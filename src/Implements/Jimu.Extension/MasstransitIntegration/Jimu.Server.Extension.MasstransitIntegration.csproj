@@ -5,11 +5,12 @@
     <Version>0.1.0</Version>
     <Authors>grissomlau@qq.com</Authors>
     <Company>grissomlau@qq.com</Company>
-    <Description>netcore microservice framework integration Masstransit to support event publish and subscription</Description>
+    <Description>support event publish and subscription using Masstransit  for Jimu microservice framework</Description>
     <Copyright>Jimu</Copyright>
     <PackageLicenseUrl>https://github.com/grissomlau/Jimu/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/grissomlau/Jimu</PackageProjectUrl>
     <RepositoryUrl>https://github.com/grissomlau/Jimu</RepositoryUrl>
+    <PackageTags>netcore,Masstransit,eventbus</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

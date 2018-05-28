@@ -7,7 +7,7 @@
     <Company>grissomlau@qq.com</Company>
     <PackageLicenseUrl>https://github.com/grissomlau/Jimu/blob/master/LICENSE</PackageLicenseUrl>
     <Copyright>Jimu</Copyright>
-    <Description>netcore micorservice discovery</Description>
+    <Description>service discovery using consul.net for Jimu microservice framework</Description>
     <PackageProjectUrl>https://github.com/grissomlau/Jimu</PackageProjectUrl>
     <RepositoryUrl>https://github.com/grissomlau/Jimu</RepositoryUrl>
     <RepositoryType></RepositoryType>

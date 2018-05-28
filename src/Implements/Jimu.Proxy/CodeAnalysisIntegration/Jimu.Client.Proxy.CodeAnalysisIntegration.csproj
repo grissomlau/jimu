@@ -8,7 +8,8 @@
     <Company>grissomlau@qq.com</Company>
     <PackageLicenseUrl>https://github.com/grissomlau/Jimu/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/grissomlau/Jimu</PackageProjectUrl>
-    <PackageTags>netcore,microservice</PackageTags>
+    <PackageTags>netcore,microservice,service proxy</PackageTags>
+    <Description>service proxy using codeanalysis for Jimu microservice framework</Description>
   </PropertyGroup>
 
   <ItemGroup>

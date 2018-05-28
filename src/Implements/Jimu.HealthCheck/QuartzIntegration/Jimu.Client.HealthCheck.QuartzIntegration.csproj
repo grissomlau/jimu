@@ -9,7 +9,8 @@
     <PackageLicenseUrl>https://github.com/grissomlau/Jimu/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/grissomlau/Jimu</PackageProjectUrl>
     <RepositoryUrl>https://github.com/grissomlau/Jimu</RepositoryUrl>
-    <PackageTags>netcore,microservice</PackageTags>
+    <PackageTags>netcore,microservice,healthcheck</PackageTags>
+    <Description>server healthcheck using quartz for Jimu microservice framework</Description>
   </PropertyGroup>
 
   <ItemGroup>

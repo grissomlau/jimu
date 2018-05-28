@@ -8,7 +8,8 @@
     <Company>grissomlau@qq.com</Company>
     <PackageLicenseUrl>https://github.com/grissomlau/Jimu/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/grissomlau/Jimu</PackageProjectUrl>
-    <PackageTags>netcore,microservice</PackageTags>
+    <PackageTags>netcore,microservice,RPC,dotnetty</PackageTags>
+    <Description>RPC transfer using dotnetty for Jimu microservice framework</Description>
   </PropertyGroup>
 
   <ItemGroup>

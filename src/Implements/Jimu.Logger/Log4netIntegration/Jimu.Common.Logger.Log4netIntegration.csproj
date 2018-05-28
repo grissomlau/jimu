@@ -9,7 +9,8 @@
     <PackageLicenseUrl>https://github.com/grissomlau/Jimu/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/grissomlau/Jimu</PackageProjectUrl>
     <RepositoryUrl>https://github.com/grissomlau/Jimu</RepositoryUrl>
-    <PackageTags>netcore,microservice</PackageTags>
+    <PackageTags>netcore,microservice,logger,log4net</PackageTags>
+    <Description>logger using log4net for Jimu microservice framework</Description>
   </PropertyGroup>
 
   <ItemGroup>
