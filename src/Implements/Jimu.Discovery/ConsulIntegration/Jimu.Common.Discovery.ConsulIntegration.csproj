@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>0.1.0</Version>
+    <Authors>grissomlau@qq.com</Authors>
+    <Company>grissomlau@qq.com</Company>
+    <PackageLicenseUrl>https://github.com/grissomlau/Jimu/blob/master/LICENSE</PackageLicenseUrl>
+    <Copyright>Jimu</Copyright>
+    <Description>netcore micorservice discovery</Description>
+    <PackageProjectUrl>https://github.com/grissomlau/Jimu</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/grissomlau/Jimu</RepositoryUrl>
+    <RepositoryType></RepositoryType>
+    <PackageTags>netcore, micorservice, discovery</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Consul" Version="0.7.2.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Jimu.Core\Jimu.Core.csproj" />
+  </ItemGroup>
+
+</Project>

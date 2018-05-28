@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>0.1.0</Version>
+    <Authors>grissomlau@qq.com</Authors>
+    <Company>grissomlau@qq.com</Company>
+    <Description>netcore microservice framework integration Masstransit to support event publish and subscription</Description>
+    <Copyright>Jimu</Copyright>
+    <PackageLicenseUrl>https://github.com/grissomlau/Jimu/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/grissomlau/Jimu</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/grissomlau/Jimu</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MassTransit" Version="4.0.1" />
+    <PackageReference Include="MassTransit.Autofac" Version="4.0.1" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="4.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Jimu.Core\Jimu.Core.csproj" />
+  </ItemGroup>
+
+</Project>

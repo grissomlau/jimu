@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>0.1.0</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <Description>netcore microservice framework, integrate dotnetty, consul, jwt and so on , support RPC and Http to transfer data.</Description>
+    <PackageProjectUrl>https://github.com/grissomlau/Jimu</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/grissomlau/Jimu/blob/master/LICENSE</PackageLicenseUrl>
+    <Copyright>Jimu</Copyright>
+    <RepositoryUrl>https://github.com/grissomlau/Jimu</RepositoryUrl>
+    <PackageTags>netcore, microservice</PackageTags>
+    <Authors>grissomlau@qq.com</Authors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Jimu.Core\Jimu.Core.csproj" />
+    <ProjectReference Include="..\Implements\Jimu.Discovery\ConsulIntegration\Jimu.Common.Discovery.ConsulIntegration.csproj" />
+    <ProjectReference Include="..\Implements\Jimu.Extension\MasstransitIntegration\Jimu.Server.Extension.MasstransitIntegration.csproj" />
+    <ProjectReference Include="..\Implements\Jimu.HealthCheck\QuartzIntegration\Jimu.Client.HealthCheck.QuartzIntegration.csproj" />
+    <ProjectReference Include="..\Implements\Jimu.Logger\Log4netIntegration\Jimu.Common.Logger.Log4netIntegration.csproj" />
+    <ProjectReference Include="..\Implements\Jimu.OAuth\JwtIntegration\Jimu.Server.OAuth.JwtIntegration.csproj" />
+    <ProjectReference Include="..\Implements\Jimu.Proxy\CodeAnalysisIntegration\Jimu.Client.Proxy.CodeAnalysisIntegration.csproj" />
+    <ProjectReference Include="..\Implements\Jimu.Transport\DotNettyIntegration\Jimu.Common.Transport.DotNettyIntegration.csproj" />
+    <ProjectReference Include="..\Implements\Jimu.Transport\NetCoreHttpIntegration\Jimu.Common.Transport.NetCoreHttpIntegration.csproj" />
+  </ItemGroup>
+
+</Project>

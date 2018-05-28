@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MassTransit" Version="4.0.1" />
+    <PackageReference Include="MassTransit.Autofac" Version="4.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Implements\Jimu.Extension\MasstransitIntegration\Jimu.Server.Extension.MasstransitIntegration.csproj" />
+    <ProjectReference Include="..\Domain\DDD.CQRS.Domain.csproj" />
+    <ProjectReference Include="..\IServices\DDD.CQRS.IServices.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,60 @@
+﻿
+@{
+    ViewData["Title"] = "Home";
+}
+@section Head{
+    <link href="~/assets/libs/Bootstrap-Table/bootstrap-table.min.css" rel="stylesheet">
+}
+@section Foot{
+    <script src="~/assets/libs/Bootstrap-Table/bootstrap-table.min.js"></script>
+    <script>
+        var vm = new Vue({
+            el: '#form',
+            data: {
+            },
+            methods: {
+                formatDetail: function (value, row, index) {
+                    return "<span onclick='vm.detail(\"" + row.Code + "\")' class='glyphicon glyphicon-list' aria-hidden='true'></span>";
+                },
+                detail: function (code) {
+                    window.location.href = "/servicesmanager/service?server=" + code;
+                },
+                responseHandler: function (resp) {
+                    return resp;
+                }
+            }
+        });
+    </script>
+}
+<div>
+
+    <input id="inputFile" type="file" />
+    <script>
+        document.getElementById('inputFile').addEventListener('change', (e) => {
+            let files = e.target.files;
+            let formData = new FormData();
+            formData.append("file", files[0]);
+            let http = new XMLHttpRequest();
+            http.open('POST', '/api/simple/user/UploadFiles', true);
+            http.send(formData);
+        }, false);
+    </script>
+</div>
+
+<div class="container" id="form">
+    <h4>Server</h4>
+
+    <table id="table" data-toggle="table"
+           data-search="true"
+           data-show-refresh="true"
+           data-url="/servicesmanager/getaddresses"
+           data-response-handler="vm.responseHandler">
+        <thead>
+            <tr>
+                <th data-field="Code">Address</th>
+                <th data-field="IsHealth">Health Status</th>
+                <th data-filed="_detail" data-formatter="vm.formatDetail"></th>
+            </tr>
+        </thead>
+    </table>
+</div>
