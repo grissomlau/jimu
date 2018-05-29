@@ -1,1 +1,1 @@
-*.rb linguist-language=C#
+src/* linguist-vendored
