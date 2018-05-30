@@ -8,9 +8,9 @@ namespace DDD.CQRS.IServices
     [ServiceRoute("api/{Service}")]
     public interface IUserService
     {
-        [Service(Director = "grissom", Name = "getuser")]
+        [Service(CreatedBy = "grissom", Comment = "getuser")]
         string GetUser();
-        [Service(Director = "grissom", Name = "create user")]
+        [Service(CreatedBy = "grissom", Comment = "create user")]
         Task<Guid> CreateUser(CreateUser createUser);
     }
 }

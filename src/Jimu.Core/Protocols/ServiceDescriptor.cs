@@ -46,34 +46,34 @@ namespace Jimu.Core.Protocols
             return GetMetadata("EnableAuthorization", false);
         }
 
-        public void Date(string value)
+        public void CreatedDate(string value)
         {
-            Metadatas["Date"] = value;
+            Metadatas["CreatedDate"] = value;
         }
 
-        public string Date()
+        public string CreatedDate()
         {
-            return GetMetadata<string>("Date");
+            return GetMetadata<string>("CreatedDate");
         }
 
-        public void Director(string value)
+        public void CreatedBy(string value)
         {
-            Metadatas["Director"] = value;
+            Metadatas["CreatedBy"] = value;
         }
 
-        public string Director()
+        public string CreatedBy()
         {
-            return GetMetadata<string>("Director");
+            return GetMetadata<string>("CreatedBy");
         }
 
-        public void Name(string value)
+        public void Comment(string value)
         {
-            Metadatas["Name"] = value;
+            Metadatas["Comment"] = value;
         }
 
-        public string Name()
+        public string Comment()
         {
-            return GetMetadata<string>("Name");
+            return GetMetadata<string>("Comment");
         }
 
         public string Roles()

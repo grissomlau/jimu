@@ -19,19 +19,19 @@ namespace Jimu.Core.Protocols.Attributes
         public bool IsWaitExecution { get; set; }
 
         /// <summary>
-        ///     director for this service
+        ///     creater for this service
         /// </summary>
-        public string Director { get; set; }
+        public string CreatedBy { get; set; }
 
         /// <summary>
-        ///     service name
+        ///     all the created and modified comment for this service
         /// </summary>
-        public string Name { get; set; }
+        public string Comment { get; set; }
 
         /// <summary>
         ///     service create date
         /// </summary>
-        public string Date { get; set; }
+        public string CreatedDate { get; set; }
 
         /// <summary>
         ///     before invoke this service, need to be authorization
@@ -47,12 +47,12 @@ namespace Jimu.Core.Protocols.Attributes
         {
             descriptor.WaitExecution(IsWaitExecution);
             descriptor.EnableAuthorization(EnableAuthorization);
-            if (!string.IsNullOrEmpty(Director))
-                descriptor.Director(Director);
-            if (!string.IsNullOrEmpty(Date))
-                descriptor.Date(Date);
-            if (!string.IsNullOrEmpty(Name))
-                descriptor.Name(Name);
+            if (!string.IsNullOrEmpty(CreatedBy))
+                descriptor.CreatedBy(CreatedBy);
+            if (!string.IsNullOrEmpty(CreatedDate))
+                descriptor.CreatedDate(CreatedDate);
+            if (!string.IsNullOrEmpty(Comment))
+                descriptor.Comment(Comment);
             if (!string.IsNullOrEmpty(Roles))
                 descriptor.Roles(Roles);
         }
