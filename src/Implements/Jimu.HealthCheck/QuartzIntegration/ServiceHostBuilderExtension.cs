@@ -1,9 +1,7 @@
 ﻿using Autofac;
 using Jimu.Client.HealthCheck.QuartzIntegration;
-using Jimu.Core.Client;
-using Jimu.Core.Client.HealthCheck;
 
-namespace Jimu
+namespace Jimu.Client
 {
     public static class ServiceHostBuilderExtension
     {
@@ -11,7 +9,7 @@ namespace Jimu
         {
             serviceHostBuilder.RegisterService(container =>
             {
-                container.RegisterType<HealthCheck>().As<IHealthCheck>().WithParameter("intervalMinute", intervalMinute).SingleInstance();
+                container.RegisterType<QuartzHealthCheck>().As<IHealthCheck>().WithParameter("intervalMinute", intervalMinute).SingleInstance();
             });
             serviceHostBuilder.AddInitializer(container =>
             {

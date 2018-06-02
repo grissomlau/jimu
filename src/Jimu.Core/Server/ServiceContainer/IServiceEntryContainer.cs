@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Jimu.Core.Protocols;
 
-namespace Jimu.Core.Server.ServiceContainer
+namespace Jimu.Server
 {
     public interface IServiceEntryContainer
     {
@@ -10,7 +9,7 @@ namespace Jimu.Core.Server.ServiceContainer
         ///     get all service entries
         /// </summary>
         /// <returns></returns>
-        List<ServiceEntry> GetServiceEntry();
+        List<JimuServiceEntry> GetServiceEntry();
 
         /// <summary>
         ///     add service

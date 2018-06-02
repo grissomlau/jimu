@@ -1,13 +1,12 @@
 ﻿using System.Threading.Tasks;
-using Jimu.Core.Protocols;
 
-namespace Jimu.Core.Server.TransportServer
+namespace Jimu.Server
 {
     /// <summary>
     ///     server response
     /// </summary>
     public interface IResponse
     {
-        Task WriteAsync(string messageId, RemoteInvokeResultMessage resultMessage);
+        Task WriteAsync(string messageId, JimuRemoteCallResultData resultMessage);
     }
 }

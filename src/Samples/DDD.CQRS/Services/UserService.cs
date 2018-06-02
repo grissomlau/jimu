@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using DDD.CQRS.IServices;
 using DDD.CQRS.IServices.Commands;
-using Jimu.Server.Extension.MasstransitIntegration;
+using Jimu.Server;
 using MassTransit;
 
 namespace DDD.CQRS.Services

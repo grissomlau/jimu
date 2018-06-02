@@ -6,12 +6,10 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Resources;
 using System.Threading.Tasks;
-using Jimu.Core.Server.TransportServer;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Jimu
+namespace Jimu.Server
 {
-    public delegate Task RequestDel(RemoteInvokeContext context);
 
     /// <summary>
     ///     Extension methods for adding typed middleware.
@@ -56,10 +54,10 @@ namespace Jimu
                             InvokeAsyncMethodName, nameof(Task)));
 
                 var parameters = methodinfo.GetParameters();
-                if (parameters.Length == 0 || parameters[0].ParameterType != typeof(RemoteInvokeContext))
+                if (parameters.Length == 0 || parameters[0].ParameterType != typeof(RemoteCallerContext))
                     throw new InvalidOperationException(
                         Resources.FormatException_UseMiddlewareNoParameters(InvokeMethodName, InvokeAsyncMethodName,
-                            nameof(RemoteInvokeContext)));
+                            nameof(RemoteCallerContext)));
 
 
                 var ctorArgs = new object[args.Length + 1];
@@ -76,12 +74,12 @@ namespace Jimu
             });
         }
 
-        private static Func<T, RemoteInvokeContext, IServiceProvider, Task> Compile<T>(MethodInfo methodinfo,
+        private static Func<T, RemoteCallerContext, IServiceProvider, Task> Compile<T>(MethodInfo methodinfo,
             ParameterInfo[] parameters)
         {
             var middleware = typeof(T);
 
-            var httpContextArg = Expression.Parameter(typeof(RemoteInvokeContext), "httpContext");
+            var httpContextArg = Expression.Parameter(typeof(RemoteCallerContext), "httpContext");
             var providerArg = Expression.Parameter(typeof(IServiceProvider), "serviceProvider");
             var instanceArg = Expression.Parameter(middleware, "middleware");
 
@@ -112,7 +110,7 @@ namespace Jimu
             var body = Expression.Call(middlewareInstanceArg, methodinfo, methodArguments);
 
             var lambda =
-                Expression.Lambda<Func<T, RemoteInvokeContext, IServiceProvider, Task>>(body, instanceArg,
+                Expression.Lambda<Func<T, RemoteCallerContext, IServiceProvider, Task>>(body, instanceArg,
                     httpContextArg, providerArg);
 
             return lambda.Compile();

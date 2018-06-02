@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Jimu.Core.Commons.Logger;
+using Jimu;
 using Simple.IServices;
 
 namespace Simple.Services
@@ -14,12 +14,12 @@ namespace Simple.Services
         }
         public string GetId()
         {
-            return "grissom id";
+            return "grissom id3";
         }
 
         public Task<string> GetName()
         {
-            return Task.FromResult("grissom name");
+            return Task.FromResult("grissom name3");
         }
 
         public void SetId()

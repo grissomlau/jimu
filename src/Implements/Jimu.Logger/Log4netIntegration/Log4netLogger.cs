@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 using log4net;
 using log4net.Appender;
 using log4net.Config;
@@ -8,7 +9,6 @@ using log4net.Core;
 using log4net.Layout;
 using log4net.Repository;
 using log4net.Repository.Hierarchy;
-using ILogger = Jimu.Core.Commons.Logger.ILogger;
 
 namespace Jimu.Common.Logger.Log4netIntegration
 {
@@ -92,12 +92,15 @@ namespace Jimu.Common.Logger.Log4netIntegration
 
         public void Error(string msg, Exception ex)
         {
-            _logError.Error(msg, ex);
+            if ((_options.LogLevel & LogLevel.Error) == LogLevel.Error)
+                _logError.Error(msg, ex);
+
         }
 
         public void Info(string msg)
         {
-            _logInfo.Info(msg);
+            if ((_options.LogLevel & LogLevel.Info) == LogLevel.Info)
+                _logInfo.Info(msg);
         }
     }
 }

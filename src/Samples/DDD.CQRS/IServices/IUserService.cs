@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Threading.Tasks;
 using DDD.CQRS.IServices.Commands;
-using Jimu.Core.Protocols.Attributes;
+using Jimu;
 
 namespace DDD.CQRS.IServices
 {
-    [ServiceRoute("api/{Service}")]
+    [JimuServiceRoute("api/{Service}")]
     public interface IUserService
     {
-        [Service(CreatedBy = "grissom", Comment = "getuser")]
+        [JimuServiceAttribute(CreatedBy = "grissom", Comment = "getuser")]
         string GetUser();
-        [Service(CreatedBy = "grissom", Comment = "create user")]
+        [JimuServiceAttribute(CreatedBy = "grissom", Comment = "create user")]
         Task<Guid> CreateUser(CreateUser createUser);
     }
 }

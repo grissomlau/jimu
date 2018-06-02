@@ -1,13 +1,10 @@
 ﻿using System.Text;
 using DotNetty.Buffers;
 using DotNetty.Transport.Channels;
-using Jimu.Core.Commons.Logger;
-using Jimu.Core.Commons.Serializer;
-using Jimu.Core.Protocols;
 
-namespace Jimu.Common.Transport.DotNettyIntegration.TransportServer.ChannelHandlerAdapter
+namespace Jimu.Server
 {
-    class ReadServerMessageChannelHandlerAdapter : DotNetty.Transport.Channels.ChannelHandlerAdapter
+    class ReadServerMessageChannelHandlerAdapter : ChannelHandlerAdapter
     {
         private readonly ISerializer _serializer;
         private readonly ILogger _logger;
@@ -26,14 +23,14 @@ namespace Jimu.Common.Transport.DotNettyIntegration.TransportServer.ChannelHandl
 
                 _logger.Info("Read Message is ");
                 _logger.Info(Encoding.UTF8.GetString(data));
-                var convertedMsg = _serializer.Deserialize<byte[], TransportMessage>(data);
-                if (convertedMsg.IsInvokeMessage())
+                var convertedMsg = _serializer.Deserialize<byte[], JimuTransportMsg>(data);
+                if (convertedMsg.ContentType == typeof(JimuRemoteCallData).FullName)
                 {
-                    convertedMsg.Content = _serializer.Deserialize<string,RemoteInvokeMessage>(convertedMsg.Content.ToString());
+                    convertedMsg.Content = _serializer.Deserialize<string, JimuRemoteCallData>(convertedMsg.Content.ToString());
                 }
-                else if (convertedMsg.IsInvokeResultMessage())
+                else if (convertedMsg.ContentType == typeof(JimuRemoteCallResultData).FullName)
                 {
-                    convertedMsg.Content = _serializer.Deserialize<string,RemoteInvokeResultMessage>(convertedMsg.Content.ToString());
+                    convertedMsg.Content = _serializer.Deserialize<string, JimuRemoteCallResultData>(convertedMsg.Content.ToString());
                 }
                 context.FireChannelRead(convertedMsg);
                 //context.FireChannelRead(data);

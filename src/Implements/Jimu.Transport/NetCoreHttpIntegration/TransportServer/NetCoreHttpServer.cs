@@ -5,20 +5,15 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
-using Jimu.Core.Commons.Logger;
-using Jimu.Core.Commons.Serializer;
-using Jimu.Core.Protocols;
-using Jimu.Core.Server.ServiceContainer;
-using Jimu.Core.Server.TransportServer;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Jimu.Common.Transport.NetCoreHttpIntegration.TransportServer
+namespace Jimu.Server
 {
     public class NetCoreHttpServer : IServer
     {
-        private readonly List<ServiceRoute> _serviceRoutes = new List<ServiceRoute>();
+        private readonly List<JimuServiceRoute> _serviceRoutes = new List<JimuServiceRoute>();
         private readonly IServiceEntryContainer _serviceEntryContainer;
         private readonly string _ip;
         private readonly int _port;
@@ -38,16 +33,16 @@ namespace Jimu.Common.Transport.NetCoreHttpIntegration.TransportServer
             _builderAction = builderAction;
             _typeConvert = typeConvert;
         }
-        public List<ServiceRoute> GetServiceRoutes()
+        public List<JimuServiceRoute> GetServiceRoutes()
         {
             if (!_serviceRoutes.Any())
             {
                 var serviceEntries = _serviceEntryContainer.GetServiceEntry();
                 serviceEntries.ForEach(entry =>
                 {
-                    var serviceRoute = new ServiceRoute
+                    var serviceRoute = new JimuServiceRoute
                     {
-                        Address = new List<Address> {
+                        Address = new List<JimuAddress> {
                             new NetCoreHttpAddress(_ip, _port){IsHealth = true}
                             },
                         ServiceDescriptor = entry.Descriptor

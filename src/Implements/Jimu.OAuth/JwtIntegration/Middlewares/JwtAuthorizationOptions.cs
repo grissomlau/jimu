@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Jimu.Core.Commons.Utils;
 
-namespace Jimu.Server.OAuth.JwtIntegration.Middlewares
+namespace Jimu.Server.OAuth.JoseJwtIntegration.Middlewares
 {
     public class JwtAuthorizationOptions
     {

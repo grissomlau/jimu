@@ -4,13 +4,9 @@ using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Jimu.Core.Commons.Serializer;
-using Jimu.Core.Commons.Utils;
-using Jimu.Core.Protocols;
-using Jimu.Core.Server.TransportServer;
 using Jose;
 
-namespace Jimu.Server.OAuth.JwtIntegration.Middlewares
+namespace Jimu.Server.OAuth.JoseJwtIntegration.Middlewares
 {
     /// <summary>
     /// support jwt middleware
@@ -27,7 +23,7 @@ namespace Jimu.Server.OAuth.JwtIntegration.Middlewares
             _next = next;
         }
 
-        public Task Invoke(RemoteInvokeContext context)
+        public Task Invoke(RemoteCallerContext context)
         {
             // get jwt token 
             if (!string.IsNullOrEmpty(_options.TokenEndpointPath)
@@ -41,7 +37,7 @@ namespace Jimu.Server.OAuth.JwtIntegration.Middlewares
                 _options.CheckCredential(jwtAuthorizationContext);
                 if (jwtAuthorizationContext.IsRejected)
                 {
-                    return context.Response.WriteAsync(context.TransportMessage.Id, new RemoteInvokeResultMessage
+                    return context.Response.WriteAsync(context.TransportMessage.Id, new JimuRemoteCallResultData
                     {
                         ErrorMsg = $"{jwtAuthorizationContext.Error}, {jwtAuthorizationContext.ErrorDescription}",
                         ErrorCode = "400"
@@ -58,14 +54,14 @@ namespace Jimu.Server.OAuth.JwtIntegration.Middlewares
                     result["expired_in"] = payload["exp"];
                 }
 
-                return context.Response.WriteAsync(context.TransportMessage.Id, new RemoteInvokeResultMessage
+                return context.Response.WriteAsync(context.TransportMessage.Id, new JimuRemoteCallResultData
                 {
                     Result = result
                 });
             }
             // jwt authentication, alse authentication the role
 
-            if (context.ServiceEntry != null && context.ServiceEntry.Descriptor.EnableAuthorization())
+            if (context.ServiceEntry != null && context.ServiceEntry.Descriptor.EnableAuthorization)
             {
 
                 try
@@ -78,7 +74,7 @@ namespace Jimu.Server.OAuth.JwtIntegration.Middlewares
                         //var exp = payloadObj["exp"];
                         if (payloadObj == null || ((Int64)payloadObj["exp"]).ToDate() < DateTime.Now)
                         {
-                            var result = new RemoteInvokeResultMessage
+                            var result = new JimuRemoteCallResultData
                             {
                                 ErrorMsg = "Token is Expired",
                                 ErrorCode = "401"
@@ -87,7 +83,7 @@ namespace Jimu.Server.OAuth.JwtIntegration.Middlewares
 
                         }
                     }
-                    var serviceRoles = context.ServiceEntry.Descriptor.Roles();
+                    var serviceRoles = context.ServiceEntry.Descriptor.Roles;
                     if (!string.IsNullOrEmpty(serviceRoles))
                     {
                         var serviceRoleArr = serviceRoles.Split(',');
@@ -95,7 +91,7 @@ namespace Jimu.Server.OAuth.JwtIntegration.Middlewares
                         var authorize = roles.Split(',').Any(role => serviceRoleArr.Any(x => x.Equals(role, StringComparison.InvariantCultureIgnoreCase)));
                         if (!authorize)
                         {
-                            var result = new RemoteInvokeResultMessage
+                            var result = new JimuRemoteCallResultData
                             {
                                 ErrorMsg = "Unauthorized",
                                 ErrorCode = "401"
@@ -103,11 +99,11 @@ namespace Jimu.Server.OAuth.JwtIntegration.Middlewares
                             return context.Response.WriteAsync(context.TransportMessage.Id, result);
                         }
                     }
-                    context.RemoteInvokeMessage.Payload = new Payload { Items = payloadObj };
+                    context.RemoteInvokeMessage.Payload = new JimuPayload { Items = payloadObj };
                 }
                 catch (Exception ex)
                 {
-                    var result = new RemoteInvokeResultMessage
+                    var result = new JimuRemoteCallResultData
                     {
                         ErrorMsg = $"Token is incorrect, exception is { ex.Message}",
                         ErrorCode = "401"

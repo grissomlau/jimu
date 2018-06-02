@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Net;
-using Jimu.Core.Protocols;
 
-namespace Jimu.Core.Client.TransportClient
+namespace Jimu.Client
 {
     /// <summary>
     ///     delegate for how to create transport client
     /// </summary>
     /// <param name="add"></param>
     /// <param name="client"></param>
-    public delegate void CreatorDelegate(Address add, ref ITransportClient client);
+    public delegate void CreatorDelegate(JimuAddress add, ref ITransportClient client);
 
     public interface ITransportClientFactory
     {
@@ -24,6 +23,6 @@ namespace Jimu.Core.Client.TransportClient
         /// </summary>
         event CreatorDelegate ClientCreatorDelegate;
 
-        ITransportClient CreateClient<T>(T address) where T : Address;
+        ITransportClient CreateClient<T>(T address) where T : JimuAddress;
     }
 }

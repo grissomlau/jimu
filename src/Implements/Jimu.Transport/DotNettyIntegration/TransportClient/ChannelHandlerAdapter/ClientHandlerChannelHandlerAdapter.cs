@@ -1,14 +1,10 @@
 ﻿using System.Net;
 using DotNetty.Common.Utilities;
 using DotNetty.Transport.Channels;
-using Jimu.Core.Client.TransportClient;
-using Jimu.Core.Commons.Logger;
-using Jimu.Core.Commons.Transport;
-using Jimu.Core.Protocols;
 
-namespace Jimu.Common.Transport.DotNettyIntegration.TransportClient.ChannelHandlerAdapter
+namespace Jimu.Client
 {
-    class ClientHandlerChannelHandlerAdapter : DotNetty.Transport.Channels.ChannelHandlerAdapter
+    class ClientHandlerChannelHandlerAdapter :ChannelHandlerAdapter
     {
         private readonly ITransportClientFactory _factory;
         private readonly ILogger _logger;
@@ -28,7 +24,7 @@ namespace Jimu.Common.Transport.DotNettyIntegration.TransportClient.ChannelHandl
 
         public override void ChannelRead(IChannelHandlerContext context, object message)
         {
-            var msg = message as TransportMessage;
+            var msg = message as JimuTransportMsg;
 
             var listener = context.Channel.GetAttribute(AttributeKey<IClientListener>.ValueOf(typeof(DefaultTransportClientFactory), nameof(IClientListener))).Get();
             var sender = context.Channel.GetAttribute(AttributeKey<IClientSender>.ValueOf(typeof(DefaultTransportClientFactory), nameof(IClientSender))).Get();

@@ -68,3 +68,12 @@
 /src/Samples/test.ps1
 /src/.vs/Jimu/DesignTimeBuild
 /src/.vs/config
+/src/Implements/Jimu.Discovery/Jimu.Common.Discovery.InMemeryIntegration/bin/Debug/netstandard2.0
+/src/Implements/Jimu.Discovery/Jimu.Common.Discovery.InMemeryIntegration/obj
+/src/Implements/Jimu.LoadBalance/Jimu.Client.LoadBalance.PollingIntegration/bin/Debug/netstandard2.0
+/src/Implements/Jimu.LoadBalance/Jimu.Client.LoadBalance.PollingIntegration/obj
+/src/Jimu/.vs/Jimu
+/src/Jimu.Client/bin/Debug/netstandard2.0
+/src/Jimu.Client/obj
+/src/Jimu.Server/bin/Debug/netstandard2.0
+/src/Jimu.Server/obj

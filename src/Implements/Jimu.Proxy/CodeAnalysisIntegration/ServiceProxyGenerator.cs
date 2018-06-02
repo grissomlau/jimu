@@ -4,11 +4,6 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
 using System.Threading.Tasks;
-using Jimu.Core.Client.Proxy;
-using Jimu.Core.Client.RemoteInvoker;
-using Jimu.Core.Commons.Logger;
-using Jimu.Core.Commons.Serializer;
-using Jimu.Core.Server.ServiceContainer;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -112,7 +107,7 @@ namespace Jimu.Client.Proxy.CodeAnalysisIntegration
                     SyntaxFactory.UsingDirective(SyntaxFactory.IdentifierName("System")),
                     SyntaxFactory.UsingDirective(GetQualifiedNameSyntax("System.Threading.Tasks")),
                     SyntaxFactory.UsingDirective(GetQualifiedNameSyntax("System.Collections.Generic")),
-                    SyntaxFactory.UsingDirective(GetQualifiedNameSyntax(typeof(IRemoteServiceInvoker).Namespace)),
+                    SyntaxFactory.UsingDirective(GetQualifiedNameSyntax(typeof(IRemoteServiceCaller).Namespace)),
                     SyntaxFactory.UsingDirective(GetQualifiedNameSyntax(typeof(ISerializer).Namespace)),
                     SyntaxFactory.UsingDirective(GetQualifiedNameSyntax(typeof(ServiceProxyBase).Namespace))
                 });
@@ -156,7 +151,7 @@ namespace Jimu.Client.Proxy.CodeAnalysisIntegration
                        SyntaxFactory.SeparatedList<ParameterSyntax>(
                            new SyntaxNodeOrToken[]
                            {
-                               SyntaxFactory.Parameter(SyntaxFactory.Identifier("remoteServiceInvoker")).WithType(SyntaxFactory.IdentifierName("IRemoteServiceInvoker"))
+                               SyntaxFactory.Parameter(SyntaxFactory.Identifier("remoteServiceCaller")).WithType(SyntaxFactory.IdentifierName("IRemoteServiceCaller"))
                            }
                            )
                        )
@@ -166,7 +161,7 @@ namespace Jimu.Client.Proxy.CodeAnalysisIntegration
                     SyntaxFactory.SeparatedList<ArgumentSyntax>(
                         new SyntaxNodeOrToken[]
                         {
-                            SyntaxFactory.Argument(SyntaxFactory.IdentifierName("remoteServiceInvoker"))
+                            SyntaxFactory.Argument(SyntaxFactory.IdentifierName("remoteServiceCaller"))
                         }
                         )
                     )
@@ -270,12 +265,12 @@ namespace Jimu.Client.Proxy.CodeAnalysisIntegration
             {
                 if (method.ReturnType == typeof(void))
                 {
-                    expressionSyntax = SyntaxFactory.IdentifierName("InvokeVoidSync");
+                    expressionSyntax = SyntaxFactory.IdentifierName("InvokeVoid");
                 }
                 else
                 {
                     expressionSyntax = SyntaxFactory.GenericName(
-                    SyntaxFactory.Identifier("InvokeSync"))
+                    SyntaxFactory.Identifier("Invoke"))
                     //.WithTypeArgumentList(((GenericNameSyntax)returnDeclaration).TypeArgumentList);
                     .WithTypeArgumentList(SyntaxFactory.TypeArgumentList(SyntaxFactory.SingletonSeparatedList(returnDeclaration)))
                    ;
@@ -320,12 +315,12 @@ namespace Jimu.Client.Proxy.CodeAnalysisIntegration
                 if (method.ReturnType == typeof(Task))
                 {
 
-                    expressionSyntax = SyntaxFactory.IdentifierName("InvokeVoid");
+                    expressionSyntax = SyntaxFactory.IdentifierName("InvokeVoidAsync");
                 }
                 else
                 {
                     expressionSyntax = SyntaxFactory.GenericName(
-             SyntaxFactory.Identifier("Invoke"))
+             SyntaxFactory.Identifier("InvokeAsync"))
              .WithTypeArgumentList(((GenericNameSyntax)returnDeclaration).TypeArgumentList);
                     //.WithTypeArgumentList(TypeArgumentList(SingletonSeparatedList(returnDeclaration)))
                 }

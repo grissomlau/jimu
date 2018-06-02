@@ -1,4 +1,4 @@
-﻿namespace Jimu.Common.Transport.DotNettyIntegration.TransportServer
+﻿namespace Jimu.Server
 {
     public class DotNettyOptions
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Jimu.Core.Client.Proxy
+namespace Jimu.Client
 {
     public interface IServiceProxyGenerator
     {

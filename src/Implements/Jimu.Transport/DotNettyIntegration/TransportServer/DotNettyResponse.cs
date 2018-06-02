@@ -2,12 +2,8 @@
 using System.Threading.Tasks;
 using DotNetty.Buffers;
 using DotNetty.Transport.Channels;
-using Jimu.Core.Commons.Logger;
-using Jimu.Core.Commons.Serializer;
-using Jimu.Core.Protocols;
-using Jimu.Core.Server.TransportServer;
 
-namespace Jimu.Common.Transport.DotNettyIntegration.TransportServer
+namespace Jimu.Server
 {
     public class DotNettyResponse : IResponse
     {
@@ -20,12 +16,12 @@ namespace Jimu.Common.Transport.DotNettyIntegration.TransportServer
             _serializer = serializer;
             _logger = logger;
         }
-        public async Task WriteAsync(string messageId, RemoteInvokeResultMessage resultMessage)
+        public async Task WriteAsync(string messageId, JimuRemoteCallResultData resultMessage)
         {
             try
             {
                 _logger.Info($"complete handle ： {messageId}");
-                var data = _serializer.Serialize<byte[]>(TransportMessage.Create(messageId, resultMessage));
+                var data = _serializer.Serialize<byte[]>(new JimuTransportMsg(messageId, resultMessage));
                 var buffer = Unpooled.Buffer(data.Length, data.Length);
                 buffer.WriteBytes(data);
                 await _channel.WriteAndFlushAsync(buffer);

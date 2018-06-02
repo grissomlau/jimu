@@ -2,11 +2,8 @@
 using System.Threading.Tasks;
 using DotNetty.Buffers;
 using DotNetty.Transport.Channels;
-using Jimu.Core.Client.TransportClient;
-using Jimu.Core.Commons.Serializer;
-using Jimu.Core.Protocols;
 
-namespace Jimu.Common.Transport.DotNettyIntegration.TransportClient
+namespace Jimu.Client
 {
     public class DotNettyClientSender : IClientSender, IDisposable
     {
@@ -26,13 +23,13 @@ namespace Jimu.Common.Transport.DotNettyIntegration.TransportClient
             }).Wait();
         }
 
-        public async Task SendAsync(TransportMessage message)
+        public async Task SendAsync(JimuTransportMsg message)
         {
             var buffer = GetByteBuffer(message);
             await _channel.WriteAndFlushAsync(buffer);
         }
 
-        private IByteBuffer GetByteBuffer(TransportMessage message)
+        private IByteBuffer GetByteBuffer(JimuTransportMsg message)
         {
             var data = _serializer.Serialize<byte[]>(message);
             var buffer = Unpooled.Buffer(data.Length, data.Length);

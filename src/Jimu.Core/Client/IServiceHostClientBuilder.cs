@@ -1,7 +1,7 @@
 ﻿using System;
 using Autofac;
 
-namespace Jimu.Core.Client
+namespace Jimu.Client
 {
     /// <summary>
     ///     build service client

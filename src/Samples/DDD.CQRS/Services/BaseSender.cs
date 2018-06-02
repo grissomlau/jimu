@@ -1,4 +1,4 @@
-﻿using Jimu.Server.Extension.MasstransitIntegration;
+﻿using Jimu.Server;
 using MassTransit;
 
 namespace DDD.CQRS.Services

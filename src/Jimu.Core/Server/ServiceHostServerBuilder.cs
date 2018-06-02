@@ -1,7 +1,7 @@
 ﻿using System;
 using Autofac;
 
-namespace Jimu.Core.Server
+namespace Jimu.Server
 {
     public class ServiceHostServerBuilder : ServiceHostBuilderBase, IServiceHostServerBuilder
     {

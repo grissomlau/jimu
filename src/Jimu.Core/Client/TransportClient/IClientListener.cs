@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Jimu.Core.Protocols;
 
-namespace Jimu.Core.Client.TransportClient
+namespace Jimu.Client
 {
     /// <summary>
     ///     listener for client recieve server response
@@ -12,7 +11,7 @@ namespace Jimu.Core.Client.TransportClient
         /// <summary>
         ///     event of received server response
         /// </summary>
-        event Func<IClientSender, TransportMessage, Task> OnReceived;
+        event Func<IClientSender, JimuTransportMsg, Task> OnReceived;
 
         /// <summary>
         ///     how to handle server response
@@ -20,6 +19,6 @@ namespace Jimu.Core.Client.TransportClient
         /// <param name="sender"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        Task Received(IClientSender sender, TransportMessage message);
+        Task Received(IClientSender sender, JimuTransportMsg message);
     }
 }

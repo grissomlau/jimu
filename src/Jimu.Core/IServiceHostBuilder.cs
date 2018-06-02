@@ -1,7 +1,7 @@
 ﻿using System;
 using Autofac;
 
-namespace Jimu.Core
+namespace Jimu
 {
     public interface IServiceHostBuilder
     {

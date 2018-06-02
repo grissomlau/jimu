@@ -1,4 +1,4 @@
-﻿namespace Jimu.Core.Client.Proxy
+﻿namespace Jimu.Client
 {
     /// <summary>
     ///     serice proxy
@@ -10,6 +10,6 @@
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        T GetServiceByType<T>() where T : class;
+        T GetService<T>() where T : class;
     }
 }

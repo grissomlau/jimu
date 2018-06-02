@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Jimu.Core.Protocols;
 
-namespace Jimu.Core.Client.LoadBalance
+namespace Jimu.Client.LoadBalance.PollingIntegration
 {
     public abstract class AddressSelectorBase : IAddressSelector
     {
-        Task<Address> IAddressSelector.GetAddressAsyn(ServiceRoute serviceRoute)
+        Task<JimuAddress> IAddressSelector.GetAddressAsyn(JimuServiceRoute serviceRoute)
         {
             if (serviceRoute == null)
                 throw new ArgumentNullException(nameof(serviceRoute));
@@ -16,6 +15,6 @@ namespace Jimu.Core.Client.LoadBalance
             return GetAddressAsync(serviceRoute);
         }
 
-        public abstract Task<Address> GetAddressAsync(ServiceRoute serviceRoute);
+        public abstract Task<JimuAddress> GetAddressAsync(JimuServiceRoute serviceRoute);
     }
 }

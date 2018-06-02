@@ -1,9 +1,8 @@
 ﻿using System.Net;
-using Jimu.Core.Protocols;
 
-namespace Jimu.Common.Transport.DotNettyIntegration
+namespace Jimu
 {
-    public class DotNettyAddress : Address
+    public class DotNettyAddress : JimuAddress
     {
         public DotNettyAddress() { }
         public DotNettyAddress(string ip, int port)

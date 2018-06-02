@@ -6,17 +6,8 @@ using DotNetty.Common.Utilities;
 using DotNetty.Transport.Bootstrapping;
 using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Sockets;
-using Jimu.Common.Transport.DotNettyIntegration;
-using Jimu.Common.Transport.DotNettyIntegration.TransportClient;
-using Jimu.Common.Transport.DotNettyIntegration.TransportClient.ChannelHandlerAdapter;
-using Jimu.Core.Client;
-using Jimu.Core.Client.TransportClient;
-using Jimu.Core.Commons.Logger;
-using Jimu.Core.Commons.Serializer;
-using Jimu.Core.Commons.Transport;
-using Jimu.Core.Protocols;
 
-namespace Jimu
+namespace Jimu.Client
 {
     public static class ServiceHostClientBuilderExtension
     {
@@ -49,7 +40,7 @@ namespace Jimu
                 AttributeKey<IClientSender> clientSenderKey = AttributeKey<IClientSender>.ValueOf(typeof(DefaultTransportClientFactory), nameof(IClientSender));
                 AttributeKey<IClientListener> clientListenerKey = AttributeKey<IClientListener>.ValueOf(typeof(DefaultTransportClientFactory), nameof(IClientListener));
                 AttributeKey<EndPoint> endPointKey = AttributeKey<EndPoint>.ValueOf(typeof(DefaultTransportClientFactory), nameof(EndPoint));
-                factory.ClientCreatorDelegate += (Address address, ref ITransportClient client) =>
+                factory.ClientCreatorDelegate += (JimuAddress address, ref ITransportClient client) =>
                 {
                     if (client == null && address.GetType().IsAssignableFrom(typeof(DotNettyAddress)))
                     {

@@ -26,11 +26,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Jimu.Core\Jimu.Core.csproj" />
     <ProjectReference Include="..\..\..\Implements\Jimu.Discovery\ConsulIntegration\Jimu.Common.Discovery.ConsulIntegration.csproj" />
     <ProjectReference Include="..\..\..\Implements\Jimu.Logger\Log4netIntegration\Jimu.Common.Logger.Log4netIntegration.csproj" />
     <ProjectReference Include="..\..\..\Implements\Jimu.Transport\DotNettyIntegration\Jimu.Common.Transport.DotNettyIntegration.csproj" />
     <ProjectReference Include="..\..\..\Implements\Jimu.Transport\NetCoreHttpIntegration\Jimu.Common.Transport.NetCoreHttpIntegration.csproj" />
+    <ProjectReference Include="..\..\..\Jimu.Core\Jimu.csproj" />
     <ProjectReference Include="..\IServices\Simple.IServices.csproj" />
     <ProjectReference Include="..\Services\Simple.Services.csproj" />
   </ItemGroup>

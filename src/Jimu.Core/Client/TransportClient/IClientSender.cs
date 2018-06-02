@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
-using Jimu.Core.Protocols;
 
-namespace Jimu.Core.Client.TransportClient
+namespace Jimu.Client
 {
     /// <summary>
     ///     sender for client
@@ -13,6 +12,6 @@ namespace Jimu.Core.Client.TransportClient
         /// </summary>
         /// <param name="msg"></param>
         /// <returns></returns>
-        Task SendAsync(TransportMessage msg);
+        Task SendAsync(JimuTransportMsg msg);
     }
 }

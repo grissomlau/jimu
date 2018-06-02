@@ -1,12 +1,25 @@
 ﻿using System;
 using Autofac;
 
-namespace Jimu.Core.Client
+namespace Jimu.Client
 {
     public class ServiceHostClientBuilder : ServiceHostBuilderBase, IServiceHostClientBuilder
     {
         public ServiceHostClientBuilder(ContainerBuilder containerBuilder) : base(containerBuilder)
         {
+            this.RegisterService(cb =>
+            {
+                cb.RegisterType<RemoteServiceCaller>().As<IRemoteServiceCaller>().SingleInstance();
+                cb.RegisterType<ClientServiceDiscovery>().As<IClientServiceDiscovery>().SingleInstance();
+                cb.RegisterType<DefaultTransportClientFactory>().As<ITransportClientFactory>().SingleInstance();
+                cb.RegisterType<ServiceProxy>().As<IServiceProxy>().SingleInstance();
+            });
+            this.AddRunner(container =>
+            {
+                var clientServiceDiscovery = (ClientServiceDiscovery)container.Resolve<IClientServiceDiscovery>();
+                clientServiceDiscovery?.RunInInit();
+
+            });
         }
 
 

@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Copyright>Jimu</Copyright>
+    <Version>0.1.0</Version>
+    <Authors>grissomlau@qq.com</Authors>
+    <Company>grissomlau@qq.com</Company>
+    <PackageLicenseUrl>https://github.com/grissomlau/Jimu/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/grissomlau/Jimu</PackageProjectUrl>
+    <PackageTags>netcore,microservice,authentication,jwt</PackageTags>
+    <Description>jwt authentication using jose.jwt for Jimu microservice framework</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="jose-jwt" Version="2.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Jimu.Core\Jimu.csproj" />
+  </ItemGroup>
+
+</Project>

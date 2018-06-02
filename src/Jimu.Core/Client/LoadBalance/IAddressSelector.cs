@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
-using Jimu.Core.Protocols;
 
-namespace Jimu.Core.Client.LoadBalance
+namespace Jimu.Client
 {
     /// <summary>
     ///     server selector
@@ -13,6 +12,6 @@ namespace Jimu.Core.Client.LoadBalance
         /// </summary>
         /// <param name="serviceRoute"></param>
         /// <returns></returns>
-        Task<Address> GetAddressAsyn(ServiceRoute serviceRoute);
+        Task<JimuAddress> GetAddressAsyn(JimuServiceRoute serviceRoute);
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Jimu.Server.Extension.MasstransitIntegration
+namespace Jimu.Server
 {
     public class MassTransitOptions
     {

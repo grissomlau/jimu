@@ -7,10 +7,8 @@ using DDD.Core;
 using DDD.Simple.Domain;
 using DDD.Simple.IServices;
 using DDD.Simple.IServices.DTO;
-using Jimu.Core.Commons.Serializer;
-using Jimu.Core.Protocols;
-using Jimu.Core.Server.ServiceContainer;
 using DbWorker.IUnitOfWork;
+using Jimu;
 
 namespace DDD.Simple.Services
 {
@@ -53,8 +51,8 @@ namespace DDD.Simple.Services
         ITypeConvertProvider _typeConvertProvider;
         ISerializer _serializer;
         readonly Guid _id;
-        readonly Payload _payload;
-        public UserService(IUnitOfWork unitOfWork, IRepository<User, Guid> userRepository, IRepository<Order, Guid> orderRepository, Payload payload, ITypeConvertProvider typeConvertProvider, ISerializer serializer)
+        readonly JimuPayload _payload;
+        public UserService(IUnitOfWork unitOfWork, IRepository<User, Guid> userRepository, IRepository<Order, Guid> orderRepository, JimuPayload payload, ITypeConvertProvider typeConvertProvider, ISerializer serializer)
         {
             _unitOfWork = unitOfWork;
             _userRepository = userRepository;
@@ -97,7 +95,7 @@ namespace DDD.Simple.Services
             public string Id { get; set; }
             public byte[] Data { get; set; }
         }
-        public async Task<FileModel> GetFile()
+        public async Task<JimuFile> GetFile()
         {
             //HttpResponseMessage msg = new HttpResponseMessage(System.Net.HttpStatusCode.OK);
             using (var ms = new MemoryStream())
@@ -111,7 +109,7 @@ namespace DDD.Simple.Services
                     //var bb = (Test)_serializer.Deserialize<string>(cb, typeof(Test));
                     ////var reb = _serializer.Deserialize(bb.Data, typeof(byte[]));
                     //var reb = Encoding.UTF8.GetBytes("anVldCB0ZXN0");
-                    return new FileModel("test.xlsx", bytes);
+                    return new JimuFile("test.xlsx", bytes);
                     //msg.Content = new StreamContent(sr.BaseStream);
                 }
                 //return msg;
@@ -151,7 +149,7 @@ namespace DDD.Simple.Services
             }
         }
 
-        public Task UploadFiles(List<FileModel> files)
+        public Task UploadFiles(List<JimuFile> files)
         {
             foreach (var file in files)
             {

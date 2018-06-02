@@ -1,11 +1,8 @@
 ﻿using System;
 using Autofac;
-using Jimu.Common.Transport.NetCoreHttpIntegration.TransportServer;
-using Jimu.Core.Server;
-using Jimu.Core.Server.TransportServer;
 using Microsoft.AspNetCore.Hosting;
 
-namespace Jimu
+namespace Jimu.Server
 {
     public static class ServiceHostBuilderExtension
     {

@@ -1,9 +1,7 @@
 ﻿using System;
 using Autofac;
-using Jimu;
 using Jimu.Common.Logger.Log4netIntegration;
-using Jimu.Core.Server;
-using Jimu.Core.Server.ServiceContainer;
+using Jimu.Server;
 
 namespace Simple.Server
 {
@@ -19,8 +17,9 @@ namespace Simple.Server
                     EnableConsoleLog = true
                 })
                 .LoadServices(new[] { "Simple.IServices", "Simple.Services" })
-                .UseDotNettyServer("127.0.0.1", 8009, server => { })
-                .UseConsul("127.0.0.1", 8500, "MService-", "127.0.0.1:8009")
+                .UseDotNettyServer("127.0.0.1", 8010, server => { })
+                //.UseInMemoryForDiscovery()
+                .UseConsulForDiscovery("127.0.0.1", 8500, "JimuService-", "127.0.0.1:8010")
                 ;
             using (var host = builder.Build())
             {

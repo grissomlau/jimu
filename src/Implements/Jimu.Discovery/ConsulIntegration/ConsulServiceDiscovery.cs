@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Consul;
-using Jimu.Core.Commons.Discovery;
-using Jimu.Core.Commons.Serializer;
-using Jimu.Core.Protocols;
+using Jimu.Server;
 
 namespace Jimu.Common.Discovery.ConsulIntegration
 {
@@ -15,7 +13,7 @@ namespace Jimu.Common.Discovery.ConsulIntegration
         private readonly ISerializer _serializer;
         private readonly string _serviceCategory;
 
-        private ServiceRoute[] _routes;
+        private JimuServiceRoute[] _routes;
         public ConsulServiceDiscovery(string ip, int port, string serviceCategory, ISerializer serializer)
         {
             _serializer = serializer;
@@ -31,11 +29,11 @@ namespace Jimu.Common.Discovery.ConsulIntegration
             _consul.Dispose();
         }
 
-        public async Task<ServiceRoute[]> GetRoutesAsync()
+        public async Task<List<JimuServiceRoute>> GetRoutesAsync()
         {
             if (_routes != null && _routes.Any())
             {
-                return _routes;
+                return _routes.ToList();
             }
 
             if (_consul.KV.Keys(_serviceCategory).Result.Response?.Count() > 0)
@@ -45,13 +43,13 @@ namespace Jimu.Common.Discovery.ConsulIntegration
                 _routes = await GetRoutes(keys);
             }
 
-            return _routes ?? (_routes = new ServiceRoute[0]);
+            return (_routes ?? (_routes = new JimuServiceRoute[0])).ToList();
         }
 
-        public async Task<List<Address>> GetAddressAsync()
+        public async Task<List<JimuAddress>> GetAddressAsync()
         {
             var routes = await GetRoutesAsync();
-            var addresses = new List<Address>();
+            var addresses = new List<JimuAddress>();
             if (routes != null && routes.Any())
             {
                 addresses = routes.SelectMany(x => x.Address).Distinct().ToList();
@@ -72,20 +70,20 @@ namespace Jimu.Common.Discovery.ConsulIntegration
             }
         }
 
-        public async Task SetRoutesAsync(IEnumerable<ServiceRoute> routes)
+        public async Task SetRoutesAsync(IEnumerable<JimuServiceRoute> routes)
         {
             var existingRoutes = await GetRoutes(routes.Select(x => GetKey(x.ServiceDescriptor.Id)));
-            var routeDescriptors = new List<ServiceRouteDescriptor>(routes.Count());
+            var routeDescriptors = new List<JimuServiceRouteDesc>(routes.Count());
             foreach (var route in routes)
             {
                 var existingRoute = existingRoutes.FirstOrDefault(x => x.ServiceDescriptor.Id == route.ServiceDescriptor.Id);
                 if (existingRoute != null)
-                    route.Address = route.Address.Concat(existingRoute.Address.Except(route.Address));
+                    route.Address = route.Address.Concat(existingRoute.Address.Except(route.Address)).ToList();
 
-                routeDescriptors.Add(new ServiceRouteDescriptor
+                routeDescriptors.Add(new JimuServiceRouteDesc
                 {
                     ServiceDescriptor = route.ServiceDescriptor,
-                    AddressDescriptors = route.Address?.Select(x => new ServiceAddressDescriptor
+                    AddressDescriptors = route.Address?.Select(x => new JimuAddressDesc
                     {
                         Type = $"{x.GetType().FullName}, {x.GetType().Assembly.GetName()}",
                         Value = _serializer.Serialize<string>(x)
@@ -96,7 +94,7 @@ namespace Jimu.Common.Discovery.ConsulIntegration
             await SetRoutesAsync(routeDescriptors);
         }
 
-        private async Task SetRoutesAsync(IEnumerable<ServiceRouteDescriptor> routes)
+        private async Task SetRoutesAsync(IEnumerable<JimuServiceRouteDesc> routes)
         {
 
             foreach (var serviceRoute in routes)
@@ -112,9 +110,9 @@ namespace Jimu.Common.Discovery.ConsulIntegration
             return $"{_serviceCategory}{id}";
         }
 
-        private async Task<ServiceRoute[]> GetRoutes(IEnumerable<string> children)
+        private async Task<JimuServiceRoute[]> GetRoutes(IEnumerable<string> children)
         {
-            var routes = new List<ServiceRoute>(children.ToArray().Count());
+            var routes = new List<JimuServiceRoute>(children.ToArray().Count());
             foreach (var child in children)
             {
                 var route = await GetRoute(child);
@@ -124,7 +122,7 @@ namespace Jimu.Common.Discovery.ConsulIntegration
             return routes.ToArray();
         }
 
-        private async Task<ServiceRoute> GetRoute(string path)
+        private async Task<JimuServiceRoute> GetRoute(string path)
         {
             var queryResult = await _consul.KV.Keys(path);
             if (queryResult.Response == null)
@@ -136,16 +134,16 @@ namespace Jimu.Common.Discovery.ConsulIntegration
             {
                 return null;
             }
-            var descriptor = _serializer.Deserialize<byte[], ServiceRouteDescriptor>(data);
+            var descriptor = _serializer.Deserialize<byte[], JimuServiceRouteDesc>(data);
 
-            IList<Address> addresses = new List<Address>(descriptor.AddressDescriptors.ToArray().Count());
+            List<JimuAddress> addresses = new List<JimuAddress>(descriptor.AddressDescriptors.ToArray().Count());
             foreach (var addDesc in descriptor.AddressDescriptors)
             {
                 var addrType = Type.GetType(addDesc.Type);
-                addresses.Add(_serializer.Deserialize(addDesc.Value, addrType) as Address);
+                addresses.Add(_serializer.Deserialize(addDesc.Value, addrType) as JimuAddress);
             }
 
-            return new ServiceRoute
+            return new JimuServiceRoute
             {
                 Address = addresses,
                 ServiceDescriptor = descriptor.ServiceDescriptor

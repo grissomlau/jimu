@@ -2,11 +2,9 @@
 using Autofac;
 using Jimu;
 using Jimu.Common.Logger.Log4netIntegration;
-using Jimu.Common.Transport.DotNettyIntegration;
-using Jimu.Core.Server;
-using Jimu.Core.Server.ServiceContainer;
-using Jimu.Server.OAuth.JwtIntegration.Middlewares;
+using Jimu.Server.OAuth.JoseJwtIntegration.Middlewares;
 using DbWorker.IUnitOfWork;
+using Jimu.Server;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.Json;
 
@@ -62,7 +60,7 @@ namespace DDD.Simple.Server
                  //.LoadServices(new string[] { "DDD.Simple.IServices", "DDD.Simple.Services", "DDD.Simple.Repository.EF", "DbWorker.UnitOfWork.EF" })
                  //.UseDotNettyServer("127.0.0.1", 8009, server => { })
                  .UseNetCoreHttpServer("127.0.0.1", 8009, server => { })
-                 .UseJwtAuthorization<DotNettyAddress>(new JwtAuthorizationOptions
+                 .UseJoseJwtForOAuth<DotNettyAddress>(new JwtAuthorizationOptions
                  {
                      CheckCredential = context =>
                       {
@@ -84,7 +82,7 @@ namespace DDD.Simple.Server
                      ServerPort = 8009,
                      TokenEndpointPath = "oauth/token?username=&password="
                  })
-                .UseConsul("127.0.0.1", 8500, "MService-", "127.0.0.1:8009")
+                .UseConsulForDiscovery("127.0.0.1", 8500, "MService-", "127.0.0.1:8009")
                 ;
             using (var host = builder.Build())
             {

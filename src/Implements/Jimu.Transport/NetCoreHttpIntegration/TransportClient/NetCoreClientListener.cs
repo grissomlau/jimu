@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Jimu.Core.Client.TransportClient;
-using Jimu.Core.Protocols;
 
-namespace Jimu.Common.Transport.NetCoreHttpIntegration.TransportClient
+namespace Jimu.Client
 {
     public class NetCoreClientListener : IClientListener
     {
-        public event Func<IClientSender, TransportMessage, Task> OnReceived;
+        public event Func<IClientSender, JimuTransportMsg, Task> OnReceived;
 
-        public async Task Received(IClientSender sender, TransportMessage message)
+        public async Task Received(IClientSender sender, JimuTransportMsg message)
         {
             if (OnReceived == null)
                 return;

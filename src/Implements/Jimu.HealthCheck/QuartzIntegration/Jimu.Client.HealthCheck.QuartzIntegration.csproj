@@ -14,11 +14,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Quartz" Version="3.0.4" />
+    <PackageReference Include="Quartz" Version="3.0.5" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Jimu.Core\Jimu.Core.csproj" />
+    <ProjectReference Include="..\..\..\Jimu.Core\Jimu.csproj" />
   </ItemGroup>
 
 </Project>

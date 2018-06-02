@@ -1,15 +1,12 @@
 ﻿using Autofac;
 using Jimu.Common.Discovery.ConsulIntegration;
-using Jimu.Core.Client;
-using Jimu.Core.Commons.Discovery;
-using Jimu.Core.Server;
-using Jimu.Core.Server.TransportServer;
+using Jimu.Server;
 
-namespace Jimu
+namespace Jimu.Server
 {
     public static class ServiceHostBuilderExtension
     {
-        public static IServiceHostServerBuilder UseConsul(this IServiceHostServerBuilder serviceHostBuilder, string ip, int port, string serviceCategory, string serverAddress = null)
+        public static IServiceHostServerBuilder UseConsulForDiscovery(this IServiceHostServerBuilder serviceHostBuilder, string ip, int port, string serviceCategory, string serverAddress = null)
         {
             serviceHostBuilder.RegisterService(containerBuilder =>
             {
@@ -39,12 +36,26 @@ namespace Jimu
 
 
 
-        public static IServiceHostClientBuilder UseConsul(this IServiceHostClientBuilder serviceHostBuilder, string ip, int port, string serviceCategory)
+    }
+}
+
+namespace Jimu.Client
+{
+    public static class ServiceHostBuilderExtension
+    {
+        public static IServiceHostClientBuilder UseConsulForDiscovery(this IServiceHostClientBuilder serviceHostBuilder, string ip, int port, string serviceCategory)
         {
             serviceHostBuilder.RegisterService(containerBuilder =>
             {
                 containerBuilder.RegisterType<ConsulServiceDiscovery>().As<IServiceDiscovery>().WithParameter("ip", ip).WithParameter("port", port).WithParameter("serviceCategory", serviceCategory).SingleInstance();
             });
+            serviceHostBuilder.AddInitializer(container =>
+            {
+                var clientDiscovery = container.Resolve<IClientServiceDiscovery>();
+                var serverDiscovery = container.Resolve<IServiceDiscovery>();
+                clientDiscovery.AddRoutesGetter(serverDiscovery.GetRoutesAsync);
+            });
+
             return serviceHostBuilder;
         }
     }

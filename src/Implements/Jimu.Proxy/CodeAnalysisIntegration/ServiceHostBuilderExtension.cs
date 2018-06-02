@@ -4,13 +4,8 @@ using System.Reflection;
 using System.Runtime.Loader;
 using Autofac;
 using Jimu.Client.Proxy.CodeAnalysisIntegration;
-using Jimu.Core.Client;
-using Jimu.Core.Client.Proxy;
-using Jimu.Core.Client.RemoteInvoker;
-using Jimu.Core.Protocols;
-using Jimu.Core.Server.ServiceContainer;
 
-namespace Jimu
+namespace Jimu.Client
 {
     public static class ServiceHostBuilderExtension
     {
@@ -20,9 +15,7 @@ namespace Jimu
             {
                 containerBuilder.RegisterType<ServiceProxyGenerator>().As<IServiceProxyGenerator>().SingleInstance();
                 containerBuilder.RegisterType<ServiceProxy>().As<IServiceProxy>().SingleInstance();
-                containerBuilder.RegisterType<RemoteServiceInvoker>().As<IRemoteServiceInvoker>().SingleInstance();
-                containerBuilder.RegisterType<ServiceIdGenerator>().As<IServiceIdGenerator>().SingleInstance();
-                containerBuilder.RegisterType<TypeConvertProvider>().As<ITypeConvertProvider>().SingleInstance();
+                containerBuilder.RegisterType<RemoteServiceCaller>().As<IRemoteServiceCaller>().SingleInstance();
             });
 
             var assemblies = new List<Assembly>();
@@ -32,7 +25,7 @@ namespace Jimu
                 assemblies.Add(assembly);
             }
 
-            var serviceTypes = assemblies.SelectMany(x => x.ExportedTypes).Where(x => typeof(IService).GetTypeInfo().IsAssignableFrom(x) && x.IsInterface).ToList();
+            var serviceTypes = assemblies.SelectMany(x => x.ExportedTypes).Where(x => x.GetMethods().Any(y => y.GetCustomAttribute<JimuServiceAttribute>() != null)).ToList();
 
             serviceHostBuilder.AddInitializer(componentRegister =>
             {

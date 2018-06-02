@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Jimu.ApiGateway.Utils;
-using Jimu.Core.Protocols;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Jimu.ApiGateway.Controllers
@@ -37,10 +36,10 @@ namespace Jimu.ApiGateway.Controllers
 
             var result = await JimuServiceProvider.Invoke(path, paras);
 
-            if (result.ResultType != typeof(FileModel).ToString())
+            if (result.ResultType != typeof(JimuFile).ToString())
                 return new JsonResult(result.Result);
 
-            var file = result.Result as FileModel;
+            var file = result.Result as JimuFile;
             return File(file?.Data, "application/octet-stream", file?.FileName);
         }
         private string GetContentType(string path)

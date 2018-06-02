@@ -1,9 +1,7 @@
 ﻿using System;
 using Autofac;
 using Jimu;
-using Jimu.Core.Server;
-using Jimu.Core.Server.ServiceContainer;
-using Jimu.Server.Extension.MasstransitIntegration;
+using Jimu.Server;
 
 namespace DDD.CQRS.Server
 {
@@ -24,7 +22,7 @@ namespace DDD.CQRS.Server
                     SendEndPointUri = new Uri("rabbitmq://localhost/Jimu_test")
                 })
                 .UseDotNettyServer("127.0.0.1", 8009, server => { })
-                .UseConsul("127.0.0.1", 8500, "MService-", "127.0.0.1:8009")
+                .UseConsulForDiscovery("127.0.0.1", 8500, "MService-", "127.0.0.1:8009")
                 ;
             using (var host = builder.Build())
             {

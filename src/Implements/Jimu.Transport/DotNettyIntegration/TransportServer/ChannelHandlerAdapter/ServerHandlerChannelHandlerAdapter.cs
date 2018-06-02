@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Threading.Tasks;
 using DotNetty.Transport.Channels;
-using Jimu.Core.Commons.Logger;
-using Jimu.Core.Protocols;
 
-namespace Jimu.Common.Transport.DotNettyIntegration.TransportServer.ChannelHandlerAdapter
+namespace Jimu.Server
 {
-    class ServerHandlerChannelHandlerAdapter : DotNetty.Transport.Channels.ChannelHandlerAdapter
+    class ServerHandlerChannelHandlerAdapter : ChannelHandlerAdapter
     {
-        private readonly Action<IChannelHandlerContext, TransportMessage> _readAction;
+        private readonly Action<IChannelHandlerContext, JimuTransportMsg> _readAction;
         private readonly ILogger _logger;
 
-        public ServerHandlerChannelHandlerAdapter(Action<IChannelHandlerContext, TransportMessage> readAction, ILogger logger)
+        public ServerHandlerChannelHandlerAdapter(Action<IChannelHandlerContext, JimuTransportMsg> readAction, ILogger logger)
         {
             _readAction = readAction;
             _logger = logger;
@@ -21,7 +19,7 @@ namespace Jimu.Common.Transport.DotNettyIntegration.TransportServer.ChannelHandl
         {
             Task.Run(() =>
             {
-                var msg = message as TransportMessage;
+                var msg = message as JimuTransportMsg;
                 _readAction(context, msg);
             });
         }

@@ -1,39 +1,38 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Jimu.Core.Client.RemoteInvoker;
 
 namespace Jimu.Client.Proxy.CodeAnalysisIntegration
-{ 
+{
     public abstract class ServiceProxyBase
     {
-        private readonly IRemoteServiceInvoker _remoteServiceInvoker;
+        private readonly IRemoteServiceCaller _remoteServiceCaller;
 
-        protected ServiceProxyBase(IRemoteServiceInvoker remoteServiceInvoker)
+        protected ServiceProxyBase(IRemoteServiceCaller remoteServiceCaller)
         {
-            _remoteServiceInvoker = remoteServiceInvoker;
+            _remoteServiceCaller = remoteServiceCaller;
         }
 
-        protected async Task<T> Invoke<T>(string serviceId, IDictionary<string, object> parameters)
+        protected async Task<T> InvokeAsync<T>(string serviceId, IDictionary<string, object> parameters)
         {
-            return await _remoteServiceInvoker.Invoke<T>(serviceId, parameters);
-
-        }
-
-        protected T InvokeSync<T>(string serviceId, IDictionary<string, object> parameters)
-        {
-            return _remoteServiceInvoker.Invoke<T>(serviceId, parameters).Result;
+            return await _remoteServiceCaller.InvokeAsync<T>(serviceId, parameters);
 
         }
 
-        protected async Task InvokeVoid(string serviceId, IDictionary<string, object> parameters)
+        protected T Invoke<T>(string serviceId, IDictionary<string, object> parameters)
         {
-            await _remoteServiceInvoker.Invoke(serviceId, parameters);
+            return _remoteServiceCaller.InvokeAsync<T>(serviceId, parameters).Result;
 
         }
 
-        protected void InvokeVoidSync(string serviceId, IDictionary<string, object> parameters)
+        protected async Task InvokeVoidAsync(string serviceId, IDictionary<string, object> parameters)
         {
-            _remoteServiceInvoker.Invoke(serviceId, parameters);
+            await _remoteServiceCaller.InvokeAsync(serviceId, parameters);
+
+        }
+
+        protected void InvokeVoid(string serviceId, IDictionary<string, object> parameters)
+        {
+            _remoteServiceCaller.InvokeAsync(serviceId, parameters);
 
         }
     }

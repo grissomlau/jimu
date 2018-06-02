@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Jimu.Core\Jimu.Core.csproj" />
+    <ProjectReference Include="..\..\..\Jimu.Core\Jimu.csproj" />
   </ItemGroup>
 
 </Project>

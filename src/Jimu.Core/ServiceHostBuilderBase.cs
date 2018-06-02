@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Autofac;
-using Jimu.Core.Client.TransportClient;
-using Jimu.Core.Commons.Logger;
-using Jimu.Core.Commons.Serializer;
-using Jimu.Core.Commons.Transport;
 
-namespace Jimu.Core
+namespace Jimu
 {
     /// <summary>
     ///     base builder for both client and server
@@ -40,21 +36,13 @@ namespace Jimu.Core
 
         public IServiceHost Build()
         {
-            //this.UseLog4netLogger(new Jimu.Logger.Log4netOptions
-            //{
-            //    EnableConsoleLog = this.Options.EnableConsoleLog,
-            //    EnableFileLog = this.Options.EnableFileLog,
-            //    FileLogPath = this.Options.FileLogPath,
-            //});
-            this.UseConsoleLogger();
-            this.UseSerializer();
-
             IContainer container = null;
             var host = new ServiceHost(_runners);
             _containerBuilder.Register(x => host).As<IServiceHost>().SingleInstance();
             _containerBuilder.Register(x => container).As<IContainer>().SingleInstance();
-            _containerBuilder.RegisterType<DefaultTransportClientFactory>().As<ITransportClientFactory>()
-                .SingleInstance();
+            _containerBuilder.RegisterType<TypeConvertProvider>().As<ITypeConvertProvider>().SingleInstance();
+            _containerBuilder.RegisterType<Serializer>().As<ISerializer>().SingleInstance();
+            _containerBuilder.RegisterType<ServiceIdGenerator>().As<IServiceIdGenerator>().SingleInstance();
 
 
             _serviceRegisters.ForEach(x => { x(_containerBuilder); });

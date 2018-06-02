@@ -1,11 +1,7 @@
 ﻿using System.Threading.Tasks;
-using Jimu.Core.Commons.Logger;
-using Jimu.Core.Commons.Serializer;
-using Jimu.Core.Protocols;
-using Jimu.Core.Server.TransportServer;
 using Microsoft.AspNetCore.Http;
 
-namespace Jimu.Common.Transport.NetCoreHttpIntegration.TransportServer
+namespace Jimu.Server
 {
     public class NetCoreHttpResponse : IResponse
     {
@@ -18,10 +14,10 @@ namespace Jimu.Common.Transport.NetCoreHttpIntegration.TransportServer
             _serializer = serializer;
             _logger = logger;
         }
-        public Task WriteAsync(string messageId, RemoteInvokeResultMessage resultMessage)
+        public Task WriteAsync(string messageId, JimuRemoteCallResultData resultMessage)
         {
-            _logger.Info($"结束处理消息： {messageId}");
-            var data = _serializer.Serialize<string>(TransportMessage.Create(messageId, resultMessage));
+            _logger.Info($"finish handling： {messageId}");
+            var data = _serializer.Serialize<string>(new JimuTransportMsg(messageId, resultMessage));
             //_httpResponse.
             return _httpResponse.WriteAsync(data);
 

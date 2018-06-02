@@ -4,24 +4,18 @@ using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using Jimu.Core.Commons.Logger;
-using Jimu.Core.Commons.Serializer;
-using Jimu.Core.Commons.Utils;
-using Jimu.Core.Protocols;
-using Jimu.Core.Server.ServiceContainer;
-using Jimu.Core.Server.TransportServer;
 using Microsoft.AspNetCore.Http;
 
-namespace Jimu.Common.Transport.NetCoreHttpIntegration.TransportServer
+namespace Jimu.Server
 {
     public class HttpMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly Stack<Func<RequestDel,RequestDel>> _middlewares;
+        private readonly Stack<Func<RequestDel, RequestDel>> _middlewares;
         private readonly IServiceEntryContainer _serviceEntryContainer;
         private readonly ILogger _logger;
         private readonly ISerializer _serializer;
-        private TransportMessage _message;
+        private JimuTransportMsg _message;
         private readonly ITypeConvertProvider _typeConvert;
         public HttpMiddleware(RequestDelegate next, Stack<Func<RequestDel, RequestDel>> middlewares, IServiceEntryContainer serviceEntryContainer, ILogger logger, ISerializer serializer, ITypeConvertProvider typeConvert)
         {
@@ -38,20 +32,20 @@ namespace Jimu.Common.Transport.NetCoreHttpIntegration.TransportServer
             using (var sr = new StreamReader(context.Request.Body))
             {
                 var body = sr.ReadToEnd();
-                _message = (TransportMessage)_typeConvert.Convert(body, typeof(TransportMessage));
+                _message = (JimuTransportMsg)_typeConvert.Convert(body, typeof(JimuTransportMsg));
             }
             IResponse response = new NetCoreHttpResponse(context.Response, _serializer, _logger);
-            var thisContext = new RemoteInvokeContext(_message, _serviceEntryContainer, response, _logger);
+            var thisContext = new RemoteCallerContext(_message, _serviceEntryContainer, response, _logger);
             var lastInvoke = new RequestDel(async ctx =>
             {
-                RemoteInvokeResultMessage resultMessage = new RemoteInvokeResultMessage();
+                JimuRemoteCallResultData resultMessage = new JimuRemoteCallResultData();
 
                 if (ctx.ServiceEntry == null)
                 {
                     resultMessage.ExceptionMessage = $"can not find service {ctx.RemoteInvokeMessage.ServiceId}";
                     await response.WriteAsync(_message.Id, resultMessage);
                 }
-                else if (ctx.ServiceEntry.Descriptor.WaitExecution())
+                else if (ctx.ServiceEntry.Descriptor.WaitExecution)
                 {
                     await LocalServiceExecuteAsync(ctx.ServiceEntry, ctx.RemoteInvokeMessage, resultMessage);
                     await response.WriteAsync(_message.Id, resultMessage);
@@ -77,7 +71,7 @@ namespace Jimu.Common.Transport.NetCoreHttpIntegration.TransportServer
 
         }
 
-        private async Task LocalServiceExecuteAsync(ServiceEntry serviceEntry, RemoteInvokeMessage invokeMessage, RemoteInvokeResultMessage resultMessage)
+        private async Task LocalServiceExecuteAsync(JimuServiceEntry serviceEntry, JimuRemoteCallData invokeMessage, JimuRemoteCallResultData resultMessage)
         {
             try
             {
@@ -100,7 +94,7 @@ namespace Jimu.Common.Transport.NetCoreHttpIntegration.TransportServer
                             resultMessage.Result = taskType.GetProperty("Result")?.GetValue(task);
                         }
                     }
-                    resultMessage.ResultType = serviceEntry.Descriptor.ReturnType();
+                    resultMessage.ResultType = serviceEntry.Descriptor.ReturnType;
 
                 }
             }

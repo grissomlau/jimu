@@ -1,18 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Autofac;
-using Jimu.Core.Commons.Discovery;
-using Jimu.Core.Commons.Serializer;
-using Jimu.Core.Protocols;
-using Jimu.Core.Server;
-using Jimu.Core.Server.TransportServer;
-using Jimu.Server.OAuth.JwtIntegration.Middlewares;
+using Jimu.Server.OAuth.JoseJwtIntegration.Middlewares;
 
-namespace Jimu
+namespace Jimu.Server
 {
     public static class ServiceHostBuilderExtension
     {
-        public static IServiceHostServerBuilder UseJwtAuthorization<T>(this IServiceHostServerBuilder serviceHostBuilder, JwtAuthorizationOptions options) where T : Address, new()
+        public static IServiceHostServerBuilder UseJoseJwtForOAuth<T>(this IServiceHostServerBuilder serviceHostBuilder, JwtAuthorizationOptions options) where T : JimuAddress, new()
         {
             serviceHostBuilder.AddInitializer(container =>
             {
@@ -27,13 +22,13 @@ namespace Jimu
                     Ip = options.ServerIp,
                     Port = options.ServerPort
                 };
-                var tokenRoute = new List<ServiceRoute> {
-                    new ServiceRoute
+                var tokenRoute = new List<JimuServiceRoute> {
+                    new JimuServiceRoute
                     {
-                        Address = new List<Address>{
+                        Address = new List<JimuAddress>{
                             addr
                         },
-                        ServiceDescriptor = new ServiceDescriptor
+                        ServiceDescriptor = new JimuServiceDesc
                         {
                             Id=options.GetServiceId(),
                             RoutePath = options.TokenEndpointPath

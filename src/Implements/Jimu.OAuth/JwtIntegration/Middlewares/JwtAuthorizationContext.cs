@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using Jimu.Core.Protocols;
 
-namespace Jimu.Server.OAuth.JwtIntegration.Middlewares
+namespace Jimu.Server.OAuth.JoseJwtIntegration.Middlewares
 {
     public class JwtAuthorizationContext
     {
@@ -12,12 +11,12 @@ namespace Jimu.Server.OAuth.JwtIntegration.Middlewares
         public string UserName { get; }
         public string Password { get; }
 
-        public RemoteInvokeMessage RemoteInvokeMessage { get; }
+        public JimuRemoteCallData RemoteInvokeMessage { get; }
 
 
         private Dictionary<string, object> Payload { get; }
 
-        public JwtAuthorizationContext(JwtAuthorizationOptions options, RemoteInvokeMessage remoteInvokeMessage)
+        public JwtAuthorizationContext(JwtAuthorizationOptions options, JimuRemoteCallData remoteInvokeMessage)
         {
             Options = options;
             Payload = options.GetPayload();

@@ -1,12 +1,9 @@
 ﻿using System;
 using Autofac;
-using Jimu.Core;
-using Jimu.Core.Server;
-using Jimu.Server.Extension.MasstransitIntegration;
 using MassTransit;
 using MassTransit.RabbitMqTransport;
 
-namespace Jimu
+namespace Jimu.Server
 {
     public static class ServiceHostBuilderExtension
     {

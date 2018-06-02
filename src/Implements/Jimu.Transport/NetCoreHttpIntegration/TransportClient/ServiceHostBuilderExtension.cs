@@ -1,13 +1,7 @@
 ﻿using Autofac;
 using Jimu.Common.Transport.NetCoreHttpIntegration;
-using Jimu.Common.Transport.NetCoreHttpIntegration.TransportClient;
-using Jimu.Core.Client;
-using Jimu.Core.Client.TransportClient;
-using Jimu.Core.Commons.Logger;
-using Jimu.Core.Commons.Transport;
-using Jimu.Core.Protocols;
 
-namespace Jimu
+namespace Jimu.Client
 {
     public static class ServiceHostClientBuilderExtension
     {
@@ -17,7 +11,7 @@ namespace Jimu
             {
                 var factory = container.Resolve<ITransportClientFactory>();
                 var logger = container.Resolve<ILogger>();
-                factory.ClientCreatorDelegate += (Address address, ref ITransportClient client) =>
+                factory.ClientCreatorDelegate += (JimuAddress address, ref ITransportClient client) =>
                  {
                      if (client == null && address.GetType() == typeof(NetCoreHttpAddress))
                      {

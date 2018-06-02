@@ -1,9 +1,6 @@
 ﻿using Autofac;
 using Jimu.Common.Logger.Log4netIntegration;
-using Jimu.Core;
-using Jimu.Core.Client;
-using Jimu.Core.Commons.Logger;
-using Jimu.Core.Server;
+
 
 namespace Jimu
 {
@@ -19,15 +16,26 @@ namespace Jimu
             });
             return serviceHostBuilder as T;
         }
-        public static IServiceHostClientBuilder UseLog4netLogger(this IServiceHostBuilder serviceHostBuilder, Log4netOptions options = null)
-        {
-            return serviceHostBuilder.UseLog4netLogger<IServiceHostClientBuilder>(options);
-        }
-
+    }
+}
+namespace Jimu.Server
+{
+    public static class ServiceHostBuilderExtension
+    {
         public static IServiceHostServerBuilder UseLog4netLogger(this IServiceHostServerBuilder serviceHostBuilder, Log4netOptions options = null)
         {
             return serviceHostBuilder.UseLog4netLogger<IServiceHostServerBuilder>(options);
         }
 
+    }
+}
+namespace Jimu.Client
+{
+    public static class ServiceHostBuilderExtension
+    {
+        public static IServiceHostClientBuilder UseLog4netLogger(this IServiceHostBuilder serviceHostBuilder, Log4netOptions options = null)
+        {
+            return serviceHostBuilder.UseLog4netLogger<IServiceHostClientBuilder>(options);
+        }
     }
 }

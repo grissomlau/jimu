@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Jimu.Core.Protocols;
 
-namespace Jimu.Core.Server.TransportServer
+namespace Jimu.Server
 {
+    public delegate Task RequestDel(RemoteCallerContext context);
     /// <summary>
     ///     transport server
     /// </summary>
@@ -14,7 +14,7 @@ namespace Jimu.Core.Server.TransportServer
         ///     get all the service in this server
         /// </summary>
         /// <returns></returns>
-        List<ServiceRoute> GetServiceRoutes();
+        List<JimuServiceRoute> GetServiceRoutes();
 
         /// <summary>
         ///     start the server

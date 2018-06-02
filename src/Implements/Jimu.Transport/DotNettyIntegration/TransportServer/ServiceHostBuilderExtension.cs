@@ -1,11 +1,7 @@
 ﻿using System;
 using Autofac;
-using Jimu.Common.Transport.DotNettyIntegration;
-using Jimu.Common.Transport.DotNettyIntegration.TransportServer;
-using Jimu.Core.Server;
-using Jimu.Core.Server.TransportServer;
 
-namespace Jimu
+namespace Jimu.Server
 {
     public static class ServiceHostBuilderExtension
     {

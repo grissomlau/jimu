@@ -3,8 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
 using Jimu.ApiGateway.Utils;
-using Jimu.Core.Commons.Discovery;
-using Jimu.Core.Protocols;
+using Jimu.Client;
+using Jimu.Server;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Jimu.ApiGateway.Controllers
@@ -13,9 +13,9 @@ namespace Jimu.ApiGateway.Controllers
     public class ServicesManagerController : Controller
     {
         //[HttpGet(Name ="addresses")]
-        public async Task<List<Address>> GetAddresses()
+        public async Task<List<JimuAddress>> GetAddresses()
         {
-            var serviceDiscovery = JimuServiceProvider.Container.Resolve<IServiceDiscovery>();
+            var serviceDiscovery = JimuServiceProvider.Container.Resolve<IClientServiceDiscovery>();
             var addresses = await serviceDiscovery.GetAddressAsync();
             return addresses;
             //return (from addr in addresses
@@ -24,9 +24,9 @@ namespace Jimu.ApiGateway.Controllers
         }
 
         //[HttpGet(Name ="services")]
-        public async Task<List<ServiceDescriptor>> GetServices(string server)
+        public async Task<List<JimuServiceDesc>> GetServices(string server)
         {
-            var serviceDiscovery = JimuServiceProvider.Container.Resolve<IServiceDiscovery>();
+            var serviceDiscovery = JimuServiceProvider.Container.Resolve<IClientServiceDiscovery>();
             var routes = await serviceDiscovery.GetRoutesAsync();
             if (routes != null && routes.Any() && !string.IsNullOrEmpty(server))
             {

@@ -3,16 +3,9 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Jimu.Core.Client.RemoteInvoker;
-using Jimu.Core.Commons.Logger;
-using Jimu.Core.Protocols;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-
-#if !NET
-
-#endif
 
 namespace Jimu.Client.Proxy.CodeAnalysisIntegration
 {
@@ -35,8 +28,8 @@ namespace Jimu.Client.Proxy.CodeAnalysisIntegration
             references = new[]
             {
                 MetadataReference.CreateFromFile(typeof(Task).GetTypeInfo().Assembly.Location),
-                MetadataReference.CreateFromFile(typeof(ServiceDescriptor).GetTypeInfo().Assembly.Location),
-                MetadataReference.CreateFromFile(typeof(IRemoteServiceInvoker).GetTypeInfo().Assembly.Location),
+                MetadataReference.CreateFromFile(typeof(JimuServiceDesc).GetTypeInfo().Assembly.Location),
+                MetadataReference.CreateFromFile(typeof(IRemoteServiceCaller).GetTypeInfo().Assembly.Location),
                 MetadataReference.CreateFromFile(typeof(ServiceProxyGenerator).GetTypeInfo().Assembly.Location)
             }.Concat(references);
             return Compile(AssemblyInfo.Create("Jimu.Proxy.ClientProxy"), trees, references, logger);

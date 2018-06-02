@@ -9,20 +9,12 @@ using DotNetty.Codecs;
 using DotNetty.Transport.Bootstrapping;
 using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Sockets;
-using Jimu.Common.Transport.DotNettyIntegration.TransportClient.ChannelHandlerAdapter;
-using Jimu.Common.Transport.DotNettyIntegration.TransportServer.ChannelHandlerAdapter;
-using Jimu.Core.Commons.Logger;
-using Jimu.Core.Commons.Serializer;
-using Jimu.Core.Commons.Utils;
-using Jimu.Core.Protocols;
-using Jimu.Core.Server.ServiceContainer;
-using Jimu.Core.Server.TransportServer;
 
-namespace Jimu.Common.Transport.DotNettyIntegration.TransportServer
+namespace Jimu.Server
 {
     public class DotNettyServer : IServer
     {
-        private readonly List<ServiceRoute> _serviceRoutes = new List<ServiceRoute>();
+        private readonly List<JimuServiceRoute> _serviceRoutes = new List<JimuServiceRoute>();
         private readonly IServiceEntryContainer _serviceEntryContainer;
         private readonly DotNettyAddress _address;
         private readonly ILogger _logger;
@@ -40,16 +32,16 @@ namespace Jimu.Common.Transport.DotNettyIntegration.TransportServer
             _serializer = serializer;
             _middlewares = new Stack<Func<RequestDel, RequestDel>>();
         }
-        public List<ServiceRoute> GetServiceRoutes()
+        public List<JimuServiceRoute> GetServiceRoutes()
         {
             if (!_serviceRoutes.Any())
             {
                 var serviceEntries = _serviceEntryContainer.GetServiceEntry();
                 serviceEntries.ForEach(entry =>
                 {
-                    var serviceRoute = new ServiceRoute
+                    var serviceRoute = new JimuServiceRoute
                     {
-                        Address = new List<Address> {
+                        Address = new List<JimuAddress> {
                              _address
                             },
                         ServiceDescriptor = entry.Descriptor
@@ -61,24 +53,24 @@ namespace Jimu.Common.Transport.DotNettyIntegration.TransportServer
             return _serviceRoutes;
         }
 
-        private async Task OnReceived(IChannelHandlerContext channel, TransportMessage message)
+        private async Task OnReceived(IChannelHandlerContext channel, JimuTransportMsg message)
         {
             _logger.Info($"begin handle message: {message.Id}");
             //TaskCompletionSource<TransportMessage> task;
-            if (message.IsInvokeMessage())
+            if (message.ContentType == typeof(JimuRemoteCallData).FullName)
             {
                 IResponse response = new DotNettyResponse(channel, _serializer, _logger);
-                var thisContext = new RemoteInvokeContext(message, _serviceEntryContainer, response, _logger);
+                var thisContext = new RemoteCallerContext(message, _serviceEntryContainer, response, _logger);
 
                 var lastInvoke = new RequestDel(async context =>
                 {
-                    RemoteInvokeResultMessage resultMessage = new RemoteInvokeResultMessage();
+                    JimuRemoteCallResultData resultMessage = new JimuRemoteCallResultData();
                     if (context.ServiceEntry == null)
                     {
                         resultMessage.ExceptionMessage = $"can not find service {context.RemoteInvokeMessage.ServiceId}";
                         await response.WriteAsync(message.Id, resultMessage);
                     }
-                    else if (context.ServiceEntry.Descriptor.WaitExecution())
+                    else if (context.ServiceEntry.Descriptor.WaitExecution)
                     {
                         await LocalServiceExecuteAsync(context.ServiceEntry, context.RemoteInvokeMessage, resultMessage);
                         await response.WriteAsync(message.Id, resultMessage);
@@ -106,7 +98,7 @@ namespace Jimu.Common.Transport.DotNettyIntegration.TransportServer
             }
         }
 
-        private async Task LocalServiceExecuteAsync(ServiceEntry serviceEntry, RemoteInvokeMessage invokeMessage, RemoteInvokeResultMessage resultMessage)
+        private async Task LocalServiceExecuteAsync(JimuServiceEntry serviceEntry, JimuRemoteCallData invokeMessage, JimuRemoteCallResultData resultMessage)
         {
             try
             {
@@ -129,7 +121,7 @@ namespace Jimu.Common.Transport.DotNettyIntegration.TransportServer
                             resultMessage.Result = taskType.GetProperty("Result")?.GetValue(task);
                         }
                     }
-                    resultMessage.ResultType = serviceEntry.Descriptor.ReturnType();
+                    resultMessage.ResultType = serviceEntry.Descriptor.ReturnType;
 
                 }
             }
@@ -159,7 +151,7 @@ namespace Jimu.Common.Transport.DotNettyIntegration.TransportServer
                     var pipeline = channel.Pipeline;
                     pipeline.AddLast(new LengthFieldPrepender(4));
                     pipeline.AddLast(new LengthFieldBasedFrameDecoder(int.MaxValue, 0, 4, 0, 4));
-                    pipeline.AddLast(new ReadClientMessageChannelHandlerAdapter(_serializer, _logger));
+                    pipeline.AddLast(new ReadServerMessageChannelHandlerAdapter(_serializer, _logger));
                     pipeline.AddLast(new ServerHandlerChannelHandlerAdapter(async (context, message) =>
                     {
                         await OnReceived(context, message);
@@ -172,7 +164,7 @@ namespace Jimu.Common.Transport.DotNettyIntegration.TransportServer
             _logger.Info($"server start successfuly, address is： {_address.Code}");
         }
 
-        private async Task InvokeMiddleware(RequestDel next, RemoteInvokeContext context)
+        private async Task InvokeMiddleware(RequestDel next, RemoteCallerContext context)
         {
             await next.Invoke(context);
         }

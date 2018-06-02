@@ -1,8 +1,7 @@
-﻿using Jimu.Core.Protocols;
-
-namespace Jimu.Common.Transport.NetCoreHttpIntegration
+﻿
+namespace Jimu
 {
-    public class NetCoreHttpAddress : Address
+    public class NetCoreHttpAddress : JimuAddress
     {
         public NetCoreHttpAddress(string ip, int port)
         {

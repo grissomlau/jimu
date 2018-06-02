@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using Jimu.Core.Commons.Logger;
-using Jimu.Core.Commons.Serializer;
-using Jimu.Core.Server.ServiceContainer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Jimu.Common.Transport.NetCoreHttpIntegration.TransportServer
+namespace Jimu.Server
 {
     public class Startup : IStartup
     {

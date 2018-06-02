@@ -1,28 +1,25 @@
 ﻿using System;
 using System.Linq;
-using Jimu.Core.Commons.Logger;
-using Jimu.Core.Protocols;
-using Jimu.Core.Server.ServiceContainer;
 
-namespace Jimu.Core.Server.TransportServer
+namespace Jimu.Server
 {
     /// <summary>
     ///     context of service invoker
     /// </summary>
-    public class RemoteInvokeContext
+    public class RemoteCallerContext
     {
-        public RemoteInvokeContext(TransportMessage transportMessage, IServiceEntryContainer serviceEntryContainer,
+        public RemoteCallerContext(JimuTransportMsg transportMessage, IServiceEntryContainer serviceEntryContainer,
             IResponse response, ILogger logger)
         {
             Response = response;
             TransportMessage = transportMessage;
             try
             {
-                RemoteInvokeMessage = transportMessage.GetContent<RemoteInvokeMessage>();
+                RemoteInvokeMessage = transportMessage.GetContent<JimuRemoteCallData>();
             }
             catch (Exception ex)
             {
-                logger.Error("failed to convert transportmessage.content to  RemoteInvokeMessage.", ex);
+                logger.Error("failed to convert transportmsg.content to  JimuRemoteCallerData.", ex);
                 return;
             }
 
@@ -34,11 +31,11 @@ namespace Jimu.Core.Server.TransportServer
             }
         }
 
-        public ServiceEntry ServiceEntry { get; }
+        public JimuServiceEntry ServiceEntry { get; }
         public IResponse Response { get; }
 
-        public TransportMessage TransportMessage { get; }
+        public JimuTransportMsg TransportMessage { get; }
 
-        public RemoteInvokeMessage RemoteInvokeMessage { get; }
+        public JimuRemoteCallData RemoteInvokeMessage { get; }
     }
 }

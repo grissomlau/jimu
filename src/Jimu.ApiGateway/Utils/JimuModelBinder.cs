@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Jimu.Core.Protocols;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Jimu.ApiGateway.Utils
@@ -24,14 +23,14 @@ namespace Jimu.ApiGateway.Utils
                 {
                     if (form.Files.Any())
                     {
-                        var list = new List<FileModel>();
+                        var list = new List<JimuFile>();
                         foreach (var file in form.Files)
                         {
                             using (var sr = file.OpenReadStream())
                             {
                                 var bytes = new byte[sr.Length];
                                 sr.ReadAsync(bytes, 0, bytes.Length);
-                                var myFile = new FileModel
+                                var myFile = new JimuFile
                                 {
                                     FileName = file.FileName,
                                     Data = bytes

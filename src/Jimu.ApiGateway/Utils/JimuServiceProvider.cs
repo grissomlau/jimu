@@ -3,13 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
 using Jimu.ApiGateway.Model;
+using Jimu.Client;
 using Jimu.Common.Logger.Log4netIntegration;
-using Jimu.Core;
-using Jimu.Core.Client;
-using Jimu.Core.Client.LoadBalance;
-using Jimu.Core.Client.RemoteInvoker;
-using Jimu.Core.Commons.Serializer;
-using Jimu.Core.Protocols;
 
 namespace Jimu.ApiGateway.Utils
 {
@@ -25,22 +20,24 @@ namespace Jimu.ApiGateway.Utils
                 {
                     EnableConsoleLog = true
                 })
-                .UseConsul(mServiceOptions.ConsulIp, mServiceOptions.ConsulPort, mServiceOptions.ServiceCategory)
+                .UseInMemoryForDiscovery(new DotNettyAddress("127.0.0.1", 8009))
+                .UseConsulForDiscovery(mServiceOptions.ConsulIp, mServiceOptions.ConsulPort, mServiceOptions.ServiceCategory)
                 .UseDotNettyClient()
                 .UseNetCoreHttpClient()
                 .UsePollingAddressSelector()
                 .UseServerHealthCheck(1)
-                .UseRemoteServiceInvoker(() => { var headers = JimuHttpContext.Current.Request.Headers["Authorization"]; return headers.Any() ? headers[0] : null; })
+                .UseToken(() => { var headers = JimuHttpContext.Current.Request.Headers["Authorization"]; return headers.Any() ? headers[0] : null; })
                 .Build();
             Container = _host.Container;
+            _host.Run();
         }
 
         //public static async Task<object> Invoke(string path, IDictionary<string, object> paras, string token)
         //public static async Task<object> Invoke(HttpResponse httpResponse, string path, IDictionary<string, object> paras)
-        public static async Task<RemoteInvokeResultMessage> Invoke( string path, IDictionary<string, object> paras)
+        public static async Task<JimuRemoteCallResultData> Invoke(string path, IDictionary<string, object> paras)
         {
             //path = ParsePath(path, paras);
-            var remoteServiceInvoker = _host.Container.Resolve<IRemoteServiceInvoker>();
+            var remoteServiceInvoker = _host.Container.Resolve<IRemoteServiceCaller>();
             var converter = _host.Container.Resolve<ISerializer>();
             //var serviceDiscovery = _host.Container.Resolve<IServiceDiscovery>();
             //var addressSelector = _host.Container.Resolve<IAddressSelector>();
@@ -64,7 +61,7 @@ namespace Jimu.ApiGateway.Utils
 
             //});
             //var result = await remoteServiceInvoker.Invoke(path, paras, token);
-            var result = await remoteServiceInvoker.Invoke(path, paras);
+            var result = await remoteServiceInvoker.InvokeAsync(path, paras);
             if (!string.IsNullOrEmpty(result.ExceptionMessage))
             {
                 throw new HttpStatusCodeException(400, $"{path}, {result.ToErrorString()}");
@@ -77,11 +74,11 @@ namespace Jimu.ApiGateway.Utils
                     throw new HttpStatusCodeException(erroCode, result.ToErrorString());
                 }
 
-                return new RemoteInvokeResultMessage { ErrorCode = result.ErrorCode, ErrorMsg = result.ErrorMsg };
+                return new JimuRemoteCallResultData { ErrorCode = result.ErrorCode, ErrorMsg = result.ErrorMsg };
             }
-            if (result.ResultType == typeof(FileModel).ToString())
+            if (result.ResultType == typeof(JimuFile).ToString())
             {
-                var file = converter.Deserialize(result.Result, typeof(FileModel));
+                var file = converter.Deserialize(result.Result, typeof(JimuFile));
                 result.Result = file;
             }
 
