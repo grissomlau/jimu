@@ -25,7 +25,8 @@ namespace Jimu.ApiGateway.Utils
                 .UseDotNettyClient()
                 .UseNetCoreHttpClient()
                 .UsePollingAddressSelector()
-                .UseServerHealthCheck(1)
+                //.UseServerHealthCheck(1)
+                .SetDiscoveryAutoUpdateJobInterval(60)
                 .UseToken(() => { var headers = JimuHttpContext.Current.Request.Headers["Authorization"]; return headers.Any() ? headers[0] : null; })
                 .Build();
             Container = _host.Container;

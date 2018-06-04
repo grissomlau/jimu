@@ -37,7 +37,7 @@ namespace Jimu.Client
             {
                 Clients.TryRemove(address.CreateEndPoint(), out var value);
                 _logger.Error($"failed to create transport client for : {address.Code}", ex);
-                return null;
+                throw new TransportException(ex.Message, ex);
             }
         }
     }

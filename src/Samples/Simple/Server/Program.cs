@@ -17,7 +17,8 @@ namespace Simple.Server
                     EnableConsoleLog = true
                 })
                 .LoadServices(new[] { "Simple.IServices", "Simple.Services" })
-                .UseDotNettyServer("127.0.0.1", 8010, server => { })
+                    .UseNetCoreHttpServer("127.0.0.1", 8010)
+                //.UseDotNettyServer("127.0.0.1", 8010, server => { })
                 //.UseInMemoryForDiscovery()
                 .UseConsulForDiscovery("127.0.0.1", 8500, "JimuService-", "127.0.0.1:8010")
                 ;

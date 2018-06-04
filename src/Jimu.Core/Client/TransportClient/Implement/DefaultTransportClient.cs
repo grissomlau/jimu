@@ -55,7 +55,7 @@ namespace Jimu.Client
             catch (Exception ex)
             {
                 _logger.Error($"failed to send:{data.ServiceId}", ex);
-                throw;
+                throw new TransportException(ex.Message, ex);
             }
         }
 

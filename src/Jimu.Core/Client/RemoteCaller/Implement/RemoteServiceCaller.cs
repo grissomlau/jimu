@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Polly;
 
 namespace Jimu.Client
 {
@@ -14,10 +15,11 @@ namespace Jimu.Client
         private readonly IServiceTokenGetter _serviceTokenGetter;
         private readonly ITransportClientFactory _transportClientFactory;
         private readonly ITypeConvertProvider _typeConvertProvider;
+        private int _retryTimes;
 
         public RemoteServiceCaller(IClientServiceDiscovery serviceDiscovery, IAddressSelector addressSelector,
             ITransportClientFactory transportClientFactory, ITypeConvertProvider typeConvertProvider,
-            IServiceTokenGetter serviceTokenGetter, ILogger logger)
+            IServiceTokenGetter serviceTokenGetter, ILogger logger, int retryTimes = -1)
         {
             _serviceDiscovery = serviceDiscovery;
             _addressSelector = addressSelector;
@@ -25,6 +27,7 @@ namespace Jimu.Client
             _typeConvertProvider = typeConvertProvider;
             _serviceTokenGetter = serviceTokenGetter;
             _logger = logger;
+            _retryTimes = retryTimes;
         }
 
         public async Task<T> InvokeAsync<T>(string serviceIdOrPath, IDictionary<string, object> paras)
@@ -82,22 +85,43 @@ namespace Jimu.Client
         {
             if (paras == null) paras = new ConcurrentDictionary<string, object>();
             var address = await _addressSelector.GetAddressAsyn(service);
-            var client = _transportClientFactory.CreateClient(address);
-            if (client == null)
-                return new JimuRemoteCallResultData
-                {
-                    ErrorCode = "400",
-                    ErrorMsg = "Server unavailable!"
-                };
-            _logger.Info($"begin to invoke： serviceId:{service.ServiceDescriptor.Id},parameters count: {paras.Count()}, token:{token}");
-            var result = await client.SendAsync(new JimuRemoteCallData
+            if (_retryTimes < 0)
             {
-                Parameters = paras,
-                ServiceId = service.ServiceDescriptor.Id,
-                Token = token,
-                Descriptor = service.ServiceDescriptor
-            });
-            return result;
+                _retryTimes = service.Address.Count;
+            }
+            JimuRemoteCallResultData result = null;
+            var retryPolicy = Policy.Handle<TransportException>()
+                .RetryAsync(_retryTimes,
+                    async (ex, count) =>
+                    {
+                        address = await _addressSelector.GetAddressAsyn(service);
+                        _logger.Info(
+                            $"FaultHandling,retry times: {count},serviceId: {service.ServiceDescriptor.Id},Address: {address.Code},RemoteServiceCaller excute retry by Polly for exception {ex.Message}");
+                    });
+            var fallbackPolicy = Policy<JimuRemoteCallResultData>.Handle<TransportException>()
+                .FallbackAsync(new JimuRemoteCallResultData() { ErrorCode = "500", ErrorMsg = "error occur when communicate with server." })
+                .WrapAsync(retryPolicy);
+            return await fallbackPolicy.ExecuteAsync(async () =>
+                    {
+                        var client = _transportClientFactory.CreateClient(address);
+                        if (client == null)
+                            return new JimuRemoteCallResultData
+                            {
+                                ErrorCode = "400",
+                                ErrorMsg = "Server unavailable!"
+                            };
+                        _logger.Info($"begin to invoke： serviceId:{service.ServiceDescriptor.Id},parameters count: {paras.Count()}, token:{token}");
+                        //Polly.Policy.Handle<>()
+
+                        result = await client.SendAsync(new JimuRemoteCallData
+                        {
+                            Parameters = paras,
+                            ServiceId = service.ServiceDescriptor.Id,
+                            Token = token,
+                            Descriptor = service.ServiceDescriptor
+                        });
+                        return result;
+                    });
         }
 
         private async Task<JimuServiceRoute> GetServiceByPathAsync(string path, IDictionary<string, object> paras)

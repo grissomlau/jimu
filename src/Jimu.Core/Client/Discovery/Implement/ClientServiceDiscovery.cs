@@ -35,6 +35,7 @@ namespace Jimu.Client
 
         public void RunInInit()
         {
+            Thread.Sleep(200);
             var result = UpdateRoutes();
             result.Wait();
             RunUpdateJob();
