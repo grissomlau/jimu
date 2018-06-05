@@ -13,6 +13,7 @@ namespace Jimu.Client
                 cb.RegisterType<ClientServiceDiscovery>().As<IClientServiceDiscovery>().SingleInstance();
                 cb.RegisterType<DefaultTransportClientFactory>().As<ITransportClientFactory>().SingleInstance();
                 cb.RegisterType<ServiceProxy>().As<IServiceProxy>().SingleInstance();
+                cb.Register<IServiceTokenGetter>((c) => null).As<IServiceTokenGetter>().SingleInstance();
             });
             this.AddRunner(container =>
             {

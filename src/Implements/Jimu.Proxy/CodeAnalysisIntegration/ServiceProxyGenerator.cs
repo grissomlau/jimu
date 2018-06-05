@@ -108,7 +108,7 @@ namespace Jimu.Client.Proxy.CodeAnalysisIntegration
                     SyntaxFactory.UsingDirective(GetQualifiedNameSyntax("System.Threading.Tasks")),
                     SyntaxFactory.UsingDirective(GetQualifiedNameSyntax("System.Collections.Generic")),
                     SyntaxFactory.UsingDirective(GetQualifiedNameSyntax(typeof(IRemoteServiceCaller).Namespace)),
-                    SyntaxFactory.UsingDirective(GetQualifiedNameSyntax(typeof(ISerializer).Namespace)),
+                    //SyntaxFactory.UsingDirective(GetQualifiedNameSyntax(typeof(ISerializer).Namespace)),
                     SyntaxFactory.UsingDirective(GetQualifiedNameSyntax(typeof(ServiceProxyBase).Namespace))
                 });
         }

@@ -23,7 +23,7 @@ namespace Jimu.Client.Proxy.CodeAnalysisIntegration
                 "System.Threading.Tasks",
                  "System.Collections"
             };
-            references = assemblys.Select(i => MetadataReference.CreateFromFile(Assembly.Load(new AssemblyName(i)).Location)).Concat(references);
+            references = assemblys.Select(i => MetadataReference.CreateFromFile(Assembly.Load(new AssemblyName(i)).Location)).Concat(references).Distinct();
 #endif
             references = new[]
             {
@@ -31,7 +31,7 @@ namespace Jimu.Client.Proxy.CodeAnalysisIntegration
                 MetadataReference.CreateFromFile(typeof(JimuServiceDesc).GetTypeInfo().Assembly.Location),
                 MetadataReference.CreateFromFile(typeof(IRemoteServiceCaller).GetTypeInfo().Assembly.Location),
                 MetadataReference.CreateFromFile(typeof(ServiceProxyGenerator).GetTypeInfo().Assembly.Location)
-            }.Concat(references);
+            }.Concat(references).Distinct();
             return Compile(AssemblyInfo.Create("Jimu.Proxy.ClientProxy"), trees, references, logger);
         }
 
