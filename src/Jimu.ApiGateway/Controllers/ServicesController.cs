@@ -24,7 +24,7 @@ namespace Jimu.ApiGateway.Controllers
                     paras[key] = query.Collection[key];
                 }
             }
-            var result = await JimuServiceProvider.Invoke(path, paras);
+            var result = await JimuClient.Invoke(path, paras);
 
             if (result.ResultType != typeof(JimuFile).ToString())
                 return new JsonResult(result.Result);

@@ -8,7 +8,7 @@ using Jimu.Common.Logger.Log4netIntegration;
 
 namespace Jimu.ApiGateway
 {
-    public class JimuServiceProvider
+    public class JimuClient
     {
         public static IContainer Container { get; private set; }
         private static IServiceHost _host;
@@ -25,7 +25,7 @@ namespace Jimu.ApiGateway
                 .UseDotNettyClient()
                 .UseNetCoreHttpClient()
                 .UsePollingAddressSelector()
-                //.UseServerHealthCheck(1)
+                .UseServerHealthCheck(1)
                 .SetDiscoveryAutoUpdateJobInterval(60)
                 .UseToken(() => { var headers = JimuHttpContext.Current.Request.Headers["Authorization"]; return headers.Any() ? headers[0] : null; })
                 .Build();

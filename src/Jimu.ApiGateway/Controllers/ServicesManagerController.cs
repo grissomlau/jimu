@@ -13,7 +13,7 @@ namespace Jimu.ApiGateway.Controllers
         //[HttpGet(Name ="addresses")]
         public async Task<List<JimuAddress>> GetAddresses()
         {
-            var serviceDiscovery = JimuServiceProvider.Container.Resolve<IClientServiceDiscovery>();
+            var serviceDiscovery = JimuClient.Container.Resolve<IClientServiceDiscovery>();
             var addresses = await serviceDiscovery.GetAddressAsync();
             return addresses;
             //return (from addr in addresses
@@ -24,7 +24,7 @@ namespace Jimu.ApiGateway.Controllers
         //[HttpGet(Name ="services")]
         public async Task<List<JimuServiceDesc>> GetServices(string server)
         {
-            var serviceDiscovery = JimuServiceProvider.Container.Resolve<IClientServiceDiscovery>();
+            var serviceDiscovery = JimuClient.Container.Resolve<IClientServiceDiscovery>();
             var routes = await serviceDiscovery.GetRoutesAsync();
             if (routes != null && routes.Any() && !string.IsNullOrEmpty(server))
             {

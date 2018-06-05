@@ -100,7 +100,7 @@ namespace Jimu.ApiGateway
                 new { controller = "Services", action = "Path" });
             });
 
-            JimuServiceProvider.Start(new ContainerBuilder(), Configuration.GetSection("JimuOptions").Get<JimuOptions>());
+            JimuClient.Start(new ContainerBuilder(), Configuration.GetSection("JimuOptions").Get<JimuOptions>());
         }
     }
 }
