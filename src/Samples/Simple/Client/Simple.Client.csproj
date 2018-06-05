@@ -12,7 +12,7 @@
     <ProjectReference Include="..\..\..\Implements\Jimu.Logger\Log4netIntegration\Jimu.Common.Logger.Log4netIntegration.csproj" />
     <ProjectReference Include="..\..\..\Implements\Jimu.Proxy\CodeAnalysisIntegration\Jimu.Client.Proxy.CodeAnalysisIntegration.csproj" />
     <ProjectReference Include="..\..\..\Implements\Jimu.Transport\DotNettyIntegration\Jimu.Common.Transport.DotNettyIntegration.csproj" />
-    <ProjectReference Include="..\..\..\Jimu.Core\Jimu.csproj" />
+    <ProjectReference Include="..\..\..\Jimu\Jimu.csproj" />
     <ProjectReference Include="..\..\..\Samples\Simple\IServices\Simple.IServices.csproj" />
   </ItemGroup>
 

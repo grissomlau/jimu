@@ -77,3 +77,4 @@
 /src/Jimu.Client/obj
 /src/Jimu.Server/bin/Debug/netstandard2.0
 /src/Jimu.Server/obj
+/src/Jimu.Server/bin/Debug

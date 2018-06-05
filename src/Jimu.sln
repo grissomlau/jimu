@@ -31,7 +31,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DDD.CQRS.Services", "Sample
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DDD.CQRS.Server", "Samples\DDD.CQRS\ConAppServer\DDD.CQRS.Server.csproj", "{B6CC5C16-2C80-4B86-8018-C13DAB44E688}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu", "Jimu.Core\Jimu.csproj", "{7F51F749-6FC5-45F0-930D-BBA7551A40AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu", "Jimu\Jimu.csproj", "{7F51F749-6FC5-45F0-930D-BBA7551A40AA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DDD.Simple.IServices", "Samples\DDD.Simple\IServices\DDD.Simple.IServices.csproj", "{2B34209D-E47E-4A5E-8D2D-28C75D1DAC20}"
 EndProject

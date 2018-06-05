@@ -18,7 +18,7 @@
     <ProjectReference Include="..\..\..\Implements\Jimu.OAuth\JwtIntegration\Jimu.Server.OAuth.JoseJwtIntegration.csproj" />
     <ProjectReference Include="..\..\..\Implements\Jimu.Transport\DotNettyIntegration\Jimu.Common.Transport.DotNettyIntegration.csproj" />
     <ProjectReference Include="..\..\..\Implements\Jimu.Transport\NetCoreHttpIntegration\Jimu.Common.Transport.NetCoreHttpIntegration.csproj" />
-    <ProjectReference Include="..\..\..\Jimu.Core\Jimu.csproj" />
+    <ProjectReference Include="..\..\..\Jimu\Jimu.csproj" />
     <ProjectReference Include="..\..\Common\DbWorker.UnitOfWork\IUnitOfWork\DbWorker.IUnitOfWork.csproj" />
     <ProjectReference Include="..\..\Common\DbWorker.UnitOfWork\UnitOfWork.EF\DbWorker.UnitOfWork.EF.csproj" />
     <ProjectReference Include="..\..\Common\DbWorker.UnitOfWork\UnitOfWork.SqlSugar\DbWorker.UnitOfWork.SqlSugar.csproj" />

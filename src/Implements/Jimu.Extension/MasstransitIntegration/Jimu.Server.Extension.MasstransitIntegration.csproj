@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <Authors>grissomlau@qq.com</Authors>
     <Company>grissomlau@qq.com</Company>
     <Description>support event publish and subscription using Masstransit  for Jimu microservice framework</Description>
@@ -11,6 +11,7 @@
     <PackageProjectUrl>https://github.com/grissomlau/Jimu</PackageProjectUrl>
     <RepositoryUrl>https://github.com/grissomlau/Jimu</RepositoryUrl>
     <PackageTags>netcore,Masstransit,eventbus</PackageTags>
+    <AssemblyVersion>0.1.0.1</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Jimu.Core\Jimu.csproj" />
+    <ProjectReference Include="..\..\..\Jimu\Jimu.csproj" />
   </ItemGroup>
 
 </Project>
