@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <Authors>grissomlau@qq.com</Authors>
     <Company />
-    <Version>0.1.3</Version>
+    <Version>0.1.4</Version>
     <Description>netcore microservice framework apigateway for Jimu</Description>
     <PackageLicenseUrl>https://github.com/grissomlau/Jimu/blob/master/LICENSE</PackageLicenseUrl>
     <Copyright>Jimu</Copyright>
