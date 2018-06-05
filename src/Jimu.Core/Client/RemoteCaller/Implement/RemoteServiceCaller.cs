@@ -99,7 +99,7 @@ namespace Jimu.Client
                             $"FaultHandling,retry times: {count},serviceId: {service.ServiceDescriptor.Id},Address: {address.Code},RemoteServiceCaller excute retry by Polly for exception {ex.Message}");
                     });
             var fallbackPolicy = Policy<JimuRemoteCallResultData>.Handle<TransportException>()
-                .FallbackAsync(new JimuRemoteCallResultData() { ErrorCode = "500", ErrorMsg = "error occur when communicate with server." })
+                .FallbackAsync(new JimuRemoteCallResultData() { ErrorCode = "500", ErrorMsg = "error occur when communicate with server. server maybe have been down." })
                 .WrapAsync(retryPolicy);
             return await fallbackPolicy.ExecuteAsync(async () =>
                     {

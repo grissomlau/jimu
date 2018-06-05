@@ -5,7 +5,7 @@
     <Authors>grissomlau@qq.com</Authors>
     <Company />
     <Version>0.1.0</Version>
-    <Description>netcore microservice framework apigateway</Description>
+    <Description>netcore microservice framework apigateway for Jimu</Description>
     <PackageLicenseUrl>https://github.com/grissomlau/Jimu/blob/master/LICENSE</PackageLicenseUrl>
     <Copyright>Jimu</Copyright>
     <PackageProjectUrl>https://github.com/grissomlau/Jimu</PackageProjectUrl>

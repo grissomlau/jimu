@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Sugar = SqlSugar;
 
 namespace DbWorker.UnitOfWork.SqlSugar
 {

@@ -1,6 +1,5 @@
 ﻿using System;
 using Autofac;
-using Jimu;
 using Jimu.Server;
 
 namespace DDD.CQRS.Server

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 
-namespace Jimu.ApiGateway.Utils
+namespace Jimu.ApiGateway
 {
     public class JimuQueryStringModelBinderProvider : IModelBinderProvider
     {

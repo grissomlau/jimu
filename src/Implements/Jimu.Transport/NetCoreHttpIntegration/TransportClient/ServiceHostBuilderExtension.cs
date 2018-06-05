@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Jimu.Common.Transport.NetCoreHttpIntegration;
 
 namespace Jimu.Client
 {

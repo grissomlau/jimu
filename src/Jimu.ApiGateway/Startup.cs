@@ -1,8 +1,6 @@
 ﻿using System.Text;
 using Autofac;
-using Jimu.ApiGateway.Controllers;
 using Jimu.ApiGateway.Model;
-using Jimu.ApiGateway.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

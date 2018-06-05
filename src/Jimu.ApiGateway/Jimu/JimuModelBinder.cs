@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace Jimu.ApiGateway.Utils
+namespace Jimu.ApiGateway
 {
     public class JimuModelBinder : IModelBinder
     {

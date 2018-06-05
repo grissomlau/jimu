@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Jimu.ApiGateway.Utils
+namespace Jimu.ApiGateway
 {
     public static class JimuHttpContext
     {

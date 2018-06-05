@@ -2,8 +2,7 @@
 using System.Web;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Jimu.ApiGateway.Utils
-{
+namespace Jimu.ApiGateway
     [ModelBinder(BinderType = typeof(JimuQueryStringModelBinder))]
     public class JimuQueryString
     {

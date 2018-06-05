@@ -6,7 +6,7 @@ using Jimu.ApiGateway.Model;
 using Jimu.Client;
 using Jimu.Common.Logger.Log4netIntegration;
 
-namespace Jimu.ApiGateway.Utils
+namespace Jimu.ApiGateway
 {
     public class JimuServiceProvider
     {

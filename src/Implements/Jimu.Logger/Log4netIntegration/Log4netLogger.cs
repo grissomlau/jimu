@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using System.Threading.Tasks;
 using log4net;
 using log4net.Appender;
 using log4net.Config;

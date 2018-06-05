@@ -5,7 +5,6 @@ using DDD.Simple.Domain.Events;
 using DDD.Simple.Model;
 using DbWorker.IUnitOfWork;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using User = DDD.Simple.Domain.User;
 
 namespace DDD.Simple.Repository.EF

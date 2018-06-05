@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Jimu.Common.Discovery.InMemoryIntegration
+﻿namespace Jimu.Common.Discovery.InMemoryIntegration
 {
     public class InMemoryOptions
     {

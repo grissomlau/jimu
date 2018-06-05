@@ -2,9 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
-using Jimu.ApiGateway.Utils;
 using Jimu.Client;
-using Jimu.Server;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Jimu.ApiGateway.Controllers

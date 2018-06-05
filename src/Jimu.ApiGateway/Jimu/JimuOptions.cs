@@ -1,4 +1,4 @@
-﻿namespace Jimu.ApiGateway.Model
+﻿namespace Jimu.ApiGateway
 {
     public class JimuOptions
     {

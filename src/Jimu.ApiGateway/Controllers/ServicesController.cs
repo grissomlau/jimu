@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Jimu.ApiGateway.Utils;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Jimu.ApiGateway.Controllers
@@ -25,15 +24,6 @@ namespace Jimu.ApiGateway.Controllers
                     paras[key] = query.Collection[key];
                 }
             }
-            //var token = "";
-            //var authorizationHeader = HttpContext.Request.Headers["Authorization"];
-            //if (authorizationHeader.Any())
-            //{
-            //    token = authorizationHeader[0];
-            //}
-
-            //return await MyServiceProvider.Invoke(path, paras, token);
-
             var result = await JimuServiceProvider.Invoke(path, paras);
 
             if (result.ResultType != typeof(JimuFile).ToString())
@@ -42,29 +32,29 @@ namespace Jimu.ApiGateway.Controllers
             var file = result.Result as JimuFile;
             return File(file?.Data, "application/octet-stream", file?.FileName);
         }
-        private string GetContentType(string path)
-        {
-            var types = GetMimeTypes();
-            var ext = System.IO.Path.GetExtension(path).ToLowerInvariant();
-            return types[ext];
-        }
+        //private string GetContentType(string path)
+        //{
+        //    var types = GetMimeTypes();
+        //    var ext = System.IO.Path.GetExtension(path).ToLowerInvariant();
+        //    return types[ext];
+        //}
 
-        private Dictionary<string, string> GetMimeTypes()
-        {
-            return new Dictionary<string, string>
-            {
-                {".txt", "text/plain"},
-                {".pdf", "application/pdf"},
-                {".doc", "application/vnd.ms-word"},
-                {".docx", "application/vnd.ms-word"},
-                {".xls", "application/vnd.ms-excel"},
-                {".xlsx", "application/vnd.openxmlformatsofficedocument.spreadsheetml.sheet"},
-                {".png", "image/png"},
-                {".jpg", "image/jpeg"},
-                {".jpeg", "image/jpeg"},
-                {".gif", "image/gif"},
-                {".csv", "text/csv"}
-            };
-        }
+        //private Dictionary<string, string> GetMimeTypes()
+        //{
+        //    return new Dictionary<string, string>
+        //    {
+        //        {".txt", "text/plain"},
+        //        {".pdf", "application/pdf"},
+        //        {".doc", "application/vnd.ms-word"},
+        //        {".docx", "application/vnd.ms-word"},
+        //        {".xls", "application/vnd.ms-excel"},
+        //        {".xlsx", "application/vnd.openxmlformatsofficedocument.spreadsheetml.sheet"},
+        //        {".png", "image/png"},
+        //        {".jpg", "image/jpeg"},
+        //        {".jpeg", "image/jpeg"},
+        //        {".gif", "image/gif"},
+        //        {".csv", "text/csv"}
+        //    };
+        //}
     }
 }

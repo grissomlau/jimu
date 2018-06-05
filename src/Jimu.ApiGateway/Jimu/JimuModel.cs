@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
-namespace Jimu.ApiGateway.Utils
+namespace Jimu.ApiGateway
 {
     [ModelBinder(BinderType = typeof(JimuModelBinder))]
     public class JimuModel

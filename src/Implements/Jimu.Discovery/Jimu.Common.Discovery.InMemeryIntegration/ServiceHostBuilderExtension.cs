@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Autofac;
 using Jimu.Common.Discovery.InMemoryIntegration;
-using Jimu.Server;
 
 namespace Jimu.Server
 {

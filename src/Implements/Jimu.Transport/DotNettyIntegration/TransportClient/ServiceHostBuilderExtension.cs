@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using Autofac;
 using DotNetty.Codecs;
 using DotNetty.Common.Utilities;
