@@ -32,12 +32,12 @@ namespace Jimu.Client
             _routes = new ConcurrentQueue<JimuServiceRoute>();
         }
 
-        public void RunInInit()
+        public async Task RunInInit()
         {
             Thread.Sleep(200);
             var result = UpdateRoutes();
             result.Wait();
-            RunUpdateJob();
+            await RunUpdateJob();
         }
 
         private async Task RunUpdateJob()

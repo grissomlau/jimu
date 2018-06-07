@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>0.1.4</Version>
+    <Version>0.2.0</Version>
     <Authors>grissomlau@qq.com</Authors>
     <Company>grissomlau@qq.com</Company>
     <Description>Client of Jimu which is netcore micorservice framework</Description>
@@ -12,20 +12,23 @@
     <PackageIconUrl></PackageIconUrl>
     <RepositoryUrl>https://github.com/grissomlau/Jimu</RepositoryUrl>
     <PackageTags>netcore,microservice</PackageTags>
-    <AssemblyVersion>0.1.0.0</AssemblyVersion>
-    <FileVersion>0.1.0.0</FileVersion>
+    <AssemblyVersion>0.2.0.0</AssemblyVersion>
+    <FileVersion>0.2.0.0</FileVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Implements\Jimu.Discovery\ConsulIntegration\Jimu.Common.Discovery.ConsulIntegration.csproj" />
-    <ProjectReference Include="..\Implements\Jimu.Discovery\Jimu.Common.Discovery.InMemeryIntegration\Jimu.Common.Discovery.InMemoryIntegration.csproj" />
-    <ProjectReference Include="..\Implements\Jimu.HealthCheck\QuartzIntegration\Jimu.Client.HealthCheck.QuartzIntegration.csproj" />
-    <ProjectReference Include="..\Implements\Jimu.LoadBalance\Jimu.Client.LoadBalance.PollingIntegration\Jimu.Client.LoadBalance.PollingIntegration.csproj" />
-    <ProjectReference Include="..\Implements\Jimu.Logger\Log4netIntegration\Jimu.Common.Logger.Log4netIntegration.csproj" />
-    <ProjectReference Include="..\Implements\Jimu.Proxy\CodeAnalysisIntegration\Jimu.Client.Proxy.CodeAnalysisIntegration.csproj" />
-    <ProjectReference Include="..\Implements\Jimu.Transport\DotNettyIntegration\Jimu.Common.Transport.DotNettyIntegration.csproj" />
-    <ProjectReference Include="..\Implements\Jimu.Transport\NetCoreHttpIntegration\Jimu.Common.Transport.NetCoreHttpIntegration.csproj" />
+    <PackageReference Include="DotNetty.Codecs" Version="0.4.8" />
+    <PackageReference Include="Flurl.Http" Version="2.3.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.4" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.8.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="2.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Jimu\Jimu.csproj" />
   </ItemGroup>
 

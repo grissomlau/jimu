@@ -7,6 +7,10 @@ namespace Jimu
     /// </summary>
     public abstract class JimuAddress
     {
+        protected JimuAddress(string serverFlag)
+        {
+            this.ServerFlag = serverFlag;
+        }
         //public string Token { get; set; }
 
         /// <summary>
@@ -24,9 +28,9 @@ namespace Jimu
         public string Code => ToString();
 
         /// <summary>
-        ///     original type of the server address
+        ///     flag of the server type
         /// </summary>
-        public string OrigType { get; set; }
+        public string ServerFlag { get; set; }
 
         public virtual EndPoint CreateEndPoint()
         {

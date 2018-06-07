@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Jimu.Client.LoadBalance.PollingIntegration
+namespace Jimu.Client.LoadBalance
 {
     public abstract class AddressSelectorBase : IAddressSelector
     {

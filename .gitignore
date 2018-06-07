@@ -79,3 +79,22 @@
 /src/Jimu.Server/obj
 /src/Jimu.Server/bin/Debug
 *.nupkg
+/src/.vs/Jimu - publish
+/src/Jimu.Extensions/Jimu.Common.Discovery.ConsulIntegration/bin/Debug/netstandard2.0
+/src/Jimu.Extensions/Jimu.Common.Discovery.ConsulIntegration/obj
+/src/Jimu.Extensions/Jimu.Server.EventBus.MasstransitIntegration/bin/Debug/netstandard2.0
+/src/Jimu.Extensions/Jimu.Server.EventBus.MasstransitIntegration/obj
+/src/Samples/ApiGateway/ApiGateway1/bin/Debug/netcoreapp2.0
+/src/Samples/ApiGateway/ApiGateway1/obj
+/src/Samples/ApiGateway/ApiGateway2/bin/Debug/netcoreapp2.0
+/src/Samples/ApiGateway/ApiGateway2/obj
+/src/Samples/Client/Client/bin/Debug/netcoreapp2.0
+/src/Samples/Client/Client/obj
+/src/Samples/Server/HttpServer/bin/Debug/netcoreapp2.0
+/src/Samples/Server/HttpServer/obj
+/src/Samples/Server/Server/bin/Debug/netcoreapp2.0
+/src/Samples/Server/Server/obj
+/src/Samples/Service/IServices/bin/Debug/netcoreapp2.0
+/src/Samples/Service/IServices/obj
+/src/Samples/Service/Services/bin/Debug/netcoreapp2.0
+/src/Samples/Service/Services/obj

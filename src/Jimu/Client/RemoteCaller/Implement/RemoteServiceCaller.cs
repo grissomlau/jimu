@@ -60,7 +60,7 @@ namespace Jimu.Client
                     ErrorMsg = $"{serviceIdOrPath}, not found!"
                 };
 
-            if (token == null && _serviceTokenGetter.GetToken != null) token = _serviceTokenGetter.GetToken();
+            if (token == null && _serviceTokenGetter?.GetToken != null) token = _serviceTokenGetter.GetToken();
             var result = await InvokeAsync(service, paras, token);
             if (!string.IsNullOrEmpty(result.ExceptionMessage))
                 return new JimuRemoteCallResultData
@@ -129,7 +129,7 @@ namespace Jimu.Client
             path = ParsePath(path, paras);
             var routes = await _serviceDiscovery.GetRoutesAsync();
             var service = routes.FirstOrDefault(x =>
-                x.ServiceDescriptor.RoutePath.Equals(path, StringComparison.InvariantCultureIgnoreCase));
+                (x.ServiceDescriptor.RoutePath ?? "").Equals(path, StringComparison.InvariantCultureIgnoreCase));
             return service;
         }
 
