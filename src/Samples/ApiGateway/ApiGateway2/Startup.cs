@@ -22,7 +22,7 @@ namespace ApiGateway2
 {
     public class Startup
     {
-        private ContainerBuilder _containerBuilder;
+        private readonly ContainerBuilder _containerBuilder;
         IServiceHost _host;
         public Startup(IConfiguration configuration)
         {
@@ -40,10 +40,8 @@ namespace ApiGateway2
 
             // inject controller
             this._containerBuilder.RegisterAssemblyTypes(typeof(ValuesController).GetTypeInfo().Assembly)
-                .Where(
-                    t =>
-                        typeof(Controller).IsAssignableFrom(t) &&
-                        t.Name.EndsWith("Controller", StringComparison.Ordinal)).PropertiesAutowired();
+                .Where(t => typeof(Controller).IsAssignableFrom(t)
+                            && t.Name.EndsWith("Controller", StringComparison.Ordinal)).PropertiesAutowired();
 
             _containerBuilder.Populate(services);
 

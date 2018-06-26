@@ -13,13 +13,13 @@ namespace Jimu.Client
 {
     public class ClientServiceDiscovery : IClientServiceDiscovery
     {
-        private List<Func<Task<List<JimuServiceRoute>>>> _routesGetters;
+        private readonly List<Func<Task<List<JimuServiceRoute>>>> _routesGetters;
 
 
-        private ConcurrentQueue<JimuAddress> _addresses;
-        private ConcurrentQueue<JimuServiceRoute> _routes;
+        private readonly ConcurrentQueue<JimuAddress> _addresses;
+        private readonly ConcurrentQueue<JimuServiceRoute> _routes;
 
-        private int _updateJobIntervalMinute;
+        private readonly int _updateJobIntervalMinute;
         public ClientServiceDiscovery(int updateJobIntervalMinute = 1)
         {
             if (updateJobIntervalMinute == 0 || updateJobIntervalMinute > 60)

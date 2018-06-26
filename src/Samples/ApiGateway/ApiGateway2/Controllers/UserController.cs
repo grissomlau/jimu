@@ -11,7 +11,7 @@ namespace ApiGateway2.Controllers
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
-        private IServiceProxy _serviceProxy;
+        private readonly IServiceProxy _serviceProxy;
         public ValuesController(IServiceProxy serviceProxy)
         {
             this._serviceProxy = serviceProxy;

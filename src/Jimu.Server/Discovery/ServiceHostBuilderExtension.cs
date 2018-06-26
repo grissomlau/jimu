@@ -8,7 +8,7 @@ namespace Jimu.Server
 {
     public static partial class ServiceHostBuilderExtension
     {
-        public static IServiceHostServerBuilder UseInMemoryForDiscovery(this IServiceHostServerBuilder serviceHostBuilder)
+        public static IServiceHostServerBuilder UseInServerForDiscovery(this IServiceHostServerBuilder serviceHostBuilder)
         {
             serviceHostBuilder.RegisterService(containerBuilder =>
             {

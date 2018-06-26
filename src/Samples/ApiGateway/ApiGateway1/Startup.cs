@@ -29,7 +29,7 @@ namespace Jimu.ApiGateway
             services.AddCors();
             services.UseJimu();
 
-            /********** below is the jwt just for local apigateay controller not for the services
+            /********** below is the jwt just for local apigateway controller not for the services
 
             var jwtOptions = Configuration.GetSection("JwtOptions").Get<JwtOptions>();
             // The key length needs to be of sufficient length, or otherwise an error will occur.
