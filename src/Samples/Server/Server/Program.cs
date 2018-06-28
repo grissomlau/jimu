@@ -20,7 +20,7 @@ namespace Simple.Server
                 //.UseNetCoreHttpServer("127.0.0.1", 8010)
                 .UseDotNettyForTransfer("127.0.0.1", 8010, server => { })
                 .UseInServerForDiscovery()
-                //.UseConsulForDiscovery("127.0.0.1", 8500, "JimuService-", "127.0.0.1:8010")
+                //.UseConsulForDiscovery("127.0.0.1", 8500, "JimuService-", "127.0.0.1:8010") // if using consul, uncomment this line
                 ;
             using (var host = builder.Build())
             {
