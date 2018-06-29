@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Controllers\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
@@ -19,7 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Jimu.Client\Jimu.Client.csproj" />
-    <ProjectReference Include="..\..\Client\Client\Simple.Client.csproj" />
+    <ProjectReference Include="..\..\..\Jimu.Extensions\Jimu.Common.Discovery.ConsulIntegration\Jimu.Common.Discovery.ConsulIntegration.csproj" />
   </ItemGroup>
 
 </Project>

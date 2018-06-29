@@ -20,7 +20,7 @@ namespace Server1.DotnettyForTransfer
                 })
                 .LoadServices(new[] { "Simple.IServices", "Simple.Services" })
                 .UseDotNettyForTransfer("127.0.0.1", 8003, server => { })
-                .UseConsulForDiscovery("127.0.0.1", 8500, "JimuService-", "127.0.0.1:8080")
+                .UseConsulForDiscovery("127.0.0.1", 8500, "JimuService-", "127.0.0.1:8003")
                 ;
             using (var hostJimu = builder.Build())
             {

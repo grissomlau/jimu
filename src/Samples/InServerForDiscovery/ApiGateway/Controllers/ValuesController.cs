@@ -4,25 +4,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using Jimu.Client;
 using Microsoft.AspNetCore.Mvc;
-using Simple.IServices;
 
 namespace ApiGateway.Controllers
 {
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
-        private readonly IServiceProxy _serviceProxy;
-        public ValuesController(IServiceProxy serviceProxy)
-        {
-            this._serviceProxy = serviceProxy;
-        }
         // GET api/values
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            var userService = _serviceProxy.GetService<IUserService>();
-            var userid = userService.GetId();
-            return new string[] { "value1", "value2", userid };
+            //var userService = _serviceProxy.GetService<IUserService>();
+            //var userid = userService.GetId();
+            return new string[] { "value1", "value2" };
         }
 
         // GET api/values/5

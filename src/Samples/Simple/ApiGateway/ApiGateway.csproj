@@ -19,7 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Jimu.Client\Jimu.Client.csproj" />
-    <ProjectReference Include="..\..\Client\Client\Simple.Client.csproj" />
+    <ProjectReference Include="..\..\Service\IServices\Simple.IServices.csproj" />
   </ItemGroup>
 
 </Project>

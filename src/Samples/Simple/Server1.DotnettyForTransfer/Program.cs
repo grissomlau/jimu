@@ -1,15 +1,15 @@
 ﻿using System;
 using Autofac;
 using Jimu;
+using Jimu.Common.Logger;
 using Jimu.Server;
 
-namespace Simple.Server2
+namespace Server1.DotnettyForTransfer
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
             var containerBuilder = new ContainerBuilder();
             var builder = new ServiceHostServerBuilder(containerBuilder)
                 .UseLog4netLogger(new Log4netOptions
@@ -17,17 +17,15 @@ namespace Simple.Server2
                     EnableConsoleLog = true
                 })
                 .LoadServices(new[] { "Simple.IServices", "Simple.Services" })
-                //.UseNetCoreHttpServer("127.0.0.1", 8010)
-                .UseDotNettyForTransfer("127.0.0.1", 8010, server => { })
+                .UseDotNettyForTransfer("127.0.0.1", 8007, server => { })
                 .UseInServerForDiscovery()
-                //.UseConsulForDiscovery("127.0.0.1", 8500, "JimuService-", "127.0.0.1:8010") // if using consul, uncomment this line
                 ;
-            using (var host = builder.Build())
+            using (var hostJimu = builder.Build())
             {
-                host.Run();
-                Console.WriteLine("Server start successful.");
+                hostJimu.Run();
                 Console.ReadLine();
             }
+
         }
     }
 }

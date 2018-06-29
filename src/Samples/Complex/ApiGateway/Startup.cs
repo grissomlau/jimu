@@ -86,8 +86,8 @@ namespace Jimu.ApiGateway
                 {
                     EnableConsoleLog = true
                 })
-                .UseInServerForDiscovery(new DotNettyAddress("127.0.0.1", 8010))
-                //.UseConsulForDiscovery(mServiceOptions.ConsulIp, mServiceOptions.ConsulPort, mServiceOptions.ServiceCategory)
+                .UseInServerForDiscovery(new HttpAddress("127.0.0.1", 8006))
+                .UseConsulForDiscovery("127.0.0.1", 8500, "JimuService-")
                 .UseDotNettyForTransfer()
                 .UseHttpForTransfer()
                 .UsePollingAddressSelector()

@@ -50,10 +50,13 @@ namespace ApiGateway
 
             // start jimu client host;
             _host = new ServiceHostClientBuilder(_containerBuilder)
-                .UseInServerForDiscovery(new DotNettyAddress("127.0.0.1", 8010))
+                .UseInServerForDiscovery(new DotNettyAddress("127.0.0.1", 8007), new HttpAddress("127.0.0.1", 8008))
                 .UseDotNettyForTransfer()
+                .UseHttpForTransfer()
                 .UsePollingAddressSelector()
                 .UseServiceProxy(new[] { "Simple.IServices" })
+                .UseServerHealthCheck(1)
+                .SetDiscoveryAutoUpdateJobInterval(60)
                 .Build();
 
             return this._host.Container.Resolve<IServiceProvider>();

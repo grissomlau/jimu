@@ -114,3 +114,15 @@
 /src/Samples/Server/Server1/obj
 /src/Samples/Server/Server2/bin/Debug/netcoreapp2.0
 /src/Samples/Server/Server2/obj
+/src/Samples/Complex/ApiGateway/bin/Debug/netcoreapp2.0
+/src/Samples/Complex/ApiGateway/obj
+/src/Samples/Complex/Server1.DotnettyForTransfer/bin/Debug/netcoreapp2.0
+/src/Samples/Complex/Server1.DotnettyForTransfer/obj
+/src/Samples/Complex/Server2.HttpForTransfer/bin/Debug/netcoreapp2.0
+/src/Samples/Complex/Server2.HttpForTransfer/obj
+/src/Samples/Simple/ApiGateway/bin/Debug/netcoreapp2.0
+/src/Samples/Simple/ApiGateway/obj
+/src/Samples/Simple/Server1.DotnettyForTransfer/bin/Debug/netcoreapp2.0
+/src/Samples/Simple/Server1.DotnettyForTransfer/obj
+/src/Samples/Simple/Server2.HttpForTransfer/bin/Debug/netcoreapp2.0
+/src/Samples/Simple/Server2.HttpForTransfer/obj
