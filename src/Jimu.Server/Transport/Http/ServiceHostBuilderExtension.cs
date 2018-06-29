@@ -14,13 +14,6 @@ namespace Jimu.Server
                 containerBuilder.RegisterType<HttpServer>().As<IServer>().WithParameter("ip", ip).WithParameter("port", port).WithParameter("builderAction", builderAction).SingleInstance();
             });
 
-            //serviceHostBuilder.AddInitializer(container =>
-            //{
-            //    var server = container.Resolve<IServer>();
-            //    server.StartAsync();
-            //    action?.Invoke(server);
-            //});
-
             serviceHostBuilder.AddRunner(container =>
             {
                 var server = container.Resolve<IServer>();

@@ -15,17 +15,21 @@ namespace Jimu.Common.Logger
     {
         private readonly ILog _logInfo;
         private readonly ILog _logError;
+        private readonly ILog _logWarn;
         private readonly Log4netOptions _options;
 
-        public Log4netLogger(Log4netOptions options)
+        public Log4netLogger(Log4netOptions options = null)
         {
-            _options = options ?? new Log4netOptions { EnableConsoleLog = true, LogLevel = LogLevel.Error | LogLevel.Info };
+            _options = options ?? new Log4netOptions { EnableConsoleLog = true, LogLevel = LogLevel.Error | LogLevel.Info | LogLevel.Warn };
             var repInfo = LogManager.CreateRepository("info");
+            var repWarn = LogManager.CreateRepository("warn");
             var repError = LogManager.CreateRepository("error");
             UseCodeConfig((Hierarchy)repInfo, "info");
             UseCodeConfig((Hierarchy)repError, "error");
+            UseCodeConfig((Hierarchy)repError, "warn");
             _logInfo = LogManager.GetLogger("info", MethodBase.GetCurrentMethod().DeclaringType);
             _logError = LogManager.GetLogger("error", MethodBase.GetCurrentMethod().DeclaringType);
+            _logWarn = LogManager.GetLogger("warn", MethodBase.GetCurrentMethod().DeclaringType);
 
         }
         //void UseFileCofnig(ILoggerRepository rep)
@@ -71,13 +75,19 @@ namespace Jimu.Common.Logger
             if (_options.EnableConsoleLog)
             {
 
-                ConsoleAppender console = new ConsoleAppender();
+                //ManagedColoredConsoleAppender managedColoredConsoleAppender = new
+                ManagedColoredConsoleAppender console = new ManagedColoredConsoleAppender();
                 PatternLayout layoutConsole = new PatternLayout
                 {
-                    ConversionPattern = "%n%date{HH:mm:ss.fff} %-5level %m"
+                    ConversionPattern = "%n%date{HH:mm:ss.fff} %-5level %m",
                 };
                 layoutConsole.ActivateOptions();
                 console.Layout = layoutConsole;
+                console.AddMapping(
+                    new ManagedColoredConsoleAppender.LevelColors { Level = Level.Error, ForeColor = ConsoleColor.DarkRed });
+                console.AddMapping(
+                    new ManagedColoredConsoleAppender.LevelColors { Level = Level.Warn, ForeColor = ConsoleColor.DarkYellow });
+                console.ActivateOptions();
                 repository.Root.AddAppender(console);
             }
 
@@ -87,6 +97,14 @@ namespace Jimu.Common.Logger
 
             repository.Root.Level = Level.Debug;
             repository.Configured = true;
+        }
+
+        public void Warn(string msg)
+        {
+            if ((_options.LogLevel & LogLevel.Warn) == LogLevel.Warn)
+            {
+                _logError.Warn(msg);
+            }
         }
 
         public void Error(string msg, Exception ex)

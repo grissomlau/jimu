@@ -23,10 +23,12 @@ namespace Jimu.Client.ApiGateway
             JimuHttpContext.Configure(httpContextAccessor);
             app.UseMvc(routes =>
             {
-
-                //routes.MapRoute(
-                //    name: "defaultApi",
-                //    template: "api/{controller}/{action}");
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller}/{action}");
+                routes.MapRoute(
+                    name: "defaultApi",
+                    template: "api/{controller}/{action}");
                 routes.MapRoute(
                     "JimuPath",
                     "{*path}",

@@ -55,7 +55,7 @@ namespace Jimu.Server.Transport.DotNetty
 
         private async Task OnReceived(IChannelHandlerContext channel, JimuTransportMsg message)
         {
-            _logger.Info($"begin handle message: {message.Id}");
+            _logger.Info($"begin handling msg: {message.Id}");
             //TaskCompletionSource<TransportMessage> task;
             if (message.ContentType == typeof(JimuRemoteCallData).FullName)
             {

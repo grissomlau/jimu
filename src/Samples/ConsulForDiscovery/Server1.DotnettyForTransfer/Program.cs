@@ -4,7 +4,7 @@ using Jimu;
 using Jimu.Common.Logger;
 using Jimu.Server;
 
-namespace Simple.HttpServer
+namespace Server1.DotnettyForTransfer
 {
     class Program
     {
@@ -19,26 +19,12 @@ namespace Simple.HttpServer
                     EnableConsoleLog = true
                 })
                 .LoadServices(new[] { "Simple.IServices", "Simple.Services" })
-                .UseHttpForTransfer("127.0.0.1", 8080)
-                //.UseDotNettyServer("127.0.0.1", 8080, server => { })
+                .UseDotNettyForTransfer("127.0.0.1", 8003, server => { })
                 .UseConsulForDiscovery("127.0.0.1", 8500, "JimuService-", "127.0.0.1:8080")
                 ;
             using (var hostJimu = builder.Build())
             {
-                Console.WriteLine("Server start successfulhaha.");
-
-                //  var host = new WebHostBuilder()
-                //.UseKestrel()
-                //.UseSetting("detailedErrors", "true")
-                //.UseContentRoot(Directory.GetCurrentDirectory())
-                //.UseUrls("http://localhost:8080")
-                ////.UseIISIntegration()
-                //.UseStartup<Startup>()
-                //.Build();
-
-                //  host.Run();
                 hostJimu.Run();
-
                 Console.ReadLine();
             }
 

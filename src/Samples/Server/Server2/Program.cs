@@ -3,7 +3,7 @@ using Autofac;
 using Jimu;
 using Jimu.Server;
 
-namespace Simple.Server
+namespace Simple.Server2
 {
     class Program
     {

@@ -32,8 +32,11 @@ namespace Jimu.Server.Transport.Http
             using (var sr = new StreamReader(context.Request.Body))
             {
                 var body = sr.ReadToEnd();
+                _logger.Info($"received msg is: {body}");
                 _message = (JimuTransportMsg)_typeConvert.Convert(body, typeof(JimuTransportMsg));
             }
+
+            _logger.Info($"begin handling msg: {_message.Id}");
             IResponse response = new HttpResponse(context.Response, _serializer, _logger);
             var thisContext = new RemoteCallerContext(_message, _serviceEntryContainer, response, _logger);
             var lastInvoke = new RequestDel(async ctx =>

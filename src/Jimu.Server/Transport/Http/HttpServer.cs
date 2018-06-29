@@ -56,7 +56,7 @@ namespace Jimu.Server.Transport.Http
 
         public Task StartAsync()
         {
-            _logger.Info($"start server: {_ip}:{_port}");
+            _logger.Info($"start server: {_ip}:{_port}\r\n");
 
             var builder = new WebHostBuilder()
       .UseKestrel()
@@ -78,7 +78,7 @@ namespace Jimu.Server.Transport.Http
             var host = builder.Build();
             host.Run();
             var endpoint = new IPEndPoint(IPAddress.Parse(_ip), _port);
-            _logger.Info($"server start successfuly, address is： {endpoint}");
+            _logger.Info($"server start successfuly, address is： {endpoint}\r\n");
             return Task.CompletedTask;
         }
 
