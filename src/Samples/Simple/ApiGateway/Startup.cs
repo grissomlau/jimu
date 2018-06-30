@@ -54,7 +54,7 @@ namespace ApiGateway
                 .UseDotNettyForTransfer()
                 .UseHttpForTransfer()
                 .UsePollingAddressSelector()
-                .UseServiceProxy(new[] { "Simple.IServices" })
+                .UseServiceProxy(new[] { "IServices" })
                 .UseServerHealthCheck(1)
                 .SetDiscoveryAutoUpdateJobInterval(60)
                 .Build();

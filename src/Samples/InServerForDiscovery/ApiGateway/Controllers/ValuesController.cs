@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ApiGateway.Controllers
 {
-    [Route("api/[controller]")]
+    //[Route("api/[controller]")]
     public class ValuesController : Controller
     {
         // GET api/values
@@ -20,10 +20,17 @@ namespace ApiGateway.Controllers
         }
 
         // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        //[HttpGet("{id}")]
+        [HttpGet]
+        public string GetById(int id)
         {
-            return "value";
+            return "value" + id;
+        }
+
+        [HttpGet]
+        public string GetServices()
+        {
+            return "fuck";
         }
 
         // POST api/values

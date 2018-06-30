@@ -27,8 +27,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Jimu.Server\Jimu.Server.csproj" />
-    <ProjectReference Include="..\..\Service\IServices\Simple.IServices.csproj" />
-    <ProjectReference Include="..\..\Service\Services\Simple.Services.csproj" />
+    <ProjectReference Include="..\..\Service\IServices\IServices.csproj" />
+    <ProjectReference Include="..\..\Service\Services\Services.csproj" />
   </ItemGroup>
 
 </Project>

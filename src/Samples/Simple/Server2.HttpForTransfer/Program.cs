@@ -16,7 +16,7 @@ namespace Server2.HttpForTransfer
                 {
                     EnableConsoleLog = true
                 })
-                .LoadServices(new[] { "Simple.IServices", "Simple.Services" })
+                .LoadServices(new[] { "IServices", "Services" })
                 .UseHttpForTransfer("127.0.0.1", 8008)
                 .UseInServerForDiscovery()
                 ;

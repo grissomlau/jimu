@@ -8,7 +8,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Jimu.Client\Jimu.Client.csproj" />
     <ProjectReference Include="..\..\..\Jimu.Extensions\Jimu.Common.Discovery.ConsulIntegration\Jimu.Common.Discovery.ConsulIntegration.csproj" />
-    <ProjectReference Include="..\..\Service\IServices\Simple.IServices.csproj" />
+    <ProjectReference Include="..\..\Service\IServices\IServices.csproj" />
   </ItemGroup>
 
 </Project>

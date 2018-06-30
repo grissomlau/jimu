@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Jimu.Client;
 using Microsoft.AspNetCore.Mvc;
-using Simple.IServices;
+using IServices;
 
 namespace ApiGateway.Controllers
 {
@@ -20,9 +20,9 @@ namespace ApiGateway.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            var userService = _serviceProxy.GetService<IUserService>();
-            var userid = userService.GetId();
-            return new string[] { "userid is: " + userid };
+            var echoService = _serviceProxy.GetService<IEchoService>();
+            var echo = echoService.GetEcho("hah");
+            return new string[] { "echo is: " + echo };
         }
 
         // GET api/values/5

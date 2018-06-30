@@ -56,7 +56,7 @@ namespace Jimu.Client
             if (service == null)
                 return new JimuRemoteCallResultData
                 {
-                    ErrorCode = "400",
+                    ErrorCode = "404",
                     ErrorMsg = $"{serviceIdOrPath}, not found!"
                 };
 

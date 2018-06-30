@@ -23,11 +23,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{CB8222
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Complex", "Complex", "{B64879C4-B8A5-4834-BE7B-4B74FEC183E5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simple.IServices", "Samples\Service\IServices\Simple.IServices.csproj", "{1B76E10B-2BE9-4C2E-AC58-3993009AC808}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IServices", "Samples\Service\IServices\IServices.csproj", "{1B76E10B-2BE9-4C2E-AC58-3993009AC808}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simple.Services", "Samples\Service\Services\Simple.Services.csproj", "{E44E56F1-9B87-4E48-8ED1-8DAE15027C19}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Samples\Service\Services\Services.csproj", "{E44E56F1-9B87-4E48-8ED1-8DAE15027C19}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simple.Client", "Samples\Client\Client\Simple.Client.csproj", "{018E5AEC-2CF3-4A27-B8BE-4DBAA63DF76D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client", "Samples\Client\Client\Client.csproj", "{018E5AEC-2CF3-4A27-B8BE-4DBAA63DF76D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ConsulForDiscovery", "ConsulForDiscovery", "{F8652D4E-5CC8-4CD1-AE61-255BB0060650}"
 EndProject

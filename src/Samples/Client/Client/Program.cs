@@ -2,9 +2,9 @@
 using Autofac;
 using Jimu;
 using Jimu.Client;
-using Simple.IServices;
+using IServices;
 
-namespace Simple.Client
+namespace Client
 {
     class Program
     {
@@ -19,17 +19,13 @@ namespace Simple.Client
                 .UseConsulForDiscovery("127.0.0.1", 8500, "JimuService-")
                 .UseDotNettyForTransfer()
                 .UseToken(() => "token")
-                .UseServiceProxy(new[] { "Simple.IServices" })
+                .UseServiceProxy(new[] { "IServices" })
                 .Build();
             host.Run();
             var proxy = host.Container.Resolve<IServiceProxy>();
-            var user = proxy.GetService<IUserService>();
-            var name = user.GetName().Result;
-            Console.WriteLine("Name is " + name);
-            var id = user.GetId();
-            Console.WriteLine("id is " + id);
-            user.SetId();
-            user.SetName("haha");
+            var echo = proxy.GetService<IEchoService>();
+            var name = echo.GetEcho("test");
+            Console.WriteLine("return:  " + name);
             Console.ReadKey();
 
 

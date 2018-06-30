@@ -22,14 +22,14 @@ namespace Jimu.Client.ApiGateway
             var result = await remoteServiceInvoker.InvokeAsync(path, paras);
             if (!string.IsNullOrEmpty(result.ExceptionMessage))
             {
-                throw new JimuHttpStatusCodeException(400, $"{path}, {result.ToErrorString()}");
+                throw new JimuHttpStatusCodeException(400, $"{result.ToErrorString()}", path);
             }
 
             if (!string.IsNullOrEmpty(result.ErrorCode) || !string.IsNullOrEmpty(result.ErrorMsg))
             {
                 if (int.TryParse(result.ErrorCode, out int erroCode) && erroCode > 200 && erroCode < 600)
                 {
-                    throw new JimuHttpStatusCodeException(erroCode, result.ToErrorString());
+                    throw new JimuHttpStatusCodeException(erroCode, result.ToErrorString(), path);
                 }
 
                 return new JimuRemoteCallResultData { ErrorCode = result.ErrorCode, ErrorMsg = result.ErrorMsg };

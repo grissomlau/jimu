@@ -18,7 +18,7 @@ namespace Server1.DotnettyForTransfer
                 {
                     EnableConsoleLog = true
                 })
-                .LoadServices(new[] { "Simple.IServices", "Simple.Services" })
+                .LoadServices(new[] { "IServices", "Services" })
                 .UseDotNettyForTransfer("127.0.0.1", 8005, server => { })
                 .UseConsulForDiscovery("127.0.0.1", 8500, "JimuService-", "127.0.0.1:8005")
                 ;
