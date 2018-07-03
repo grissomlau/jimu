@@ -126,3 +126,6 @@
 /src/Samples/Simple/Server1.DotnettyForTransfer/obj
 /src/Samples/Simple/Server2.HttpForTransfer/bin/Debug/netcoreapp2.0
 /src/Samples/Simple/Server2.HttpForTransfer/obj
+/src/Jimu/bin/Release/netstandard2.0
+/src/Jimu/Properties/PublishProfiles
+/src/Jimu/Jimu.csproj.user

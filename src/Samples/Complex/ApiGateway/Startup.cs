@@ -92,7 +92,7 @@ namespace Jimu.ApiGateway
                 .UseHttpForTransfer()
                 .UsePollingAddressSelector()
                 .UseServerHealthCheck(1)
-                .SetDiscoveryAutoUpdateJobInterval(60)
+                .SetDiscoveryAutoUpdateJobInterval(1)
                 .UseToken(() => { var headers = JimuHttpContext.Current.Request.Headers["Authorization"]; return headers.Any() ? headers[0] : null; })
                 .Build();
             app.UseJimu(host);
