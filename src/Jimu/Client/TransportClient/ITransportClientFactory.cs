@@ -16,7 +16,8 @@ namespace Jimu.Client
         /// <summary>
         ///     all created client holded by the memory
         /// </summary>
-        ConcurrentDictionary<EndPoint, Lazy<ITransportClient>> Clients { get; }
+        //ConcurrentDictionary<EndPoint, Lazy<ITransportClient>> Clients { get; }
+        ConcurrentDictionary<string, Lazy<ITransportClient>> Clients { get; }
 
         /// <summary>
         ///     delegate for how to create transport client

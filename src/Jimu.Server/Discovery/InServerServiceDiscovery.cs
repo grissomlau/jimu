@@ -26,7 +26,7 @@ namespace Jimu.Server.Discovery
             return Task.CompletedTask;
         }
 
-        public Task ClearAsyncByServiceId(string serviceId)
+        public Task ClearServiceAsync(string serviceId)
         {
             _routes.Remove(_routes.FirstOrDefault(x => x.ServiceDescriptor.Id == serviceId));
             return Task.CompletedTask;
@@ -38,6 +38,16 @@ namespace Jimu.Server.Discovery
             _routes.RemoveAll(x => routes.Any(y => y.ServiceDescriptor.Id == x.ServiceDescriptor.Id));
             // add news routes
             _routes.AddRange(routes.ToList());
+            return Task.CompletedTask;
+        }
+
+        public Task AddRouteAsync(List<JimuServiceRoute> routes)
+        {
+            foreach (var route in routes)
+            {
+                _routes.RemoveAll(x => x.ServiceDescriptor.Id == route.ServiceDescriptor.Id);
+                _routes.Add(route);
+            }
             return Task.CompletedTask;
         }
 

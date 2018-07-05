@@ -16,11 +16,11 @@ namespace Jimu.Common.Logger
         private readonly ILog _logInfo;
         private readonly ILog _logError;
         private readonly ILog _logWarn;
-        private readonly Log4netOptions _options;
+        private readonly LogOptions _options;
 
-        public Log4netLogger(Log4netOptions options = null)
+        public Log4netLogger(LogOptions options = null)
         {
-            _options = options ?? new Log4netOptions { EnableConsoleLog = true, LogLevel = LogLevel.Error | LogLevel.Info | LogLevel.Warn };
+            _options = options ?? new LogOptions { EnableConsoleLog = true, ConsoleLogLevel = LogLevel.Error | LogLevel.Info | LogLevel.Warn };
             var repInfo = LogManager.CreateRepository("info");
             var repWarn = LogManager.CreateRepository("warn");
             var repError = LogManager.CreateRepository("error");
@@ -101,7 +101,7 @@ namespace Jimu.Common.Logger
 
         public void Warn(string msg)
         {
-            if ((_options.LogLevel & LogLevel.Warn) == LogLevel.Warn)
+            if ((_options.ConsoleLogLevel & LogLevel.Warn) == LogLevel.Warn)
             {
                 _logError.Warn(msg);
             }
@@ -109,14 +109,14 @@ namespace Jimu.Common.Logger
 
         public void Error(string msg, Exception ex)
         {
-            if ((_options.LogLevel & LogLevel.Error) == LogLevel.Error)
+            if ((_options.ConsoleLogLevel & LogLevel.Error) == LogLevel.Error)
                 _logError.Error(msg, ex);
 
         }
 
         public void Info(string msg)
         {
-            if ((_options.LogLevel & LogLevel.Info) == LogLevel.Info)
+            if ((_options.ConsoleLogLevel & LogLevel.Info) == LogLevel.Info)
                 _logInfo.Info(msg);
         }
     }

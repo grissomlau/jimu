@@ -33,7 +33,8 @@ namespace Jimu.Client
                     }));
                 AttributeKey<IClientSender> clientSenderKey = AttributeKey<IClientSender>.ValueOf(typeof(DefaultTransportClientFactory), nameof(IClientSender));
                 AttributeKey<IClientListener> clientListenerKey = AttributeKey<IClientListener>.ValueOf(typeof(DefaultTransportClientFactory), nameof(IClientListener));
-                AttributeKey<EndPoint> endPointKey = AttributeKey<EndPoint>.ValueOf(typeof(DefaultTransportClientFactory), nameof(EndPoint));
+                //AttributeKey<EndPoint> endPointKey = AttributeKey<EndPoint>.ValueOf(typeof(DefaultTransportClientFactory), nameof(EndPoint));
+                AttributeKey<string> endPointKey = AttributeKey<string>.ValueOf(typeof(DefaultTransportClientFactory), "addresscode");
                 factory.ClientCreatorDelegate += (JimuAddress address, ref ITransportClient client) =>
                 {
                     //if (client == null && address.GetType().IsAssignableFrom(typeof(DotNettyAddress)))
@@ -45,7 +46,7 @@ namespace Jimu.Client
                         channel.GetAttribute(clientListenerKey).Set(listener);
                         var sender = new DotNettyClientSender(channel, serializer);
                         channel.GetAttribute(clientSenderKey).Set(sender);
-                        channel.GetAttribute(endPointKey).Set(ep);
+                        channel.GetAttribute(endPointKey).Set($"{address.ServerFlag}-{address.Code}");
                         client = new DefaultTransportClient(listener, sender, logger);
                     }
                 };

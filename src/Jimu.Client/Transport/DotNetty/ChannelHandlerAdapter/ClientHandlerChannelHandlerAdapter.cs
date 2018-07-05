@@ -4,7 +4,7 @@ using DotNetty.Transport.Channels;
 
 namespace Jimu.Client
 {
-    class ClientHandlerChannelHandlerAdapter :ChannelHandlerAdapter
+    class ClientHandlerChannelHandlerAdapter : ChannelHandlerAdapter
     {
         private readonly ITransportClientFactory _factory;
         private readonly ILogger _logger;
@@ -19,7 +19,7 @@ namespace Jimu.Client
 
         public override void ChannelInactive(IChannelHandlerContext context)
         {
-            _factory.Clients.TryRemove(context.Channel.GetAttribute(AttributeKey<EndPoint>.ValueOf(typeof(DefaultTransportClientFactory), nameof(EndPoint))).Get(), out var value);
+            _factory.Clients.TryRemove(context.Channel.GetAttribute(AttributeKey<string>.ValueOf(typeof(DefaultTransportClientFactory), "addresscode")).Get(), out _);
         }
 
         public override void ChannelRead(IChannelHandlerContext context, object message)

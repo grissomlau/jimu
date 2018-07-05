@@ -20,7 +20,8 @@ namespace Jimu.Client
         private readonly ConcurrentQueue<JimuServiceRoute> _routes;
 
         private readonly int _updateJobIntervalMinute;
-        public ClientServiceDiscovery(int updateJobIntervalMinute = 1)
+        private readonly ILogger _logger;
+        public ClientServiceDiscovery(ILogger logger, int updateJobIntervalMinute = 1)
         {
             if (updateJobIntervalMinute == 0 || updateJobIntervalMinute > 60)
             {
@@ -30,25 +31,33 @@ namespace Jimu.Client
             _routesGetters = new List<Func<Task<List<JimuServiceRoute>>>>();
             _addresses = new ConcurrentQueue<JimuAddress>();
             _routes = new ConcurrentQueue<JimuServiceRoute>();
+            this._logger = logger;
         }
 
         public async Task RunInInit()
         {
-            Thread.Sleep(200);
-            var result = UpdateRoutes();
-            result.Wait();
+            //Thread.Sleep(200);
+            _logger.Info($"start run init: {_updateJobIntervalMinute}");
+            await UpdateRoutes();
             await RunUpdateJob();
         }
 
         private async Task RunUpdateJob()
         {
+            _logger.Info($"start discovery update interval: {_updateJobIntervalMinute}");
             string cron = $"0 0/{_updateJobIntervalMinute} * * * ?";
+            if (_updateJobIntervalMinute == 60)
+            {
+                cron = $"0 0 0/1 * * ?";
+            }
             var scheduler = await StdSchedulerFactory.GetDefaultScheduler();
             IJobDetail jobDetail = JobBuilder.Create<MonitorJob>().WithIdentity("MonitorJob", "Jimu.Client.UpdateServiceJob").Build();
             jobDetail.JobDataMap.Put("serviceDiscovery", this);
             IOperableTrigger trigger = new CronTriggerImpl("MonitorJob", "Jimu.Client.UpdateServiceJob", cron);
             await scheduler.ScheduleJob(jobDetail, trigger);
             await scheduler.Start();
+            _logger.Info($"end discovery update interval: {_updateJobIntervalMinute}");
+
         }
 
         private void ClearQueue<T>(ConcurrentQueue<T> queue)
@@ -137,6 +146,7 @@ namespace Jimu.Client
         {
             public Task Execute(IJobExecutionContext context)
             {
+                Console.WriteLine("******************* start job *************************");
                 var serviceDiscovery = context.JobDetail.JobDataMap.Get("serviceDiscovery") as ClientServiceDiscovery;
                 serviceDiscovery?.UpdateRoutes();
                 return Task.CompletedTask;

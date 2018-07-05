@@ -19,14 +19,14 @@ namespace Jimu.Server
         /// </summary>
         /// <param name="address"></param>
         /// <returns></returns>
-        Task ClearAsync(string address);
+        //Task ClearAsync(string address);
 
         /// <summary>
         ///     clear discovered service by specify service id
         /// </summary>
         /// <param name="serviceId"></param>
         /// <returns></returns>
-        Task ClearAsyncByServiceId(string serviceId);
+        Task ClearServiceAsync(string serviceId);
 
         /// <summary>
         ///     register service by service routes
@@ -34,6 +34,12 @@ namespace Jimu.Server
         /// <param name="routes"></param>
         /// <returns></returns>
         Task SetRoutesAsync(IEnumerable<JimuServiceRoute> routes);
+        /// <summary>
+        /// register service by service route
+        /// </summary>
+        /// <param name="route"></param>
+        /// <returns></returns>
+        Task AddRouteAsync(List<JimuServiceRoute> routes);
 
         /// <summary>
         ///     get all registered service routes

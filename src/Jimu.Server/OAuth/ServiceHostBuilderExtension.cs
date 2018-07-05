@@ -35,8 +35,9 @@ namespace Jimu.Server
                         }
                     }
                 };
-                discovery.ClearAsyncByServiceId(tokenRoute.First().ServiceDescriptor.Id);
-                discovery.SetRoutesAsync(tokenRoute);
+                discovery.ClearServiceAsync(tokenRoute.First().ServiceDescriptor.Id);
+                //discovery.SetRoutesAsync(tokenRoute);
+                discovery.AddRouteAsync(tokenRoute);
             });
             return serviceHostBuilder;
         }

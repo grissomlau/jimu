@@ -82,8 +82,7 @@ namespace Jimu.Client
             }
             finally
             {
-                TaskCompletionSource<JimuTransportMsg> value;
-                _resultCallbackDic.TryRemove(id, out value);
+                _resultCallbackDic.TryRemove(id, out _);
             }
         }
     }

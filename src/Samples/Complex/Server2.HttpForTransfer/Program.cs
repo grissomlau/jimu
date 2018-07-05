@@ -14,7 +14,7 @@ namespace Server2.HttpForTransfer
 
             var containerBuilder = new ContainerBuilder();
             var builder = new ServiceHostServerBuilder(containerBuilder)
-                .UseLog4netLogger(new Log4netOptions
+                .UseLog4netLogger(new LogOptions
                 {
                     EnableConsoleLog = true
                 })

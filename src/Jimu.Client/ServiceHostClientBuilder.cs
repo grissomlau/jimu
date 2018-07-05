@@ -18,7 +18,7 @@ namespace Jimu.Client
             this.AddRunner(container =>
             {
                 var clientServiceDiscovery = (ClientServiceDiscovery)container.Resolve<IClientServiceDiscovery>();
-                clientServiceDiscovery?.RunInInit();
+                clientServiceDiscovery?.RunInInit().Wait();
 
             });
         }

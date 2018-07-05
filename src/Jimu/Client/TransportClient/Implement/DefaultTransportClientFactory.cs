@@ -10,11 +10,13 @@ namespace Jimu.Client
 
         public DefaultTransportClientFactory(ILogger logger)
         {
-            Clients = new ConcurrentDictionary<EndPoint, Lazy<ITransportClient>>();
+            //Clients = new ConcurrentDictionary<EndPoint, Lazy<ITransportClient>>();
+            Clients = new ConcurrentDictionary<string, Lazy<ITransportClient>>();
             _logger = logger;
         }
 
-        public ConcurrentDictionary<EndPoint, Lazy<ITransportClient>> Clients { get; }
+        //public ConcurrentDictionary<EndPoint, Lazy<ITransportClient>> Clients { get; }
+        public ConcurrentDictionary<string, Lazy<ITransportClient>> Clients { get; }
 
 
         public event CreatorDelegate ClientCreatorDelegate;
@@ -25,7 +27,8 @@ namespace Jimu.Client
             _logger.Info($"creating transport client for: {address.Code}");
             try
             {
-                return Clients.GetOrAdd(address.CreateEndPoint(), ep => new Lazy<ITransportClient>(() =>
+                //return Clients.GetOrAdd(address.CreateEndPoint(), ep => new Lazy<ITransportClient>(() =>
+                return Clients.GetOrAdd($"{address.ServerFlag}-{address.Code}", ep => new Lazy<ITransportClient>(() =>
                 {
                     ITransportClient client = null;
                     ClientCreatorDelegate?.Invoke(address, ref client);
@@ -35,7 +38,8 @@ namespace Jimu.Client
             }
             catch (Exception ex)
             {
-                Clients.TryRemove(address.CreateEndPoint(), out var value);
+                //Clients.TryRemove(address.CreateEndPoint(), out _);
+                Clients.TryRemove($"{address.ServerFlag}-{address.Code}", out _);
                 _logger.Error($"failed to create transport client for : {address.Code}", ex);
                 throw new TransportException(ex.Message, ex);
             }

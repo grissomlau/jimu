@@ -2,7 +2,10 @@
 using Jimu.Common.Discovery.ConsulIntegration;
 using Jimu.Server;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
+using Consul;
 
 namespace Jimu.Server
 {
@@ -17,11 +20,16 @@ namespace Jimu.Server
         /// <param name="serviceCategory">server category name</param>
         /// <param name="serverAddress">server address</param>
         /// <returns></returns>
-        public static IServiceHostServerBuilder UseConsulForDiscovery(this IServiceHostServerBuilder serviceHostBuilder, string consulIp, int consulPort, string serviceCategory, string serverAddress = null)
+        public static IServiceHostServerBuilder UseConsulForDiscovery(this IServiceHostServerBuilder serviceHostBuilder, string consulIp, int consulPort, string serviceCategory, string serverAddress)
         {
             serviceHostBuilder.RegisterService(containerBuilder =>
             {
-                containerBuilder.RegisterType<ConsulServiceDiscovery>().As<IServiceDiscovery>().WithParameter("ip", consulIp).WithParameter("port", consulPort).WithParameter("serviceCategory", serviceCategory).SingleInstance();
+                containerBuilder.RegisterType<ConsulServiceDiscovery>().As<IServiceDiscovery>()
+                    .WithParameter("ip", consulIp)
+                    .WithParameter("port", consulPort)
+                    .WithParameter("serviceCategory", serviceCategory)
+                    .WithParameter("serverAddress", serverAddress)
+                    .SingleInstance();
             });
 
             //serviceHostBuilder.AddRunner(async container =>
@@ -29,24 +37,28 @@ namespace Jimu.Server
             {
                 while (!container.IsRegistered<IServer>())
                 {
-                    default(SpinWait).SpinOnce();
+                    //default(SpinWait).SpinOnce();
+                    Thread.Sleep(200);
                 }
 
+                var logger = container.Resolve<ILogger>();
                 IServer server = container.Resolve<IServer>();
                 var routes = server.GetServiceRoutes();
+                logger.Info("find routes count: " + routes.Count);
+
                 try
                 {
                     var discovery = container.Resolve<IServiceDiscovery>();
-                    if (!string.IsNullOrEmpty(serverAddress))
-                    {
-                        await discovery.ClearAsync(serverAddress);
-                    }
+                    //if (!string.IsNullOrEmpty(serverAddress))
+                    //{
+                    //    await discovery.ClearAsync(serverAddress);
+                    //}
 
+                    await discovery.ClearAsync();
                     await discovery.SetRoutesAsync(routes);
                 }
                 catch (Exception ex)
                 {
-                    var logger = container.Resolve<ILogger>();
                     logger.Error($"error occurred while connecting with consul, ensure consul is running.\r\n", ex);
                 }
 
@@ -63,17 +75,57 @@ namespace Jimu.Client
 {
     public static class ServiceHostBuilderExtension
     {
-        public static IServiceHostClientBuilder UseConsulForDiscovery(this IServiceHostClientBuilder serviceHostBuilder, string ip, int port, string serviceCategory)
+        public static IServiceHostClientBuilder UseConsulForDiscovery(this IServiceHostClientBuilder serviceHostBuilder,
+            string ip, int port, string serviceCategory)
         {
-            serviceHostBuilder.RegisterService(containerBuilder =>
-            {
-                containerBuilder.RegisterType<ConsulServiceDiscovery>().As<IServiceDiscovery>().WithParameter("ip", ip).WithParameter("port", port).WithParameter("serviceCategory", serviceCategory).SingleInstance();
-            });
             serviceHostBuilder.AddInitializer(container =>
             {
                 var clientDiscovery = container.Resolve<IClientServiceDiscovery>();
-                var serverDiscovery = container.Resolve<IServiceDiscovery>();
-                clientDiscovery.AddRoutesGetter(serverDiscovery.GetRoutesAsync);
+                var serializer = container.Resolve<ISerializer>();
+                clientDiscovery.AddRoutesGetter(async () =>
+                {
+                    var consul = new ConsulClient(config => { config.Address = new Uri($"http://{ip}:{port}"); });
+                    var queryResult = await consul.KV.Keys(serviceCategory);
+                    var keys = queryResult.Response;
+                    if (keys == null)
+                    {
+                        return null;
+                    }
+
+                    var routes = new List<JimuServiceRoute>();
+                    foreach (var key in keys)
+                    {
+                        var data = (await consul.KV.Get(key)).Response?.Value;
+                        if (data == null)
+                        {
+                            continue;
+                        }
+
+                        var descriptors = serializer.Deserialize<byte[], List<JimuServiceRouteDesc>>(data);
+                        if (descriptors != null && descriptors.Any())
+                        {
+                            foreach (var descriptor in descriptors)
+                            {
+                                List<JimuAddress> addresses =
+                                    new List<JimuAddress>(descriptor.AddressDescriptors.ToArray().Count());
+                                foreach (var addDesc in descriptor.AddressDescriptors)
+                                {
+                                    var addrType = Type.GetType(addDesc.Type);
+                                    addresses.Add(serializer.Deserialize(addDesc.Value, addrType) as JimuAddress);
+                                }
+
+                                routes.Add(new JimuServiceRoute
+                                {
+                                    Address = addresses,
+                                    ServiceDescriptor = descriptor.ServiceDescriptor
+                                });
+                            }
+                        }
+
+                    }
+
+                    return routes;
+                });
             });
 
             return serviceHostBuilder;

@@ -12,12 +12,15 @@ namespace Jimu.Common.Discovery.ConsulIntegration
         private readonly ConsulClient _consul;
         private readonly ISerializer _serializer;
         private readonly string _serviceCategory;
+        private readonly string _serverAddress;
 
-        private JimuServiceRoute[] _routes;
-        public ConsulServiceDiscovery(string ip, int port, string serviceCategory, ISerializer serializer)
+        private List<JimuServiceRoute> _routes;
+        public ConsulServiceDiscovery(string ip, int port, string serviceCategory, string serverAddress, ISerializer serializer)
         {
+            _routes = new List<JimuServiceRoute>();
             _serializer = serializer;
             _serviceCategory = serviceCategory;
+            _serverAddress = serverAddress;
             _consul = new ConsulClient(config =>
             {
                 config.Address = new Uri($"http://{ip}:{port}");
@@ -35,15 +38,33 @@ namespace Jimu.Common.Discovery.ConsulIntegration
             {
                 return _routes.ToList();
             }
-
-            if (_consul.KV.Keys(_serviceCategory).Result.Response?.Count() > 0)
+            var data = (await _consul.KV.Get(GetKey())).Response?.Value;
+            if (data == null)
             {
-                //var result = (await this._consul.KV.List(this._serviceCategory)).Response?.Select(x=>encoding);
-                var keys = (await _consul.KV.Keys(_serviceCategory)).Response;
-                _routes = await GetRoutes(keys);
+                return _routes;
             }
 
-            return (_routes ?? (_routes = new JimuServiceRoute[0])).ToList();
+            var descriptors = _serializer.Deserialize<byte[], List<JimuServiceRouteDesc>>(data);
+            if (descriptors != null && descriptors.Any())
+            {
+                foreach (var descriptor in descriptors)
+                {
+                    List<JimuAddress> addresses = new List<JimuAddress>(descriptor.AddressDescriptors.ToArray().Count());
+                    foreach (var addDesc in descriptor.AddressDescriptors)
+                    {
+                        var addrType = Type.GetType(addDesc.Type);
+                        addresses.Add(_serializer.Deserialize(addDesc.Value, addrType) as JimuAddress);
+                    }
+
+                    _routes.Add(new JimuServiceRoute
+                    {
+                        Address = addresses,
+                        ServiceDescriptor = descriptor.ServiceDescriptor
+                    });
+                }
+            }
+
+            return _routes;
         }
 
         public async Task<List<JimuAddress>> GetAddressAsync()
@@ -59,27 +80,25 @@ namespace Jimu.Common.Discovery.ConsulIntegration
 
         public async Task ClearAsync()
         {
-            var queryResult = await _consul.KV.List(_serviceCategory);
-            var response = queryResult.Response;
-            if (response != null)
-            {
-                foreach (var result in response)
-                {
-                    await _consul.KV.DeleteCAS(result);
-                }
-            }
+            await _consul.KV.Delete(GetKey());
+            //var queryResult = await _consul.KV.List(_serviceCategory);
+            //var response = queryResult.Response;
+            //if (response != null)
+            //{
+            //    foreach (var result in response)
+            //    {
+            //        await _consul.KV.DeleteCAS(result);
+            //    }
+            //}
         }
 
         public async Task SetRoutesAsync(IEnumerable<JimuServiceRoute> routes)
         {
-            var existingRoutes = await GetRoutes(routes.Select(x => GetKey(x.ServiceDescriptor.Id)));
+            //var existingRoutes = await GetRoutes(routes.Select(x => GetKey(x.ServiceDescriptor.Id)));
+            _routes = routes.ToList();
             var routeDescriptors = new List<JimuServiceRouteDesc>(routes.Count());
             foreach (var route in routes)
             {
-                var existingRoute = existingRoutes.FirstOrDefault(x => x.ServiceDescriptor.Id == route.ServiceDescriptor.Id);
-                if (existingRoute != null)
-                    route.Address = route.Address.Concat(existingRoute.Address.Except(route.Address)).ToList();
-
                 routeDescriptors.Add(new JimuServiceRouteDesc
                 {
                     ServiceDescriptor = route.ServiceDescriptor,
@@ -91,35 +110,27 @@ namespace Jimu.Common.Discovery.ConsulIntegration
                 });
             }
 
-            await SetRoutesAsync(routeDescriptors);
+            //await SetRoutesAsync(routeDescriptors);
+            var nodeData = _serializer.Serialize<byte[]>(routeDescriptors);
+            var keyValuePair = new KVPair(GetKey()) { Value = nodeData };
+            await _consul.KV.Put(keyValuePair);
         }
 
-        private async Task SetRoutesAsync(IEnumerable<JimuServiceRouteDesc> routes)
+        public async Task AddRouteAsync(List<JimuServiceRoute> routes)
         {
-
-            foreach (var serviceRoute in routes)
+            var curRoutes = await GetRoutesAsync();
+            foreach (var route in routes)
             {
-                var nodeData = _serializer.Serialize<byte[]>(serviceRoute);
-                var keyValuePair = new KVPair(GetKey(serviceRoute.ServiceDescriptor.Id)) { Value = nodeData };
-                await _consul.KV.Put(keyValuePair);
+                curRoutes.RemoveAll(x => x.ServiceDescriptor.Id == route.ServiceDescriptor.Id);
+                curRoutes.Add(route);
             }
+
+            await SetRoutesAsync(routes);
         }
 
-        private string GetKey(string id)
+        private string GetKey()
         {
-            return $"{_serviceCategory}{id}";
-        }
-
-        private async Task<JimuServiceRoute[]> GetRoutes(IEnumerable<string> children)
-        {
-            var routes = new List<JimuServiceRoute>(children.ToArray().Count());
-            foreach (var child in children)
-            {
-                var route = await GetRoute(child);
-                if (route != null)
-                    routes.Add(route);
-            }
-            return routes.ToArray();
+            return $"{_serviceCategory}-{_serverAddress}";
         }
 
         private async Task<JimuServiceRoute> GetRoute(string path)
@@ -150,26 +161,29 @@ namespace Jimu.Common.Discovery.ConsulIntegration
             };
         }
 
-        /// <summary>
-        /// clean specify address service
-        /// </summary>
-        /// <param name="address"></param>
-        /// <returns></returns>
-        public async Task ClearAsync(string address)
+        ///// <summary>
+        ///// clean specify address service
+        ///// </summary>
+        ///// <param name="address"></param>
+        ///// <returns></returns>
+        //public async Task ClearAsync(string address)
+        //{
+        //    await _consul.KV.Delete(GetKey());
+        //    //var routes = await GetRoutesAsync();
+        //    //var remoteRouteIds = (from route in routes
+        //    //                      where route.Address.Count() == 1 && (route.Address.Any(x => x == null || route.Address.First().Code == address))
+        //    //                      select route.ServiceDescriptor.Id).ToArray();
+        //    //foreach (var remoteRouteId in remoteRouteIds)
+        //    //{
+        //    //    await _consul.KV.Delete(GetKey(remoteRouteId));
+        //    //}
+        //}
+
+        public async Task ClearServiceAsync(string serviceId)
         {
             var routes = await GetRoutesAsync();
-            var remoteRouteIds = (from route in routes
-                                  where route.Address.Count() == 1 && (route.Address.Any(x => x == null || route.Address.First().Code == address))
-                                  select route.ServiceDescriptor.Id).ToArray();
-            foreach (var remoteRouteId in remoteRouteIds)
-            {
-                await _consul.KV.Delete(GetKey(remoteRouteId));
-            }
-        }
-
-        public async Task ClearAsyncByServiceId(string serviceId)
-        {
-            await _consul.KV.Delete(GetKey(serviceId));
+            routes.RemoveAll(x => x.ServiceDescriptor.Id == serviceId);
+            await SetRoutesAsync(routes);
         }
     }
 }

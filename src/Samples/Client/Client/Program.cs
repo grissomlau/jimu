@@ -14,7 +14,7 @@ namespace Client
 
             var container = new ContainerBuilder();
             var host = new ServiceHostClientBuilder(container)
-                .UseLog4netLogger(new Log4netOptions { EnableConsoleLog = true })
+                .UseLog4netLogger(new LogOptions { EnableConsoleLog = true })
                 .UsePollingAddressSelector()
                 .UseConsulForDiscovery("127.0.0.1", 8500, "JimuService-")
                 .UseDotNettyForTransfer()

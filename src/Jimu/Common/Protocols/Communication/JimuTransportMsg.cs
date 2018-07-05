@@ -1,5 +1,6 @@
 ﻿using System;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Jimu
 {
@@ -30,6 +31,10 @@ namespace Jimu
         {
             try
             {
+                if (Content is JObject o)
+                {
+                    return o.ToObject<T>();
+                }
                 return (T)Content;
             }
             catch (Exception)
