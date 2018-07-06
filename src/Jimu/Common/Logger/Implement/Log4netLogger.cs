@@ -13,23 +13,34 @@ namespace Jimu.Common.Logger
 {
     public class Log4netLogger : ILogger
     {
-        private readonly ILog _logInfo;
-        private readonly ILog _logError;
-        private readonly ILog _logWarn;
+        //private readonly ILog _logDebug;
+        //private readonly ILog _logInfo;
+        //private readonly ILog _logError;
+        //private readonly ILog _logWarn;
+        private readonly ILog _logger;
         private readonly LogOptions _options;
 
         public Log4netLogger(LogOptions options = null)
         {
-            _options = options ?? new LogOptions { EnableConsoleLog = true, ConsoleLogLevel = LogLevel.Error | LogLevel.Info | LogLevel.Warn };
-            var repInfo = LogManager.CreateRepository("info");
-            var repWarn = LogManager.CreateRepository("warn");
-            var repError = LogManager.CreateRepository("error");
-            UseCodeConfig((Hierarchy)repInfo, "info");
-            UseCodeConfig((Hierarchy)repError, "error");
-            UseCodeConfig((Hierarchy)repError, "warn");
-            _logInfo = LogManager.GetLogger("info", MethodBase.GetCurrentMethod().DeclaringType);
-            _logError = LogManager.GetLogger("error", MethodBase.GetCurrentMethod().DeclaringType);
-            _logWarn = LogManager.GetLogger("warn", MethodBase.GetCurrentMethod().DeclaringType);
+            _options = options ?? new LogOptions { EnableConsoleLog = true };
+            var repLogger = LogManager.CreateRepository("logger");
+            //var repDebug = LogManager.CreateRepository("debug");
+            //var repInfo = LogManager.CreateRepository("info");
+            //var repWarn = LogManager.CreateRepository("warn");
+            //var repError = LogManager.CreateRepository("error");
+            //UseCodeConfig((Hierarchy)repDebug, "debug");
+            //UseCodeConfig((Hierarchy)repInfo, "info");
+            //UseCodeConfig((Hierarchy)repError, "error");
+            //UseCodeConfig((Hierarchy)repWarn, "warn");
+            UseCodeConfig((Hierarchy)repLogger, LogLevel.Debug);
+            UseCodeConfig((Hierarchy)repLogger, LogLevel.Info);
+            UseCodeConfig((Hierarchy)repLogger, LogLevel.Warn);
+            UseCodeConfig((Hierarchy)repLogger, LogLevel.Error);
+            _logger = LogManager.GetLogger("logger", MethodBase.GetCurrentMethod().DeclaringType);
+            //_logDebug = LogManager.GetLogger("debug", MethodBase.GetCurrentMethod().DeclaringType);
+            //_logInfo = LogManager.GetLogger("info", MethodBase.GetCurrentMethod().DeclaringType);
+            //_logError = LogManager.GetLogger("error", MethodBase.GetCurrentMethod().DeclaringType);
+            //_logWarn = LogManager.GetLogger("warn", MethodBase.GetCurrentMethod().DeclaringType);
 
         }
         //void UseFileCofnig(ILoggerRepository rep)
@@ -45,10 +56,11 @@ namespace Jimu.Common.Logger
         //    }
         //}
 
-        void UseCodeConfig(Hierarchy repository, string type)
+        //void UseCodeConfig(Hierarchy repository, string type)
+        void UseCodeConfig(Hierarchy repository, LogLevel logLevel)
         {
 
-            if (_options.EnableFileLog)
+            if (_options.EnableFileLog && (_options.FileLogLevel & logLevel) == logLevel)
             {
                 PatternLayout layout = new PatternLayout
                 {
@@ -60,19 +72,35 @@ namespace Jimu.Common.Logger
                 {
                     AppendToFile = false
                 };
-                var path = _options.EnableFileLog ? _options.FileLogPath : "Log";
-                roller.File = $@"{path}\{type}\";
+                var path = _options.EnableFileLog ? _options.FileLogPath : "log";
+                roller.File = $@"{path}\{logLevel.ToString().ToLower()}\";
+                roller.PreserveLogFileNameExtension = true;
                 roller.StaticLogFileName = false;
-                roller.MaxSizeRollBackups = 10;
-                roller.DatePattern = @"yyyyMMdd"".log""";
+                roller.MaxSizeRollBackups = 0;
+                roller.DatePattern = $@"yyyyMMdd"".log""";
                 roller.RollingStyle = RollingFileAppender.RollingMode.Date;
                 roller.Layout = layout;
+                roller.MaxFileSize = 10000000;
+                switch (logLevel)
+                {
+                    case LogLevel.Debug:
+                        roller.Threshold = Level.Debug;
+                        break;
+                    case LogLevel.Info:
+                        roller.Threshold = Level.Info;
+                        break;
+                    case LogLevel.Warn:
+                        roller.Threshold = Level.Warn;
+                        break;
+                    case LogLevel.Error:
+                        roller.Threshold = Level.Error;
+                        break;
+                }
                 roller.ActivateOptions();
-
                 repository.Root.AddAppender(roller);
             }
 
-            if (_options.EnableConsoleLog)
+            if (_options.EnableConsoleLog && (_options.ConsoleLogLevel & logLevel) == logLevel)
             {
 
                 //ManagedColoredConsoleAppender managedColoredConsoleAppender = new
@@ -81,43 +109,65 @@ namespace Jimu.Common.Logger
                 {
                     ConversionPattern = "%n%date{HH:mm:ss.fff} %-5level %m",
                 };
-                layoutConsole.ActivateOptions();
-                console.Layout = layoutConsole;
+                switch (logLevel)
+                {
+                    case LogLevel.Debug:
+                        console.Threshold = Level.Debug;
+                        break;
+                    case LogLevel.Info:
+                        console.Threshold = Level.Info;
+                        break;
+                    case LogLevel.Warn:
+                        console.Threshold = Level.Warn;
+                        break;
+                    case LogLevel.Error:
+                        console.Threshold = Level.Error;
+                        break;
+                }
                 console.AddMapping(
                     new ManagedColoredConsoleAppender.LevelColors { Level = Level.Error, ForeColor = ConsoleColor.DarkRed });
                 console.AddMapping(
                     new ManagedColoredConsoleAppender.LevelColors { Level = Level.Warn, ForeColor = ConsoleColor.DarkYellow });
+
+                layoutConsole.ActivateOptions();
+                console.Layout = layoutConsole;
                 console.ActivateOptions();
                 repository.Root.AddAppender(console);
             }
 
-            MemoryAppender memory = new MemoryAppender();
-            memory.ActivateOptions();
-            repository.Root.AddAppender(memory);
+            //MemoryAppender memory = new MemoryAppender();
+            //memory.ActivateOptions();
+            //repository.Root.AddAppender(memory);
 
-            repository.Root.Level = Level.Debug;
+            //repository.Root.Level = Level.Debug;
             repository.Configured = true;
         }
 
         public void Warn(string msg)
         {
-            if ((_options.ConsoleLogLevel & LogLevel.Warn) == LogLevel.Warn)
-            {
-                _logError.Warn(msg);
-            }
+            _logger.Warn(msg);
         }
 
         public void Error(string msg, Exception ex)
         {
-            if ((_options.ConsoleLogLevel & LogLevel.Error) == LogLevel.Error)
-                _logError.Error(msg, ex);
+            //if ((_options.ConsoleLogLevel & LogLevel.Error) == LogLevel.Error)
+            //    _logError.Error(msg, ex);
+            _logger.Error(msg, ex);
 
+        }
+
+        public void Debug(string info)
+        {
+            //if ((_options.ConsoleLogLevel & LogLevel.Debug) == LogLevel.Debug)
+            //    _logDebug.Debug(info);
+            _logger.Debug(info);
         }
 
         public void Info(string msg)
         {
-            if ((_options.ConsoleLogLevel & LogLevel.Info) == LogLevel.Info)
-                _logInfo.Info(msg);
+            //if ((_options.ConsoleLogLevel & LogLevel.Info) == LogLevel.Info)
+            //    _logInfo.Info(msg);
+            _logger.Info(msg);
         }
     }
 }

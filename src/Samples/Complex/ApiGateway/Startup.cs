@@ -82,13 +82,12 @@ namespace Jimu.ApiGateway
 
             // jimu client
             var host = new ServiceHostClientBuilder(new ContainerBuilder())
-                //.UseLog4netLogger(new LogOptions
-                .UseNLogger(new LogOptions
+                .UseLog4netLogger(new LogOptions
+                //.UseNLogger(new LogOptions
                 {
                     EnableConsoleLog = true,
                     EnableFileLog = true,
-                    FileLogLevel = LogLevel.Info | LogLevel.Error | LogLevel.Warn,
-                    FileLogPath = "log",
+                    FileLogLevel = LogLevel.Info | LogLevel.Error,
                 })
                 //.UseInServerForDiscovery(new HttpAddress("127.0.0.1", 8006))
                 .UseConsulForDiscovery("127.0.0.1", 8500, "caritem-")

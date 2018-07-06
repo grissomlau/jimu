@@ -7,19 +7,24 @@ namespace Jimu.Common.Logger
     /// </summary>
     public class ConsoleLogger : ILogger
     {
+        public void Debug(string info)
+        {
+            Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss.fff")} {info}");
+        }
+
         public void Error(string info, Exception ex)
         {
-            Console.WriteLine($"{info},{ex.ToStackTraceString()}");
+            Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss.fff")} {info},{ex.ToStackTraceString()}");
         }
 
         public void Info(string info)
         {
-            Console.WriteLine($"{info}");
+            Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss.fff")} {info}");
         }
 
         public void Warn(string info)
         {
-            Console.WriteLine($"{info}"); ;
+            Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss.fff")} {info}"); ;
         }
     }
 }

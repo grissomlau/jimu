@@ -57,7 +57,7 @@ namespace Jimu.Client.HealthCheck
                     var routes = (await serviceDiscovery.GetRoutesAsync()).ToList();
                     var servers = (from route in routes
                                    from address in route.Address
-                                   where address.IsHealth
+                                   //where address.IsHealth
                                    select address).Distinct().ToList();
                     foreach (var server in servers)
                     {

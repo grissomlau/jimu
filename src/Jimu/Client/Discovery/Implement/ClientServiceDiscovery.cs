@@ -53,6 +53,7 @@ namespace Jimu.Client
             var scheduler = await StdSchedulerFactory.GetDefaultScheduler();
             IJobDetail jobDetail = JobBuilder.Create<MonitorJob>().WithIdentity("MonitorJob", "Jimu.Client.UpdateServiceJob").Build();
             jobDetail.JobDataMap.Put("serviceDiscovery", this);
+            jobDetail.JobDataMap.Put("logger", _logger);
             IOperableTrigger trigger = new CronTriggerImpl("MonitorJob", "Jimu.Client.UpdateServiceJob", cron);
             await scheduler.ScheduleJob(jobDetail, trigger);
             await scheduler.Start();
@@ -124,11 +125,15 @@ namespace Jimu.Client
             ClearQueue(_routes);
             foreach (var route in routes)
             {
+                var oldAddr = _addresses.FirstOrDefault(x => route.Address.Any(y => y.Code == x.Code && y.IsHealth != x.IsHealth));
+                if (oldAddr != null)
+                {
+                    route.Address.Where(x => x.Code == oldAddr.Code).ToList().ForEach(x => x.IsHealth = oldAddr.IsHealth);
+                }
                 if (_routes.Any(x => x.ServiceDescriptor.Id == route.ServiceDescriptor.Id))
                 {
                     var existService = _routes.First(x => x.ServiceDescriptor.Id == route.ServiceDescriptor.Id);
                     existService.Address = existService.Address.Concat(route.Address.Except(existService.Address)).ToList();
-
                 }
                 else
                 {
@@ -146,8 +151,9 @@ namespace Jimu.Client
         {
             public Task Execute(IJobExecutionContext context)
             {
-                Console.WriteLine("******************* start job *************************");
                 var serviceDiscovery = context.JobDetail.JobDataMap.Get("serviceDiscovery") as ClientServiceDiscovery;
+                var logger = context.JobDetail.JobDataMap.Get("logger") as ILogger;
+                logger.Debug("******************* start update services job *************************");
                 serviceDiscovery?.UpdateRoutes();
                 return Task.CompletedTask;
             }

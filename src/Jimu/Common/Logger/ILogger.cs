@@ -5,6 +5,11 @@ namespace Jimu
     public interface ILogger
     {
         /// <summary>
+        ///     general debug info
+        /// </summary>
+        /// <param name="info"></param>
+        void Debug(string info);
+        /// <summary>
         ///     general info
         /// </summary>
         /// <param name="info"></param>

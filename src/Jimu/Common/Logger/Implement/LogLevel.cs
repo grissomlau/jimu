@@ -5,8 +5,9 @@ namespace Jimu
     [Flags]
     public enum LogLevel
     {
-        Error = 2,
-        Warn = 4,
-        Info = 8,
+        Debug = 2,
+        Info = 4,
+        Warn = 8,
+        Error = 16
     }
 }

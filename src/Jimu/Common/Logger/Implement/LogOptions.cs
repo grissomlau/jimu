@@ -4,9 +4,9 @@
     {
         public bool EnableConsoleLog { get; set; }
         public bool EnableFileLog { get; set; }
-        public string FileLogPath { get; set; } = "logs";
+        public string FileLogPath { get; set; } = "log";
         public LogLevel FileLogLevel { get; set; } = LogLevel.Error;
-        public LogLevel ConsoleLogLevel { get; set; } = LogLevel.Error | LogLevel.Info | LogLevel.Warn;
+        public LogLevel ConsoleLogLevel { get; set; } = LogLevel.Debug;
 
     }
 }
