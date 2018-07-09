@@ -10,6 +10,8 @@ namespace Jimu.Client
             {
                 var factory = container.Resolve<ITransportClientFactory>();
                 var logger = container.Resolve<ILogger>();
+                logger.Info($"[config]use http for transfer");
+
                 factory.ClientCreatorDelegate += (JimuAddress address, ref ITransportClient client) =>
                  {
                      //if (client == null && address.GetType() == typeof(HttpAddress))

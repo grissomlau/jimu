@@ -17,6 +17,10 @@ namespace Jimu.Client
             {
                 var tokenGetter = componentRegister.Resolve<IServiceTokenGetter>();
                 tokenGetter.GetToken = getToken;
+
+
+                var logger = componentRegister.Resolve<ILogger>();
+                logger.Info($"[config]get token has been set");
             });
 
             return serviceHostBuilder;

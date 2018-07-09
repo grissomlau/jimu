@@ -35,6 +35,8 @@ namespace Jimu.Server
 
             serviceHostBuilder.AddInitializer(container =>
             {
+                var logger = container.Resolve<ILogger>();
+                logger.Info($"[config]use Masstransit for EventBus, options.HostAddress {options.HostAddress.ToString()}, options.SendEndPointUrl {options.SendEndPointUri.ToString()}");
                 var bus = container.Resolve<IBusControl>();
                 bus.StartAsync();
                 IServiceHost host = container.Resolve<IServiceHost>();

@@ -16,6 +16,9 @@ namespace Jimu.Server
 
             serviceHostBuilder.AddRunner(container =>
             {
+                var logger = container.Resolve<ILogger>();
+                logger.Info($"[config]use http for transfer");
+
                 var server = container.Resolve<IServer>();
                 var routes = server.GetServiceRoutes();
                 server.StartAsync();

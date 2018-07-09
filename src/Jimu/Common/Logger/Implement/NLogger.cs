@@ -47,7 +47,7 @@ namespace Jimu
             {
                 var consoleLog = new NLog.Targets.ConsoleTarget("logconsole")
                 {
-                    Layout = @"${date:format=HH\:mm\:ss.fff} ${level:uppercase=true}  ${message}"
+                    Layout = @"${date:format=yyyy-MM-dd HH\:mm\:ss.fff} ${level:uppercase=true}  ${message}"
                 };
                 if ((options.ConsoleLogLevel & LogLevel.Error) == LogLevel.Error)
                 {

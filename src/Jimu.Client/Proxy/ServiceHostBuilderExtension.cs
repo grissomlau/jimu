@@ -32,6 +32,8 @@ namespace Jimu.Client
                 var serviceProxyGenerator = componentRegister.Resolve<IServiceProxyGenerator>();
                 var serviceProxyTypes = serviceProxyGenerator.GenerateProxy(serviceTypes);
                 var serviceProxy = componentRegister.Resolve<IServiceProxy>();
+                var logger = componentRegister.Resolve<ILogger>();
+                logger.Info($"[config]use service proxy");
             });
 
             return serviceHostBuilder;

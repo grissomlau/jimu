@@ -14,6 +14,11 @@ namespace Jimu
                 if (options == null) options = new LogOptions();
                 containerBuilder.RegisterType<Log4netLogger>().WithParameter("options", options).As<ILogger>().SingleInstance();
             });
+            serviceHostBuilder.AddInitializer(container =>
+            {
+                var logger = container.Resolve<ILogger>();
+                logger.Info($"[config]use Log4net logger");
+            });
             return serviceHostBuilder as T;
         }
         public static T UseNLogger<T>(this IServiceHostBuilder serviceHostBuilder, LogOptions options = null)
@@ -23,6 +28,11 @@ namespace Jimu
             {
                 if (options == null) options = new LogOptions();
                 containerBuilder.RegisterType<NLogger>().WithParameter("options", options).As<ILogger>().SingleInstance();
+            });
+            serviceHostBuilder.AddInitializer(container =>
+            {
+                var logger = container.Resolve<ILogger>();
+                logger.Info($"[config]use NLog logger");
             });
             return serviceHostBuilder as T;
         }

@@ -11,6 +11,11 @@ namespace Jimu.Client
             {
                 containerBuilder.RegisterType<ClientServiceDiscovery>().As<IClientServiceDiscovery>().WithParameter("updateJobIntervalMinute", updateJobIntervalMinute).SingleInstance();
             });
+            serviceHostBuilder.AddInitializer(container =>
+            {
+                var logger = container.Resolve<ILogger>();
+                logger.Info($"[config]services discovery auto update job interval: {updateJobIntervalMinute} min");
+            });
 
             return serviceHostBuilder;
         }

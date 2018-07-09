@@ -19,6 +19,9 @@ namespace Jimu.Client
                 var logger = container.Resolve<ILogger>();
                 var serializer = container.Resolve<ISerializer>();
                 var bootstrap = new Bootstrap();
+
+                logger.Info($"[config]use dotnetty for transfer");
+
                 bootstrap
                     .Group(new MultithreadEventLoopGroup())
                     .Channel<TcpSocketChannel>()

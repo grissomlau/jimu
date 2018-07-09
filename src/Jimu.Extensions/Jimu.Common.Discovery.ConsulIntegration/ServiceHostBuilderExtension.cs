@@ -42,6 +42,8 @@ namespace Jimu.Server
                 }
 
                 var logger = container.Resolve<ILogger>();
+                logger.Info($"[config]use consul for services discovery, consul ip: {consulIp}:{consulPort}, service cateogry: {serviceCategory}, server address: {serverAddress} ");
+
                 IServer server = container.Resolve<IServer>();
                 var routes = server.GetServiceRoutes();
                 logger.Debug("running consul found routes count: " + routes.Count);
@@ -80,6 +82,9 @@ namespace Jimu.Client
         {
             serviceHostBuilder.AddInitializer(container =>
             {
+                var logger = container.Resolve<ILogger>();
+                logger.Info($"[config]use consul for services discovery, consul ip: {ip}:{port}, service cateogry: {serviceCategory}");
+
                 var clientDiscovery = container.Resolve<IClientServiceDiscovery>();
                 var serializer = container.Resolve<ISerializer>();
                 clientDiscovery.AddRoutesGetter(async () =>

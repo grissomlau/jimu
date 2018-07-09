@@ -20,6 +20,8 @@ namespace Jimu.Server
             serviceHostBuilder.AddInitializer(async container =>
             //serviceHostBuilder.AddRunner(async container =>
             {
+                var logger = container.Resolve<ILogger>();
+                logger.Info($"[config]use in server for discovery");
                 while (!container.IsRegistered<IServer>())
                 {
                     default(SpinWait).SpinOnce();

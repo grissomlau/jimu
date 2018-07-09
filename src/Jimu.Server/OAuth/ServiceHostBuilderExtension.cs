@@ -11,6 +11,9 @@ namespace Jimu.Server
         {
             serviceHostBuilder.AddInitializer(container =>
             {
+                var logger = container.Resolve<ILogger>();
+                logger.Info($"[config]use jose.jwt for OAuth");
+
                 var server = container.Resolve<IServer>();
                 var serializer = container.Resolve<ISerializer>();
                 server.UseMiddleware<JwtAuthorizationMiddleware>(options, serializer);

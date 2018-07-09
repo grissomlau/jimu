@@ -17,6 +17,11 @@ namespace Jimu.Client
             {
                 containerBuilder.RegisterType<PollingAddressSelector>().As<IAddressSelector>().SingleInstance();
             });
+            serviceHostBuilder.AddInitializer(container =>
+            {
+                var logger = container.Resolve<ILogger>();
+                logger.Info($"[config]use polling address selector");
+            });
             return serviceHostBuilder;
         }
     }

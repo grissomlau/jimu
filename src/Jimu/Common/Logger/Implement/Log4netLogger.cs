@@ -107,7 +107,7 @@ namespace Jimu.Common.Logger
                 ManagedColoredConsoleAppender console = new ManagedColoredConsoleAppender();
                 PatternLayout layoutConsole = new PatternLayout
                 {
-                    ConversionPattern = "%n%date{HH:mm:ss.fff} %-5level %m",
+                    ConversionPattern = "%n%date{yyyy-MM-dd HH:mm:ss.fff} %-5level %m",
                 };
                 switch (logLevel)
                 {

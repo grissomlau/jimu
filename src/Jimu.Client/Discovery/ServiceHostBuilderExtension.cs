@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Autofac;
 
 namespace Jimu.Client
@@ -15,9 +16,12 @@ namespace Jimu.Client
                 var remoteCaller = container.Resolve<IRemoteServiceCaller>();
                 var serializer = container.Resolve<ISerializer>();
                 var typeConverter = container.Resolve<ITypeConvertProvider>();
+                var logger = container.Resolve<ILogger>();
+                StringBuilder sb = new StringBuilder();
 
                 foreach (var addr in address)
                 {
+                    sb.AppendFormat(addr.Code + ",");
                     var service = new JimuServiceRoute
                     {
                         Address = new List<JimuAddress>
@@ -57,6 +61,10 @@ namespace Jimu.Client
 
                         return routes;
                     });
+                }
+                if (sb.Length > 0)
+                {
+                    logger.Info($"[config]use in server for discovery, servers is {sb.ToString()}");
                 }
             });
 

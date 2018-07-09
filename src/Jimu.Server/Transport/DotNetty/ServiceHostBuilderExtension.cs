@@ -15,6 +15,8 @@ namespace Jimu.Server
 
             serviceHostBuilder.AddInitializer(container =>
             {
+                var logger = container.Resolve<ILogger>();
+                logger.Info($"[config]use dotnetty for transfer");
                 var server = container.Resolve<IServer>();
                 server.StartAsync();
                 action?.Invoke(server);

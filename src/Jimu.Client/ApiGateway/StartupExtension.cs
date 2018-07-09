@@ -13,6 +13,7 @@ namespace Jimu.Client.ApiGateway
     {
         public static IApplicationBuilder UseJimu(this IApplicationBuilder app, IServiceHost host)
         {
+            Console.WriteLine();
             app.UseMiddleware<JimuHttpStatusCodeExceptionMiddleware>();
             app.UseCors(builder =>
             {

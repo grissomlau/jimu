@@ -15,7 +15,7 @@ namespace Jimu.Server
         /// <param name="assemblyNames">the dll to load (trim the ".dll"), like: "IServices,Services"</param>
         /// <returns></returns>
         public static IServiceHostServerBuilder LoadServices(this IServiceHostServerBuilder serviceHostBuilder,
-            string[] assemblyNames)
+            params string[] assemblyNames)
         {
             var assemblies = new List<Assembly>();
             foreach (var assemblyName in assemblyNames)
@@ -46,6 +46,9 @@ namespace Jimu.Server
             {
                 var serviceEntryContainer = container.Resolve<IServiceEntryContainer>();
                 serviceEntryContainer.AddServices(serviceTypes.ToArray());
+
+                var logger = container.Resolve<ILogger>();
+                logger.Info($"[config] loaded services: {string.Join(",", assemblies)}");
             });
             return serviceHostBuilder;
         }

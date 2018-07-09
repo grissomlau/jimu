@@ -14,6 +14,8 @@ namespace Jimu.Client
             serviceHostBuilder.AddInitializer(container =>
             {
                 var healthCheck = container.Resolve<IHealthCheck>();
+                var logger = container.Resolve<ILogger>();
+                logger.Info($"[config]use server health check, checked job interval: {intervalMinute} min");
                 healthCheck.RunAsync();
             });
             return serviceHostBuilder;

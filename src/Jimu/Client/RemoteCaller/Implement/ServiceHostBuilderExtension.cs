@@ -11,6 +11,11 @@ namespace Jimu.Client
             {
                 containerBuilder.RegisterType<RemoteServiceCaller>().As<IRemoteServiceCaller>().WithParameter("retryTimes", retryTimes).SingleInstance();
             });
+            serviceHostBuilder.AddInitializer(container =>
+            {
+                var logger = container.Resolve<ILogger>();
+                logger.Info($"[config]remote service call failure retry times: {retryTimes}");
+            });
 
             return serviceHostBuilder;
         }
