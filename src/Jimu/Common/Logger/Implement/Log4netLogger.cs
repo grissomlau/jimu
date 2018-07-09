@@ -23,7 +23,7 @@ namespace Jimu.Common.Logger
         public Log4netLogger(LogOptions options = null)
         {
             _options = options ?? new LogOptions { EnableConsoleLog = true };
-            var repLogger = LogManager.CreateRepository("logger");
+            var repLogger = LogManager.CreateRepository("jimuLogger");
             //var repDebug = LogManager.CreateRepository("debug");
             //var repInfo = LogManager.CreateRepository("info");
             //var repWarn = LogManager.CreateRepository("warn");
@@ -36,7 +36,7 @@ namespace Jimu.Common.Logger
             UseCodeConfig((Hierarchy)repLogger, LogLevel.Info);
             UseCodeConfig((Hierarchy)repLogger, LogLevel.Warn);
             UseCodeConfig((Hierarchy)repLogger, LogLevel.Error);
-            _logger = LogManager.GetLogger("logger", MethodBase.GetCurrentMethod().DeclaringType);
+            _logger = LogManager.GetLogger("jimuLogger", MethodBase.GetCurrentMethod().DeclaringType);
             //_logDebug = LogManager.GetLogger("debug", MethodBase.GetCurrentMethod().DeclaringType);
             //_logInfo = LogManager.GetLogger("info", MethodBase.GetCurrentMethod().DeclaringType);
             //_logError = LogManager.GetLogger("error", MethodBase.GetCurrentMethod().DeclaringType);

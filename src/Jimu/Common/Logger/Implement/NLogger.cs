@@ -16,7 +16,7 @@ namespace Jimu
             var config = new NLog.Config.LoggingConfiguration();
             if (options.EnableFileLog)
             {
-                var fileConf = new NLog.Targets.FileTarget("logFile")
+                var fileConf = new NLog.Targets.FileTarget("jimuLogFile")
                 {
                     FileName = ".\\log\\${level:lowercase=true}\\${shortdate}.log",
                     ArchiveAboveSize = 10000000,
@@ -45,7 +45,7 @@ namespace Jimu
 
             if (options.EnableConsoleLog)
             {
-                var consoleLog = new NLog.Targets.ConsoleTarget("logconsole")
+                var consoleLog = new NLog.Targets.ConsoleTarget("jimuLogconsole")
                 {
                     Layout = @"${date:format=yyyy-MM-dd HH\:mm\:ss.fff} ${level:uppercase=true}  ${message}"
                 };
@@ -53,24 +53,24 @@ namespace Jimu
                 {
                     config.AddRuleForOneLevel(NLog.LogLevel.Error, consoleLog);
                 }
-                if ((options.FileLogLevel & LogLevel.Warn) == LogLevel.Warn)
+                if ((options.ConsoleLogLevel & LogLevel.Warn) == LogLevel.Warn)
                 {
                     config.AddRule(NLog.LogLevel.Warn, NLog.LogLevel.Error, consoleLog);
                     //config.AddRuleForOneLevel(NLog.LogLevel.Warn, consoleLog);
                 }
-                if ((options.FileLogLevel & LogLevel.Info) == LogLevel.Info)
+                if ((options.ConsoleLogLevel & LogLevel.Info) == LogLevel.Info)
                 {
                     config.AddRule(NLog.LogLevel.Info, NLog.LogLevel.Error, consoleLog);
                     //config.AddRuleForOneLevel(NLog.LogLevel.Info, consoleLog);
                 }
-                if ((options.FileLogLevel & LogLevel.Debug) == LogLevel.Debug)
+                if ((options.ConsoleLogLevel & LogLevel.Debug) == LogLevel.Debug)
                 {
                     config.AddRule(NLog.LogLevel.Debug, NLog.LogLevel.Error, consoleLog);
                     //config.AddRuleForOneLevel(NLog.LogLevel.Debug, consoleLog);
                 }
             }
             NLog.LogManager.Configuration = config;
-            _logger = NLog.LogManager.GetLogger("logger");
+            _logger = NLog.LogManager.GetLogger("jimuLogger");
         }
         public void Info(string info)
         {
@@ -89,7 +89,7 @@ namespace Jimu
 
         public void Debug(string info)
         {
-            throw new NotImplementedException();
+            _logger.Debug(info);
         }
     }
 }

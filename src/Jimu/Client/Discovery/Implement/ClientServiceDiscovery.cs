@@ -47,6 +47,7 @@ namespace Jimu.Client
             {
                 cron = $"0 0 0/1 * * ?";
             }
+          
             var scheduler = await StdSchedulerFactory.GetDefaultScheduler();
             IJobDetail jobDetail = JobBuilder.Create<MonitorJob>().WithIdentity("MonitorJob", "Jimu.Client.UpdateServiceJob").Build();
             jobDetail.JobDataMap.Put("serviceDiscovery", this);

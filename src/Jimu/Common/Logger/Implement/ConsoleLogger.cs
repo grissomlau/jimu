@@ -24,7 +24,7 @@ namespace Jimu.Common.Logger
 
         public void Warn(string info)
         {
-            Console.WriteLine($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")} WARN  {info}"); ;
+            Console.WriteLine($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")} WARN  {info}");
         }
     }
 }
