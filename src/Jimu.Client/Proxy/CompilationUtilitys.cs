@@ -50,7 +50,7 @@ namespace Jimu.Client.Proxy.CodeAnalysisIntegration
             {
                 foreach (var message in result.Diagnostics.Select(i => i.ToString()))
                 {
-                    logger.Info(message);
+                    logger.Debug(message);
                 }
                 return null;
             }

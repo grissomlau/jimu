@@ -44,7 +44,7 @@ namespace Jimu.Server
                 var logger = container.Resolve<ILogger>();
                 IServer server = container.Resolve<IServer>();
                 var routes = server.GetServiceRoutes();
-                logger.Info("find routes count: " + routes.Count);
+                logger.Debug("running consul found routes count: " + routes.Count);
 
                 try
                 {

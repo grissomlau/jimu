@@ -27,7 +27,7 @@ namespace Jimu.Client.LoadBalance
             var serverIndexHolder = _addresses.GetOrAdd(serviceRoute.ServiceDescriptor.Id,
                 key => new Lazy<ServerIndexHolder>(() => new ServerIndexHolder()));
             var address = serverIndexHolder.Value.GetAddress(serviceRoute.Address.Where(x => x.IsHealth).ToList());
-            _logger.Info($"ServerSelector: {serviceRoute.ServiceDescriptor.Id}: {address.Code}");
+            _logger.Debug($"{serviceRoute.ServiceDescriptor.Id}, request address: {serviceRoute.ServiceDescriptor.Id}: {address.Code}");
             return Task.FromResult(address);
         }
 

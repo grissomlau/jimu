@@ -16,7 +16,7 @@ namespace Jimu.Server.Transport.Http
         }
         public Task WriteAsync(string messageId, JimuRemoteCallResultData resultMessage)
         {
-            _logger.Info($"finish handling msg: {messageId}");
+            _logger.Debug($"finish handling msg: {messageId}");
             var data = _serializer.Serialize<string>(new JimuTransportMsg(messageId, resultMessage));
             //_httpResponse.
             return _httpResponse.WriteAsync(data);

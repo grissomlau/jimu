@@ -21,8 +21,7 @@ namespace Jimu.Client
                 byte[] data = new byte[buffer.ReadableBytes];
                 buffer.GetBytes(buffer.ReaderIndex, data);
 
-                _logger.Info("Read Message is ");
-                _logger.Info(Encoding.UTF8.GetString(data));
+                _logger.Debug($"received msg is: {Encoding.UTF8.GetString(data)}");
                 var convertedMsg = _serializer.Deserialize<byte[], JimuTransportMsg>(data);
                 if (convertedMsg.ContentType == typeof(JimuRemoteCallData).FullName)
                 {

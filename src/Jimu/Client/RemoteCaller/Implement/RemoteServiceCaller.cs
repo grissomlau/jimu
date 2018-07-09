@@ -32,15 +32,25 @@ namespace Jimu.Client
 
         public async Task<T> InvokeAsync<T>(string serviceIdOrPath, IDictionary<string, object> paras)
         {
-            _logger.Info($"Invoking Service: {serviceIdOrPath}");
+            _logger.Debug($"begin to invoke service: {serviceIdOrPath}");
             var result = await InvokeAsync(serviceIdOrPath, paras);
-            if (!string.IsNullOrEmpty(result.ExceptionMessage)) throw new Exception(result.ExceptionMessage);
-            if (result.Result == null) return default(T);
+            if (!string.IsNullOrEmpty(result.ExceptionMessage))
+            {
+                _logger.Debug($"invoking service: {serviceIdOrPath} raising an error: {result.ExceptionMessage}");
+                throw new Exception(result.ExceptionMessage);
+            }
+            if (result.Result == null)
+            {
+                _logger.Debug($"invoking service: {serviceIdOrPath} has null return.");
+                return default(T);
+            }
             object value;
             if (result.Result is Task<T> task)
                 value = _typeConvertProvider.Convert(task.Result, typeof(T));
             else
                 value = _typeConvertProvider.Convert(result.Result, typeof(T));
+
+            _logger.Debug($"finish invoking service: {serviceIdOrPath}.");
             return (T)value;
 
         }
@@ -95,7 +105,7 @@ namespace Jimu.Client
                     async (ex, count) =>
                     {
                         address = await _addressSelector.GetAddressAsyn(service);
-                        _logger.Info(
+                        _logger.Debug(
                             $"FaultHandling,retry times: {count},serviceId: {service.ServiceDescriptor.Id},Address: {address.Code},RemoteServiceCaller excute retry by Polly for exception {ex.Message}");
                     });
             var fallbackPolicy = Policy<JimuRemoteCallResultData>.Handle<TransportException>()
@@ -110,7 +120,7 @@ namespace Jimu.Client
                                 ErrorCode = "400",
                                 ErrorMsg = "Server unavailable!"
                             };
-                        _logger.Info($"begin to invoke： serviceId:{service.ServiceDescriptor.Id},parameters count: {paras.Count()}, token:{token}");
+                        _logger.Debug($"invoke： serviceId:{service.ServiceDescriptor.Id}, parameters count: {paras.Count()}, token:{token}");
                         //Polly.Policy.Handle<>()
 
                         result = await client.SendAsync(new JimuRemoteCallData

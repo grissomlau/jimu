@@ -55,7 +55,7 @@ namespace Jimu.Server.Transport.DotNetty
 
         private async Task OnReceived(IChannelHandlerContext channel, JimuTransportMsg message)
         {
-            _logger.Info($"begin handling msg: {message.Id}");
+            _logger.Debug($"begin handling msg: {message.Id}");
             //TaskCompletionSource<TransportMessage> task;
             if (message.ContentType == typeof(JimuRemoteCallData).FullName)
             {
@@ -94,7 +94,7 @@ namespace Jimu.Server.Transport.DotNetty
             }
             else
             {
-                _logger.Info("message type is not an  RemoteInvokeMessage.");
+                _logger.Debug($"msg: {message.Id}, message type is not an  JimuRemoteCallData.");
             }
         }
 

@@ -37,34 +37,35 @@ namespace Jimu.Client
         {
             try
             {
-                _logger.Info($"prepare sending :{data.ServiceId}");
+                _logger.Debug($"prepare sending: {data.ServiceId}");
                 var transportMsg = new JimuTransportMsg(data);
                 var callbackTask = RegisterResultCallbackAsync(transportMsg.Id);
                 try
                 {
                     await _sender.SendAsync(transportMsg);
-                    _logger.Info($"succed to  send :{data.ServiceId}");
+                    _logger.Debug($"succed to send: {data.ServiceId}, msg: {transportMsg.Id}");
                     return await callbackTask;
                 }
                 catch (Exception ex)
                 {
-                    _logger.Error("error occur when connecting with server", ex);
+                    _logger.Error($"error occur when connecting with server, serviceid: {data.ServiceId}", ex);
                     throw;
                 }
             }
             catch (Exception ex)
             {
-                _logger.Error($"failed to send:{data.ServiceId}", ex);
+                _logger.Error($"failed to send: {data.ServiceId}", ex);
                 throw new TransportException(ex.Message, ex);
             }
         }
 
         private Task ListenerOnReceived(IClientSender sender, JimuTransportMsg message)
         {
-            _logger.Info("received msg, on handing ...");
-
+            _logger.Debug($"receive response of msg: {message.Id}");
             if (!_resultCallbackDic.TryGetValue(message.Id, out var task))
+            {
                 return Task.CompletedTask;
+            }
 
             if (message.ContentType != typeof(JimuRemoteCallResultData).FullName) return Task.CompletedTask;
             task.SetResult(message);

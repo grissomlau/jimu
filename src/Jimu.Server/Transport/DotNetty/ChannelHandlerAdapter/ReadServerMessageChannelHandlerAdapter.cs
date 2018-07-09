@@ -21,7 +21,7 @@ namespace Jimu.Server.Transport.DotNetty
                 byte[] data = new byte[buffer.ReadableBytes];
                 buffer.GetBytes(buffer.ReaderIndex, data);
 
-                _logger.Info($"recevied msg is: {Encoding.UTF8.GetString(data)}");
+                _logger.Debug($"recevied msg is: {Encoding.UTF8.GetString(data)}");
                 var convertedMsg = _serializer.Deserialize<byte[], JimuTransportMsg>(data);
                 if (convertedMsg.ContentType == typeof(JimuRemoteCallData).FullName)
                 {

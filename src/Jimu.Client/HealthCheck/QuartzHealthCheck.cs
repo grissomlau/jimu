@@ -39,6 +39,7 @@ namespace Jimu.Client.HealthCheck
             _scheduler = await StdSchedulerFactory.GetDefaultScheduler();
             IJobDetail jobDetail = JobBuilder.Create<MonitorJob>().WithIdentity("MonitorJob", "Jimu.Client.HealthCheck").Build();
             jobDetail.JobDataMap.Put("serviceDiscovery", _serviceDiscovery);
+            jobDetail.JobDataMap.Put("logger", _logger);
             jobDetail.JobDataMap.Put("timeout", _timeout);
             IOperableTrigger trigger = new CronTriggerImpl("MonitorJob", "HealthCheck", _cron);
             await _scheduler.ScheduleJob(jobDetail, trigger);
@@ -51,13 +52,15 @@ namespace Jimu.Client.HealthCheck
             public async Task Execute(IJobExecutionContext context)
             {
                 var serviceDiscovery = context.JobDetail.JobDataMap.Get("serviceDiscovery") as IClientServiceDiscovery;
+                var logger = context.JobDetail.JobDataMap.Get("logger") as ILogger;
+                logger.Debug("******* start check server health job *******");
                 var timeout = (int)context.JobDetail.JobDataMap.Get("timeout");
                 if (serviceDiscovery != null)
                 {
                     var routes = (await serviceDiscovery.GetRoutesAsync()).ToList();
                     var servers = (from route in routes
                                    from address in route.Address
-                                   //where address.IsHealth
+                                       //where address.IsHealth
                                    select address).Distinct().ToList();
                     foreach (var server in servers)
                     {

@@ -20,7 +20,7 @@ namespace Jimu.Server.Transport.DotNetty
         {
             try
             {
-                _logger.Info($"finish handling msg: {messageId}");
+                _logger.Debug($"finish handling msg: {messageId}");
                 var data = _serializer.Serialize<byte[]>(new JimuTransportMsg(messageId, resultMessage));
                 var buffer = Unpooled.Buffer(data.Length, data.Length);
                 buffer.WriteBytes(data);

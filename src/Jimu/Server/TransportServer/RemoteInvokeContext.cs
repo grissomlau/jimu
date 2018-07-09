@@ -27,7 +27,7 @@ namespace Jimu.Server
                 .FirstOrDefault(x => x.Descriptor.Id == RemoteInvokeMessage.ServiceId);
             if (ServiceEntry == null)
             {
-                logger.Info($"not found service: {RemoteInvokeMessage.ServiceId}");
+                logger.Warn($"not found service: {RemoteInvokeMessage.ServiceId}");
             }
         }
 

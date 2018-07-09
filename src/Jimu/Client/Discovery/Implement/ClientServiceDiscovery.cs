@@ -36,15 +36,12 @@ namespace Jimu.Client
 
         public async Task RunInInit()
         {
-            //Thread.Sleep(200);
-            _logger.Info($"start run init: {_updateJobIntervalMinute}");
             await UpdateRoutes();
             await RunUpdateJob();
         }
 
         private async Task RunUpdateJob()
         {
-            _logger.Info($"start discovery update interval: {_updateJobIntervalMinute}");
             string cron = $"0 0/{_updateJobIntervalMinute} * * * ?";
             if (_updateJobIntervalMinute == 60)
             {
@@ -57,7 +54,6 @@ namespace Jimu.Client
             IOperableTrigger trigger = new CronTriggerImpl("MonitorJob", "Jimu.Client.UpdateServiceJob", cron);
             await scheduler.ScheduleJob(jobDetail, trigger);
             await scheduler.Start();
-            _logger.Info($"end discovery update interval: {_updateJobIntervalMinute}");
 
         }
 
@@ -153,7 +149,7 @@ namespace Jimu.Client
             {
                 var serviceDiscovery = context.JobDetail.JobDataMap.Get("serviceDiscovery") as ClientServiceDiscovery;
                 var logger = context.JobDetail.JobDataMap.Get("logger") as ILogger;
-                logger.Debug("******************* start update services job *************************");
+                logger.Debug("******* start update services job *******");
                 serviceDiscovery?.UpdateRoutes();
                 return Task.CompletedTask;
             }
