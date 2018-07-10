@@ -24,17 +24,18 @@ namespace Jimu.Client
         public ITransportClient CreateClient<T>(T address)
             where T : JimuAddress
         {
-            _logger.Info($"creating transport client for: {address.Code}");
             try
             {
+                _logger.Debug($"creating transport client for: {address.Code}");
                 //return Clients.GetOrAdd(address.CreateEndPoint(), ep => new Lazy<ITransportClient>(() =>
-                return Clients.GetOrAdd($"{address.ServerFlag}-{address.Code}", ep => new Lazy<ITransportClient>(() =>
-                {
-                    ITransportClient client = null;
-                    ClientCreatorDelegate?.Invoke(address, ref client);
-                    _logger.Info($"succed to create transport client for: {address.Code}");
-                    return client;
-                })).Value;
+                var val = Clients.GetOrAdd($"{address.ServerFlag}-{address.Code}", ep => new Lazy<ITransportClient>(() =>
+               {
+                   ITransportClient client = null;
+                   ClientCreatorDelegate?.Invoke(address, ref client);
+                   return client;
+               })).Value;
+                _logger.Debug($"succed to create transport client for: {address.Code}");
+                return val;
             }
             catch (Exception ex)
             {

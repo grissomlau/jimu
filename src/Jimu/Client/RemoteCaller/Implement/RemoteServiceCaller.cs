@@ -120,7 +120,7 @@ namespace Jimu.Client
                                 ErrorCode = "400",
                                 ErrorMsg = "Server unavailable!"
                             };
-                        _logger.Debug($"invoke： serviceId:{service.ServiceDescriptor.Id}, parameters count: {paras.Count()}, token:{token}");
+                        _logger.Debug($"invoke: serviceId:{service.ServiceDescriptor.Id}, parameters count: {paras.Count()}, token:{token}");
                         //Polly.Policy.Handle<>()
 
                         result = await client.SendAsync(new JimuRemoteCallData
