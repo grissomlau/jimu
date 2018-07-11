@@ -150,3 +150,8 @@
 /src/Samples/Simple/Server1.DotnettyForTransfer/bin/Release/netcoreapp2.0
 /src/Samples/Simple/Server2.HttpForTransfer/bin/Release/netcoreapp2.0
 *.user
+/src/Samples/CSMode/Client/bin/Debug/netcoreapp2.0
+/src/Samples/CSMode/Client/bin/Release/netcoreapp2.0
+/src/Samples/CSMode/Client/obj
+/src/Samples/CSMode/Server/bin
+/src/Samples/CSMode/Server/obj

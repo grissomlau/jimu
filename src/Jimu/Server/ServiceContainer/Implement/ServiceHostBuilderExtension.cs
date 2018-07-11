@@ -35,7 +35,7 @@ namespace Jimu.Server
 
             serviceHostBuilder.RegisterService(containerBuilder =>
             {
-                containerBuilder.RegisterTypes(serviceTypes.ToArray()).AsImplementedInterfaces()
+                containerBuilder.RegisterTypes(serviceTypes.ToArray()).AsSelf().AsImplementedInterfaces()
                     .InstancePerDependency();
                 containerBuilder.RegisterType<ServiceEntryContainer>().As<IServiceEntryContainer>().SingleInstance();
                 containerBuilder.RegisterType<ServiceIdGenerator>().As<IServiceIdGenerator>().SingleInstance();
@@ -48,7 +48,7 @@ namespace Jimu.Server
                 serviceEntryContainer.AddServices(serviceTypes.ToArray());
 
                 var logger = container.Resolve<ILogger>();
-                logger.Info($"[config] loaded services: {string.Join(",", assemblies)}");
+                logger.Info($"[config]loaded services: {string.Join(",", assemblies)}");
             });
             return serviceHostBuilder;
         }
