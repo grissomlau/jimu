@@ -23,7 +23,11 @@ namespace Jimu
                 if (param == null)
                     result.Append($"{parameter}/");
                 else if (service.EndsWith(param))
-                    result.Append($"{service.TrimStart('I').Substring(0, service.Length - param.Length - 1)}/");
+                {
+                    var curService = service.TrimStart('I');
+                    curService = curService.Substring(0, curService.Length - param.Length);
+                    result.Append($"{curService}/");
+                }
                 //else if (param == "Method")
                 //{
                 //    result.Append(method);
