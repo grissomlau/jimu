@@ -20,7 +20,7 @@ Install-Package  Jimu
      [JimuService(CreatedBy = "grissom")] // 指定服务的元数据, 该服务调用路径为 api/user/getname?id=
      public string GetName(string id)
      {
-         return $"user id {id}, name hello!";
+         return $"user id {id}, name enjoy!";
      }
  }
 
@@ -36,7 +36,7 @@ Install-Package  Jimu.Server
 static void Main(string[] args)
 {
     var hostBuilder = new ServiceHostServerBuilder(new Autofac.ContainerBuilder())
-        .UseLog4netLogger(new Jimu.LogOptions { EnableConsoleLog = true })
+        .UseLog4netLogger()
         .LoadServices("QuickStart.Services")
         .UseDotNettyForTransfer("127.0.0.1", 8001)
         .UseInServerForDiscovery()
@@ -86,7 +86,7 @@ using Jimu.Client.ApiGateway;
 
             //app.UseMvc();
             var host = new ServiceHostClientBuilder(new Autofac.ContainerBuilder())
-                .UseLog4netLogger(new Jimu.LogOptions { EnableConsoleLog = true })
+                .UseLog4netLogger()
                 .UsePollingAddressSelector()
                 .UseDotNettyForTransfer()
                 .UseInServerForDiscovery(new Jimu.DotNettyAddress("127.0.0.1", 8001))
