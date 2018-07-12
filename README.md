@@ -103,7 +103,7 @@ using Jimu.Client.ApiGateway;
 请下载 jimu 源码, 或者下载项目  [jimu.demo](https://github.com/grissomlau/jimu.demo)
 
 ## About Me 
-项目暂时由我独自开发和管理，关于项目问题可提交 issue  
+项目暂时由我独自开发和管理，关于项目问题可提交 [issues](https://github.com/grissomlau/jimu/issues)  
 关于项目的更多资料正在断断续续地整理， 可以关注我的 [博客园](http://www.cnblogs.com/grissom007/)  
 联系我请发邮件到： grissomlau@qq.com
 
