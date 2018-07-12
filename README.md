@@ -11,17 +11,18 @@ jimu(积木)，正如其中文名，希望用她来开发项目像搭积木一�
 ```bash
 Install-Package  Jimu
 ```
-添加服务
-```csharp
-   [JimuServiceRoute("api/{Service}")] // RPC 调用路径
-    public class UserService : IJimuService
-    {
-        [JimuService(CreatedBy = "grissom")] // 指定服务的元数据, 该服务调用路径为 api/user/getname?id=
-        public string GetName(string id)
-        {
-            return $"user id {id}, name hello!";
-        }
-    }
+添加服务  
+注意引用空间： using Jimu;
+```csharp 
+[JimuServiceRoute("api/{Service}")] // RPC 调用路径
+ public class UserService : IJimuService
+ {
+     [JimuService(CreatedBy = "grissom")] // 指定服务的元数据, 该服务调用路径为 api/user/getname?id=
+     public string GetName(string id)
+     {
+         return $"user id {id}, name hello!";
+     }
+ }
 
 ```
 ### 2. 微服务服务端项目
@@ -29,7 +30,8 @@ Install-Package  Jimu
 ```bash
 Install-Package  Jimu.Server
 ```
-在 Main 函数中添加服务器启动代码
+在 Main 函数中添加服务器启动代码  
+注意引用空间： using Jimu.Server;
 ```csharp
 static void Main(string[] args)
 {
@@ -55,6 +57,9 @@ Install-Package  Jimu.Client
 修改 Startup.cs 类的代码， 以便添加对 jimu 的支持
 
 ```csharp
+using Jimu.Client;
+using Jimu.Client.ApiGateway;
+
  public class Startup
     {
         public Startup(IConfiguration configuration)
