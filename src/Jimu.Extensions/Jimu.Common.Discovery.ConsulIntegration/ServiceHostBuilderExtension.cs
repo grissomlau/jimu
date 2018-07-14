@@ -33,38 +33,38 @@ namespace Jimu.Server
             });
 
             //serviceHostBuilder.AddRunner(async container =>
-            serviceHostBuilder.AddInitializer(async container =>
-            {
-                while (!container.IsRegistered<IServer>())
-                {
+            serviceHostBuilder.AddInitializer(container =>
+           {
+               while (!container.IsRegistered<IServer>())
+               {
                     //default(SpinWait).SpinOnce();
                     Thread.Sleep(200);
-                }
+               }
 
-                var logger = container.Resolve<ILogger>();
-                logger.Info($"[config]use consul for services discovery, consul ip: {consulIp}:{consulPort}, service cateogry: {serviceCategory}, server address: {serverAddress} ");
+               var logger = container.Resolve<ILogger>();
+               logger.Info($"[config]use consul for services discovery, consul ip: {consulIp}:{consulPort}, service cateogry: {serviceCategory}, server address: {serverAddress} ");
 
-                IServer server = container.Resolve<IServer>();
-                var routes = server.GetServiceRoutes();
-                logger.Debug("running consul found routes count: " + routes.Count);
+               IServer server = container.Resolve<IServer>();
+               var routes = server.GetServiceRoutes();
+               logger.Debug("running consul found routes count: " + routes.Count);
 
-                try
-                {
-                    var discovery = container.Resolve<IServiceDiscovery>();
+               try
+               {
+                   var discovery = container.Resolve<IServiceDiscovery>();
                     //if (!string.IsNullOrEmpty(serverAddress))
                     //{
                     //    await discovery.ClearAsync(serverAddress);
                     //}
 
-                    await discovery.ClearAsync();
-                    await discovery.SetRoutesAsync(routes);
-                }
-                catch (Exception ex)
-                {
-                    logger.Error($"error occurred while connecting with consul, ensure consul is running.\r\n", ex);
-                }
+                    discovery.ClearAsync().Wait();
+                   discovery.SetRoutesAsync(routes).Wait();
+               }
+               catch (Exception ex)
+               {
+                   logger.Error($"error occurred while connecting with consul, ensure consul is running.\r\n", ex);
+               }
 
-            });
+           });
             return serviceHostBuilder;
         }
 

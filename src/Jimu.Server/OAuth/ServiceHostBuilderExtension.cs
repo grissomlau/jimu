@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Autofac;
 using Jimu.Server.OAuth;
 
@@ -14,6 +15,10 @@ namespace Jimu.Server
                 var logger = container.Resolve<ILogger>();
                 logger.Info($"[config]use jose.jwt for OAuth");
 
+                while (!container.IsRegistered<IServer>() || !container.IsRegistered<IServiceDiscovery>())
+                {
+                    Thread.Sleep(200);
+                }
                 var server = container.Resolve<IServer>();
                 var serializer = container.Resolve<ISerializer>();
                 server.UseMiddleware<JwtAuthorizationMiddleware>(options, serializer);
@@ -38,9 +43,9 @@ namespace Jimu.Server
                         }
                     }
                 };
-                discovery.ClearServiceAsync(tokenRoute.First().ServiceDescriptor.Id);
+                discovery.ClearServiceAsync(tokenRoute.First().ServiceDescriptor.Id).Wait();
                 //discovery.SetRoutesAsync(tokenRoute);
-                discovery.AddRouteAsync(tokenRoute);
+                discovery.AddRouteAsync(tokenRoute).Wait();
             });
             return serviceHostBuilder;
         }
