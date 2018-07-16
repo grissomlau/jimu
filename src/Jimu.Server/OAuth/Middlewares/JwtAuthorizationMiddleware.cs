@@ -66,8 +66,12 @@ namespace Jimu.Server.OAuth
 
                 try
                 {
-                    var payload = JWT.Decode(context.RemoteInvokeMessage.Token, Encoding.ASCII.GetBytes(
-                        _options.SecretKey));
+                    var pureToken = context.RemoteInvokeMessage.Token;
+                    if (pureToken != null && pureToken.Trim().StartsWith("Bearer "))
+                    {
+                        pureToken = pureToken.Trim().Substring(6).Trim();
+                    }
+                    var payload = JWT.Decode(pureToken, Encoding.ASCII.GetBytes(_options.SecretKey), JwsAlgorithm.HS256);
                     var payloadObj = _serializer.Deserialize(payload, typeof(IDictionary<string, object>)) as IDictionary<string, object>;
                     if (_options.ValidateLifetime)
                     {
