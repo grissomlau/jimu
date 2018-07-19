@@ -159,3 +159,4 @@
 /src/Samples/Complex/Server1.DotnettyForTransfer/Properties/PublishProfiles/FolderProfile.pubxml
 *.bak
 /src/Samples/Service/Services/Properties/PublishProfiles/FolderProfile.pubxml
+/src/Samples/Service/Services/Services.csproj.user
