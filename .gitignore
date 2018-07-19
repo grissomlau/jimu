@@ -156,3 +156,6 @@
 /src/Samples/CSMode/Server/bin
 /src/Samples/CSMode/Server/obj
 /src/txt.txt
+/src/Samples/Complex/Server1.DotnettyForTransfer/Properties/PublishProfiles/FolderProfile.pubxml
+*.bak
+/src/Samples/Service/Services/Properties/PublishProfiles/FolderProfile.pubxml

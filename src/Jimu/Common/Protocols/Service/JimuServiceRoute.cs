@@ -13,7 +13,7 @@ namespace Jimu
         public JimuServiceDesc ServiceDescriptor { get; set; }
 
         public static string ParseRoutePath(string routeTemplet, string service, string method,
-            ParameterInfo[] parameterInfos)
+            ParameterInfo[] parameterInfos, bool isInterface)
         {
             var result = new StringBuilder();
             var parameters = routeTemplet?.Split('/');
@@ -24,7 +24,7 @@ namespace Jimu
                     result.Append($"{parameter}/");
                 else if (service.EndsWith(param))
                 {
-                    var curService = service.TrimStart('I');
+                    var curService = isInterface ? service.TrimStart('I') : service;
                     curService = curService.Substring(0, curService.Length - param.Length);
                     result.Append($"{curService}/");
                 }
@@ -39,7 +39,7 @@ namespace Jimu
             result = new StringBuilder(result.ToString().ToLower());
 
             if (!parameterInfos.Any())
-                return result.ToString().TrimEnd('&');
+                return result.ToString().TrimEnd('&', '/', '\\').TrimStart('/', '\\');
 
             result.Append("?");
             foreach (var para in parameterInfos)
@@ -52,7 +52,7 @@ namespace Jimu
                 result.Append($"{para.Name}=&");
             //}
 
-            return result.ToString().TrimEnd('&');
+            return result.ToString().TrimEnd('&', '/', '\\').TrimStart('/', '\\');
         }
 
         private static List<string> GetParameters(string text)

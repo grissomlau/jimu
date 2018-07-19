@@ -44,7 +44,7 @@ namespace Jimu.Server
             foreach (var type in serviceTypes)
             {
                 var routeTemplate = type.GetCustomAttribute<JimuServiceRouteAttribute>();
-                foreach (var methodInfo in type.GetTypeInfo().GetMethods().Where(x => x.GetCustomAttributes<JimuServiceDescAttribute>().Any() ))
+                foreach (var methodInfo in type.GetTypeInfo().GetMethods().Where(x => x.GetCustomAttributes<JimuServiceDescAttribute>().Any()))
                 {
 
                     JimuServiceDesc desc = new JimuServiceDesc();
@@ -64,7 +64,7 @@ namespace Jimu.Server
                     var fastInvoker = GetHandler(desc.Id, methodInfo);
                     if (routeTemplate != null)
                         desc.RoutePath = JimuServiceRoute.ParseRoutePath(routeTemplate.RouteTemplate, type.Name,
-                            methodInfo.Name, methodInfo.GetParameters());
+                            methodInfo.Name, methodInfo.GetParameters(), type.IsInterface);
 
                     var service = new JimuServiceEntry
                     {
