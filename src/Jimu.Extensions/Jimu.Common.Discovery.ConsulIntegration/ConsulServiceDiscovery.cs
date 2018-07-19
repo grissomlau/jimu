@@ -124,8 +124,6 @@ namespace Jimu.Common.Discovery.ConsulIntegration
                 curRoutes.RemoveAll(x => x.ServiceDescriptor.Id == route.ServiceDescriptor.Id);
                 curRoutes.Add(route);
             }
-            Console.WriteLine("adding route count: " + curRoutes.Count);
-
             await SetRoutesAsync(curRoutes);
         }
 
@@ -182,12 +180,9 @@ namespace Jimu.Common.Discovery.ConsulIntegration
 
         public async Task ClearServiceAsync(string serviceId)
         {
-            Console.WriteLine("serverid:" + serviceId);
             var routes = await GetRoutesAsync();
-            Console.WriteLine("orig count: " + routes.Count);
-            var hasRemote = routes.RemoveAll(x => x.ServiceDescriptor.Id == serviceId);
-            Console.WriteLine("remote count: " + hasRemote + ", after count " + routes.Count);
-            if (hasRemote > 0)
+            var hasRemove = routes.RemoveAll(x => x.ServiceDescriptor.Id == serviceId);
+            if (hasRemove > 0)
                 await SetRoutesAsync(routes);
         }
     }
