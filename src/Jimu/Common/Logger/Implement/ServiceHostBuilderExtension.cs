@@ -44,6 +44,7 @@ namespace Jimu.Server
     {
         public static IServiceHostServerBuilder UseLog4netLogger(this IServiceHostServerBuilder serviceHostBuilder, LogOptions options = null)
         {
+
             return serviceHostBuilder.UseLog4netLogger<IServiceHostServerBuilder>(options);
         }
         public static IServiceHostServerBuilder UseNLogger(this IServiceHostServerBuilder serviceHostBuilder, LogOptions options = null)
