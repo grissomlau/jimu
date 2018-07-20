@@ -44,12 +44,10 @@ namespace Jimu.Server
     {
         public static IServiceHostServerBuilder UseLog4netLogger(this IServiceHostServerBuilder serviceHostBuilder, LogOptions options = null)
         {
-            options = options ?? new LogOptions { EnableConsoleLog = true, ConsoleLogLevel = LogLevel.Error | LogLevel.Info };
             return serviceHostBuilder.UseLog4netLogger<IServiceHostServerBuilder>(options);
         }
         public static IServiceHostServerBuilder UseNLogger(this IServiceHostServerBuilder serviceHostBuilder, LogOptions options = null)
         {
-            options = options ?? new LogOptions { EnableConsoleLog = true, ConsoleLogLevel = LogLevel.Error | LogLevel.Info };
             return serviceHostBuilder.UseNLogger<IServiceHostServerBuilder>(options);
         }
     }
