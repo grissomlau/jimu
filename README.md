@@ -5,6 +5,8 @@ jimu 在持续迭代开发中，很多功能还在排期（如可视化监控和
 
 jimu(积木)，正如其中文名，希望用她来开发项目像搭积木一样简单快速可控，使项目安全可靠稳定，整体架构可拓展、高并发、分布式。
 
+更多详情，[查看 Wiki](https://github.com/grissomlau/jimu/wiki)
+
 ## Quick Start
 ### 1. 微服务项目
 创建一个基于 .Net Core 2.0 的类库项目，并添加 jimu 依赖
