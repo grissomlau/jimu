@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Jimu.Client.ApiGateway
@@ -39,7 +41,7 @@ namespace Jimu.Client.ApiGateway
                             }
                         }
 
-                        var data = new Dictionary<string, object> {{"files", list}};
+                        var data = new Dictionary<string, object> { { "files", list } };
                         model = new JimuModel(data);
                     }
                     else
@@ -53,7 +55,16 @@ namespace Jimu.Client.ApiGateway
                 var body = req.Body;
                 if (body != null)
                 {
-                    model = new JimuModel(body);
+                    try
+                    {
+                        model = new JimuModel(body);
+                    }
+                    catch (Exception ex)
+                    {
+                        var logger = JimuClient.Host.Container.Resolve<ILogger>();
+                        logger.Error("JimuModelBinder.BindModelAsync", ex);
+                        throw;
+                    }
                 }
             }
             bindingContext.ModelState.SetModelValue("model", model, null);

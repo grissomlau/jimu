@@ -70,6 +70,16 @@ namespace Jimu
             set => Metadatas["ReturnType"] = value;
         }
 
+        public string HttpMethod
+        {
+            get => GetMetadata<string>("HttpMethod");
+            set => Metadatas["HttpMethod"] = value;
+        }
+        public string Parameters
+        {
+            get => GetMetadata<string>("Parameters");
+            set => Metadatas["Parameters"] = value;
+        }
         /// <summary>
         ///     other useful data
         /// </summary>

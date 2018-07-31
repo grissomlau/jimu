@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Core;
@@ -16,9 +17,10 @@ namespace Jimu.Server
         private readonly ITypeConvertProvider _typeConvertProvider;
         private readonly ConcurrentDictionary<Tuple<Type, string>, FastInvoke.FastInvokeHandler> _handler;
         private readonly List<JimuServiceEntry> _services;
+        private readonly ISerializer _serializer;
 
         public ServiceEntryContainer(IContainer container, IServiceIdGenerator serviceIdGenerate,
-                ITypeConvertProvider typeConvertProvider)
+                ITypeConvertProvider typeConvertProvider, ISerializer serializer)
         //public ServiceEntryContainer()
         {
             _serviceIdGenerate = serviceIdGenerate;
@@ -26,7 +28,8 @@ namespace Jimu.Server
             _typeConvertProvider = typeConvertProvider;
             _services = new List<JimuServiceEntry>();
             _handler = new ConcurrentDictionary<Tuple<Type, string>, FastInvoke.FastInvokeHandler>();
-            new ConcurrentDictionary<Tuple<Type, string>, object>();
+            _serializer = serializer;
+            //new ConcurrentDictionary<Tuple<Type, string>, object>();
         }
 
 
@@ -55,6 +58,9 @@ namespace Jimu.Server
                         desc.ReturnType = string.Join(",", methodInfo.ReturnType.GenericTypeArguments.Select(x => x.FullName));
                     else
                         desc.ReturnType = methodInfo.ReturnType.ToString();
+
+                    desc.HttpMethod = GetHttpMethod(methodInfo);
+                    desc.Parameters = GetParameters(methodInfo);
 
                     if (string.IsNullOrEmpty(desc.Id))
                     {
@@ -127,6 +133,31 @@ namespace Jimu.Server
                         (pi, ctx) => payload
                     ));
             }
+        }
+
+        private string GetParameters(MethodInfo method)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (var para in method.GetParameters())
+            {
+                if (para.ParameterType.IsClass
+                && !para.ParameterType.FullName.StartsWith("System."))
+                {
+                    var t = Activator.CreateInstance(para.ParameterType);
+                    sb.Append($"\"{para.Name}\":{_serializer.Serialize<string>(t)},");
+                }
+                else
+                {
+                    sb.Append($"\"{para.Name}\":{para.ParameterType.ToString()},");
+                }
+            }
+            return "{" + sb.ToString().TrimEnd(',') + "}";
+        }
+
+        private string GetHttpMethod(MethodInfo method)
+        {
+            return method.GetParameters().Any(x => x.ParameterType.IsClass
+                && !x.ParameterType.FullName.StartsWith("System.")) ? "POST" : "GET";
         }
     }
 }

@@ -15,6 +15,16 @@ namespace Services
             _payload = payload;
         }
 
+        public string CreateUser(UserDTO user)
+        {
+            return "ok";
+        }
+
+        public string CreateUserFriend(UserDTO user, UserFriendDTO friend, string comment)
+        {
+            return "ok";
+        }
+
         public string GetEcho(string anything)
         {
             return $"the echo is  {anything}";
