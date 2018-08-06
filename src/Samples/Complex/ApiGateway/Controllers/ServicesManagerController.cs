@@ -12,6 +12,7 @@ namespace Jimu.ApiGateway.Controllers
     public class ServicesManagerController : Controller
     {
         //[HttpGet(Name ="addresses")]
+        [HttpGet]
         public async Task<List<JimuAddress>> GetAddresses()
         {
             var serviceDiscovery = JimuClient.Host.Container.Resolve<IClientServiceDiscovery>();
@@ -23,6 +24,7 @@ namespace Jimu.ApiGateway.Controllers
         }
 
         //[HttpGet(Name ="services")]
+        [HttpGet]
         public async Task<List<JimuServiceDesc>> GetServices(string server)
         {
             var serviceDiscovery = JimuClient.Host.Container.Resolve<IClientServiceDiscovery>();

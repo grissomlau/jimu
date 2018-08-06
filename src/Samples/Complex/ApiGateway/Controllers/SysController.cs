@@ -7,6 +7,7 @@ namespace Jimu.ApiGateway.Controllers
     [Route("api/[controller]/[action]")]
     public class SysController : Controller
     {
+        [HttpGet]
         public List<Menu> Menus()
         {
             return new List<Menu>

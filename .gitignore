@@ -160,3 +160,6 @@
 *.bak
 /src/Samples/Service/Services/Properties/PublishProfiles/FolderProfile.pubxml
 /src/Samples/Service/Services/Services.csproj.user
+/src/Jimu.Extensions/Jimu.Client.ApiGateway.SwaggerIntegration/bin/Debug/netcoreapp2.0
+/src/Jimu.Extensions/Jimu.Client.ApiGateway.SwaggerIntegration/obj
+/src/WebApplication1

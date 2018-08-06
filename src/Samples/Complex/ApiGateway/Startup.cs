@@ -27,6 +27,7 @@ namespace Jimu.ApiGateway
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
+            services.UseJimuSwagger();
             services.UseJimu();
 
             /********** below is the jwt just for local apigateway controller not for the services
@@ -79,6 +80,7 @@ namespace Jimu.ApiGateway
                 //app.UseDeveloperExceptionPage();
             }
             app.UseStatusCodePages();
+            app.UseJimuSwagger();
 
             // jimu client
             var host = new ServiceHostClientBuilder(new ContainerBuilder())

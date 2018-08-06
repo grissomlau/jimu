@@ -59,8 +59,10 @@ namespace Jimu.Server
                     else
                         desc.ReturnType = methodInfo.ReturnType.ToString();
 
-                    desc.HttpMethod = GetHttpMethod(methodInfo);
-                    desc.Parameters = GetParameters(methodInfo);
+                    if (string.IsNullOrEmpty(desc.HttpMethod))
+                        desc.HttpMethod = GetHttpMethod(methodInfo);
+
+                    desc.Parameters = _serializer.Serialize<string>(GetParameters(methodInfo));
 
                     if (string.IsNullOrEmpty(desc.Id))
                     {
@@ -135,23 +137,57 @@ namespace Jimu.Server
             }
         }
 
-        private string GetParameters(MethodInfo method)
+        private List<JimuServiceParameterDesc> GetParameters(MethodInfo method)
         {
-            StringBuilder sb = new StringBuilder();
+            //StringBuilder sb = new StringBuilder();
+            var paras = new List<JimuServiceParameterDesc>();
+            var paraComments = method.GetCustomAttributes<JimuFieldCommentAttribute>();
             foreach (var para in method.GetParameters())
             {
+                var paraDesc = new JimuServiceParameterDesc
+                {
+                    Name = para.Name,
+                    Type = para.ParameterType.ToString(),
+                    Comment = paraComments.FirstOrDefault(x => x.FieldName == para.Name)?.Comment,
+                };
                 if (para.ParameterType.IsClass
                 && !para.ParameterType.FullName.StartsWith("System."))
                 {
-                    var t = Activator.CreateInstance(para.ParameterType);
-                    sb.Append($"\"{para.Name}\":{_serializer.Serialize<string>(t)},");
+                    //var t = Activator.CreateInstance(para.ParameterType);
+                    //sb.Append($"\"{para.Name}\":{_serializer.Serialize<string>(t)},");
+                    //sb.Append($"\"{para.Name}\":{{{GetCustomTypeMembers(para.ParameterType)}}},");
+                    paraDesc.Format = $"{{{ GetCustomTypeMembers(para.ParameterType)}}}";
                 }
                 else
                 {
-                    sb.Append($"\"{para.Name}\":{para.ParameterType.ToString()},");
+                    paraDesc.Format = $"{para.ParameterType.ToString()}";
+                    //sb.Append($"\"{para.Name}\":\"{para.ParameterType.ToString()}\",");
+                }
+                paras.Add(paraDesc);
+            }
+            //return "{" + sb.ToString().TrimEnd(',') + "}";
+            return paras;
+        }
+
+        private string GetCustomTypeMembers(Type customType)
+        {
+            StringBuilder sb = new StringBuilder(); ;
+            foreach (var prop in customType.GetProperties())
+            {
+                if (prop.PropertyType.IsClass
+              && !prop.PropertyType.FullName.StartsWith("System."))
+                {
+
+                    sb.Append($"\"{prop.Name}\":{{{GetCustomTypeMembers(prop.PropertyType)}}}");
+                }
+                else
+                {
+                    var comment = prop.GetCustomAttribute<JimuFieldCommentAttribute>();
+                    var proComment = comment == null ? "" : (" | " + comment?.Comment);
+                    sb.Append($"\"{prop.Name}\":\"{prop.PropertyType.ToString()}{proComment}\",");
                 }
             }
-            return "{" + sb.ToString().TrimEnd(',') + "}";
+            return sb.ToString();
         }
 
         private string GetHttpMethod(MethodInfo method)

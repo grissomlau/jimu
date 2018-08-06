@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Jimu;
 using IServices;
+using System.Collections.Generic;
 
 namespace Services
 {
@@ -33,6 +34,11 @@ namespace Services
         public Task<string> SetEcho(string anything)
         {
             return Task.FromResult($"the echo is {anything} and the current user  is {_payload.Items["username"]}");
+        }
+
+        public Task<string> SetEcho(string anything, List<string> anything2)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

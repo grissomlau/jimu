@@ -53,6 +53,11 @@ namespace Jimu
         /// </summary>
         public string Roles { get; set; }
 
+        /// <summary>
+        ///     set the http method for http request
+        /// </summary>
+        public string HttpMethod { get; set; }
+
         public override void Apply(JimuServiceDesc descriptor)
         {
             descriptor.WaitExecution = IsWaitExecution;
@@ -69,6 +74,8 @@ namespace Jimu
                 descriptor.Comment = Comment;
             if (!string.IsNullOrEmpty(Roles))
                 descriptor.Roles = Roles;
+            if (!string.IsNullOrEmpty(HttpMethod))
+                descriptor.HttpMethod = HttpMethod;
         }
     }
 }

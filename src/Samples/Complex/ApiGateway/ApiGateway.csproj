@@ -22,7 +22,8 @@
 
   <ItemGroup>
     <PackageReference Include="jose-jwt" Version="2.4.0" />
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.8" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="3.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,6 +31,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Views\Home\Index.cshtml" />
+    <None Include="Views\ServicesManager\Service.cshtml" />
+    <None Include="Views\Shared\_Layout.cshtml" />
+    <None Include="Views\_ViewStart.cshtml" />
     <None Include="wwwroot\assets\libs\Flat-UI\css\flat-ui.css.map" />
     <None Include="wwwroot\assets\libs\Flat-UI\css\vendor\bootstrap\fonts\glyphicons-halflings-regular.svg" />
     <None Include="wwwroot\assets\libs\Flat-UI\css\vendor\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
@@ -72,6 +77,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Jimu.Client\Jimu.Client.csproj" />
+    <ProjectReference Include="..\..\..\Jimu.Extensions\Jimu.Client.ApiGateway.SwaggerIntegration\Jimu.Client.ApiGateway.SwaggerIntegration.csproj" />
     <ProjectReference Include="..\..\..\Jimu.Extensions\Jimu.Common.Discovery.ConsulIntegration\Jimu.Common.Discovery.ConsulIntegration.csproj" />
   </ItemGroup>
 
