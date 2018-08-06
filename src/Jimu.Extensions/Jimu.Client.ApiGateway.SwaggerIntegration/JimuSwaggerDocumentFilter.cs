@@ -43,7 +43,7 @@ namespace Jimu.Client.ApiGateway.SwaggerIntegration
                         In = "header",
                         Description = "Token",
                         Required = true,
-                        Default = "Bearer"
+                        Default = "Bearer "
                     });
                 }
 
