@@ -177,10 +177,17 @@ namespace Jimu.Server
             }
 
             List<Type> customTypes = new List<Type>();
-            if (methodInfo.ReturnType.ToString().IndexOf("System.Threading.Tasks.Task", StringComparison.Ordinal) == 0 &&
-                      methodInfo.ReturnType.IsGenericType)
+            //if (methodInfo.ReturnType.ToString().IndexOf("System.Threading.Tasks.Task", StringComparison.Ordinal) == 0 &&
+            //          methodInfo.ReturnType.IsGenericType)
+            //{
+            //    desc.ReturnType = string.Join(",", methodInfo.ReturnType.GenericTypeArguments.Select(x => x.FullName));
+            //    customTypes = methodInfo.ReturnType.GenericTypeArguments.ToList();
+            //}
+            //else if (methodInfo.ReturnType.IsGenericType)
+            if (methodInfo.ReturnType.IsGenericType)
             {
-                desc.ReturnType = string.Join(",", methodInfo.ReturnType.GenericTypeArguments.Select(x => x.FullName));
+                //desc.ReturnType = string.Join(",", methodInfo.ReturnType.GenericTypeArguments.Select(x => x.FullName));
+                desc.ReturnType = methodInfo.ReturnType.ToString();
                 customTypes = methodInfo.ReturnType.GenericTypeArguments.ToList();
             }
             else

@@ -38,7 +38,7 @@ namespace Services
         }
 
         //public Task<UserDTO> SetEcho(string anything, List<string> anything2)
-        public Task<UserDTO> SetEcho(string anything, string anything2)
+        public List<UserDTO> SetEcho(string anything, string anything2)
         {
             throw new System.NotImplementedException();
         }

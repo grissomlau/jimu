@@ -90,6 +90,7 @@ namespace Jimu.Client.ApiGateway.SwaggerIntegration
 
         private static Response GetResponse(string returnDescStr)
         {
+
             if (string.IsNullOrEmpty(returnDescStr) || !returnDescStr.StartsWith('{'))
             {
                 return new Response
@@ -109,9 +110,14 @@ namespace Jimu.Client.ApiGateway.SwaggerIntegration
                 Schema = new Schema
                 {
                     Type = isObject ? "object" : returnDesc.ReturnType,
-                    Example = isObject ? Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(returnDesc.ReturnFormat) : returnDesc.ReturnFormat
+                    Example = (isObject && returnDesc.ReturnFormat.StartsWith('{')) ? Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(returnDesc.ReturnFormat) : returnDesc.ReturnFormat,
                 }
             };
+            var isArray = TypeHelper.CheckIsArray(returnDesc.ReturnType);
+            if (isArray)
+            {
+                response.Schema.Example = (isObject && returnDesc.ReturnFormat.StartsWith('{')) ? Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>($"[{returnDesc.ReturnFormat}]") : $"[{returnDesc.ReturnFormat}]";
+            }
             return response;
         }
 
@@ -187,5 +193,5 @@ namespace Jimu.Client.ApiGateway.SwaggerIntegration
         }
     }
 
-  
+
 }

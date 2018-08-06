@@ -16,7 +16,7 @@ namespace IServices
         [JimuFieldComment("anything", "任何值")]
         [JimuFieldComment("anything2", "任何值2")]
         [JimuReturnComment("返回是否成功")]
-        Task<UserDTO> SetEcho(string anything, string anything2);
+        List<UserDTO> SetEcho(string anything, string anything2);
         [JimuService(CreatedBy = "grissom", Comment = "create user")]
         [JimuFieldComment("user", "想创建的用户对象")]
         string CreateUser(UserDTO user);
