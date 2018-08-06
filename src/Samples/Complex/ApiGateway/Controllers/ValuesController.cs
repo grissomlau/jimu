@@ -8,6 +8,10 @@ namespace Jimu.ApiGateway.Controllers
     public class ValuesController : Controller
     {
         // GET api/values
+        /// <summary>
+        /// get values
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Authorize]
         public IEnumerable<string> Get()

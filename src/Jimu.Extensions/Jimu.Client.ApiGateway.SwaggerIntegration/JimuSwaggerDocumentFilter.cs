@@ -61,7 +61,8 @@ namespace Jimu.Client.ApiGateway.SwaggerIntegration
                             OperationId = x.RoutePath,
                             Parameters = paras,
                             Produces = new List<string> { "application/json" },
-                            Responses = response
+                            Responses = response,
+                            Description = x.Comment
                         }
                     });
                 }
@@ -75,7 +76,8 @@ namespace Jimu.Client.ApiGateway.SwaggerIntegration
                             OperationId = x.RoutePath,
                             Parameters = paras,
                             Produces = new List<string> { "application/json" },
-                            Responses = response
+                            Responses = response,
+                            Description = x.Comment
                         }
                     });
                 }
