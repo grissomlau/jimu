@@ -97,7 +97,7 @@ namespace Jimu.Server.Transport.Http
                             resultMessage.Result = taskType.GetProperty("Result")?.GetValue(task);
                         }
                     }
-                    resultMessage.ResultType = serviceEntry.Descriptor.ReturnType;
+                    resultMessage.ResultType = serviceEntry.Descriptor.ReturnDesc;
 
                 }
             }

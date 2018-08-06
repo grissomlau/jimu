@@ -33,10 +33,12 @@ namespace Services
 
         public Task<string> SetEcho(string anything)
         {
+            //return Task.FromResult(new UserDTO());
             return Task.FromResult($"the echo is {anything} and the current user  is {_payload.Items["username"]}");
         }
 
-        public Task<string> SetEcho(string anything, List<string> anything2)
+        //public Task<UserDTO> SetEcho(string anything, List<string> anything2)
+        public Task<UserDTO> SetEcho(string anything, string anything2)
         {
             throw new System.NotImplementedException();
         }

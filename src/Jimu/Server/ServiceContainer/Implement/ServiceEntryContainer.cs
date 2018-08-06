@@ -53,11 +53,8 @@ namespace Jimu.Server
                     JimuServiceDesc desc = new JimuServiceDesc();
                     var descriptorAttributes = methodInfo.GetCustomAttributes<JimuServiceDescAttribute>();
                     foreach (var attr in descriptorAttributes) attr.Apply(desc);
-                    if (methodInfo.ReturnType.ToString().IndexOf("System.Threading.Tasks.Task", StringComparison.Ordinal) == 0 &&
-                        methodInfo.ReturnType.IsGenericType)
-                        desc.ReturnType = string.Join(",", methodInfo.ReturnType.GenericTypeArguments.Select(x => x.FullName));
-                    else
-                        desc.ReturnType = methodInfo.ReturnType.ToString();
+
+                    desc.ReturnDesc = GetReturnDesc(methodInfo);
 
                     if (string.IsNullOrEmpty(desc.HttpMethod))
                         desc.HttpMethod = GetHttpMethod(methodInfo);
@@ -167,6 +164,50 @@ namespace Jimu.Server
             }
             //return "{" + sb.ToString().TrimEnd(',') + "}";
             return paras;
+        }
+
+        private string GetReturnDesc(MethodInfo methodInfo)
+        {
+            JimuServiceReturnDesc desc = new JimuServiceReturnDesc();
+            var jimuReturnComment = methodInfo.GetCustomAttribute<JimuReturnCommentAttribute>();
+            if (jimuReturnComment != null)
+            {
+                desc.Comment = jimuReturnComment.Comment;
+                desc.ReturnFormat = jimuReturnComment.Format;
+            }
+
+            List<Type> customTypes = new List<Type>();
+            if (methodInfo.ReturnType.ToString().IndexOf("System.Threading.Tasks.Task", StringComparison.Ordinal) == 0 &&
+                      methodInfo.ReturnType.IsGenericType)
+            {
+                desc.ReturnType = string.Join(",", methodInfo.ReturnType.GenericTypeArguments.Select(x => x.FullName));
+                customTypes = methodInfo.ReturnType.GenericTypeArguments.ToList();
+            }
+            else
+            {
+                desc.ReturnType = methodInfo.ReturnType.ToString();
+                customTypes = new List<Type> { methodInfo.ReturnType };
+            }
+
+            // if not specify the return format in method attribute, we auto generate it.
+            if (string.IsNullOrEmpty(desc.ReturnFormat))
+            {
+                string format = "";
+                foreach (var customType in customTypes)
+                {
+                    if (customType.IsClass
+                     && !customType.FullName.StartsWith("System."))
+                    {
+                        format = $"{{{ GetCustomTypeMembers(customType)}}},";
+                    }
+                    else
+                    {
+                        format = $"{customType.ToString()},";
+                    }
+                }
+                desc.ReturnFormat = format.TrimEnd(',');
+            }
+            return _serializer.Serialize<string>(desc);
         }
 
         private string GetCustomTypeMembers(Type customType)

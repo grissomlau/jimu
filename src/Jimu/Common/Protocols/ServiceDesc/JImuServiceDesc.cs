@@ -64,10 +64,10 @@ namespace Jimu
             set => Metadatas["Roles"] = value;
         }
 
-        public string ReturnType
+        public string ReturnDesc
         {
-            get => GetMetadata<string>("ReturnType");
-            set => Metadatas["ReturnType"] = value;
+            get => GetMetadata<string>("ReturnDesc");
+            set => Metadatas["ReturnDesc"] = value;
         }
 
         public string HttpMethod

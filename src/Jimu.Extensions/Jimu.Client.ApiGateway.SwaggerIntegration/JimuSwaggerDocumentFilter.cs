@@ -28,41 +28,27 @@ namespace Jimu.Client.ApiGateway.SwaggerIntegration
                 route = route.StartsWith('/') ? route : "/" + route;
 
                 var paras = new List<IParameter>();
-                var jimuParas = new Dictionary<string, dynamic>();
                 if (!string.IsNullOrEmpty(x.Parameters))
                 {
-                    var parameters = _serializer.Deserialize(ParameterParser.ReplaceTypeToJsType(x.Parameters), typeof(List<JimuServiceParameterDesc>)) as List<JimuServiceParameterDesc>;
-                    paras = new ParameterParser(parameters, x.HttpMethod).GetParameters();
+                    var parameters = _serializer.Deserialize(TypeHelper.ReplaceTypeToJsType(x.Parameters), typeof(List<JimuServiceParameterDesc>)) as List<JimuServiceParameterDesc>;
+                    paras = GetParameters(parameters, x.HttpMethod);
+                }
+
+                if (x.GetMetadata<bool>("EnableAuthorization"))
+                {
+                    paras.Add(new NonBodyParameter
+                    {
+                        Name = "Authorization",
+                        Type = "string",
+                        In = "header",
+                        Description = "Token",
+                        Required = true,
+                        Default = "Bearer"
+                    });
                 }
 
                 var response = new Dictionary<string, Response>();
-                var returnType = GetType(x.ReturnType);
-                //switch (x.ReturnType)
-                //{
-                //    case "System.String":
-                //        response.Add("200", new Response
-                //        {
-                //            Description = "Success",
-                //            Schema = new Schema
-                //            {
-                //                Type = returnType.Item1,
-                //                Format = returnType.Item2,
-                //            }
-
-                //        });
-                //        break;
-                //}
-
-                response.Add("200", new Response
-                {
-                    Description = "Success",
-                    Schema = new Schema
-                    {
-                        Type = returnType.Item1,
-                        Format = returnType.Item2,
-                    }
-
-                });
+                response.Add("200", GetResponse(x.ReturnDesc));
 
                 if (x.HttpMethod == "GET")
                 {
@@ -81,29 +67,6 @@ namespace Jimu.Client.ApiGateway.SwaggerIntegration
                 }
                 else
                 {
-                    //var idx = 0;
-                    //foreach (var p in paras)
-                    //{
-                    //    Schema schema = null;
-                    //    if (idx == jimuParas.Count - 1)
-                    //    {
-                    //        schema = new Schema
-                    //        {
-                    //            Example = jimuParas
-                    //        };
-                    //    }
-                    //    paras.Add(
-                    //        new BodyParameter
-                    //        {
-                    //            Name = p.Key,
-                    //            Required = true,
-                    //            In = "body",
-                    //            Description = p.Value + "",
-                    //            Schema = schema
-                    //        }
-                    //        );
-                    //    idx++;
-                    //}
                     swaggerDoc.Paths.Add(route, new PathItem
                     {
                         Post = new Operation
@@ -120,72 +83,109 @@ namespace Jimu.Client.ApiGateway.SwaggerIntegration
 
         }
 
-        private static ValueTuple<string, string> GetType(string type)
+        private static void AddAuthorization()
         {
-            string format = "";
-            if (ParameterParser.CheckIsObject(type))
-            {
-                type = "object";
-            }
-            else
-            {
-                var systemTypeDic = ParameterParser.GetSystemTypeDic();
-                foreach (var st in systemTypeDic)
-                {
-                    if (st.Key == type)
-                    {
-                        type = st.Value;
-                        break;
-                    }
-                }
-                if (ParameterParser.CheckIsArray(type))
-                {
-                    type = ParameterParser.GetArrayType(type);
-                }
-            }
-            //switch (type)
-            //{
-            //    case "System.String":
-            //        type = "string";
-            //        format = "";
-            //        break;
-            //    case "System.Int32":
-            //        type = "integer";
-            //        format = "int32";
-            //        break;
-            //    case "System.Int64":
-            //        type = "integer";
-            //        format = "int64";
-            //        break;
-            //    case "System.Float":
-            //        type = "number";
-            //        format = "float";
-            //        break;
-            //    case "System.Double":
-            //        type = "number";
-            //        format = "double";
-            //        break;
-            //    case "System.Decimal":
-            //        type = "number";
-            //        format = "decimal";
-            //        break;
-            //    case "System.Byte":
-            //        type = "string";
-            //        format = "byte";
-            //        break;
-            //    case "System.Boolean":
-            //        type = "boolean";
-            //        format = "";
-            //        break;
-            //    case "System.DateTime":
-            //        type = "datetime";
-            //        format = "datetime";
-            //        break;
-            //    default:
-            //        break;
 
-            //}
-            return (type, format);
+        }
+
+        private static Response GetResponse(string returnDescStr)
+        {
+            if (string.IsNullOrEmpty(returnDescStr) || !returnDescStr.StartsWith('{'))
+            {
+                return new Response
+                {
+                    Description = "Success",
+                    Schema = new Schema
+                    {
+                        Type = returnDescStr
+                    }
+                };
+            }
+            var returnDesc = Newtonsoft.Json.JsonConvert.DeserializeObject<JimuServiceReturnDesc>(TypeHelper.ReplaceTypeToJsType(returnDescStr));
+            var isObject = TypeHelper.CheckIsObject(returnDesc.ReturnType);
+            var response = new Response
+            {
+                Description = string.IsNullOrEmpty(returnDesc.Comment) ? "Success" : returnDesc.Comment,
+                Schema = new Schema
+                {
+                    Type = isObject ? "object" : returnDesc.ReturnType,
+                    Example = isObject ? Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(returnDesc.ReturnFormat) : returnDesc.ReturnFormat
+                }
+            };
+            return response;
+        }
+
+        private static List<IParameter> GetParameters(List<JimuServiceParameterDesc> paras, string httpMethod)
+        {
+            List<IParameter> parameters = new List<IParameter>();
+            int idx = 0;
+            StringBuilder sbExample = new StringBuilder();
+            foreach (var p in paras)
+            {
+                idx++;
+                if (httpMethod == "GET")
+                {
+                    var param = new NonBodyParameter
+                    {
+                        Name = p.Name,
+                        Type = p.Type,
+                        //Format = typeInfo.Format,
+                        In = "query",
+                        Description = $"{p.Comment}",
+                    };
+                    //if (typeInfo.IsArray)
+                    if (TypeHelper.CheckIsArray(p.Type))
+                    {
+                        param.Format = null;
+                        param.Items = new PartialSchema
+                        {
+                            //Type = typeInfo.Type
+                            Type = TypeHelper.GetArrayType(p.Type)
+                        };
+                        param.Type = "array";
+                    }
+                    parameters.Add(param);
+                }
+                else
+                {
+
+                    var bodyPara = new BodyParameter
+                    {
+                        Name = p.Name,
+                        In = "body",
+                        Description = $"{p.Comment}",
+                        Schema = new Schema
+                        {
+                            Format = p.Format,
+                        }
+
+                    };
+                    // swagger bug: two or more object parameter in post, when execute it, just post the last one,so we put all parameter in the last one that it can post it
+                    if (!string.IsNullOrEmpty(p.Format) && p.Format.IndexOf("{") < 0)
+                    {
+                        sbExample.Append($"{p.Name}:\"{ p.Format}\",");
+                    }
+                    else if (!string.IsNullOrEmpty(p.Format))
+                    {
+
+                        sbExample.Append($"{p.Name}:{ p.Format},");
+                    }
+                    if (idx == paras.Count && sbExample.Length > 0 && paras.Count > 1)
+                    {
+                        bodyPara.Schema.Example = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>($"{{{sbExample.ToString().TrimEnd(',')}}}");
+                    }
+                    else if (idx == paras.Count && sbExample.Length > 0)
+                    {
+                        bodyPara.Schema.Example = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>($"{{{sbExample.ToString().TrimEnd(',')}}}");
+
+                    }
+
+                    parameters.Add(bodyPara);
+                }
+            }
+            return parameters;
         }
     }
+
+  
 }

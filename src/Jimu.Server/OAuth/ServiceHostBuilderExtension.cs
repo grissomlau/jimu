@@ -39,7 +39,30 @@ namespace Jimu.Server
                         ServiceDescriptor = new JimuServiceDesc
                         {
                             Id=options.GetServiceId(),
-                            RoutePath = options.TokenEndpointPath
+                            RoutePath = options.TokenEndpointPath,
+                             Parameters = serializer.Serialize<string>(new List<JimuServiceParameterDesc>{
+                                 new JimuServiceParameterDesc
+                                 {
+                                      Comment = "username",
+                                       Format = "System.String",
+                                        Name = "username",
+                                         Type = "object"
+                                 },
+                                 new JimuServiceParameterDesc
+                                 {
+                                      Comment = "password",
+                                       Format = "System.String",
+                                        Name = "password",
+                                         Type = "object"
+                                 },
+
+
+                             }),
+                            ReturnDesc = serializer.Serialize<string>( new JimuServiceReturnDesc{
+                                 Comment = "Token",
+                                  ReturnType = "object",
+                                   ReturnFormat = "{\"access_token\":\"System.String | token\", \"expired_in\":\"System.Int32 | expired timestamp which is the number of seconds between 1970-01-01 and expired datetime\"}"
+                            })
                         }
                     }
                 };

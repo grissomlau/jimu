@@ -121,7 +121,7 @@ namespace Jimu.Server.Transport.DotNetty
                             resultMessage.Result = taskType.GetProperty("Result")?.GetValue(task);
                         }
                     }
-                    resultMessage.ResultType = serviceEntry.Descriptor.ReturnType;
+                    resultMessage.ResultType = serviceEntry.Descriptor.ReturnDesc;
 
                 }
             }
