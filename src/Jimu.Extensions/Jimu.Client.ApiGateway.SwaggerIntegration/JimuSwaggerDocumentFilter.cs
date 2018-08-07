@@ -85,11 +85,6 @@ namespace Jimu.Client.ApiGateway.SwaggerIntegration
 
         }
 
-        private static void AddAuthorization()
-        {
-
-        }
-
         private static Response GetResponse(string returnDescStr)
         {
 

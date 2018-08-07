@@ -177,14 +177,17 @@ namespace Jimu.Server
             }
 
             List<Type> customTypes = new List<Type>();
-            //if (methodInfo.ReturnType.ToString().IndexOf("System.Threading.Tasks.Task", StringComparison.Ordinal) == 0 &&
-            //          methodInfo.ReturnType.IsGenericType)
-            //{
-            //    desc.ReturnType = string.Join(",", methodInfo.ReturnType.GenericTypeArguments.Select(x => x.FullName));
-            //    customTypes = methodInfo.ReturnType.GenericTypeArguments.ToList();
-            //}
-            //else if (methodInfo.ReturnType.IsGenericType)
-            if (methodInfo.ReturnType.IsGenericType)
+            if (methodInfo.ReturnType.ToString().IndexOf("System.Threading.Tasks.Task", StringComparison.Ordinal) == 0 &&
+                      methodInfo.ReturnType.IsGenericType)
+            {
+                //desc.ReturnType = methodInfo.ReturnType.ToString();
+                desc.ReturnType = string.Join(",", methodInfo.ReturnType.GenericTypeArguments.Select(x => x.FullName));
+                customTypes = (from type in methodInfo.ReturnType.GenericTypeArguments
+                               from childType in type.GenericTypeArguments
+                               select childType).ToList();
+            }
+            else if (methodInfo.ReturnType.IsGenericType)
+            //if (methodInfo.ReturnType.IsGenericType)
             {
                 //desc.ReturnType = string.Join(",", methodInfo.ReturnType.GenericTypeArguments.Select(x => x.FullName));
                 desc.ReturnType = methodInfo.ReturnType.ToString();
@@ -199,22 +202,33 @@ namespace Jimu.Server
             // if not specify the return format in method attribute, we auto generate it.
             if (string.IsNullOrEmpty(desc.ReturnFormat))
             {
-                string format = "";
-                foreach (var customType in customTypes)
-                {
-                    if (customType.IsClass
-                     && !customType.FullName.StartsWith("System."))
-                    {
-                        format = $"{{{ GetCustomTypeMembers(customType)}}},";
-                    }
-                    else
-                    {
-                        format = $"{customType.ToString()},";
-                    }
-                }
-                desc.ReturnFormat = format.TrimEnd(',');
+                desc.ReturnFormat = GetReturnFormat(customTypes);
             }
             return _serializer.Serialize<string>(desc);
+        }
+
+        private string GetReturnFormat(List<Type> types)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            foreach (var customType in types)
+            {
+                if (customType.IsClass
+                 && !customType.FullName.StartsWith("System."))
+                {
+                    sb.Append($"{{{ GetCustomTypeMembers(customType)}}},");
+                }
+                //else if (customType.FullName.StartsWith("System.Collections.Generic"))
+                //{
+                //    var childTypes = customType.GenericTypeArguments.ToList();
+                //    sb.Append($"[{GetReturnFormat(childTypes)}]");
+                //}
+                else
+                {
+                    sb.Append($"{customType.ToString()},");
+                }
+            }
+            return sb.ToString().TrimEnd(',');
         }
 
         private string GetCustomTypeMembers(Type customType)
