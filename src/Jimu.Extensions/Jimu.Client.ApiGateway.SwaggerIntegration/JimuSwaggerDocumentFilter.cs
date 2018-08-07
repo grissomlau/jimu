@@ -20,68 +20,68 @@ namespace Jimu.Client.ApiGateway.SwaggerIntegration
             var serviceDiscovery = JimuClient.Host.Container.Resolve<IClientServiceDiscovery>();
             var routes = serviceDiscovery.GetRoutesAsync().GetAwaiter().GetResult();
 
-            (from route in routes select route.ServiceDescriptor).ToList().ForEach(x =>
-            {
-                var subsIndex = x.RoutePath.IndexOf('?');
-                subsIndex = subsIndex < 0 ? x.RoutePath.Length : subsIndex;
-                var route = x.RoutePath.Substring(0, subsIndex);
-                route = route.StartsWith('/') ? route : "/" + route;
+            (from route in routes select route.ServiceDescriptor).OrderBy(x => x.RoutePath).ToList().ForEach(x =>
+              {
+                  var subsIndex = x.RoutePath.IndexOf('?');
+                  subsIndex = subsIndex < 0 ? x.RoutePath.Length : subsIndex;
+                  var route = x.RoutePath.Substring(0, subsIndex);
+                  route = route.StartsWith('/') ? route : "/" + route;
 
-                var paras = new List<IParameter>();
-                if (!string.IsNullOrEmpty(x.Parameters))
-                {
-                    var parameters = _serializer.Deserialize(TypeHelper.ReplaceTypeToJsType(x.Parameters), typeof(List<JimuServiceParameterDesc>)) as List<JimuServiceParameterDesc>;
-                    paras = GetParameters(parameters, x.HttpMethod);
-                }
+                  var paras = new List<IParameter>();
+                  if (!string.IsNullOrEmpty(x.Parameters))
+                  {
+                      var parameters = _serializer.Deserialize(TypeHelper.ReplaceTypeToJsType(x.Parameters), typeof(List<JimuServiceParameterDesc>)) as List<JimuServiceParameterDesc>;
+                      paras = GetParameters(parameters, x.HttpMethod);
+                  }
 
-                if (x.GetMetadata<bool>("EnableAuthorization"))
-                {
-                    paras.Add(new NonBodyParameter
-                    {
-                        Name = "Authorization",
-                        Type = "string",
-                        In = "header",
-                        Description = "Token",
-                        Required = true,
-                        Default = "Bearer "
-                    });
-                }
+                  if (x.GetMetadata<bool>("EnableAuthorization"))
+                  {
+                      paras.Add(new NonBodyParameter
+                      {
+                          Name = "Authorization",
+                          Type = "string",
+                          In = "header",
+                          Description = "Token",
+                          Required = true,
+                          Default = "Bearer "
+                      });
+                  }
 
-                var response = new Dictionary<string, Response>();
-                response.Add("200", GetResponse(x.ReturnDesc));
+                  var response = new Dictionary<string, Response>();
+                  response.Add("200", GetResponse(x.ReturnDesc));
 
-                if (x.HttpMethod == "GET")
-                {
+                  if (x.HttpMethod == "GET")
+                  {
 
-                    swaggerDoc.Paths.Add(route, new PathItem
-                    {
-                        Get = new Operation
-                        {
-                            Consumes = new List<string> { "application/json" },
-                            OperationId = x.RoutePath,
-                            Parameters = paras,
-                            Produces = new List<string> { "application/json" },
-                            Responses = response,
-                            Description = x.Comment
-                        }
-                    });
-                }
-                else
-                {
-                    swaggerDoc.Paths.Add(route, new PathItem
-                    {
-                        Post = new Operation
-                        {
-                            Consumes = new List<string> { "application/json" },
-                            OperationId = x.RoutePath,
-                            Parameters = paras,
-                            Produces = new List<string> { "application/json" },
-                            Responses = response,
-                            Description = x.Comment
-                        }
-                    });
-                }
-            });
+                      swaggerDoc.Paths.Add(route, new PathItem
+                      {
+                          Get = new Operation
+                          {
+                              Consumes = new List<string> { "application/json" },
+                              OperationId = x.RoutePath,
+                              Parameters = paras,
+                              Produces = new List<string> { "application/json" },
+                              Responses = response,
+                              Description = x.Comment
+                          }
+                      });
+                  }
+                  else
+                  {
+                      swaggerDoc.Paths.Add(route, new PathItem
+                      {
+                          Post = new Operation
+                          {
+                              Consumes = new List<string> { "application/json" },
+                              OperationId = x.RoutePath,
+                              Parameters = paras,
+                              Produces = new List<string> { "application/json" },
+                              Responses = response,
+                              Description = x.Comment
+                          }
+                      });
+                  }
+              });
 
         }
 
