@@ -22,6 +22,11 @@ namespace Jimu
                     ArchiveAboveSize = 10000000,
                     Layout = @"${date:format=yyyy-MM-dd HH\:mm\:ss.fff} ${level:uppercase=true}  ${message}"
                 };
+                if(options.FileLogPath!= null)
+                {
+                    fileConf.FileName = options.FileLogPath+"\\${level:lowercase=true}\\${shortdate}.log";
+
+                }
                 if ((options.FileLogLevel & LogLevel.Error) == LogLevel.Error)
                 {
                     config.AddRuleForOneLevel(NLog.LogLevel.Error, fileConf);
