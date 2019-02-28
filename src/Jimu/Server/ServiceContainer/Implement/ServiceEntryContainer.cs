@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.XPath;
 using Autofac;
 using Autofac.Core;
 
@@ -18,6 +20,9 @@ namespace Jimu.Server
         private readonly ConcurrentDictionary<Tuple<Type, string>, FastInvoke.FastInvokeHandler> _handler;
         private readonly List<JimuServiceEntry> _services;
         private readonly ISerializer _serializer;
+        private const string AllMemberXPath = "/doc/members";
+        private const string MemberXPath = "/doc/members/member[@name='{0}']";
+        private Dictionary<string, Dictionary<string, XPathNavigator>> _xmlComments;
 
         public ServiceEntryContainer(IContainer container, IServiceIdGenerator serviceIdGenerate,
                 ITypeConvertProvider typeConvertProvider, ISerializer serializer)
@@ -28,7 +33,9 @@ namespace Jimu.Server
             _typeConvertProvider = typeConvertProvider;
             _services = new List<JimuServiceEntry>();
             _handler = new ConcurrentDictionary<Tuple<Type, string>, FastInvoke.FastInvokeHandler>();
+
             _serializer = serializer;
+            _xmlComments = new Dictionary<string, Dictionary<string, XPathNavigator>>();
             //new ConcurrentDictionary<Tuple<Type, string>, object>();
         }
 
@@ -53,6 +60,18 @@ namespace Jimu.Server
                     JimuServiceDesc desc = new JimuServiceDesc();
                     var descriptorAttributes = methodInfo.GetCustomAttributes<JimuServiceDescAttribute>();
                     foreach (var attr in descriptorAttributes) attr.Apply(desc);
+
+                    if (string.IsNullOrEmpty(desc.Comment))
+                    {
+                        var xml = GetXmlComment(methodInfo.DeclaringType);
+                        var key = XmlCommentsMemberNameHelper.GetMemberNameForMethod(methodInfo);
+                        if (xml != null && xml.TryGetValue(key, out var node))
+                        {
+                            var summaryNode = node.SelectSingleNode("summary");
+                            if (summaryNode != null)
+                                desc.Comment = summaryNode.Value.Trim();
+                        }
+                    }
 
                     desc.ReturnDesc = GetReturnDesc(methodInfo);
 
@@ -139,6 +158,13 @@ namespace Jimu.Server
             //StringBuilder sb = new StringBuilder();
             var paras = new List<JimuServiceParameterDesc>();
             var paraComments = method.GetCustomAttributes<JimuFieldCommentAttribute>();
+            var xml = GetXmlComment(method.DeclaringType);
+            var key = XmlCommentsMemberNameHelper.GetMemberNameForMethod(method);
+            var hasNode = false;
+            XPathNavigator node = null;
+            if (xml != null)
+                hasNode = xml.TryGetValue(key, out node);
+
             foreach (var para in method.GetParameters())
             {
                 var paraDesc = new JimuServiceParameterDesc
@@ -147,6 +173,12 @@ namespace Jimu.Server
                     Type = para.ParameterType.ToString(),
                     Comment = paraComments.FirstOrDefault(x => x.FieldName == para.Name)?.Comment,
                 };
+                if (string.IsNullOrEmpty(paraDesc.Comment) && hasNode)
+                {
+                    var paraNode = node.SelectSingleNode($"param[@name='{para.Name}']");
+                    if (paraNode != null)
+                        paraDesc.Comment = paraNode.Value.Trim();
+                }
                 if (para.ParameterType.IsClass
                 && !para.ParameterType.FullName.StartsWith("System."))
                 {
@@ -174,6 +206,17 @@ namespace Jimu.Server
             {
                 desc.Comment = jimuReturnComment.Comment;
                 desc.ReturnFormat = jimuReturnComment.Format;
+            }
+            else
+            {
+                var xml = GetXmlComment(methodInfo.DeclaringType);
+                var key = XmlCommentsMemberNameHelper.GetMemberNameForMethod(methodInfo);
+                if (xml != null && xml.TryGetValue(key, out var node))
+                {
+                    var returnNode = node.SelectSingleNode("returns");
+                    desc.Comment = returnNode.Value.Trim();
+                }
+
             }
 
             List<Type> customTypes = new List<Type>();
@@ -234,6 +277,7 @@ namespace Jimu.Server
         private string GetCustomTypeMembers(Type customType)
         {
             StringBuilder sb = new StringBuilder(); ;
+            var xmlNode = GetXmlComment(customType);
             foreach (var prop in customType.GetProperties())
             {
                 if (prop.PropertyType.IsClass
@@ -246,6 +290,11 @@ namespace Jimu.Server
                 {
                     var comment = prop.GetCustomAttribute<JimuFieldCommentAttribute>();
                     var proComment = comment == null ? "" : (" | " + comment?.Comment);
+                    var key = XmlCommentsMemberNameHelper.GetMemberNameForMember(prop);
+                    if (comment == null && xmlNode != null && xmlNode.TryGetValue(key, out var node))
+                    {
+                        proComment = $" | " + node.Value.Trim();
+                    }
                     sb.Append($"\"{prop.Name}\":\"{prop.PropertyType.ToString()}{proComment}\",");
                 }
             }
@@ -256,6 +305,28 @@ namespace Jimu.Server
         {
             return method.GetParameters().Any(x => x.ParameterType.IsClass
                 && !x.ParameterType.FullName.StartsWith("System.")) ? "POST" : "GET";
+        }
+
+        private Dictionary<string, XPathNavigator> GetXmlComment(Type type)
+        {
+            var key = type.Assembly.GetName().Name;
+            //Dictionary<string, XPathNavigator> xmlComments = null;
+            if (!_xmlComments.TryGetValue(key, out var xmlComments)
+                && File.Exists($"{key}.xml")
+                )
+            {
+                using (var sr = File.OpenText($"{key}.xml"))
+                {
+                    var xmlMembers = new XPathDocument(sr).CreateNavigator().SelectSingleNode(AllMemberXPath);
+                    xmlComments = new Dictionary<string, XPathNavigator>();
+                    foreach (XPathNavigator path in xmlMembers.Select("member"))
+                    {
+                        xmlComments.Add(path.GetAttribute("name", ""), path);
+                    }
+                    _xmlComments.Add(key, xmlComments);
+                }
+            }
+            return xmlComments;
         }
     }
 }

@@ -52,5 +52,16 @@ namespace Jimu.Server
             });
             return serviceHostBuilder;
         }
+
+        /// <summary>
+        /// load description for services base on xml documents
+        /// </summary>
+        /// <param name="serviceHostBuilder"></param>
+        /// <param name="fileFullPath">xml full name path</param>
+        /// <returns></returns>
+        public static IServiceHostServerBuilder LoadServiceXmlComments(this IServiceHostServerBuilder serviceHostBuilder, string fileFullPath)
+        {
+            return serviceHostBuilder;
+        }
     }
 }

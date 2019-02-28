@@ -163,3 +163,5 @@
 /src/Jimu.Extensions/Jimu.Client.ApiGateway.SwaggerIntegration/bin/Debug/netcoreapp2.0
 /src/Jimu.Extensions/Jimu.Client.ApiGateway.SwaggerIntegration/obj
 /src/WebApplication1
+/src/test/Jimu.Test/bin/Debug/netcoreapp2.0
+/src/test/Jimu.Test/obj
