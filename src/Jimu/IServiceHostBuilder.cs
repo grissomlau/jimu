@@ -13,7 +13,7 @@ namespace Jimu
         IServiceHostBuilder RegisterService(Action<ContainerBuilder> serviceRegister);
 
         /// <summary>
-        ///     delegate will be exute in initializing host
+        ///     delegate will be execute in initializing host
         /// </summary>
         /// <param name="initializer">autofac IContainer</param>
         /// <returns></returns>
@@ -22,7 +22,7 @@ namespace Jimu
         IServiceHostBuilder AddRunner(Action<IContainer> runner);
 
         /// <summary>
-        ///     buid serviceHost
+        ///     build serviceHost
         /// </summary>
         /// <returns></returns>
         IServiceHost Build();

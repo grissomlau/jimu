@@ -23,7 +23,7 @@ namespace Jimu.Client
         private readonly ILogger _logger;
         public ClientServiceDiscovery(ILogger logger, int updateJobIntervalMinute = 1)
         {
-            if (updateJobIntervalMinute == 0 || updateJobIntervalMinute > 60)
+            if (updateJobIntervalMinute <= 0 || updateJobIntervalMinute > 60)
             {
                 throw new ArgumentOutOfRangeException($"updateJobIntervalMinute must between 1 and 60, current is {updateJobIntervalMinute}");
             }

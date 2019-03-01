@@ -16,7 +16,7 @@ namespace Jimu
             ParameterInfo[] parameterInfos, bool isInterface)
         {
             var result = new StringBuilder();
-            var parameters = routeTemplet?.Split('/');
+            var parameters = routeTemplet?.Split('/');// "/api/{ServiceName}" or "/api/UserService"
             foreach (var parameter in parameters)
             {
                 var param = GetParameters(parameter).FirstOrDefault();
@@ -58,7 +58,7 @@ namespace Jimu
         private static List<string> GetParameters(string text)
         {
             var matchVale = new List<string>();
-            var reg = @"(?<={)[^{}]*(?=})";
+            var reg = @"(?<={)[^{}]*(?=})";//{ServiceName}
             var key = string.Empty;
             foreach (Match m in Regex.Matches(text, reg)) matchVale.Add(m.Value);
             return matchVale;

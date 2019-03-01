@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Jimu.Server
 {
-    public class XmlCommentsMemberNameHelper
+    class XmlCommentsMemberNameHelper
     {
         public static string GetMemberNameForMethod(MethodInfo method)
         {

@@ -11,17 +11,17 @@ namespace Jimu
     public abstract class ServiceHostBuilderBase : IServiceHostBuilder
     {
         /// <summary>
-        ///     action will be excute in intializing: after autofac container build
+        ///     action will be execute in intializing: after autofac container build
         /// </summary>
         private readonly List<Action<IContainer>> _initializers;
 
         /// <summary>
-        ///     action will be excute in server runing
+        ///     action will be execute in server runing
         /// </summary>
         private readonly List<Action<IContainer>> _runners;
 
         /// <summary>
-        ///     action will be excute in registering: before autofac container build
+        ///     action will be execute in registering: before autofac container build
         /// </summary>
         private readonly List<Action<ContainerBuilder>> _serviceRegisters;
 

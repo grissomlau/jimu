@@ -7,7 +7,10 @@ namespace Jimu
     public class JimuServiceEntry
     {
         /// <summary>
-        ///     invoke service func
+        ///     invoke service func: 
+        ///     IDictionary is parameters,
+        ///     JimuPayload is context,
+        ///     return object
         /// </summary>
         public Func<IDictionary<string, object>, JimuPayload, Task<object>> Func { get; set; }
 

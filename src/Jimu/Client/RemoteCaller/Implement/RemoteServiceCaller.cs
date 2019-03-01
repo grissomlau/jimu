@@ -75,7 +75,7 @@ namespace Jimu.Client
             if (!string.IsNullOrEmpty(result.ExceptionMessage))
                 return new JimuRemoteCallResultData
                 {
-                    ErrorCode = "400",
+                    ErrorCode = "500",
                     ErrorMsg = $"{serviceIdOrPath}, {result.ToErrorString()}"
                 };
 
@@ -106,7 +106,7 @@ namespace Jimu.Client
                     {
                         address = await _addressSelector.GetAddressAsyn(service);
                         _logger.Debug(
-                            $"FaultHandling,retry times: {count},serviceId: {service.ServiceDescriptor.Id},Address: {address.Code},RemoteServiceCaller excute retry by Polly for exception {ex.Message}");
+                            $"FaultHandling,retry times: {count},serviceId: {service.ServiceDescriptor.Id},Address: {address.Code},RemoteServiceCaller execute retry by Polly for exception {ex.Message}");
                     });
             var fallbackPolicy = Policy<JimuRemoteCallResultData>.Handle<TransportException>()
                 .FallbackAsync(new JimuRemoteCallResultData() { ErrorCode = "500", ErrorMsg = "error occur when communicate with server. server maybe have been down." })

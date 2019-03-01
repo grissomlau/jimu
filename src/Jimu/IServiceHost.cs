@@ -11,7 +11,7 @@ namespace Jimu
         IContainer Container { get; }
 
         /// <summary>
-        ///     delegate will be exute in host disposing
+        ///     delegate will be execute in host disposing
         /// </summary>
         /// <param name="action"></param>
         void DisposeAction(Action<IContainer> action);
