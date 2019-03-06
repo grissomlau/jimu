@@ -5,16 +5,16 @@ using Flurl.Http;
 
 namespace Jimu.Client
 {
-    public class HttpClientSender : IClientSender
+    public class HttpClientSender : ClientSender
     {
         readonly JimuAddress _address;
-        readonly IClientListener _clientListener;
-        public HttpClientSender(JimuAddress address, IClientListener clientListener)
+        readonly ClientListener _clientListener;
+        public HttpClientSender(ClientListener clientListener, ILogger logger, JimuAddress address) : base(clientListener, logger)
         {
             _address = address;
             _clientListener = clientListener;
         }
-        public async Task SendAsync(JimuTransportMsg msg)
+        protected override async Task DoSendAsync(JimuTransportMsg msg)
         {
             var invokeMessage = msg.GetContent<JimuRemoteCallData>();
             var uri = $"http://{_address.CreateEndPoint()}/{invokeMessage.Descriptor.RoutePath}";
@@ -70,7 +70,7 @@ namespace Jimu.Client
             //    }
             //}
             //result = new RemoteInvokeResultMessage { ErrorCode = "501", ErrorMsg = "not support media type" };
-            await _clientListener.Received(this, result);
+            await _clientListener.Received(result);
         }
     }
 }

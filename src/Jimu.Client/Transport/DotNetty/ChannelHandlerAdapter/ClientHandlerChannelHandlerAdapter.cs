@@ -6,11 +6,11 @@ namespace Jimu.Client
 {
     class ClientHandlerChannelHandlerAdapter : ChannelHandlerAdapter
     {
-        private readonly ITransportClientFactory _factory;
+        private readonly ClientSenderFactory _factory;
         private readonly ILogger _logger;
 
 
-        public ClientHandlerChannelHandlerAdapter(ITransportClientFactory factory
+        public ClientHandlerChannelHandlerAdapter(ClientSenderFactory factory
             , ILogger logger)
         {
             _factory = factory;
@@ -19,17 +19,18 @@ namespace Jimu.Client
 
         public override void ChannelInactive(IChannelHandlerContext context)
         {
-            _factory.Clients.TryRemove(context.Channel.GetAttribute(AttributeKey<string>.ValueOf(typeof(DefaultTransportClientFactory), "addresscode")).Get(), out _);
+            _factory.ClientSenders.TryRemove(context.Channel.GetAttribute(AttributeKey<string>.ValueOf(typeof(ClientSenderFactory), "addresscode")).Get(), out _);
         }
 
         public override void ChannelRead(IChannelHandlerContext context, object message)
         {
             var msg = message as JimuTransportMsg;
 
-            var listener = context.Channel.GetAttribute(AttributeKey<IClientListener>.ValueOf(typeof(DefaultTransportClientFactory), nameof(IClientListener))).Get();
-            var sender = context.Channel.GetAttribute(AttributeKey<IClientSender>.ValueOf(typeof(DefaultTransportClientFactory), nameof(IClientSender))).Get();
+            var listener = context.Channel.GetAttribute(AttributeKey<ClientListener>.ValueOf(typeof(ClientSenderFactory), nameof(ClientListener))).Get();
+            //var sender = context.Channel.GetAttribute(AttributeKey<IClientSender>.ValueOf(typeof(DefaultTransportClientFactory), nameof(IClientSender))).Get();
 
-            listener.Received(sender, msg);
+            //listener.Received(sender, msg);
+            listener.Received(msg);
         }
 
     }

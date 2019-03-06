@@ -1,0 +1,41 @@
+﻿using Jimu.Common.Helper;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+
+namespace Jimu
+{
+    public static class JimuHelper
+    {
+        public static T Serialize<T>(object instance)
+        {
+            return SerializerHelper.Serialize<T>(instance);
+        }
+
+        public static TResult Deserialize<T, TResult>(T data) where TResult : class
+        {
+            return SerializerHelper.Deserialize<T, TResult>(data);
+        }
+        public static object Deserialize<T>(T data, Type type)
+        {
+            return SerializerHelper.Deserialize(data, type);
+        }
+
+        public static string GenerateServiceId(MethodInfo method)
+        {
+            if (method.DeclaringType == null) return null;
+            var id = $"{method.DeclaringType.FullName}.{method.Name}";
+            var paras = method.GetParameters();
+            if (paras.Any()) id += "(" + string.Join(",", paras.Select(i => i.Name)) + ")";
+            return id;
+
+        }
+
+        public static object ConvertType(object instance, Type destinationType)
+        {
+            return TypeConvertProvider.Convert(instance, destinationType);
+        }
+    }
+}

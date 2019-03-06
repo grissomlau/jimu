@@ -15,11 +15,9 @@ namespace Jimu.Server.OAuth
     {
         private readonly RequestDel _next;
         private readonly JwtAuthorizationOptions _options;
-        private readonly ISerializer _serializer;
-        public JwtAuthorizationMiddleware(RequestDel next, JwtAuthorizationOptions options, ISerializer serializer)
+        public JwtAuthorizationMiddleware(RequestDel next, JwtAuthorizationOptions options)
         {
             _options = options;
-            _serializer = serializer;
             _next = next;
         }
 
@@ -72,7 +70,7 @@ namespace Jimu.Server.OAuth
                         pureToken = pureToken.Trim().Substring(6).Trim();
                     }
                     var payload = JWT.Decode(pureToken, Encoding.ASCII.GetBytes(_options.SecretKey), JwsAlgorithm.HS256);
-                    var payloadObj = _serializer.Deserialize(payload, typeof(IDictionary<string, object>)) as IDictionary<string, object>;
+                    var payloadObj = JimuHelper.Deserialize(payload, typeof(IDictionary<string, object>)) as IDictionary<string, object>;
                     if (_options.ValidateLifetime)
                     {
                         //var exp = payloadObj["exp"];

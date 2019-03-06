@@ -14,8 +14,6 @@ namespace Jimu.Client
             {
                 var clientDiscovery = container.Resolve<IClientServiceDiscovery>();
                 var remoteCaller = container.Resolve<IRemoteServiceCaller>();
-                var serializer = container.Resolve<ISerializer>();
-                var typeConverter = container.Resolve<ITypeConvertProvider>();
                 var logger = container.Resolve<ILogger>();
                 StringBuilder sb = new StringBuilder();
 
@@ -39,7 +37,7 @@ namespace Jimu.Client
                         }
 
                         var routesDesc =
-                            (List<JimuServiceRouteDesc>)typeConverter.Convert(result.Result,
+                            (List<JimuServiceRouteDesc>)JimuHelper.ConvertType(result.Result,
                                 typeof(List<JimuServiceRouteDesc>));
                         var routes = new List<JimuServiceRoute>();
                         foreach (var desc in routesDesc)
@@ -49,7 +47,7 @@ namespace Jimu.Client
                             foreach (var addDesc in desc.AddressDescriptors)
                             {
                                 var addrType = Type.GetType(addDesc.Type);
-                                addresses.Add(serializer.Deserialize(addDesc.Value, addrType) as JimuAddress);
+                                addresses.Add(JimuHelper.Deserialize(addDesc.Value, addrType) as JimuAddress);
                             }
 
                             routes.Add(new JimuServiceRoute()

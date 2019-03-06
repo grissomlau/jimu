@@ -11,7 +11,7 @@ namespace Jimu.Client
             {
                 cb.RegisterType<RemoteServiceCaller>().As<IRemoteServiceCaller>().SingleInstance();
                 cb.RegisterType<ClientServiceDiscovery>().As<IClientServiceDiscovery>().SingleInstance();
-                cb.RegisterType<DefaultTransportClientFactory>().As<ITransportClientFactory>().SingleInstance();
+                cb.RegisterType<ClientSenderFactory>().AsSelf().SingleInstance();
                 cb.RegisterType<ServiceProxy>().As<IServiceProxy>().SingleInstance();
                 cb.RegisterType<ServiceTokenGetter>().As<IServiceTokenGetter>().SingleInstance();
             });

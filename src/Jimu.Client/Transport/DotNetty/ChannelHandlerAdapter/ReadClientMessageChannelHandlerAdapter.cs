@@ -6,11 +6,9 @@ namespace Jimu.Client
 {
     class ReadClientMessageChannelHandlerAdapter : ChannelHandlerAdapter
     {
-        private readonly ISerializer _serializer;
         private readonly ILogger _logger;
-        public ReadClientMessageChannelHandlerAdapter(ISerializer serializer, ILogger logger)
+        public ReadClientMessageChannelHandlerAdapter(ILogger logger)
         {
-            _serializer = serializer;
             _logger = logger;
         }
         public override void ChannelRead(IChannelHandlerContext context, object message)
@@ -22,14 +20,14 @@ namespace Jimu.Client
                 buffer.GetBytes(buffer.ReaderIndex, data);
 
                 _logger.Debug($"received msg is: {Encoding.UTF8.GetString(data)}");
-                var convertedMsg = _serializer.Deserialize<byte[], JimuTransportMsg>(data);
+                var convertedMsg = JimuHelper.Deserialize<byte[], JimuTransportMsg>(data);
                 if (convertedMsg.ContentType == typeof(JimuRemoteCallData).FullName)
                 {
-                    convertedMsg.Content = _serializer.Deserialize<string, JimuRemoteCallData>(convertedMsg.Content.ToString());
+                    convertedMsg.Content = JimuHelper.Deserialize<string, JimuRemoteCallData>(convertedMsg.Content.ToString());
                 }
                 else if (convertedMsg.ContentType == typeof(JimuRemoteCallData).FullName)
                 {
-                    convertedMsg.Content = _serializer.Deserialize<string, JimuRemoteCallResultData>(convertedMsg.Content.ToString());
+                    convertedMsg.Content = JimuHelper.Deserialize<string, JimuRemoteCallResultData>(convertedMsg.Content.ToString());
                 }
                 context.FireChannelRead(convertedMsg);
             }

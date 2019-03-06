@@ -15,9 +15,8 @@ namespace Jimu.Client
 
             serviceHostBuilder.AddInitializer(container =>
             {
-                var factory = container.Resolve<ITransportClientFactory>();
+                var factory = container.Resolve<ClientSenderFactory>();
                 var logger = container.Resolve<ILogger>();
-                var serializer = container.Resolve<ISerializer>();
                 var bootstrap = new Bootstrap();
 
                 logger.Info($"[config]use dotnetty for transfer");
@@ -31,26 +30,26 @@ namespace Jimu.Client
                         var pipeline = channel.Pipeline;
                         pipeline.AddLast(new LengthFieldPrepender(4));
                         pipeline.AddLast(new LengthFieldBasedFrameDecoder(int.MaxValue, 0, 4, 0, 4));
-                        pipeline.AddLast(new ReadClientMessageChannelHandlerAdapter(serializer, logger));
+                        pipeline.AddLast(new ReadClientMessageChannelHandlerAdapter(logger));
                         pipeline.AddLast(new ClientHandlerChannelHandlerAdapter(factory, logger));
                     }));
-                AttributeKey<IClientSender> clientSenderKey = AttributeKey<IClientSender>.ValueOf(typeof(DefaultTransportClientFactory), nameof(IClientSender));
-                AttributeKey<IClientListener> clientListenerKey = AttributeKey<IClientListener>.ValueOf(typeof(DefaultTransportClientFactory), nameof(IClientListener));
+                //AttributeKey<IClientSender> clientSenderKey = AttributeKey<IClientSender>.ValueOf(typeof(DefaultTransportClientFactory), nameof(IClientSender));
+                AttributeKey<ClientListener> clientListenerKey = AttributeKey<ClientListener>.ValueOf(typeof(ClientSenderFactory), nameof(ClientListener));
                 //AttributeKey<EndPoint> endPointKey = AttributeKey<EndPoint>.ValueOf(typeof(DefaultTransportClientFactory), nameof(EndPoint));
-                AttributeKey<string> endPointKey = AttributeKey<string>.ValueOf(typeof(DefaultTransportClientFactory), "addresscode");
-                factory.ClientCreatorDelegate += (JimuAddress address, ref ITransportClient client) =>
+                AttributeKey<string> endPointKey = AttributeKey<string>.ValueOf(typeof(ClientSenderFactory), "addresscode");
+                factory.ClientSenderCreator += (JimuAddress address, ref IClientSender client) =>
                 {
                     //if (client == null && address.GetType().IsAssignableFrom(typeof(DotNettyAddress)))
                     if (client == null && address.ServerFlag == "DotNetty")
                     {
                         var ep = address.CreateEndPoint();
                         var channel = bootstrap.ConnectAsync(ep).Result;
-                        var listener = new DotNettyClientListener();
+                        var listener = new ClientListener();
                         channel.GetAttribute(clientListenerKey).Set(listener);
-                        var sender = new DotNettyClientSender(channel, serializer);
-                        channel.GetAttribute(clientSenderKey).Set(sender);
+                        //var sender = new DotNettyClientSender(channel, logger);
+                        //channel.GetAttribute(clientSenderKey).Set(sender);
                         channel.GetAttribute(endPointKey).Set($"{address.ServerFlag}-{address.Code}");
-                        client = new DefaultTransportClient(listener, sender, logger);
+                        client = new DotNettyClientSender(listener, logger, channel);
                     }
                 };
             });

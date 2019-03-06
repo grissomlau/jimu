@@ -14,17 +14,13 @@ namespace Jimu.Server.Transport.Http
         private readonly Stack<Func<RequestDel, RequestDel>> _middlewares;
         private readonly IServiceEntryContainer _serviceEntryContainer;
         private readonly ILogger _logger;
-        private readonly ISerializer _serializer;
         private JimuTransportMsg _message;
-        private readonly ITypeConvertProvider _typeConvert;
-        public HttpMiddleware(RequestDelegate next, Stack<Func<RequestDel, RequestDel>> middlewares, IServiceEntryContainer serviceEntryContainer, ILogger logger, ISerializer serializer, ITypeConvertProvider typeConvert)
+        public HttpMiddleware(RequestDelegate next, Stack<Func<RequestDel, RequestDel>> middlewares, IServiceEntryContainer serviceEntryContainer, ILogger logger)
         {
             _next = next;
             _middlewares = middlewares;
             _serviceEntryContainer = serviceEntryContainer;
             _logger = logger;
-            _serializer = serializer;
-            _typeConvert = typeConvert;
         }
 
         public async Task Invoke(HttpContext context)
@@ -33,11 +29,11 @@ namespace Jimu.Server.Transport.Http
             {
                 var body = sr.ReadToEnd();
                 _logger.Debug($"received msg is: {body}");
-                _message = (JimuTransportMsg)_typeConvert.Convert(body, typeof(JimuTransportMsg));
+                _message = (JimuTransportMsg)JimuHelper.ConvertType(body, typeof(JimuTransportMsg));
             }
 
             _logger.Debug($"begin handling msg: {_message.Id}");
-            IResponse response = new HttpResponse(context.Response, _serializer, _logger);
+            IResponse response = new HttpResponse(context.Response, _logger);
             var thisContext = new RemoteCallerContext(_message, _serviceEntryContainer, response, _logger);
             var lastInvoke = new RequestDel(async ctx =>
             {

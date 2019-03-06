@@ -10,11 +10,6 @@ namespace Jimu.Client.ApiGateway.SwaggerIntegration
 {
     public class JimuSwaggerDocumentFilter : IDocumentFilter
     {
-        ISerializer _serializer;
-        public JimuSwaggerDocumentFilter(ISerializer serializer)
-        {
-            _serializer = serializer;
-        }
         public void Apply(SwaggerDocument swaggerDoc, DocumentFilterContext context)
         {
             var serviceDiscovery = JimuClient.Host.Container.Resolve<IClientServiceDiscovery>();
@@ -30,7 +25,7 @@ namespace Jimu.Client.ApiGateway.SwaggerIntegration
                   var paras = new List<IParameter>();
                   if (!string.IsNullOrEmpty(x.Parameters))
                   {
-                      var parameters = _serializer.Deserialize(TypeHelper.ReplaceTypeToJsType(x.Parameters), typeof(List<JimuServiceParameterDesc>)) as List<JimuServiceParameterDesc>;
+                      var parameters = JimuHelper.Deserialize(TypeHelper.ReplaceTypeToJsType(x.Parameters), typeof(List<JimuServiceParameterDesc>)) as List<JimuServiceParameterDesc>;
                       paras = GetParameters(parameters, x.HttpMethod);
                   }
 

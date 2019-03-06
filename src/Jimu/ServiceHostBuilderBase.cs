@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Autofac;
-using Jimu.Common.Logger;
+using Jimu.Logger;
 
 namespace Jimu
 {
@@ -41,9 +41,6 @@ namespace Jimu
             var host = new ServiceHost(_runners);
             _containerBuilder.Register(x => host).As<IServiceHost>().SingleInstance();
             _containerBuilder.Register(x => container).As<IContainer>().SingleInstance();
-            _containerBuilder.RegisterType<TypeConvertProvider>().As<ITypeConvertProvider>().SingleInstance();
-            _containerBuilder.RegisterType<Serializer>().As<ISerializer>().SingleInstance();
-            _containerBuilder.RegisterType<ServiceIdGenerator>().As<IServiceIdGenerator>().SingleInstance();
             //_containerBuilder.RegisterType<Log4netLogger>().As<ILogger>().SingleInstance();
             _containerBuilder.RegisterType<ConsoleLogger>().As<ILogger>().SingleInstance();
 

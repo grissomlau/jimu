@@ -18,18 +18,16 @@ namespace Jimu.Server.Transport.DotNetty
         private readonly IServiceEntryContainer _serviceEntryContainer;
         private readonly DotNettyAddress _address;
         private readonly ILogger _logger;
-        private readonly ISerializer _serializer;
         private IChannel _channel;
 
         private readonly Stack<Func<RequestDel, RequestDel>> _middlewares;
 
 
-        public DotNettyServer(DotNettyAddress address, IServiceEntryContainer serviceEntryContainer, ILogger logger, ISerializer serializer)
+        public DotNettyServer(DotNettyAddress address, IServiceEntryContainer serviceEntryContainer, ILogger logger)
         {
             _serviceEntryContainer = serviceEntryContainer;
             _address = address;
             _logger = logger;
-            _serializer = serializer;
             _middlewares = new Stack<Func<RequestDel, RequestDel>>();
         }
         public List<JimuServiceRoute> GetServiceRoutes()
@@ -59,7 +57,7 @@ namespace Jimu.Server.Transport.DotNetty
             //TaskCompletionSource<TransportMessage> task;
             if (message.ContentType == typeof(JimuRemoteCallData).FullName)
             {
-                IResponse response = new DotNettyResponse(channel, _serializer, _logger);
+                IResponse response = new DotNettyResponse(channel, _logger);
                 var thisContext = new RemoteCallerContext(message, _serviceEntryContainer, response, _logger);
 
                 var lastInvoke = new RequestDel(async context =>
@@ -151,7 +149,7 @@ namespace Jimu.Server.Transport.DotNetty
                     var pipeline = channel.Pipeline;
                     pipeline.AddLast(new LengthFieldPrepender(4));
                     pipeline.AddLast(new LengthFieldBasedFrameDecoder(int.MaxValue, 0, 4, 0, 4));
-                    pipeline.AddLast(new ReadServerMessageChannelHandlerAdapter(_serializer, _logger));
+                    pipeline.AddLast(new ReadServerMessageChannelHandlerAdapter(_logger));
                     pipeline.AddLast(new ServerHandlerChannelHandlerAdapter(async (context, message) =>
                     {
                         await OnReceived(context, message);

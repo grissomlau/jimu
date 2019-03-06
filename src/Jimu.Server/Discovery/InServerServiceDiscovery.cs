@@ -8,12 +8,6 @@ namespace Jimu.Server.Discovery
     {
         private static readonly List<JimuServiceRoute> _routes = new List<JimuServiceRoute>();
 
-        private readonly ISerializer _serializer;
-        public InServerServiceDiscovery(ISerializer serializer)
-        {
-            _serializer = serializer;
-        }
-
         public Task ClearAsync()
         {
             _routes.Clear();
@@ -68,7 +62,7 @@ namespace Jimu.Server.Discovery
                     AddressDescriptors = route.Address?.Select(x => new JimuAddressDesc
                     {
                         Type = $"{x.GetType().FullName}, {x.GetType().Assembly.GetName()}",
-                        Value = _serializer.Serialize<string>(x)
+                        Value = JimuHelper.Serialize<string>(x)
                     })
                 });
             }

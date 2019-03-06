@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
 using Jimu.Client;
-using Jimu.Common.Logger;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,7 +17,6 @@ namespace Jimu.Client.ApiGateway
         public static async Task<JimuRemoteCallResultData> Invoke(string path, IDictionary<string, object> paras)
         {
             var remoteServiceInvoker = Host.Container.Resolve<IRemoteServiceCaller>();
-            var converter = Host.Container.Resolve<ISerializer>();
             var result = await remoteServiceInvoker.InvokeAsync(path, paras);
             if (!string.IsNullOrEmpty(result.ExceptionMessage))
             {
@@ -36,7 +34,7 @@ namespace Jimu.Client.ApiGateway
             }
             if (result.ResultType == typeof(JimuFile).ToString())
             {
-                var file = converter.Deserialize(result.Result, typeof(JimuFile));
+                var file = JimuHelper.Deserialize(result.Result, typeof(JimuFile));
                 result.Result = file;
             }
 

@@ -5,25 +5,26 @@ using DotNetty.Transport.Channels;
 
 namespace Jimu.Client
 {
-    public class DotNettyClientSender : IClientSender, IDisposable
+    public class DotNettyClientSender : ClientSender, IDisposable
     {
         private readonly IChannel _channel;
-        private readonly ISerializer _serializer;
-        public DotNettyClientSender(IChannel channel, ISerializer serializer)
+        public DotNettyClientSender(ClientListener listener, ILogger logger, IChannel channel) : base(listener, logger)
         {
             _channel = channel;
-            _serializer = serializer;
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             Task.Run(async () =>
             {
                 await _channel.DisconnectAsync();
             }).Wait();
+
+            base.Dispose();
+
         }
 
-        public async Task SendAsync(JimuTransportMsg message)
+        protected override async Task DoSendAsync(JimuTransportMsg message)
         {
             var buffer = GetByteBuffer(message);
             await _channel.WriteAndFlushAsync(buffer);
@@ -31,7 +32,7 @@ namespace Jimu.Client
 
         private IByteBuffer GetByteBuffer(JimuTransportMsg message)
         {
-            var data = _serializer.Serialize<byte[]>(message);
+            var data = JimuHelper.Serialize<byte[]>(message);
             var buffer = Unpooled.Buffer(data.Length, data.Length);
             return buffer.WriteBytes(data);
         }

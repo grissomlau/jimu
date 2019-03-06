@@ -1,0 +1,165 @@
+﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Polly;
+
+namespace Jimu.Client
+{
+    public class RemoteServiceCaller : IRemoteServiceCaller
+    {
+        private readonly IAddressSelector _addressSelector;
+        private readonly ILogger _logger;
+        private readonly IClientServiceDiscovery _serviceDiscovery;
+        private readonly IServiceTokenGetter _serviceTokenGetter;
+        private readonly ClientSenderFactory _clientSenderFactory;
+        private int _retryTimes;
+
+        public RemoteServiceCaller(IClientServiceDiscovery serviceDiscovery,
+            IAddressSelector addressSelector,
+            ClientSenderFactory clientSenderFactory,
+            IServiceTokenGetter serviceTokenGetter,
+            ILogger logger,
+            int retryTimes = -1)
+        {
+            _serviceDiscovery = serviceDiscovery;
+            _addressSelector = addressSelector;
+            _clientSenderFactory = clientSenderFactory;
+            _serviceTokenGetter = serviceTokenGetter;
+            _logger = logger;
+            _retryTimes = retryTimes;
+        }
+
+        public async Task<T> InvokeAsync<T>(string serviceIdOrPath, IDictionary<string, object> paras)
+        {
+            _logger.Debug($"begin to invoke service: {serviceIdOrPath}");
+            var result = await InvokeAsync(serviceIdOrPath, paras);
+            if (!string.IsNullOrEmpty(result.ExceptionMessage))
+            {
+                _logger.Debug($"invoking service: {serviceIdOrPath} raising an error: {result.ExceptionMessage}");
+                throw new Exception(result.ExceptionMessage);
+            }
+            if (result.Result == null)
+            {
+                _logger.Debug($"invoking service: {serviceIdOrPath} has null return.");
+                return default(T);
+            }
+            object value;
+            if (result.Result is Task<T> task)
+                value = JimuHelper.ConvertType(task.Result, typeof(T));
+            else
+                value = JimuHelper.ConvertType(result.Result, typeof(T));
+
+            _logger.Debug($"finish invoking service: {serviceIdOrPath}.");
+            return (T)value;
+
+        }
+
+        public async Task<JimuRemoteCallResultData> InvokeAsync(string serviceIdOrPath, IDictionary<string, object> paras,
+            string token = null)
+        {
+            if (paras == null)
+            {
+                paras = new ConcurrentDictionary<string, object>();
+            }
+            var service = await GetServiceByIdAsync(serviceIdOrPath) ?? await GetServiceByPathAsync(serviceIdOrPath, paras);
+            if (service == null)
+                return new JimuRemoteCallResultData
+                {
+                    ErrorCode = "404",
+                    ErrorMsg = $"{serviceIdOrPath}, not found!"
+                };
+
+            if (token == null && _serviceTokenGetter?.GetToken != null) token = _serviceTokenGetter.GetToken();
+            var result = await InvokeAsync(service, paras, token);
+            if (!string.IsNullOrEmpty(result.ExceptionMessage))
+                return new JimuRemoteCallResultData
+                {
+                    ErrorCode = "500",
+                    ErrorMsg = $"{serviceIdOrPath}, {result.ToErrorString()}"
+                };
+
+            if (string.IsNullOrEmpty(result.ErrorCode) && string.IsNullOrEmpty(result.ErrorMsg)) return result;
+            if (int.TryParse(result.ErrorCode, out var erroCode) && erroCode > 200 && erroCode < 600)
+                return new JimuRemoteCallResultData
+                {
+                    ErrorCode = result.ErrorCode,
+                    ErrorMsg = $"{serviceIdOrPath}, {result.ToErrorString()}"
+                };
+            return result;
+
+        }
+
+        public async Task<JimuRemoteCallResultData> InvokeAsync(JimuServiceRoute service, IDictionary<string, object> paras,
+            string token)
+        {
+            if (paras == null) paras = new ConcurrentDictionary<string, object>();
+            var address = await _addressSelector.GetAddressAsyn(service);
+            if (_retryTimes < 0)
+            {
+                _retryTimes = service.Address.Count;
+            }
+            JimuRemoteCallResultData result = null;
+            var retryPolicy = Policy.Handle<TransportException>()
+                .RetryAsync(_retryTimes,
+                    async (ex, count) =>
+                    {
+                        address = await _addressSelector.GetAddressAsyn(service);
+                        _logger.Debug(
+                            $"FaultHandling,retry times: {count},serviceId: {service.ServiceDescriptor.Id},Address: {address.Code},RemoteServiceCaller execute retry by Polly for exception {ex.Message}");
+                    });
+            var fallbackPolicy = Policy<JimuRemoteCallResultData>.Handle<TransportException>()
+                .FallbackAsync(new JimuRemoteCallResultData() { ErrorCode = "500", ErrorMsg = "error occur when communicate with server. server maybe have been down." })
+                .WrapAsync(retryPolicy);
+            return await fallbackPolicy.ExecuteAsync(async () =>
+                    {
+                        var client = _clientSenderFactory.CreateClientSender(address);
+                        if (client == null)
+                            return new JimuRemoteCallResultData
+                            {
+                                ErrorCode = "400",
+                                ErrorMsg = "Server unavailable!"
+                            };
+                        _logger.Debug($"invoke: serviceId:{service.ServiceDescriptor.Id}, parameters count: {paras.Count()}, token:{token}");
+                        //Polly.Policy.Handle<>()
+
+                        result = await client.SendAsync(new JimuRemoteCallData
+                        {
+                            Parameters = paras,
+                            ServiceId = service.ServiceDescriptor.Id,
+                            Token = token,
+                            Descriptor = service.ServiceDescriptor
+                        });
+                        return result;
+                    });
+        }
+
+        private async Task<JimuServiceRoute> GetServiceByPathAsync(string path, IDictionary<string, object> paras)
+        {
+            path = ParsePath(path, paras);
+            var routes = await _serviceDiscovery.GetRoutesAsync();
+            var service = routes.FirstOrDefault(x =>
+                (x.ServiceDescriptor.RoutePath ?? "").Equals(path, StringComparison.InvariantCultureIgnoreCase));
+            return service;
+        }
+
+        private async Task<JimuServiceRoute> GetServiceByIdAsync(string serviceId)
+        {
+            var routes = await _serviceDiscovery.GetRoutesAsync();
+            var service = routes.FirstOrDefault(x =>
+                x.ServiceDescriptor.Id.Equals(serviceId, StringComparison.InvariantCultureIgnoreCase));
+            return service;
+        }
+
+        private static string ParsePath(string path, IDictionary<string, object> paras)
+        {
+            if (!paras.Any()) return path;
+            path += "?";
+            path = paras.Keys.Aggregate(path, (current, key) => current + (key + "=&"));
+            path = path.TrimEnd('&');
+
+            return path;
+        }
+    }
+}

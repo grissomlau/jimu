@@ -17,7 +17,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Common\Protocols\IpAddress.cs" />
+    <Compile Remove="Protocols\IpAddress.cs" />
     <Compile Remove="ServiceHostBuilderExtension.cs" />
   </ItemGroup>
 

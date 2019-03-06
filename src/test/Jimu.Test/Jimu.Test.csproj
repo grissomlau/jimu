@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Debug\netcoreapp2.0\Jimu.Tests.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\netcoreapp2.0\Jimu.Test.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Jimu.Server\Jimu.Server.csproj" />
     <ProjectReference Include="..\..\Jimu\Jimu.csproj" />
   </ItemGroup>
 

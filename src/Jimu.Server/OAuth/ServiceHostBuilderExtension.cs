@@ -20,8 +20,7 @@ namespace Jimu.Server
                     Thread.Sleep(200);
                 }
                 var server = container.Resolve<IServer>();
-                var serializer = container.Resolve<ISerializer>();
-                server.UseMiddleware<JwtAuthorizationMiddleware>(options, serializer);
+                server.UseMiddleware<JwtAuthorizationMiddleware>(options);
 
                 if (string.IsNullOrEmpty(options.TokenEndpointPath)) return;
                 var discovery = container.Resolve<IServiceDiscovery>();
@@ -40,7 +39,7 @@ namespace Jimu.Server
                         {
                             Id=options.GetServiceId(),
                             RoutePath = options.TokenEndpointPath,
-                             Parameters = serializer.Serialize<string>(new List<JimuServiceParameterDesc>{
+                             Parameters = JimuHelper.Serialize<string>(new List<JimuServiceParameterDesc>{
                                  new JimuServiceParameterDesc
                                  {
                                       Comment = "username",
@@ -58,7 +57,7 @@ namespace Jimu.Server
 
 
                              }),
-                            ReturnDesc = serializer.Serialize<string>( new JimuServiceReturnDesc{
+                            ReturnDesc = JimuHelper.Serialize<string>( new JimuServiceReturnDesc{
                                  Comment = "Token",
                                   ReturnType = "object",
                                    ReturnFormat = "{\"access_token\":\"System.String | token\", \"expired_in\":\"System.Int32 | expired timestamp which is the number of seconds between 1970-01-01 and expired datetime\"}"

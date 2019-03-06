@@ -6,23 +6,23 @@ namespace Jimu.Client
     {
         public static IServiceHostClientBuilder UseHttpForTransfer(this IServiceHostClientBuilder serviceHostBuilder)
         {
-            serviceHostBuilder.AddInitializer(container =>
+            serviceHostBuilder.AddInitializer((System.Action<IContainer>)(container =>
             {
-                var factory = container.Resolve<ITransportClientFactory>();
+                var factory = container.Resolve<ClientSenderFactory>();
                 var logger = container.Resolve<ILogger>();
                 logger.Info($"[config]use http for transfer");
 
-                factory.ClientCreatorDelegate += (JimuAddress address, ref ITransportClient client) =>
+                factory.ClientSenderCreator += (global::Jimu.JimuAddress address, ref global::Jimu.Client.IClientSender client) =>
                  {
                      //if (client == null && address.GetType() == typeof(HttpAddress))
                      if (client == null && address.ServerFlag == "Http")
                      {
-                         var listener = new HttpClientListener();
-                         var sender = new HttpClientSender(address, listener);
-                         client = new DefaultTransportClient(listener, sender, logger);
+                         var listener = new global::Jimu.Client.ClientListener();
+                         //var sender = new HttpClientSender(address, listener);
+                         client = new global::Jimu.Client.HttpClientSender((global::Jimu.Client.ClientListener)listener, (global::Jimu.ILogger)logger, (global::Jimu.JimuAddress)address);
                      }
                  };
-            });
+            }));
             return serviceHostBuilder;
         }
     }

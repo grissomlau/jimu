@@ -13,13 +13,11 @@ namespace Jimu.Client.Proxy.CodeAnalysisIntegration
 {
     class ServiceProxyGenerator : IServiceProxyGenerator, IDisposable
     {
-        private readonly IServiceIdGenerator _serviceIdGenerator;
         private readonly ILogger _logger;
         private IEnumerable<Type> _generatedServiceProxyTypes;
 
-        public ServiceProxyGenerator(IServiceIdGenerator serviceIdGenerator, ILogger logger)
+        public ServiceProxyGenerator(ILogger logger)
         {
-            _serviceIdGenerator = serviceIdGenerator;
             _logger = logger;
         }
 
@@ -193,7 +191,7 @@ namespace Jimu.Client.Proxy.CodeAnalysisIntegration
         }
         private MemberDeclarationSyntax GenerateMethodDeclaration(MethodInfo method)
         {
-            var serviceId = _serviceIdGenerator.GenerateServiceId(method);
+            var serviceId = JimuHelper.GenerateServiceId(method);
             var returnDeclaration = GetTypeSyntax(method.ReturnType);
 
             var parameterList = new List<SyntaxNodeOrToken>();

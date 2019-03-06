@@ -86,7 +86,6 @@ namespace Jimu.Client
                 logger.Info($"[config]use consul for services discovery, consul ip: {ip}:{port}, service cateogry: {serviceCategory}");
 
                 var clientDiscovery = container.Resolve<IClientServiceDiscovery>();
-                var serializer = container.Resolve<ISerializer>();
                 clientDiscovery.AddRoutesGetter(async () =>
                 {
                     var consul = new ConsulClient(config => { config.Address = new Uri($"http://{ip}:{port}"); });
@@ -106,7 +105,7 @@ namespace Jimu.Client
                             continue;
                         }
 
-                        var descriptors = serializer.Deserialize<byte[], List<JimuServiceRouteDesc>>(data);
+                        var descriptors = JimuHelper.Deserialize<byte[], List<JimuServiceRouteDesc>>(data);
                         if (descriptors != null && descriptors.Any())
                         {
                             foreach (var descriptor in descriptors)
@@ -116,7 +115,7 @@ namespace Jimu.Client
                                 foreach (var addDesc in descriptor.AddressDescriptors)
                                 {
                                     var addrType = Type.GetType(addDesc.Type);
-                                    addresses.Add(serializer.Deserialize(addDesc.Value, addrType) as JimuAddress);
+                                    addresses.Add(JimuHelper.Deserialize(addDesc.Value, addrType) as JimuAddress);
                                 }
 
                                 routes.Add(new JimuServiceRoute

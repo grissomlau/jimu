@@ -17,12 +17,7 @@ namespace Jimu.Test
         public JimuEntryContainerTest(ITestOutputHelper output)
         {
             IContainer container = new ContainerBuilder().Build();
-            IServiceIdGenerator serviceIdGenerator = Substitute.For<IServiceIdGenerator>();
-            serviceIdGenerator.GenerateServiceId(Arg.Any<MethodInfo>()).ReturnsForAnyArgs("testid");
-            ISerializer serializer = new Serializer();
-            ITypeConvertProvider typeConvertProvider = new TypeConvertProvider();
-
-            serviceEntry = new ServiceEntryContainer(container, serviceIdGenerator, typeConvertProvider, serializer);
+            serviceEntry = new ServiceEntryContainer(container);
             serviceEntry.AddServices(new Type[] { typeof(User), typeof(IUser) });
             this.output = output;
         }
@@ -42,7 +37,7 @@ namespace Jimu.Test
 
             var services = serviceEntry.GetServiceEntry();
             this.output.WriteLine(services[1].Descriptor.ReturnDesc);
-            Assert.Equal(@"{""ReturnType"":""Jimu.Tests.User"",""ReturnFormat"":""{\""Id\"":\""System.Int32 | 用户 id\"",\""Name\"":\""System.String | 用户 name\"",}"",""Comment"":""user""}", services[1].Descriptor.ReturnDesc);
+            Assert.Equal(@"{""ReturnType"":""Jimu.Test.User"",""ReturnFormat"":""{\""Id\"":\""System.Int32 | 用户 id\"",\""Name\"":\""System.String | 用户 name\"",}"",""Comment"":""user""}", services[1].Descriptor.ReturnDesc);
 
         }
 

@@ -18,20 +18,16 @@ namespace Jimu.Server.Transport.Http
         private readonly string _ip;
         private readonly int _port;
         private readonly ILogger _logger;
-        private readonly ISerializer _serializer;
         private readonly Stack<Func<RequestDel, RequestDel>> _middlewares;
         private readonly Action<IWebHostBuilder> _builderAction;
-        private readonly ITypeConvertProvider _typeConvert;
-        public HttpServer(string ip, int port, Action<IWebHostBuilder> builderAction, IServiceEntryContainer serviceEntryContainer, ILogger logger, ISerializer serializer, ITypeConvertProvider typeConvert)
+        public HttpServer(string ip, int port, Action<IWebHostBuilder> builderAction, IServiceEntryContainer serviceEntryContainer, ILogger logger)
         {
             _serviceEntryContainer = serviceEntryContainer;
             _ip = ip;
             _port = port;
             _logger = logger;
-            _serializer = serializer;
             _middlewares = new Stack<Func<RequestDel, RequestDel>>();
             _builderAction = builderAction;
-            _typeConvert = typeConvert;
         }
         public List<JimuServiceRoute> GetServiceRoutes()
         {
@@ -66,7 +62,7 @@ namespace Jimu.Server.Transport.Http
       .UseUrls($"http://{_ip}:{_port}")
       .ConfigureServices(services =>
       {
-          services.AddSingleton<IStartup>(new Startup(new ConfigurationBuilder().Build(), _middlewares, _serviceEntryContainer, _logger, _serializer, _typeConvert));
+          services.AddSingleton<IStartup>(new Startup(new ConfigurationBuilder().Build(), _middlewares, _serviceEntryContainer, _logger));
       })
        .UseSetting(WebHostDefaults.ApplicationKey, typeof(Startup).GetTypeInfo().Assembly.FullName)
       //.UseStartup<Startup>()

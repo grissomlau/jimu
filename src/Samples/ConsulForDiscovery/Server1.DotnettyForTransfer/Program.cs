@@ -1,7 +1,6 @@
 ﻿using System;
 using Autofac;
 using Jimu;
-using Jimu.Common.Logger;
 using Jimu.Server;
 
 namespace Server1.DotnettyForTransfer

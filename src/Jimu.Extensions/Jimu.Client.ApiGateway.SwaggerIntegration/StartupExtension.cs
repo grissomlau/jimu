@@ -28,8 +28,7 @@ namespace Jimu.Client.ApiGateway
         {
             services.AddSwaggerGen(c =>
             {
-                var serializer = JimuClient.Host.Container.Resolve<ISerializer>();
-                c.DocumentFilter<JimuSwaggerDocumentFilter>(serializer);
+                c.DocumentFilter<JimuSwaggerDocumentFilter>();
                 c.SwaggerDoc(version, new Info { Title = title, Version = version });
             });
             return services;

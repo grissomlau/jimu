@@ -12,16 +12,12 @@ namespace Jimu.Server.Transport.Http
         readonly Stack<Func<RequestDel, RequestDel>> _middlewares;
         private readonly IServiceEntryContainer _serviceEntryContainer;
         private readonly ILogger _logger;
-        private readonly ISerializer _serializer;
-        private readonly ITypeConvertProvider _typeConvert;
-        public Startup(IConfiguration configuration, Stack<Func<RequestDel, RequestDel>> middlewares, IServiceEntryContainer serviceEntryContainer, ILogger logger, ISerializer serializer, ITypeConvertProvider typeConvert)
+        public Startup(IConfiguration configuration, Stack<Func<RequestDel, RequestDel>> middlewares, IServiceEntryContainer serviceEntryContainer, ILogger logger)
         {
             Configuration = configuration;
             _middlewares = middlewares;
             _serviceEntryContainer = serviceEntryContainer;
             _logger = logger;
-            _serializer = serializer;
-            _typeConvert = typeConvert;
         }
 
         public IConfiguration Configuration { get; }
@@ -37,7 +33,7 @@ namespace Jimu.Server.Transport.Http
         public void Configure(IApplicationBuilder app)
         {
             app.UseMvc();
-            app.UseMiddleware<HttpMiddleware>(_middlewares, _serviceEntryContainer, _logger, _serializer, _typeConvert);
+            app.UseMiddleware<HttpMiddleware>(_middlewares, _serviceEntryContainer, _logger);
         }
 
     }
