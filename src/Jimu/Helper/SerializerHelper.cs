@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Jimu.Common.Helper
 {
-    internal class SerializerHelper
+    class SerializerHelper
     {
         static SerializerHelper()
         {

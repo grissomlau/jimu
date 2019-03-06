@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Jimu.Extension;
+using System;
 
 namespace Jimu.Logger
 {

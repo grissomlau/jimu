@@ -8,7 +8,7 @@ namespace Jimu.Common.Helper
 {
     delegate object TypeConvertDelegate(object instance, Type destinationType);
 
-    internal class TypeConvertProvider
+    class TypeConvertProvider
     {
         public static object Convert(object instance, Type destinationType)
         {

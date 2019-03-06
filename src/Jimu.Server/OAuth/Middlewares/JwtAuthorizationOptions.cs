@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Jimu.Extension;
+using System;
 using System.Collections.Generic;
 
 namespace Jimu.Server.OAuth

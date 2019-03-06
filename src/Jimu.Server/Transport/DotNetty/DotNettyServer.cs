@@ -9,6 +9,7 @@ using DotNetty.Codecs;
 using DotNetty.Transport.Bootstrapping;
 using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Sockets;
+using Jimu.Extension;
 
 namespace Jimu.Server.Transport.DotNetty
 {

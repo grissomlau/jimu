@@ -1,13 +1,13 @@
 ﻿using System;
 
-namespace Jimu
+namespace Jimu.Extension
 {
     public static class Extensions
     {
         public static int ToInt(this DateTime time)
         {
             var startTime = TimeZoneInfo.ConvertTime(new DateTime(1970, 1, 1), TimeZoneInfo.Local);
-            return (int) (time - startTime).TotalSeconds;
+            return (int)(time - startTime).TotalSeconds;
         }
 
         public static DateTime ToDate(this long time)

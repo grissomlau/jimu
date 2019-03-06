@@ -165,3 +165,7 @@
 /src/WebApplication1
 /src/test/Jimu.Test/bin/Debug/netcoreapp2.0
 /src/test/Jimu.Test/obj
+/src/Jimu.Extensions/Jimu.Client.Discovery.ConsulIntegration/bin/Debug/netstandard2.0
+/src/Jimu.Extensions/Jimu.Client.Discovery.ConsulIntegration/obj
+/src/Jimu.Extensions/Jimu.Server.Discovery.ConsulIntegration/bin/Debug/netstandard2.0
+/src/Jimu.Extensions/Jimu.Server.Discovery.ConsulIntegration/obj

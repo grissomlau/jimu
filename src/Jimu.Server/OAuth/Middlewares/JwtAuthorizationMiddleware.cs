@@ -4,6 +4,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Jimu.Extension;
 using Jose;
 
 namespace Jimu.Server.OAuth
