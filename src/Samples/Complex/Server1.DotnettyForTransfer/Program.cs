@@ -17,7 +17,8 @@ namespace Server1.DotnettyForTransfer
                 {
                     EnableConsoleLog = true
                 })
-                .LoadServices(new[] { "IServices", "Services" })
+                //.LoadServices(new[] { "IServices", "Services" })
+                .LoadServices("services")
                 .UseDotNettyForTransfer("127.0.0.1", 8005, server => { })
                 .UseConsulForDiscovery("127.0.0.1", 8500, "JimuService", "127.0.0.1:8005")
                              .UseJoseJwtForOAuth<DotNettyAddress>(new Jimu.Server.OAuth.JwtAuthorizationOptions

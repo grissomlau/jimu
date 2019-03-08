@@ -2,6 +2,7 @@ using Autofac;
 using Jimu.Server;
 using NSubstitute;
 using System;
+using System.Linq;
 using System.Reflection;
 using Xunit;
 using Xunit.Abstractions;
@@ -17,8 +18,8 @@ namespace Jimu.Test
         public JimuEntryContainerTest(ITestOutputHelper output)
         {
             IContainer container = new ContainerBuilder().Build();
-            serviceEntry = new ServiceEntryContainer(container);
-            serviceEntry.AddServices(new Type[] { typeof(User), typeof(IUser) });
+            serviceEntry = new ServiceEntryContainer();
+            serviceEntry.LoadServices(new System.Collections.Generic.List<Assembly> { typeof(IUser).Assembly });
             this.output = output;
         }
 

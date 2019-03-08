@@ -1,57 +1,82 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.XPath;
-using Autofac;
+﻿using Autofac;
 using Autofac.Core;
 using Jimu.Server.Implement.Parser;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace Jimu.Server
 {
     public class ServiceEntryContainer : IServiceEntryContainer
     {
-        private readonly IContainer _container;
-        private readonly List<JimuServiceEntry> _services;
+        private readonly List<JimuServiceEntry> _services = new List<JimuServiceEntry>();
 
-
-        public ServiceEntryContainer(IContainer container)
+        ILogger _logger;
+        public ServiceEntryContainer(ILogger logger)
         {
-            _container = container;
-            _services = new List<JimuServiceEntry>();
+            _logger = logger;
         }
-
-
-        public IServiceEntryContainer AddServices(Type[] types)
+        /// <summary>
+        ///     load service
+        /// </summary>
+        /// <returns></returns>
+        public virtual void LoadServices(List<Assembly> assemblies)
         {
-            var serviceTypes = types
-                .Where(x => x.GetMethods().Any(y => y.GetCustomAttribute<JimuServiceAttribute>() != null)).Distinct();
-
+            var jimuServicesType = GetJimuService(assemblies);
+            var container = RegisterToIOC(jimuServicesType, assemblies);
             JimuServiceDescParser descParser = new JimuServiceDescParser();
-            JimuServiceEntryParser entryParser = new JimuServiceEntryParser(_container);
-            foreach (var type in serviceTypes)
+            JimuServiceEntryParser entryParser = new JimuServiceEntryParser(container);
+            var tmpServices = new List<JimuServiceEntry>();
+            foreach (var type in jimuServicesType)
             {
-                foreach (var methodInfo in type.GetTypeInfo().GetMethods().Where(x => x.GetCustomAttributes<JimuServiceDescAttribute>().Any()))
+                // the type catch from Interface.dll will not register sccessful, so we just filter the success one
+                if (container.IsRegistered(type))
                 {
-
-                    JimuServiceDesc desc = descParser.Parse(methodInfo);
-                    var service = entryParser.Parse(methodInfo,desc);
-                    _services.Add(service);
+                    foreach (var methodInfo in GetMethodInfos(type))
+                    {
+                        JimuServiceDesc desc = descParser.Parse(methodInfo);
+                        var service = entryParser.Parse(methodInfo, desc);
+                        tmpServices.Add(service);
+                    }
                 }
-            }
 
-            return this;
+            }
+            _services.Clear();
+            _services.AddRange(tmpServices);
         }
 
+        private List<MethodInfo> GetMethodInfos(Type type)
+        {
+            var methods = type.GetTypeInfo().GetMethods().Where(x => x.GetCustomAttributes<JimuServiceDescAttribute>().Any()).ToList();
+            if (!methods.Any() && !type.IsInterface)
+            {
+                type.GetInterfaces().Where(x => x.GetTypeInfo().IsAssignableTo<IJimuService>())
+                    .ToList().ForEach(t => methods.AddRange(t.GetMethods().Where(m => m.GetCustomAttribute<JimuServiceAttribute>() != null)));
+            }
+            return methods;
+        }
+        private List<Type> GetJimuService(List<Assembly> assemblies)
+        {
+            List<Type> jimuServices = new List<Type>();
+            assemblies.ForEach(x =>
+                jimuServices.AddRange(x.ExportedTypes.Where(y => typeof(IJimuService).GetTypeInfo().IsAssignableFrom(y)).ToList())
+            );
+            return jimuServices;
+        }
+
+        private IContainer RegisterToIOC(List<Type> types, List<Assembly> assemblies)
+        {
+            //var serviceTypes = types.Where(x => x.GetMethods().Any(y => y.GetCustomAttribute<JimuServiceAttribute>() != null)).Distinct();
+            var containerBuilder = new ContainerBuilder();
+            containerBuilder.RegisterTypes(types.ToArray()).AsSelf().AsImplementedInterfaces().InstancePerDependency();
+            containerBuilder.RegisterAssemblyModules(assemblies.ToArray());
+            containerBuilder.RegisterInstance(_logger).AsImplementedInterfaces().SingleInstance();
+            return containerBuilder.Build();
+        }
         public List<JimuServiceEntry> GetServiceEntry()
         {
             return _services;
         }
-
-
     }
 }
