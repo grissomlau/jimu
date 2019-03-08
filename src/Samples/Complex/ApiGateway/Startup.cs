@@ -91,7 +91,6 @@ namespace Jimu.ApiGateway
                     EnableFileLog = true,
                     FileLogLevel = LogLevel.Info | LogLevel.Error,
                 })
-                .UseInServerForDiscovery(new HttpAddress("127.0.0.1", 8006))
                 .UseConsulForDiscovery("127.0.0.1", 8500, "JimuService")
                 .UseDotNettyForTransfer()
                 .UseHttpForTransfer()

@@ -23,6 +23,7 @@ namespace Jimu.Server
         static object _lockObj = new object();
         readonly IServiceEntryContainer _serviceEntryContainer;
         readonly string _watchingFilePattern;
+        volatile bool _changingInloading;
 
         /// <summary>
         /// dll loader
@@ -97,6 +98,12 @@ namespace Jimu.Server
 
             _serviceEntryContainer.LoadServices(assemblies.ToList());
 
+            if (_changingInloading)
+            {
+                _changingInloading = false;
+                this.LoadServices();
+            }
+
             _loading = false;
             if (_enableWatchChanged && !_isWatching)
             {
@@ -104,7 +111,8 @@ namespace Jimu.Server
                 this.Watch();
             }
 
-            _logger.Info($"[config]loaded services: {string.Join(",", assemblies)}");
+            _logger.Debug($"[config]loaded services: {string.Join(",", assemblies)}");
+            _logger.Info($"[config]loaded services.");
         }
 
         private static bool IsCandidateLibrary(RuntimeLibrary library, AssemblyName assemblyName)
@@ -140,12 +148,14 @@ namespace Jimu.Server
 
         private void Watcher_Changed(object sender, FileSystemEventArgs e)
         {
+            _changingInloading = true;
             lock (_lockObj)
             {
                 if (!_loading)
                 {
                     _loading = true;
                     Thread.Sleep(10000);//waiting for changing finish
+                    _changingInloading = false;
                     Task.Run(() => this.LoadServices());
                 }
             }

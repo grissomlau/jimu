@@ -200,10 +200,17 @@ namespace Jimu.Server.Implement.Parser
                     {
                         proComment = $" | " + node.Value.Trim();
                     }
+                    proComment = FilterJson(proComment);
                     sb.Append($"\"{prop.Name}\":\"{prop.PropertyType.ToString()}{proComment}\",");
                 }
             }
             return sb.ToString();
+        }
+
+        private static string FilterJson(string objJson)
+        {
+            if (string.IsNullOrEmpty(objJson)) return objJson;
+            return objJson?.Replace(@"\", @"\\").Replace("\"", "&quot;");
         }
 
         private string GetHttpMethod(MethodInfo method)

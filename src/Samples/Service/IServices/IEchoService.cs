@@ -7,9 +7,14 @@ namespace IServices
     [JimuServiceRoute("api/echo")]
     public interface IEchoService : IJimuService
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="anything">任何值")]</param>
+        /// <returns>返回anything"""\"</returns>
         [JimuService(CreatedBy = "grissom", Comment = "get input things", EnableAuthorization = true)]
-        [JimuFieldComment("anything", "任何值")]
-        [JimuReturnComment("返回anything")]
+        //[JimuFieldComment("anything", "任何值")]
+        //[JimuReturnComment("返回anything")]
         string GetEcho(string anything);
 
         /// <summary>

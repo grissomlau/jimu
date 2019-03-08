@@ -17,6 +17,7 @@ namespace Server2.HttpForTransfer
                 })
                 .LoadServices(new[] { "IServices", "Services" })
                 .UseHttpForTransfer("127.0.0.1", 8008)
+                .UseConsulForDiscovery("127.0.0.1", 8500, "JimuService-", "127.0.0.1:8008")
                 ;
             using (var hostJimu = builder.Build())
             {

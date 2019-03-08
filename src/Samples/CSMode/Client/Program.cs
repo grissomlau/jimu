@@ -16,16 +16,21 @@ namespace Client
             var host = new ServiceHostClientBuilder(container)
                 .UseLog4netLogger(new LogOptions { EnableConsoleLog = true })
                 .UsePollingAddressSelector()
-                .UseInServerForDiscovery(new HttpAddress("127.0.0.1", 8007))
+                .UseConsulForDiscovery("127.0.0.1", 8500, "JimuService-")
                 .UseHttpForTransfer()
-                .UseToken(() => "token")
+                //.UseDotNettyForTransfer()
+                //.UseToken(() => "token")
                 .UseServiceProxy(new[] { "IServices" })
                 .Build();
             host.Run();
             var proxy = host.Container.Resolve<IServiceProxy>();
-            var echo = proxy.GetService<IEchoService>();
-            var name = echo.GetEcho("test");
-            Console.WriteLine("return:  " + name);
+            while (Console.Read() != 'q')
+            {
+                var echo = proxy.GetService<IEchoService>();
+                var name = echo.GetEcho("test");
+                Console.WriteLine("return:  " + name);
+            }
+
             Console.ReadKey();
 
 

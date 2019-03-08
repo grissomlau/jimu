@@ -18,7 +18,7 @@ namespace Jimu.Test
         public JimuEntryContainerTest(ITestOutputHelper output)
         {
             IContainer container = new ContainerBuilder().Build();
-            serviceEntry = new ServiceEntryContainer();
+            serviceEntry = new ServiceEntryContainer(null);
             serviceEntry.LoadServices(new System.Collections.Generic.List<Assembly> { typeof(IUser).Assembly });
             this.output = output;
         }

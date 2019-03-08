@@ -11,10 +11,13 @@ namespace IServices
         /// user name
         /// </summary>
         public string Name { get; set; }
+        /// <summary>
+        /// 是否或者"
+        /// </summary>
         public bool IsAlive { get; set; }
 
         /// <summary>
-        /// 创建时间
+        /// {创建时间
         /// </summary>
         //[Jimu.JimuFieldCommentAttribute(@"创建时间
         //换行了
