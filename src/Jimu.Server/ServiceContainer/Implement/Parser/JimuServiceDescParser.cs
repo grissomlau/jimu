@@ -233,7 +233,7 @@ namespace Jimu.Server.Implement.Parser
                 && File.Exists(fileFullName)
                 )
             {
-                using (var sr = File.OpenText($"{key}.xml"))
+                using (var sr = File.OpenText(fileFullName))
                 {
                     var xmlMembers = new XPathDocument(sr).CreateNavigator().SelectSingleNode(AllMemberXPath);
                     xmlComments = new Dictionary<string, XPathNavigator>();
