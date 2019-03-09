@@ -223,8 +223,14 @@ namespace Jimu.Server.Implement.Parser
         {
             var key = type.Assembly.GetName().Name;
             //Dictionary<string, XPathNavigator> xmlComments = null;
+            var fileFullName = $"{key}.xml";
+            if (!File.Exists(fileFullName))
+            {
+                var assemblyPath = Path.GetDirectoryName(type.Assembly.Location);
+                fileFullName = Path.Combine(assemblyPath, fileFullName);
+            }
             if (!_xmlComments.TryGetValue(key, out var xmlComments)
-                && File.Exists($"{key}.xml")
+                && File.Exists(fileFullName)
                 )
             {
                 using (var sr = File.OpenText($"{key}.xml"))
