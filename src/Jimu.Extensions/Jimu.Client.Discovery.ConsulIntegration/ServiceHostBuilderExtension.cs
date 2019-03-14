@@ -9,27 +9,45 @@ namespace Jimu.Client
 {
     public static class ServiceHostBuilderExtension
     {
+        /// <summary>
+        /// discovery service
+        /// </summary>
+        /// <param name="serviceHostBuilder"></param>
+        /// <param name="ip"></param>
+        /// <param name="port"></param>
+        /// <param name="serviceGroups">which groups to extract, multiple seperate with ','</param>
+        /// <returns></returns>
         public static IServiceHostClientBuilder UseConsulForDiscovery(this IServiceHostClientBuilder serviceHostBuilder,
-            string ip, int port, string serviceCategory)
+            string ip, int port, string serviceGroups)
         {
             serviceHostBuilder.AddInitializer(container =>
             {
                 var logger = container.Resolve<ILogger>();
-                logger.Info($"[config]use consul for services discovery, consul ip: {ip}:{port}, service cateogry: {serviceCategory}");
+                logger.Info($"[config]use consul for services discovery, consul ip: {ip}:{port}, service cateogry: {serviceGroups}");
 
                 var clientDiscovery = container.Resolve<IClientServiceDiscovery>();
                 clientDiscovery.AddRoutesGetter(async () =>
                 {
                     var consul = new ConsulClient(config => { config.Address = new Uri($"http://{ip}:{port}"); });
-                    var queryResult = await consul.KV.Keys(serviceCategory);
-                    var keys = queryResult.Response;
-                    if (keys == null)
+                    HashSet<string> keyset = new HashSet<string>();
+                    foreach (var group in serviceGroups.Split(','))
+                    {
+                        if (string.IsNullOrEmpty(group)) continue;
+                        var queryResult = await consul.KV.Keys(group);
+                        if (queryResult == null || queryResult.Response == null) continue;
+
+                        foreach (var key in queryResult.Response)
+                        {
+                            keyset.Add(key);
+                        }
+                    }
+                    if (!keyset.Any())
                     {
                         return null;
                     }
 
                     var routes = new List<JimuServiceRoute>();
-                    foreach (var key in keys)
+                    foreach (var key in keyset)
                     {
                         var data = (await consul.KV.Get(key)).Response?.Value;
                         if (data == null)

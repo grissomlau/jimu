@@ -17,17 +17,17 @@ namespace Jimu.Server
         /// <param name="serviceHostBuilder"></param>
         /// <param name="consulIp">server ip</param>
         /// <param name="consulPort">server port</param>
-        /// <param name="serviceCategory">server category name</param>
+        /// <param name="serviceGroups">which group the service register to, multiple group seperate with ','</param>
         /// <param name="serverAddress">server address</param>
         /// <returns></returns>
-        public static IServiceHostServerBuilder UseConsulForDiscovery(this IServiceHostServerBuilder serviceHostBuilder, string consulIp, int consulPort, string serviceCategory, string serverAddress)
+        public static IServiceHostServerBuilder UseConsulForDiscovery(this IServiceHostServerBuilder serviceHostBuilder, string consulIp, int consulPort, string serviceGroups, string serverAddress)
         {
             serviceHostBuilder.RegisterService(containerBuilder =>
             {
                 containerBuilder.RegisterType<ConsulServiceDiscovery>().As<IServiceDiscovery>()
                     .WithParameter("ip", consulIp)
                     .WithParameter("port", consulPort)
-                    .WithParameter("serviceCategory", serviceCategory)
+                    .WithParameter("serviceGroups", serviceGroups)
                     .WithParameter("serverAddress", serverAddress)
                     .SingleInstance();
             });
@@ -37,12 +37,12 @@ namespace Jimu.Server
            {
                while (!container.IsRegistered<IServer>())
                {
-                    //default(SpinWait).SpinOnce();
-                    Thread.Sleep(200);
+                   //default(SpinWait).SpinOnce();
+                   Thread.Sleep(200);
                }
 
                var logger = container.Resolve<ILogger>();
-               logger.Info($"[config]use consul for services discovery, consul ip: {consulIp}:{consulPort}, service cateogry: {serviceCategory}, server address: {serverAddress} ");
+               logger.Info($"[config]use consul for services discovery, consul ip: {consulIp}:{consulPort}, service group: {serviceGroups}, server address: {serverAddress} ");
 
                IServer server = container.Resolve<IServer>();
                var routes = server.GetServiceRoutes();
@@ -51,12 +51,12 @@ namespace Jimu.Server
                try
                {
                    var discovery = container.Resolve<IServiceDiscovery>();
-                    //if (!string.IsNullOrEmpty(serverAddress))
-                    //{
-                    //    await discovery.ClearAsync(serverAddress);
-                    //}
+                   //if (!string.IsNullOrEmpty(serverAddress))
+                   //{
+                   //    await discovery.ClearAsync(serverAddress);
+                   //}
 
-                    discovery.ClearAsync().Wait();
+                   discovery.ClearAsync().Wait();
                    discovery.SetRoutesAsync(routes).Wait();
                }
                catch (Exception ex)

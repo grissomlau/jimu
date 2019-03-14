@@ -10,14 +10,14 @@ namespace Jimu.Server.Discovery.ConsulIntegration
     public class ConsulServiceDiscovery : IServiceDiscovery, IDisposable
     {
         private readonly ConsulClient _consul;
-        private readonly string _serviceCategory;
+        private readonly List<string> _serviceGroups;
         private readonly string _serverAddress;
 
         private List<JimuServiceRoute> _routes;
-        public ConsulServiceDiscovery(string ip, int port, string serviceCategory, string serverAddress)
+        public ConsulServiceDiscovery(string ip, int port, string serviceGroups, string serverAddress)
         {
             _routes = new List<JimuServiceRoute>();
-            _serviceCategory = serviceCategory;
+            _serviceGroups = serviceGroups.Split(',').ToList();
             _serverAddress = serverAddress;
             _consul = new ConsulClient(config =>
             {
@@ -36,7 +36,13 @@ namespace Jimu.Server.Discovery.ConsulIntegration
             {
                 return _routes.ToList();
             }
-            var data = (await _consul.KV.Get(GetKey())).Response?.Value;
+            byte[] data = null;
+            foreach (var key in GetKey())
+            {
+                data = (await _consul.KV.Get(key)).Response?.Value;
+                if (data != null && data.Length > 0) break;
+            }
+
             if (data == null)
             {
                 return _routes;
@@ -78,7 +84,10 @@ namespace Jimu.Server.Discovery.ConsulIntegration
 
         public async Task ClearAsync()
         {
-            await _consul.KV.Delete(GetKey());
+            foreach (var key in GetKey())
+            {
+                await _consul.KV.Delete(key);
+            }
             //var queryResult = await _consul.KV.List(_serviceCategory);
             //var response = queryResult.Response;
             //if (response != null)
@@ -110,8 +119,11 @@ namespace Jimu.Server.Discovery.ConsulIntegration
 
             //await SetRoutesAsync(routeDescriptors);
             var nodeData = JimuHelper.Serialize<byte[]>(routeDescriptors);
-            var keyValuePair = new KVPair(GetKey()) { Value = nodeData };
-            await _consul.KV.Put(keyValuePair);
+            foreach (var key in GetKey())
+            {
+                var keyValuePair = new KVPair(key) { Value = nodeData };
+                await _consul.KV.Put(keyValuePair);
+            }
         }
 
         public async Task AddRouteAsync(List<JimuServiceRoute> routes)
@@ -125,9 +137,9 @@ namespace Jimu.Server.Discovery.ConsulIntegration
             await SetRoutesAsync(curRoutes);
         }
 
-        private string GetKey()
+        private List<string> GetKey()
         {
-            return $"{_serviceCategory}-{_serverAddress}";
+            return _serviceGroups.Select(x => $"{x}-{_serverAddress}").ToList();
         }
 
         private async Task<JimuServiceRoute> GetRoute(string path)

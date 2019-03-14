@@ -3,6 +3,8 @@ using Autofac;
 using Jimu;
 using Jimu.Client;
 using IServices;
+using System.Threading;
+using System.Diagnostics;
 
 namespace Client
 {
@@ -11,6 +13,7 @@ namespace Client
         static void Main(string[] args)
         {
             Console.WriteLine("Hello client!");
+            var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTI1ODM4NjUsInVzZXJuYW1lIjoiYWRtaW4iLCJkZXBhcnRtZW50IjoiSVTpg6gifQ.tx4etoJenyjsujHP5QGwSlhgyl9n2ftn-UziyGIIDPo";
 
             var container = new ContainerBuilder();
             var host = new ServiceHostClientBuilder(container)
@@ -18,17 +21,23 @@ namespace Client
                 .UsePollingAddressSelector()
                 .UseConsulForDiscovery("127.0.0.1", 8500, "JimuService-")
                 .UseHttpForTransfer()
-                //.UseDotNettyForTransfer()
-                //.UseToken(() => "token")
+                .UseDotNettyForTransfer()
+                .UseToken(() => token)
                 .UseServiceProxy(new[] { "IServices" })
                 .Build();
             host.Run();
-            var proxy = host.Container.Resolve<IServiceProxy>();
+
+            Stopwatch watch = new Stopwatch();
             while (Console.Read() != 'q')
             {
+                watch.Reset();
+                watch.Start();
+
+                var proxy = host.Container.Resolve<IServiceProxy>();
                 var echo = proxy.GetService<IEchoService>();
                 var name = echo.GetEcho("test");
-                Console.WriteLine("return:  " + name);
+                watch.Stop();
+                Console.WriteLine($"take time {watch.ElapsedMilliseconds}," + "return:  " + name);
             }
 
             Console.ReadKey();
