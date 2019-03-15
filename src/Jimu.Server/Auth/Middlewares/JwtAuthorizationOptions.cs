@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Jimu.Server.OAuth
+namespace Jimu.Server.Auth
 {
     public class JwtAuthorizationOptions
     {

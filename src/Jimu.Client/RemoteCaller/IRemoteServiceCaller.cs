@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Jimu.Client
 {
+    public delegate Task<JimuRemoteCallResultData> ClientRequestDel(RemoteCallerContext context);
     public interface IRemoteServiceCaller
     {
         /// <summary>
@@ -24,5 +26,13 @@ namespace Jimu.Client
         Task<T> InvokeAsync<T>(string serviceIdOrPath, IDictionary<string, object> paras);
 
         Task<JimuRemoteCallResultData> InvokeAsync(JimuServiceRoute service, IDictionary<string, object> paras, string token);
+
+
+        /// <summary>
+        ///     add middleware in request
+        /// </summary>
+        /// <param name="middleware"></param>
+        /// <returns></returns>
+        IRemoteServiceCaller Use(Func<ClientRequestDel, ClientRequestDel> middleware);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Text;
 using Autofac;
 using Jimu.ApiGateway.Model;
@@ -91,13 +92,33 @@ namespace Jimu.ApiGateway
                     EnableFileLog = true,
                     FileLogLevel = LogLevel.Info | LogLevel.Error,
                 })
-                .UseConsulForDiscovery("127.0.0.1", 8500, "hi")
+                .UseConsulForDiscovery("127.0.0.1", 8500, "hello")
                 .UseDotNettyForTransfer()
                 .UseHttpForTransfer()
                 .UsePollingAddressSelector()
                 .UseServerHealthCheck(1)
                 .SetDiscoveryAutoUpdateJobInterval(1)
                 .UseToken(() => { var headers = JimuHttpContext.Current.Request.Headers["Authorization"]; return headers.Any() ? headers[0] : null; })
+                .UseJoseJwtForOAuth<HttpAddress>(new Client.Auth.JwtAuthorizationOptions()
+                {
+                    ServerIp = "127.0.0.1",
+                    ServerPort = 5001,
+                    SecretKey = "test",
+                    ExpireTimeSpan = new TimeSpan(1, 0, 0),
+                    TokenEndpointPath = "/api/client/token",
+                    ValidateLifetime = true,
+                    CheckCredential = o =>
+                    {
+                        if (o.UserName == "admin" && o.Password == "admin")
+                        {
+                            o.AddClaim("department", "IT部");
+                        }
+                        else
+                        {
+                            o.Rejected("401", "acount or password incorrect");
+                        }
+                    }
+                })
                 .Build();
             app.UseJimu(host);
             host.Run();

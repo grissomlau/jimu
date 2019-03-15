@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Jimu.Extension;
 using Jose;
 
-namespace Jimu.Server.OAuth
+namespace Jimu.Server.Auth
 {
     /// <summary>
     /// support jwt middleware

@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Jimu.Client.RemoteCaller;
 
 namespace Jimu.Client
 {

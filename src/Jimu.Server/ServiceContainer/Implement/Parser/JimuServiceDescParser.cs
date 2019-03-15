@@ -53,7 +53,7 @@ namespace Jimu.Server.Implement.Parser
             var routeTemplate = type.GetCustomAttribute<JimuServiceRouteAttribute>();
             if (routeTemplate != null)
                 desc.RoutePath = JimuServiceRoute.ParseRoutePath(routeTemplate.RouteTemplate, type.Name,
-                    methodInfo.Name, methodInfo.GetParameters(), type.IsInterface);
+                    methodInfo.Name, methodInfo.GetParameters().Select(x => x.Name).ToArray(), type.IsInterface);
             return desc;
         }
 

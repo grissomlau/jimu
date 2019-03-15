@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading;
 using Autofac;
-using Jimu.Server.OAuth;
+using Jimu.Server.Auth;
 
 namespace Jimu.Server
 {
@@ -13,7 +13,7 @@ namespace Jimu.Server
             serviceHostBuilder.AddInitializer(container =>
             {
                 var logger = container.Resolve<ILogger>();
-                logger.Info($"[config]use jose.jwt for OAuth");
+                logger.Info($"[config]use jose.jwt for Auth");
 
                 while (!container.IsRegistered<IServer>() || !container.IsRegistered<IServiceDiscovery>())
                 {

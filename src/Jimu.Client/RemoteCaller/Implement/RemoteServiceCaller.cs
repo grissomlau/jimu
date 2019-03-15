@@ -15,6 +15,7 @@ namespace Jimu.Client
         private readonly IServiceTokenGetter _serviceTokenGetter;
         private readonly ClientSenderFactory _clientSenderFactory;
         private int _retryTimes;
+        private readonly Stack<Func<ClientRequestDel, ClientRequestDel>> _middlewares;
 
         public RemoteServiceCaller(IClientServiceDiscovery serviceDiscovery,
             IAddressSelector addressSelector,
@@ -29,6 +30,7 @@ namespace Jimu.Client
             _serviceTokenGetter = serviceTokenGetter;
             _logger = logger;
             _retryTimes = retryTimes;
+            _middlewares = new Stack<Func<ClientRequestDel, ClientRequestDel>>();
         }
 
         public async Task<T> InvokeAsync<T>(string serviceIdOrPath, IDictionary<string, object> paras)
@@ -94,45 +96,54 @@ namespace Jimu.Client
         public async Task<JimuRemoteCallResultData> InvokeAsync(JimuServiceRoute service, IDictionary<string, object> paras,
             string token)
         {
-            if (paras == null) paras = new ConcurrentDictionary<string, object>();
-            var address = await _addressSelector.GetAddressAsyn(service);
-            if (_retryTimes < 0)
+            var lastInvoke = new ClientRequestDel(async context =>
             {
-                _retryTimes = service.Address.Count;
-            }
-            JimuRemoteCallResultData result = null;
-            var retryPolicy = Policy.Handle<TransportException>()
-                .RetryAsync(_retryTimes,
-                    async (ex, count) =>
-                    {
-                        address = await _addressSelector.GetAddressAsyn(service);
-                        _logger.Debug(
-                            $"FaultHandling,retry times: {count},serviceId: {service.ServiceDescriptor.Id},Address: {address.Code},RemoteServiceCaller execute retry by Polly for exception {ex.Message}");
-                    });
-            var fallbackPolicy = Policy<JimuRemoteCallResultData>.Handle<TransportException>()
-                .FallbackAsync(new JimuRemoteCallResultData() { ErrorCode = "500", ErrorMsg = "error occur when communicate with server. server maybe have been down." })
-                .WrapAsync(retryPolicy);
-            return await fallbackPolicy.ExecuteAsync(async () =>
-                    {
-                        var client = _clientSenderFactory.CreateClientSender(address);
-                        if (client == null)
-                            return new JimuRemoteCallResultData
-                            {
-                                ErrorCode = "400",
-                                ErrorMsg = "Server unavailable!"
-                            };
-                        _logger.Debug($"invoke: serviceId:{service.ServiceDescriptor.Id}, parameters count: {paras.Count()}, token:{token}");
-                        //Polly.Policy.Handle<>()
-
-                        result = await client.SendAsync(new JimuRemoteCallData
+                if (paras == null) paras = new ConcurrentDictionary<string, object>();
+                var address = await _addressSelector.GetAddressAsyn(service);
+                if (_retryTimes < 0)
+                {
+                    _retryTimes = service.Address.Count;
+                }
+                JimuRemoteCallResultData result = null;
+                var retryPolicy = Policy.Handle<TransportException>()
+                    .RetryAsync(_retryTimes,
+                        async (ex, count) =>
                         {
-                            Parameters = paras,
-                            ServiceId = service.ServiceDescriptor.Id,
-                            Token = token,
-                            Descriptor = service.ServiceDescriptor
+                            address = await _addressSelector.GetAddressAsyn(service);
+                            _logger.Debug(
+                                $"FaultHandling,retry times: {count},serviceId: {service.ServiceDescriptor.Id},Address: {address.Code},RemoteServiceCaller execute retry by Polly for exception {ex.Message}");
                         });
-                        return result;
+                var fallbackPolicy = Policy<JimuRemoteCallResultData>.Handle<TransportException>()
+                    .FallbackAsync(new JimuRemoteCallResultData() { ErrorCode = "500", ErrorMsg = "error occur when communicate with server. server maybe have been down." })
+                    .WrapAsync(retryPolicy);
+                return await fallbackPolicy.ExecuteAsync(async () =>
+                {
+                    var client = _clientSenderFactory.CreateClientSender(address);
+                    if (client == null)
+                        return new JimuRemoteCallResultData
+                        {
+                            ErrorCode = "400",
+                            ErrorMsg = "Server unavailable!"
+                        };
+                    _logger.Debug($"invoke: serviceId:{service.ServiceDescriptor.Id}, parameters count: {paras.Count()}, token:{token}");
+                    //Polly.Policy.Handle<>()
+
+                    result = await client.SendAsync(new JimuRemoteCallData
+                    {
+                        Parameters = paras,
+                        ServiceId = service.ServiceDescriptor.Id,
+                        Token = token,
+                        Descriptor = service.ServiceDescriptor
                     });
+                    return result;
+                });
+            });
+            foreach (var mid in _middlewares)
+            {
+                lastInvoke = mid(lastInvoke);
+            }
+
+            return await lastInvoke(new RemoteCallerContext(service, paras, token));
         }
 
         private async Task<JimuServiceRoute> GetServiceByPathAsync(string path, IDictionary<string, object> paras)
@@ -160,6 +171,12 @@ namespace Jimu.Client
             path = path.TrimEnd('&');
 
             return path;
+        }
+
+        public IRemoteServiceCaller Use(Func<ClientRequestDel, ClientRequestDel> middleware)
+        {
+            this._middlewares.Push(middleware);
+            return this;
         }
     }
 }

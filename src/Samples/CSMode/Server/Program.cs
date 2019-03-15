@@ -21,7 +21,7 @@ namespace Server1
                     //.UseHttpForTransfer("127.0.0.1", 8007)// http server ip and port,becareful the firewall blocker
                     .UseConsulForDiscovery("127.0.0.1", 8500, "JimuService-", "127.0.0.1:8009")
                     .UseDotNettyForTransfer("127.0.0.1",8009)
-                                                 .UseJoseJwtForOAuth<DotNettyAddress>(new Jimu.Server.OAuth.JwtAuthorizationOptions
+                                                 .UseJoseJwtForOAuth<DotNettyAddress>(new Jimu.Server.Auth.JwtAuthorizationOptions
                                                  {
                                                      ServerIp = "127.0.0.1",
                                                      ServerPort = 8009,

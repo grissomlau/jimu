@@ -13,7 +13,7 @@ namespace Jimu
         public JimuServiceDesc ServiceDescriptor { get; set; }
 
         public static string ParseRoutePath(string routeTemplet, string service, string method,
-            ParameterInfo[] parameterInfos, bool isInterface)
+            string[] paraNames, bool isInterface)
         {
             var result = new StringBuilder();
             var parameters = routeTemplet?.Split('/');// "/api/{ServiceName}" or "/api/UserService"
@@ -38,18 +38,18 @@ namespace Jimu
             result.Append(method);
             result = new StringBuilder(result.ToString().ToLower());
 
-            if (!parameterInfos.Any())
+            if (!paraNames.Any())
                 return result.ToString().TrimEnd('&', '/', '\\').TrimStart('/', '\\');
 
             result.Append("?");
-            foreach (var para in parameterInfos)
+            foreach (var para in paraNames)
                 //if (para.IsOptional)
                 //{
                 //    result.Append($"[{para.Name}]=&");
                 //}
                 //else
                 //{
-                result.Append($"{para.Name}=&");
+                result.Append($"{para}=&");
             //}
 
             return result.ToString().TrimEnd('&', '/', '\\').TrimStart('/', '\\');
