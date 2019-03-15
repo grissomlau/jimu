@@ -28,7 +28,7 @@ namespace Jimu.ApiGateway
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
-            services.UseJimuSwagger("My API");
+            services.UseJimuSwagger(new Client.ApiGateway.SwaggerIntegration.JimuSwaggerOptions("My API"));
             services.UseJimu();
 
             /********** below is the jwt just for local apigateway controller not for the services
@@ -92,12 +92,12 @@ namespace Jimu.ApiGateway
                     EnableFileLog = true,
                     FileLogLevel = LogLevel.Info | LogLevel.Error,
                 })
-                .UseConsulForDiscovery("127.0.0.1", 8500, "hello")
+                .UseConsulForDiscovery(new Client.Discovery.ConsulIntegration.ConsulOptions("127.0.0.1", 8500, "hello"))
                 .UseDotNettyForTransfer()
                 .UseHttpForTransfer()
                 .UsePollingAddressSelector()
                 .UseServerHealthCheck(1)
-                .SetDiscoveryAutoUpdateJobInterval(1)
+                .SetDiscoveryAutoUpdateJobInterval(new Client.Discovery.Implement.DiscoveryOptions(1))
                 .UseToken(() => { var headers = JimuHttpContext.Current.Request.Headers["Authorization"]; return headers.Any() ? headers[0] : null; })
                 .UseJoseJwtForOAuth<HttpAddress>(new Client.Auth.JwtAuthorizationOptions()
                 {

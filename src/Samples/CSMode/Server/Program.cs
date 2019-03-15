@@ -19,8 +19,8 @@ namespace Server1
                     .LoadServices(new[] { "IServices", "Services" })
                     .UseLog4netLogger(new LogOptions { EnableConsoleLog = true })
                     //.UseHttpForTransfer("127.0.0.1", 8007)// http server ip and port,becareful the firewall blocker
-                    .UseConsulForDiscovery("127.0.0.1", 8500, "JimuService-", "127.0.0.1:8009")
-                    .UseDotNettyForTransfer("127.0.0.1",8009)
+                    .UseConsulForDiscovery(new Jimu.Server.Discovery.ConsulIntegration.ConsulOptions("127.0.0.1", 8500, "JimuService-", "127.0.0.1:8009"))
+                    .UseDotNettyForTransfer(new Jimu.Server.Transport.DotNetty.DotNettyOptions("127.0.0.1", 8009))
                                                  .UseJoseJwtForOAuth<DotNettyAddress>(new Jimu.Server.Auth.JwtAuthorizationOptions
                                                  {
                                                      ServerIp = "127.0.0.1",
@@ -56,10 +56,10 @@ namespace Server1
             var host = new Jimu.Client.ServiceHostClientBuilder(containerBuilder)
                 //.UseLog4netLogger(new LogOptions { EnableConsoleLog = true })
                 .UsePollingAddressSelector()
-                .UseConsulForDiscovery("127.0.0.1", 8500, "JimuService-")
+                .UseConsulForDiscovery(new Jimu.Client.Discovery.ConsulIntegration.ConsulOptions("127.0.0.1", 8500, "JimuService-"))
                 .UseDotNettyForTransfer()
                 .UseHttpForTransfer()
-                .UseServiceProxy(new[] { "IServices" })
+                .UseServiceProxy(new Jimu.Client.Proxy.ServiceProxyOptions(new[] { "IServices" }))
                 .Build()
                 ;
             host.Run();

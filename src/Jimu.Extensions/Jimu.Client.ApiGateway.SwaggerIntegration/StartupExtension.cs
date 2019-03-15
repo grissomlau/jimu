@@ -24,12 +24,12 @@ namespace Jimu.Client.ApiGateway
             app.UseSwagger();
             return app;
         }
-        public static IServiceCollection UseJimuSwagger(this IServiceCollection services, string title = "Jimu API", string version = "v1")
+        public static IServiceCollection UseJimuSwagger(this IServiceCollection services, JimuSwaggerOptions options)
         {
             services.AddSwaggerGen(c =>
             {
                 c.DocumentFilter<JimuSwaggerDocumentFilter>();
-                c.SwaggerDoc(version, new Info { Title = title, Version = version });
+                c.SwaggerDoc(options.Version, new Info { Title = options.Title, Version = options.Version });
             });
             return services;
         }

@@ -18,7 +18,7 @@ namespace Server2.HttpForTransfer
                     EnableConsoleLog = true
                 })
                 .LoadServices(new[] { "IServices", "Services" })
-                .UseHttpForTransfer("127.0.0.1", 8006)
+                .UseHttpForTransfer(new Jimu.Server.Transport.Http.HttpOptions("127.0.0.1", 8006))
                 ;
             using (var hostJimu = builder.Build())
             {

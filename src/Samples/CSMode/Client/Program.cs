@@ -19,11 +19,11 @@ namespace Client
             var host = new ServiceHostClientBuilder(container)
                 .UseLog4netLogger(new LogOptions { EnableConsoleLog = true })
                 .UsePollingAddressSelector()
-                .UseConsulForDiscovery("127.0.0.1", 8500, "JimuService-")
+                .UseConsulForDiscovery(new Jimu.Client.Discovery.ConsulIntegration.ConsulOptions("127.0.0.1", 8500, "JimuService-"))
                 .UseHttpForTransfer()
                 .UseDotNettyForTransfer()
                 .UseToken(() => token)
-                .UseServiceProxy(new[] { "IServices" })
+                .UseServiceProxy(new Jimu.Client.Proxy.ServiceProxyOptions( new[] { "IServices" }))
                 .Build();
             host.Run();
 

@@ -1,4 +1,4 @@
-﻿namespace Jimu.Server.Discovery.ConsulIntegration
+﻿namespace Jimu.Client.Discovery.ConsulIntegration
 {
     public class ConsulOptions
     {
@@ -10,19 +10,17 @@
         /// consul port
         /// </summary>
         public int Port { get; set; }
-        /// which groups to extract, multiple seperate with ','
-        public string ServiceGroups { get; set; }
         /// <summary>
-        /// server address, format like: ip:port, e.g.: 192.168.0.10:8080
+        /// which groups to extract, multiple seperate with ','
         /// </summary>
-        public string ServerAddress { get; set; }
+        public string ServiceGroups { get; set; }
 
-        public ConsulOptions(string ip, int port, string serviceGroups, string serverAddress)
+
+        public ConsulOptions(string ip, int port, string serviceGroups)
         {
             this.Ip = ip;
             this.Port = port;
             this.ServiceGroups = serviceGroups;
-            this.ServerAddress = serverAddress;
         }
 
         public ConsulOptions() { }

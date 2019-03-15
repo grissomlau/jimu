@@ -16,8 +16,8 @@ namespace Server2.HttpForTransfer
                     EnableConsoleLog = true
                 })
                 .LoadServices(new[] { "IServices", "Services" })
-                .UseHttpForTransfer("127.0.0.1", 8008)
-                .UseConsulForDiscovery("127.0.0.1", 8500, "JimuService-", "127.0.0.1:8008")
+                .UseHttpForTransfer(new Jimu.Server.Transport.Http.HttpOptions("127.0.0.1", 8008))
+                .UseConsulForDiscovery(new Jimu.Server.Discovery.ConsulIntegration.ConsulOptions("127.0.0.1", 8500, "JimuService-", "127.0.0.1:8008"))
                 ;
             using (var hostJimu = builder.Build())
             {

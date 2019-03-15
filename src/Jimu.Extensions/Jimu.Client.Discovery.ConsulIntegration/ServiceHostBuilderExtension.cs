@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Consul;
+using Jimu.Client.Discovery.ConsulIntegration;
 
 namespace Jimu.Client
 {
@@ -12,25 +13,21 @@ namespace Jimu.Client
         /// <summary>
         /// discovery service
         /// </summary>
-        /// <param name="serviceHostBuilder"></param>
-        /// <param name="ip"></param>
-        /// <param name="port"></param>
-        /// <param name="serviceGroups">which groups to extract, multiple seperate with ','</param>
+        /// <param name="serviceGroups"></param>
         /// <returns></returns>
-        public static IServiceHostClientBuilder UseConsulForDiscovery(this IServiceHostClientBuilder serviceHostBuilder,
-            string ip, int port, string serviceGroups)
+        public static IServiceHostClientBuilder UseConsulForDiscovery(this IServiceHostClientBuilder serviceHostBuilder, ConsulOptions options)
         {
             serviceHostBuilder.AddInitializer(container =>
             {
                 var logger = container.Resolve<ILogger>();
-                logger.Info($"[config]use consul for services discovery, consul ip: {ip}:{port}, service cateogry: {serviceGroups}");
+                logger.Info($"[config]use consul for services discovery, consul ip: {options.Ip}:{options.Port}, service cateogry: {options.ServiceGroups}");
 
                 var clientDiscovery = container.Resolve<IClientServiceDiscovery>();
                 clientDiscovery.AddRoutesGetter(async () =>
                 {
-                    var consul = new ConsulClient(config => { config.Address = new Uri($"http://{ip}:{port}"); });
+                    var consul = new ConsulClient(config => { config.Address = new Uri($"http://{options.Ip}:{options.Port}"); });
                     HashSet<string> keyset = new HashSet<string>();
-                    foreach (var group in serviceGroups.Split(','))
+                    foreach (var group in options.ServiceGroups.Split(','))
                     {
                         if (string.IsNullOrEmpty(group)) continue;
                         var queryResult = await consul.KV.Keys(group);

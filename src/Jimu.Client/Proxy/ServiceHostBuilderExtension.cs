@@ -3,13 +3,14 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
 using Autofac;
+using Jimu.Client.Proxy;
 using Jimu.Client.Proxy.CodeAnalysisIntegration;
 
 namespace Jimu.Client
 {
     public static partial class ServiceHostBuilderExtension
     {
-        public static IServiceHostClientBuilder UseServiceProxy(this IServiceHostClientBuilder serviceHostBuilder, string[] assemblyNames)
+        public static IServiceHostClientBuilder UseServiceProxy(this IServiceHostClientBuilder serviceHostBuilder, ServiceProxyOptions options)
         {
             serviceHostBuilder.RegisterService(containerBuilder =>
             {
@@ -19,7 +20,7 @@ namespace Jimu.Client
             });
 
             var assemblies = new List<Assembly>();
-            foreach (var assemblyName in assemblyNames)
+            foreach (var assemblyName in options.AssemblyNames)
             {
                 var assembly = AssemblyLoadContext.Default.LoadFromAssemblyName(new AssemblyName(assemblyName));
                 assemblies.Add(assembly);

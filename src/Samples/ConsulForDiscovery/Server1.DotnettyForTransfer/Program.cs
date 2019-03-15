@@ -18,8 +18,8 @@ namespace Server1.DotnettyForTransfer
                     EnableConsoleLog = true
                 })
                 .LoadServices(new[] { "IServices", "Services" })
-                .UseDotNettyForTransfer("127.0.0.1", 8003, server => { })
-                .UseConsulForDiscovery("127.0.0.1", 8500, "JimuService-", "127.0.0.1:8003")
+                .UseDotNettyForTransfer(new Jimu.Server.Transport.DotNetty.DotNettyOptions("127.0.0.1", 8003), server => { })
+                .UseConsulForDiscovery(new Jimu.Server.Discovery.ConsulIntegration.ConsulOptions("127.0.0.1", 8500, "JimuService-", "127.0.0.1:8003"))
                 ;
             using (var hostJimu = builder.Build())
             {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
 using Autofac;
+using Jimu.Server.ServiceContainer.Implement;
 
 namespace Jimu.Server
 {
@@ -39,6 +40,11 @@ namespace Jimu.Server
             return serviceHostBuilder;
         }
 
+
+        public static IServiceHostServerBuilder LoadServices(this IServiceHostServerBuilder serviceHostBuilder, ServiceOptions options)
+        {
+            return DoLoadServices(serviceHostBuilder, options.AssemblyNames);
+        }
         /// <summary>
         ///     load service(which must inherit from IServiceKey, and load Module of autofac
         ///     note: only one LoadServices invoke is affect, so don't double invoke LoadServices
@@ -51,7 +57,12 @@ namespace Jimu.Server
 
             //var serviceTypes = assemblies.SelectMany(x => x.ExportedTypes)
             //    .Where(x => x.GetMethods().Any(y => y.GetCustomAttribute<JimuServiceAttribute>() != null)).ToList();
+            return DoLoadServices(serviceHostBuilder, assemblyNames);
 
+        }
+
+        private static IServiceHostServerBuilder DoLoadServices(IServiceHostServerBuilder serviceHostBuilder, string[] assemblyNames)
+        {
 
             serviceHostBuilder.RegisterService(containerBuilder =>
             {

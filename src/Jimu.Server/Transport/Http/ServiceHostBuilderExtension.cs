@@ -7,11 +7,11 @@ namespace Jimu.Server
 {
     public static partial class ServiceHostBuilderExtension
     {
-        public static IServiceHostServerBuilder UseHttpForTransfer(this IServiceHostServerBuilder serviceHostBuilder, string ip, int port, Action<IServer> action = null, Action<IWebHostBuilder> builderAction = null)
+        public static IServiceHostServerBuilder UseHttpForTransfer(this IServiceHostServerBuilder serviceHostBuilder, HttpOptions options, Action<IServer> action = null, Action<IWebHostBuilder> builderAction = null)
         {
             serviceHostBuilder.RegisterService(containerBuilder =>
             {
-                containerBuilder.RegisterType<HttpServer>().As<IServer>().WithParameter("ip", ip).WithParameter("port", port).WithParameter("builderAction", builderAction).SingleInstance();
+                containerBuilder.RegisterType<HttpServer>().As<IServer>().WithParameter("ip", options.Ip).WithParameter("port", options.Port).WithParameter("builderAction", builderAction).SingleInstance();
             });
 
             serviceHostBuilder.AddRunner(container =>

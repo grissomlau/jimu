@@ -6,11 +6,11 @@ namespace Jimu.Server
 {
     public static partial class ServiceHostBuilderExtension
     {
-        public static IServiceHostServerBuilder UseDotNettyForTransfer(this IServiceHostServerBuilder serviceHostBuilder, string ip, int port, Action<IServer> action = null)
+        public static IServiceHostServerBuilder UseDotNettyForTransfer(this IServiceHostServerBuilder serviceHostBuilder, DotNettyOptions options, Action<IServer> action = null)
         {
             serviceHostBuilder.RegisterService(containerBuilder =>
             {
-                containerBuilder.RegisterType<DotNettyServer>().As<IServer>().WithParameter("address", new DotNettyAddress(ip, port)).SingleInstance();
+                containerBuilder.RegisterType<DotNettyServer>().As<IServer>().WithParameter("address", new DotNettyAddress(options.Ip, options.Port)).SingleInstance();
             });
 
             serviceHostBuilder.AddInitializer(container =>

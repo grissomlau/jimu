@@ -14,21 +14,16 @@ namespace Jimu.Server
         /// <summary>
         /// use consul for discovery server
         /// </summary>
-        /// <param name="serviceHostBuilder"></param>
-        /// <param name="consulIp">server ip</param>
-        /// <param name="consulPort">server port</param>
-        /// <param name="serviceGroups">which group the service register to, multiple group seperate with ','</param>
-        /// <param name="serverAddress">server address</param>
         /// <returns></returns>
-        public static IServiceHostServerBuilder UseConsulForDiscovery(this IServiceHostServerBuilder serviceHostBuilder, string consulIp, int consulPort, string serviceGroups, string serverAddress)
+        public static IServiceHostServerBuilder UseConsulForDiscovery(this IServiceHostServerBuilder serviceHostBuilder, ConsulOptions options)
         {
             serviceHostBuilder.RegisterService(containerBuilder =>
             {
                 containerBuilder.RegisterType<ConsulServiceDiscovery>().As<IServiceDiscovery>()
-                    .WithParameter("ip", consulIp)
-                    .WithParameter("port", consulPort)
-                    .WithParameter("serviceGroups", serviceGroups)
-                    .WithParameter("serverAddress", serverAddress)
+                    .WithParameter("ip", options.Ip)
+                    .WithParameter("port", options.Port)
+                    .WithParameter("serviceGroups", options.ServiceGroups)
+                    .WithParameter("serverAddress", options.ServerAddress)
                     .SingleInstance();
             });
 
@@ -42,7 +37,7 @@ namespace Jimu.Server
                }
 
                var logger = container.Resolve<ILogger>();
-               logger.Info($"[config]use consul for services discovery, consul ip: {consulIp}:{consulPort}, service group: {serviceGroups}, server address: {serverAddress} ");
+               logger.Info($"[config]use consul for services discovery, consul ip: {options.Ip}:{options.Port}, service group: {options.ServiceGroups}, server address: {options.ServerAddress} ");
 
                IServer server = container.Resolve<IServer>();
                var routes = server.GetServiceRoutes();

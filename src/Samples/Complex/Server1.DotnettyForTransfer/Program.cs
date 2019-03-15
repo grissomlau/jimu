@@ -19,8 +19,8 @@ namespace Server1.DotnettyForTransfer
                 })
                 //.LoadServices(new[] { "IServices", "Services" })
                 .LoadServices("services")
-                .UseDotNettyForTransfer("127.0.0.1", 8005, server => { })
-                .UseConsulForDiscovery("127.0.0.1", 8500, "JimuService,hello", "127.0.0.1:8005")
+                .UseDotNettyForTransfer(new Jimu.Server.Transport.DotNetty.DotNettyOptions("127.0.0.1", 8005), server => { })
+                .UseConsulForDiscovery(new Jimu.Server.Discovery.ConsulIntegration.ConsulOptions("127.0.0.1", 8500, "JimuService,hello", "127.0.0.1:8005"))
                 //.UseJoseJwtForOAuth<DotNettyAddress>(new Jimu.Server.Auth.JwtAuthorizationOptions
                 //{
                 //    ServerIp = "127.0.0.1",
