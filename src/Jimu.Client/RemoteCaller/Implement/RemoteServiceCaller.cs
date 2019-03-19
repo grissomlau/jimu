@@ -14,22 +14,19 @@ namespace Jimu.Client
         private readonly IClientServiceDiscovery _serviceDiscovery;
         private readonly IServiceTokenGetter _serviceTokenGetter;
         private readonly ClientSenderFactory _clientSenderFactory;
-        private int _retryTimes;
         private readonly Stack<Func<ClientRequestDel, ClientRequestDel>> _middlewares;
 
         public RemoteServiceCaller(IClientServiceDiscovery serviceDiscovery,
             IAddressSelector addressSelector,
             ClientSenderFactory clientSenderFactory,
             IServiceTokenGetter serviceTokenGetter,
-            ILogger logger,
-            int retryTimes = -1)
+            ILogger logger)
         {
             _serviceDiscovery = serviceDiscovery;
             _addressSelector = addressSelector;
             _clientSenderFactory = clientSenderFactory;
             _serviceTokenGetter = serviceTokenGetter;
             _logger = logger;
-            _retryTimes = retryTimes;
             _middlewares = new Stack<Func<ClientRequestDel, ClientRequestDel>>();
         }
 
@@ -96,54 +93,37 @@ namespace Jimu.Client
         public async Task<JimuRemoteCallResultData> InvokeAsync(JimuServiceRoute service, IDictionary<string, object> paras,
             string token)
         {
-            var lastInvoke = new ClientRequestDel(async context =>
-            {
-                if (paras == null) paras = new ConcurrentDictionary<string, object>();
-                var address = await _addressSelector.GetAddressAsyn(service);
-                if (_retryTimes < 0)
-                {
-                    _retryTimes = service.Address.Count;
-                }
-                JimuRemoteCallResultData result = null;
-                var retryPolicy = Policy.Handle<TransportException>()
-                    .RetryAsync(_retryTimes,
-                        async (ex, count) =>
-                        {
-                            address = await _addressSelector.GetAddressAsyn(service);
-                            _logger.Debug(
-                                $"FaultHandling,retry times: {count},serviceId: {service.ServiceDescriptor.Id},Address: {address.Code},RemoteServiceCaller execute retry by Polly for exception {ex.Message}");
-                        });
-                var fallbackPolicy = Policy<JimuRemoteCallResultData>.Handle<TransportException>()
-                    .FallbackAsync(new JimuRemoteCallResultData() { ErrorCode = "500", ErrorMsg = "error occur when communicate with server. server maybe have been down." })
-                    .WrapAsync(retryPolicy);
-                return await fallbackPolicy.ExecuteAsync(async () =>
-                {
-                    var client = _clientSenderFactory.CreateClientSender(address);
-                    if (client == null)
-                        return new JimuRemoteCallResultData
-                        {
-                            ErrorCode = "400",
-                            ErrorMsg = "Server unavailable!"
-                        };
-                    _logger.Debug($"invoke: serviceId:{service.ServiceDescriptor.Id}, parameters count: {paras.Count()}, token:{token}");
-                    //Polly.Policy.Handle<>()
+            var lastInvoke = GetLastInvoke();
 
-                    result = await client.SendAsync(new JimuRemoteCallData
-                    {
-                        Parameters = paras,
-                        ServiceId = service.ServiceDescriptor.Id,
-                        Token = token,
-                        Descriptor = service.ServiceDescriptor
-                    });
-                    return result;
-                });
-            });
             foreach (var mid in _middlewares)
             {
                 lastInvoke = mid(lastInvoke);
             }
 
-            return await lastInvoke(new RemoteCallerContext(service, paras, token));
+            return await lastInvoke(new RemoteCallerContext(service, paras, token, service.Address.First()));
+        }
+
+        private ClientRequestDel GetLastInvoke()
+        {
+            return new ClientRequestDel(async context =>
+             {
+                 var client = _clientSenderFactory.CreateClientSender(context.ServiceAddress);
+                 if (client == null)
+                     return new JimuRemoteCallResultData
+                     {
+                         ErrorCode = "400",
+                         ErrorMsg = "Server unavailable!"
+                     };
+                 _logger.Debug($"invoke: serviceId:{context.Service.ServiceDescriptor.Id}, parameters count: {context.Paras.Count()}, token:{context.Token}");
+
+                 return await client.SendAsync(new JimuRemoteCallData
+                 {
+                     Parameters = context.Paras,
+                     ServiceId = context.Service.ServiceDescriptor.Id,
+                     Token = context.Token,
+                     Descriptor = context.Service.ServiceDescriptor
+                 });
+             });
         }
 
         private async Task<JimuServiceRoute> GetServiceByPathAsync(string path, IDictionary<string, object> paras)
