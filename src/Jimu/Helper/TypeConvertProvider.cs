@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
 
-namespace Jimu.Common.Helper
+namespace Jimu.Helper
 {
     delegate object TypeConvertDelegate(object instance, Type destinationType);
 

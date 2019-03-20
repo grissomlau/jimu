@@ -1,4 +1,4 @@
-﻿using Jimu.Common.Helper;
+﻿using Jimu.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Jimu.Common.Helper
+namespace Jimu.Helper
 {
     class SerializerHelper
     {
