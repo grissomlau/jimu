@@ -15,7 +15,7 @@ namespace Server1
         static void Main(string[] args)
         {
             var containerBuilder = new ContainerBuilder();
-            var hostBuilder = new ServiceHostServerBuilder(containerBuilder)
+            var hostBuilder = new ApplicationServerBuilder(containerBuilder)
                     .LoadServices(new[] { "IServices", "Services" })
                     .UseLog4netLogger(new LogOptions { EnableConsoleLog = true })
                     //.UseHttpForTransfer("127.0.0.1", 8007)// http server ip and port,becareful the firewall blocker
@@ -53,7 +53,7 @@ namespace Server1
         static void InitProxyService()
         {
             var containerBuilder = new ContainerBuilder();
-            var host = new Jimu.Client.ServiceHostClientBuilder(containerBuilder)
+            var host = new Jimu.Client.ApplicationClientBuilder(containerBuilder)
                 //.UseLog4netLogger(new LogOptions { EnableConsoleLog = true })
                 .UsePollingAddressSelector()
                 .UseConsulForDiscovery(new Jimu.Client.Discovery.ConsulIntegration.ConsulOptions("127.0.0.1", 8500, "JimuService-"))

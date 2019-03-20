@@ -10,7 +10,7 @@ namespace Jimu.Client
 {
     public static partial class ServiceHostBuilderExtension
     {
-        public static IServiceHostClientBuilder UseJoseJwtForOAuth<T>(this IServiceHostClientBuilder serviceHostBuilder, JwtAuthorizationOptions options) where T : JimuAddress, new()
+        public static IApplicationClientBuilder UseJoseJwtForOAuth<T>(this IApplicationClientBuilder serviceHostBuilder, JwtAuthorizationOptions options) where T : JimuAddress, new()
         {
             serviceHostBuilder.AddInitializer(container =>
             {

@@ -5,10 +5,10 @@ namespace Jimu.Client
 {
     public static partial class ServiceHostBuilderExtension
     {
-        public static IServiceHostClientBuilder SetDiscoveryAutoUpdateJobInterval(
-            this IServiceHostClientBuilder serviceHostBuilder, DiscoveryOptions options)
+        public static IApplicationClientBuilder SetDiscoveryAutoUpdateJobInterval(
+            this IApplicationClientBuilder serviceHostBuilder, DiscoveryOptions options)
         {
-            serviceHostBuilder.RegisterService(containerBuilder =>
+            serviceHostBuilder.RegisterComponent(containerBuilder =>
             {
                 containerBuilder.RegisterType<ClientServiceDiscovery>().As<IClientServiceDiscovery>().WithParameter("updateJobIntervalMinute", options.UpdateJobIntervalMinute).SingleInstance();
             });

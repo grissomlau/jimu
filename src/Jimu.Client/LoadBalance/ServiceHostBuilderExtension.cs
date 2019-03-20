@@ -10,10 +10,10 @@ namespace Jimu.Client
         /// </summary>
         /// <param name="serviceHostBuilder"></param>
         /// <returns></returns>
-        public static IServiceHostClientBuilder UsePollingAddressSelector(
-            this IServiceHostClientBuilder serviceHostBuilder)
+        public static IApplicationClientBuilder UsePollingAddressSelector(
+            this IApplicationClientBuilder serviceHostBuilder)
         {
-            serviceHostBuilder.RegisterService(containerBuilder =>
+            serviceHostBuilder.RegisterComponent(containerBuilder =>
             {
                 containerBuilder.RegisterType<PollingAddressSelector>().As<IAddressSelector>().SingleInstance();
             });

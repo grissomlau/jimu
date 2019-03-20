@@ -4,11 +4,11 @@ using Jimu.Server.Transport.DotNetty;
 
 namespace Jimu.Server
 {
-    public static partial class ServiceHostBuilderExtension
+    public static partial class ApplicationBuilderExtension
     {
-        public static IServiceHostServerBuilder UseDotNettyForTransfer(this IServiceHostServerBuilder serviceHostBuilder, DotNettyOptions options, Action<IServer> action = null)
+        public static IApplicationServerBuilder UseDotNettyForTransfer(this IApplicationServerBuilder serviceHostBuilder, DotNettyOptions options, Action<IServer> action = null)
         {
-            serviceHostBuilder.RegisterService(containerBuilder =>
+            serviceHostBuilder.RegisterComponent(containerBuilder =>
             {
                 containerBuilder.RegisterType<DotNettyServer>().As<IServer>().WithParameter("address", new DotNettyAddress(options.Ip, options.Port)).SingleInstance();
             });

@@ -4,7 +4,7 @@ namespace Jimu.Client
 {
     public static partial class ServiceHostClientBuilderExtension
     {
-        public static IServiceHostClientBuilder UseHttpForTransfer(this IServiceHostClientBuilder serviceHostBuilder)
+        public static IApplicationClientBuilder UseHttpForTransfer(this IApplicationClientBuilder serviceHostBuilder)
         {
             serviceHostBuilder.AddInitializer((System.Action<IContainer>)(container =>
             {

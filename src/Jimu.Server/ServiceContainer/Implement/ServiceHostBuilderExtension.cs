@@ -8,7 +8,7 @@ using Jimu.Server.ServiceContainer.Implement;
 
 namespace Jimu.Server
 {
-    public static partial class ServiceHostBuilderExtension
+    public static partial class ApplicationBuilderExtension
     {
         /// <summary>
         ///     load service(which must inherit from IServiceKey, and load Module of autofac
@@ -19,14 +19,14 @@ namespace Jimu.Server
         /// <param name="enableWatchChanged">reload when the path dll is updated</param>
         ///<param name="watchingFilePattern">what's the type of file will be watch when enableWatchChanged is true,e.g.: *.dll|*.json|*.config, default is *.dll</param>
         /// <returns></returns>
-        public static IServiceHostServerBuilder LoadServices(this IServiceHostServerBuilder serviceHostBuilder, string path, string watchingFilePattern = "*.dll", bool enableWatchChanged = true)
+        public static IApplicationServerBuilder LoadServices(this IApplicationServerBuilder serviceHostBuilder, string path, string watchingFilePattern = "*.dll", bool enableWatchChanged = true)
         {
 
             //var serviceTypes = assemblies.SelectMany(x => x.ExportedTypes)
             //    .Where(x => x.GetMethods().Any(y => y.GetCustomAttribute<JimuServiceAttribute>() != null)).ToList();
 
 
-            serviceHostBuilder.RegisterService(containerBuilder =>
+            serviceHostBuilder.RegisterComponent(containerBuilder =>
             {
                 containerBuilder.RegisterType<ServiceEntryContainer>().As<IServiceEntryContainer>().SingleInstance();
             });
@@ -41,7 +41,7 @@ namespace Jimu.Server
         }
 
 
-        public static IServiceHostServerBuilder LoadServices(this IServiceHostServerBuilder serviceHostBuilder, ServiceOptions options)
+        public static IApplicationServerBuilder LoadServices(this IApplicationServerBuilder serviceHostBuilder, ServiceOptions options)
         {
             return DoLoadServices(serviceHostBuilder, options.AssemblyNames);
         }
@@ -52,7 +52,7 @@ namespace Jimu.Server
         /// <param name="serviceHostBuilder"></param>
         /// <param name="assemblyNames">the dll to load (trim the ".dll"), like: "IServices,Services"</param>
         /// <returns></returns>
-        public static IServiceHostServerBuilder LoadServices(this IServiceHostServerBuilder serviceHostBuilder, string[] assemblyNames)
+        public static IApplicationServerBuilder LoadServices(this IApplicationServerBuilder serviceHostBuilder, string[] assemblyNames)
         {
 
             //var serviceTypes = assemblies.SelectMany(x => x.ExportedTypes)
@@ -61,10 +61,10 @@ namespace Jimu.Server
 
         }
 
-        private static IServiceHostServerBuilder DoLoadServices(IServiceHostServerBuilder serviceHostBuilder, string[] assemblyNames)
+        private static IApplicationServerBuilder DoLoadServices(IApplicationServerBuilder serviceHostBuilder, string[] assemblyNames)
         {
 
-            serviceHostBuilder.RegisterService(containerBuilder =>
+            serviceHostBuilder.RegisterComponent(containerBuilder =>
             {
                 containerBuilder.RegisterType<ServiceEntryContainer>().As<IServiceEntryContainer>().SingleInstance();
             });

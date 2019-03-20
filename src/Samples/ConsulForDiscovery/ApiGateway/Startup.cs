@@ -39,7 +39,7 @@ namespace ApiGateway
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -47,7 +47,7 @@ namespace ApiGateway
             }
 
             // start jimu client host;
-            var host = new ServiceHostClientBuilder(new ContainerBuilder())
+            var host = new ApplicationClientBuilder(new ContainerBuilder())
                 .UseConsulForDiscovery(new Jimu.Client.Discovery.ConsulIntegration.ConsulOptions("127.0.0.1", 8500, "JimuService-"))
                 .UseDotNettyForTransfer()
                 .UseHttpForTransfer()

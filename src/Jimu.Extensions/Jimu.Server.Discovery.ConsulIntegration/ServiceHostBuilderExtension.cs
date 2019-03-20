@@ -15,9 +15,9 @@ namespace Jimu.Server
         /// use consul for discovery server
         /// </summary>
         /// <returns></returns>
-        public static IServiceHostServerBuilder UseConsulForDiscovery(this IServiceHostServerBuilder serviceHostBuilder, ConsulOptions options)
+        public static IApplicationServerBuilder UseConsulForDiscovery(this IApplicationServerBuilder serviceHostBuilder, ConsulOptions options)
         {
-            serviceHostBuilder.RegisterService(containerBuilder =>
+            serviceHostBuilder.RegisterComponent(containerBuilder =>
             {
                 containerBuilder.RegisterType<ConsulServiceDiscovery>().As<IServiceDiscovery>()
                     .WithParameter("ip", options.Ip)

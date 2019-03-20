@@ -15,7 +15,7 @@ namespace Jimu.Client
         /// </summary>
         /// <param name="serviceGroups"></param>
         /// <returns></returns>
-        public static IServiceHostClientBuilder UseConsulForDiscovery(this IServiceHostClientBuilder serviceHostBuilder, ConsulOptions options)
+        public static IApplicationClientBuilder UseConsulForDiscovery(this IApplicationClientBuilder serviceHostBuilder, ConsulOptions options)
         {
             serviceHostBuilder.AddInitializer(container =>
             {

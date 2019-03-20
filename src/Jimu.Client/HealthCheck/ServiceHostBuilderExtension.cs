@@ -5,9 +5,9 @@ namespace Jimu.Client
 {
     public static partial class ServiceHostBuilderExtension
     {
-        public static IServiceHostClientBuilder UseServerHealthCheck(this IServiceHostClientBuilder serviceHostBuilder, int intervalMinute)
+        public static IApplicationClientBuilder UseServerHealthCheck(this IApplicationClientBuilder serviceHostBuilder, int intervalMinute)
         {
-            serviceHostBuilder.RegisterService(container =>
+            serviceHostBuilder.RegisterComponent(container =>
             {
                 container.RegisterType<QuartzHealthCheck>().As<IHealthCheck>().WithParameter("intervalMinute", intervalMinute).SingleInstance();
             });

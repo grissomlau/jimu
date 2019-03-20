@@ -11,7 +11,7 @@ namespace Jimu.Client.ApiGateway
 {
     public static class StartupExtension
     {
-        public static IApplicationBuilder UseJimu(this IApplicationBuilder app, IServiceHost host)
+        public static Microsoft.AspNetCore.Builder.IApplicationBuilder UseJimu(this Microsoft.AspNetCore.Builder.IApplicationBuilder app, IApplication host)
         {
             Console.WriteLine();
             app.UseMiddleware<JimuHttpStatusCodeExceptionMiddleware>();

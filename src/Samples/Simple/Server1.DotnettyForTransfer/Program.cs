@@ -10,7 +10,7 @@ namespace Server1.DotnettyForTransfer
         static void Main(string[] args)
         {
             var containerBuilder = new ContainerBuilder();
-            var builder = new ServiceHostServerBuilder(containerBuilder)
+            var builder = new ApplicationServerBuilder(containerBuilder)
                 .UseLog4netLogger(new LogOptions
                 {
                     EnableConsoleLog = true

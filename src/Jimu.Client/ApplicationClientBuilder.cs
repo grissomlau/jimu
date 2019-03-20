@@ -3,11 +3,11 @@ using Autofac;
 
 namespace Jimu.Client
 {
-    public class ServiceHostClientBuilder : ServiceHostBuilderBase, IServiceHostClientBuilder
+    public class ApplicationClientBuilder : ApplicationBuilderBase, IApplicationClientBuilder
     {
-        public ServiceHostClientBuilder(ContainerBuilder containerBuilder) : base(containerBuilder)
+        public ApplicationClientBuilder(ContainerBuilder containerBuilder) : base(containerBuilder)
         {
-            this.RegisterService(cb =>
+            this.RegisterComponent(cb =>
             {
                 cb.RegisterType<RemoteServiceCaller>().As<IRemoteServiceCaller>().SingleInstance();
                 cb.RegisterType<ClientServiceDiscovery>().As<IClientServiceDiscovery>().SingleInstance();
@@ -24,19 +24,19 @@ namespace Jimu.Client
         }
 
 
-        public new IServiceHostClientBuilder RegisterService(Action<ContainerBuilder> serviceRegister)
+        public new IApplicationClientBuilder RegisterComponent(Action<ContainerBuilder> serviceRegister)
         {
-            return base.RegisterService(serviceRegister) as IServiceHostClientBuilder;
+            return base.RegisterComponent(serviceRegister) as IApplicationClientBuilder;
         }
 
-        public new IServiceHostClientBuilder AddInitializer(Action<IContainer> initializer)
+        public new IApplicationClientBuilder AddInitializer(Action<IContainer> initializer)
         {
-            return base.AddInitializer(initializer) as IServiceHostClientBuilder;
+            return base.AddInitializer(initializer) as IApplicationClientBuilder;
         }
 
-        public new IServiceHostClientBuilder AddRunner(Action<IContainer> runner)
+        public new IApplicationClientBuilder AddRunner(Action<IContainer> runner)
         {
-            return base.AddRunner(runner) as IServiceHostClientBuilder;
+            return base.AddRunner(runner) as IApplicationClientBuilder;
         }
     }
 }

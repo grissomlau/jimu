@@ -30,7 +30,7 @@ namespace Jimu.Server.Transport.Http
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app)
+        public void Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder app)
         {
             app.UseMvc();
             app.UseMiddleware<HttpMiddleware>(_middlewares, _serviceEntryContainer, _logger);

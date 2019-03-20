@@ -5,10 +5,10 @@ namespace Jimu
 {
     public static partial class ServiceHostBuilderExtension
     {
-        public static T UseLog4netLogger<T>(this IServiceHostBuilder serviceHostBuilder, LogOptions options = null)
-            where T : class, IServiceHostBuilder
+        public static T UseLog4netLogger<T>(this IApplicationBuilder serviceHostBuilder, LogOptions options = null)
+            where T : class, IApplicationBuilder
         {
-            serviceHostBuilder.RegisterService(containerBuilder =>
+            serviceHostBuilder.RegisterComponent(containerBuilder =>
             {
                 if (options == null) options = new LogOptions();
                 containerBuilder.RegisterType<Log4netLogger>().WithParameter("options", options).As<ILogger>().SingleInstance();
@@ -20,10 +20,10 @@ namespace Jimu
             });
             return serviceHostBuilder as T;
         }
-        public static T UseNLogger<T>(this IServiceHostBuilder serviceHostBuilder, LogOptions options = null)
-            where T : class, IServiceHostBuilder
+        public static T UseNLogger<T>(this IApplicationBuilder serviceHostBuilder, LogOptions options = null)
+            where T : class, IApplicationBuilder
         {
-            serviceHostBuilder.RegisterService(containerBuilder =>
+            serviceHostBuilder.RegisterComponent(containerBuilder =>
             {
                 if (options == null) options = new LogOptions();
                 containerBuilder.RegisterType<NLogger>().WithParameter("options", options).As<ILogger>().SingleInstance();

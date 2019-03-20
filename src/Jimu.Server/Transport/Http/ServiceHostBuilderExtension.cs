@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Hosting;
 
 namespace Jimu.Server
 {
-    public static partial class ServiceHostBuilderExtension
+    public static partial class ApplicationBuilderExtension
     {
-        public static IServiceHostServerBuilder UseHttpForTransfer(this IServiceHostServerBuilder serviceHostBuilder, HttpOptions options, Action<IServer> action = null, Action<IWebHostBuilder> builderAction = null)
+        public static IApplicationServerBuilder UseHttpForTransfer(this IApplicationServerBuilder serviceHostBuilder, HttpOptions options, Action<IServer> action = null, Action<IWebHostBuilder> builderAction = null)
         {
-            serviceHostBuilder.RegisterService(containerBuilder =>
+            serviceHostBuilder.RegisterComponent(containerBuilder =>
             {
                 containerBuilder.RegisterType<HttpServer>().As<IServer>().WithParameter("ip", options.Ip).WithParameter("port", options.Port).WithParameter("builderAction", builderAction).SingleInstance();
             });

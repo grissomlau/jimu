@@ -5,12 +5,12 @@ namespace Jimu.Client
 {
     public static partial class ServiceHostBuilderExtension
     {
-        public static IServiceHostClientBuilder SetRemoteCallerRetryTimes(
-            this IServiceHostClientBuilder serviceHostBuilder, FaultTolerantOptions options)
+        public static IApplicationClientBuilder SetRemoteCallerRetryTimes(
+            this IApplicationClientBuilder serviceHostBuilder, FaultTolerantOptions options)
         {
             if (options.RetryTimes > 0)
             {
-                serviceHostBuilder.RegisterService(containerBuilder =>
+                serviceHostBuilder.RegisterComponent(containerBuilder =>
                 {
                     containerBuilder.RegisterType<RemoteServiceCaller>().As<IRemoteServiceCaller>().WithParameter("retryTimes", options.RetryTimes).SingleInstance();
                 });

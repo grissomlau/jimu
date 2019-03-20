@@ -12,7 +12,7 @@ namespace Jimu.Client.ApiGateway
 {
     public class JimuClient
     {
-        public static IServiceHost Host { get; set; }
+        public static IApplication Host { get; set; }
 
         public static async Task<JimuRemoteCallResultData> Invoke(string path, IDictionary<string, object> paras)
         {

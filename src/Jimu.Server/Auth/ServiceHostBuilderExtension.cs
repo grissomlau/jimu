@@ -6,9 +6,9 @@ using Jimu.Server.Auth;
 
 namespace Jimu.Server
 {
-    public static partial class ServiceHostBuilderExtension
+    public static partial class ApplicationBuilderExtension
     {
-        public static IServiceHostServerBuilder UseJoseJwtForOAuth<T>(this IServiceHostServerBuilder serviceHostBuilder, JwtAuthorizationOptions options) where T : JimuAddress, new()
+        public static IApplicationServerBuilder UseJoseJwtForOAuth<T>(this IApplicationServerBuilder serviceHostBuilder, JwtAuthorizationOptions options) where T : JimuAddress, new()
         {
             serviceHostBuilder.AddInitializer(container =>
             {

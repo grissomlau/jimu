@@ -5,10 +5,10 @@ namespace Jimu.Client
 {
     public static partial class ServiceHostBuilderExtension
     {
-        public static IServiceHostClientBuilder UseToken(
-            this IServiceHostClientBuilder serviceHostBuilder, Func<string> getToken)
+        public static IApplicationClientBuilder UseToken(
+            this IApplicationClientBuilder serviceHostBuilder, Func<string> getToken)
         {
-            serviceHostBuilder.RegisterService(containerBuilder =>
+            serviceHostBuilder.RegisterComponent(containerBuilder =>
             {
                 containerBuilder.RegisterType<ServiceTokenGetter>().As<IServiceTokenGetter>().SingleInstance();
             });

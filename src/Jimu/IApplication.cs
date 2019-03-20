@@ -3,7 +3,7 @@ using Autofac;
 
 namespace Jimu
 {
-    public interface IServiceHost : IDisposable
+    public interface IApplication : IDisposable
     {
         /// <summary>
         ///     autofac container

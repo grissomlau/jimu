@@ -6,13 +6,13 @@ namespace Jimu.Client
 {
     public static partial class ServiceHostBuilderExtension
     {
-        public static IServiceHostClientBuilder UseLog4netLogger(this IServiceHostBuilder serviceHostBuilder, LogOptions options = null)
+        public static IApplicationClientBuilder UseLog4netLogger(this IApplicationBuilder serviceHostBuilder, LogOptions options = null)
         {
-            return serviceHostBuilder.UseLog4netLogger<IServiceHostClientBuilder>(options);
+            return serviceHostBuilder.UseLog4netLogger<IApplicationClientBuilder>(options);
         }
-        public static IServiceHostClientBuilder UseNLogger(this IServiceHostBuilder serviceHostBuilder, LogOptions options = null)
+        public static IApplicationClientBuilder UseNLogger(this IApplicationBuilder serviceHostBuilder, LogOptions options = null)
         {
-            return serviceHostBuilder.UseNLogger<IServiceHostClientBuilder>(options);
+            return serviceHostBuilder.UseNLogger<IApplicationClientBuilder>(options);
         }
     }
 }

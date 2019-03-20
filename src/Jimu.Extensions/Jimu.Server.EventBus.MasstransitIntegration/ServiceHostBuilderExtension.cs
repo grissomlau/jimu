@@ -7,9 +7,9 @@ namespace Jimu.Server
 {
     public static class ServiceHostBuilderExtension
     {
-        public static IServiceHostServerBuilder UseMasstransit(this IServiceHostServerBuilder serviceHostBuilder, MassTransitOptions options, Action<IRabbitMqBusFactoryConfigurator> action = null)
+        public static IApplicationServerBuilder UseMasstransit(this IApplicationServerBuilder serviceHostBuilder, MassTransitOptions options, Action<IRabbitMqBusFactoryConfigurator> action = null)
         {
-            serviceHostBuilder.RegisterService(containerBuilder =>
+            serviceHostBuilder.RegisterComponent(containerBuilder =>
             {
                 containerBuilder.Register(x => options).SingleInstance();
                 containerBuilder.Register(context =>
@@ -39,7 +39,7 @@ namespace Jimu.Server
                 logger.Info($"[config]use Masstransit for EventBus, options.HostAddress {options.HostAddress.ToString()}, options.SendEndPointUrl {options.SendEndPointUri.ToString()}");
                 var bus = container.Resolve<IBusControl>();
                 bus.StartAsync();
-                IServiceHost host = container.Resolve<IServiceHost>();
+                IApplication host = container.Resolve<IApplication>();
                 host.DisposeAction(c =>
                 {
                     bus.Stop();

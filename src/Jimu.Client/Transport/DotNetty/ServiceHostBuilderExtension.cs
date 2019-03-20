@@ -10,7 +10,7 @@ namespace Jimu.Client
 {
     public static partial class ServiceHostClientBuilderExtension
     {
-        public static IServiceHostClientBuilder UseDotNettyForTransfer(this IServiceHostClientBuilder serviceHostBuilder)
+        public static IApplicationClientBuilder UseDotNettyForTransfer(this IApplicationClientBuilder serviceHostBuilder)
         {
 
             serviceHostBuilder.AddInitializer(container =>

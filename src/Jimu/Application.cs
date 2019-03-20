@@ -5,12 +5,12 @@ using Autofac;
 
 namespace Jimu
 {
-    public class ServiceHost : IServiceHost
+    public class Application : IApplication
     {
         private readonly List<Action<IContainer>> _disposeActions;
         private readonly List<Action<IContainer>> _runActions;
 
-        public ServiceHost(List<Action<IContainer>> runActions = null, List<Action<IContainer>> disposeActions = null)
+        public Application(List<Action<IContainer>> runActions = null, List<Action<IContainer>> disposeActions = null)
         {
             _disposeActions = disposeActions ?? new List<Action<IContainer>>();
             _runActions = runActions ?? new List<Action<IContainer>>();

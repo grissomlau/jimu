@@ -10,9 +10,9 @@ namespace Jimu.Client
 {
     public static partial class ServiceHostBuilderExtension
     {
-        public static IServiceHostClientBuilder UseServiceProxy(this IServiceHostClientBuilder serviceHostBuilder, ServiceProxyOptions options)
+        public static IApplicationClientBuilder UseServiceProxy(this IApplicationClientBuilder serviceHostBuilder, ServiceProxyOptions options)
         {
-            serviceHostBuilder.RegisterService(containerBuilder =>
+            serviceHostBuilder.RegisterComponent(containerBuilder =>
             {
                 containerBuilder.RegisterType<ServiceProxyGenerator>().As<IServiceProxyGenerator>().SingleInstance();
                 containerBuilder.RegisterType<ServiceProxy>().As<IServiceProxy>().SingleInstance();

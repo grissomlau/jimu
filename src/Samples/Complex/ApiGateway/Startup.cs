@@ -70,7 +70,7 @@ namespace Jimu.ApiGateway
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder app, IHostingEnvironment env)
         {
 
             app.UseStaticFiles();
@@ -84,7 +84,7 @@ namespace Jimu.ApiGateway
             app.UseJimuSwagger();
 
             // jimu client
-            var host = new ServiceHostClientBuilder(new ContainerBuilder())
+            var host = new ApplicationClientBuilder(new ContainerBuilder())
                 .UseLog4netLogger(new LogOptions
                 //.UseNLogger(new LogOptions
                 {

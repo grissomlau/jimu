@@ -12,10 +12,10 @@ namespace Jimu.Server
     {
         private readonly List<JimuServiceEntry> _services = new List<JimuServiceEntry>();
 
-        ILogger _logger;
-        public ServiceEntryContainer(ILogger logger)
+        List<Action<ContainerBuilder>> _serviceRegisters;
+        public ServiceEntryContainer(List<Action<ContainerBuilder>> serviceRegisters)
         {
-            _logger = logger;
+            this._serviceRegisters = serviceRegisters;
         }
         /// <summary>
         ///     load service
@@ -69,9 +69,9 @@ namespace Jimu.Server
         {
             //var serviceTypes = types.Where(x => x.GetMethods().Any(y => y.GetCustomAttribute<JimuServiceAttribute>() != null)).Distinct();
             var containerBuilder = new ContainerBuilder();
+            this._serviceRegisters.ForEach(x => x(containerBuilder));
             containerBuilder.RegisterTypes(types.ToArray()).AsSelf().AsImplementedInterfaces().InstancePerDependency();
             containerBuilder.RegisterAssemblyModules(assemblies.ToArray());
-            containerBuilder.RegisterInstance(_logger).AsImplementedInterfaces().SingleInstance();
             return containerBuilder.Build();
         }
         public List<JimuServiceEntry> GetServiceEntry()

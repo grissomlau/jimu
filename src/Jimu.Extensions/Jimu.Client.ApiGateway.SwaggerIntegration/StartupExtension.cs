@@ -15,7 +15,7 @@ namespace Jimu.Client.ApiGateway
 {
     public static class StartupExtension
     {
-        public static IApplicationBuilder UseJimuSwagger(this IApplicationBuilder app, string version = "v1")
+        public static Microsoft.AspNetCore.Builder.IApplicationBuilder UseJimuSwagger(this Microsoft.AspNetCore.Builder.IApplicationBuilder app, string version = "v1")
         {
             app.UseSwaggerUI(c =>
             {

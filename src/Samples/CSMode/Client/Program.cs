@@ -16,7 +16,7 @@ namespace Client
             var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTI1ODM4NjUsInVzZXJuYW1lIjoiYWRtaW4iLCJkZXBhcnRtZW50IjoiSVTpg6gifQ.tx4etoJenyjsujHP5QGwSlhgyl9n2ftn-UziyGIIDPo";
 
             var container = new ContainerBuilder();
-            var host = new ServiceHostClientBuilder(container)
+            var host = new ApplicationClientBuilder(container)
                 .UseLog4netLogger(new LogOptions { EnableConsoleLog = true })
                 .UsePollingAddressSelector()
                 .UseConsulForDiscovery(new Jimu.Client.Discovery.ConsulIntegration.ConsulOptions("127.0.0.1", 8500, "JimuService-"))
