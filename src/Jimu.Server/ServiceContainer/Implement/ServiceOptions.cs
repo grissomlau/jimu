@@ -6,11 +6,14 @@ namespace Jimu.Server.ServiceContainer.Implement
 {
     public class ServiceOptions
     {
-        public string[] AssemblyNames { get; set; }
-        public ServiceOptions(string[] assemblyNames)
-        {
-            this.AssemblyNames = assemblyNames;
-        }
         public ServiceOptions() { }
+
+        public string Path { get; set; }
+
+        public string WatchFilePattern { get; set; }
+
+        public string LoadFilePattern { get; set; }
+
+        public bool EnableWatch { get; set; }
     }
 }

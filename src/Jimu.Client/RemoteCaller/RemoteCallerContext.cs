@@ -22,6 +22,7 @@ namespace Jimu.Client
             this.Service = service;
             this.Paras = paras;
             this.Token = token;
+            this.ServiceAddress = jimuAddress;
         }
     }
 }

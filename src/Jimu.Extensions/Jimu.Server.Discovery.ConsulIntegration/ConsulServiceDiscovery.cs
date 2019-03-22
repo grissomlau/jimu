@@ -14,6 +14,9 @@ namespace Jimu.Server.Discovery.ConsulIntegration
         private readonly string _serverAddress;
 
         private List<JimuServiceRoute> _routes;
+
+        public event Action<List<JimuServiceRoute>> OnBeforeSetRoutes;
+
         public ConsulServiceDiscovery(string ip, int port, string serviceGroups, string serverAddress)
         {
             _routes = new List<JimuServiceRoute>();
@@ -99,8 +102,9 @@ namespace Jimu.Server.Discovery.ConsulIntegration
             //}
         }
 
-        public async Task SetRoutesAsync(IEnumerable<JimuServiceRoute> routes)
+        public async Task SetRoutesAsync(List<JimuServiceRoute> routes)
         {
+            OnBeforeSetRoutes(routes);
             //var existingRoutes = await GetRoutes(routes.Select(x => GetKey(x.ServiceDescriptor.Id)));
             _routes = routes.ToList();
             var routeDescriptors = new List<JimuServiceRouteDesc>(routes.Count());
@@ -126,16 +130,16 @@ namespace Jimu.Server.Discovery.ConsulIntegration
             }
         }
 
-        public async Task AddRouteAsync(List<JimuServiceRoute> routes)
-        {
-            var curRoutes = await GetRoutesAsync();
-            foreach (var route in routes)
-            {
-                curRoutes.RemoveAll(x => x.ServiceDescriptor.Id == route.ServiceDescriptor.Id);
-                curRoutes.Add(route);
-            }
-            await SetRoutesAsync(curRoutes);
-        }
+        //public async Task AddRouteAsync(List<JimuServiceRoute> routes)
+        //{
+        //    var curRoutes = await GetRoutesAsync();
+        //    foreach (var route in routes)
+        //    {
+        //        curRoutes.RemoveAll(x => x.ServiceDescriptor.Id == route.ServiceDescriptor.Id);
+        //        curRoutes.Add(route);
+        //    }
+        //    await SetRoutesAsync(curRoutes);
+        //}
 
         private List<string> GetKey()
         {

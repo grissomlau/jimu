@@ -109,3 +109,252 @@ using Jimu.Client.ApiGateway;
 项目的更多资料正在断断续续地整理， 可关注我的 [博客园](http://www.cnblogs.com/grissom007/)  
 联系我请发邮件： grissomlau@qq.com
 
+
+
+## 配置
+
+### 服务器
+
+#### 日志
+
+1. JimuLog4netOptions: Log4net 日志组件
+
+   ```json
+   {
+       "JimuLog4netOptions":{
+           "EnableConsoleLog":true,
+           "EnableFileLog":true,
+           "FileLogPath":"log",
+           "FileLogLevel":"Debug,Info,Warn,Error",
+           "ConsoleLogLevel":"Debug,Info,Warn,Error",
+           "UseInService": true
+           
+       }
+   }
+   ```
+
+   
+
+2. JimuNLogOptions: NLog 组件
+
+#### 授权
+
+1. JwtAuthorizationOptions: Jwt 授权
+
+   ```json
+   {
+       "JwtAuthorizationOptions":{
+           "ServerIp": "192.168.10.195",
+           "ServerPort": 8001,
+           "Protocol": "Http", //传输协议：Http,Netty
+           "SecretKey": "123456",//生成token 的钥匙
+           "ValidateLifetime": true,
+           "ExpireTimeSpan": "1.1:1:0",//token 有效时长: day.hour:minute:second
+           "ValidateIssuer": false,//
+           "ValidIssuer": "",
+           "ValidateAudience": false,
+           "ValidAudience": "",
+           "TokenEndpointPath": "/api/v1/token",//获取 token 的路径
+       }
+   }
+   ```
+
+   
+
+   #### 服务发现
+
+   1. ConsulOptions： 使用 Consul 作为服务发现组件
+
+      ```json
+      {
+          "ConsulOptions":{
+              "Ip": "127.0.0.1",//consul ip
+              "Port": 8500,// consul port
+              "ServiceGroups": "MyService",//服务注册所属的组别
+              "ServerAddress": "192.168.10.195:8001",//服务宿主的地址
+          }
+      }
+      ```
+
+      
+
+   
+
+#### 服务调用协议
+
+1. TransportOptions： 服务调用的传输组件
+
+   ```json
+   {
+       "TransportOptions":{
+           "Ip":"192.168.10.195",//服务宿主ip
+           "Port": 8001, //服务宿主端口
+           "Protocol":"Netty" //传输协议： Netty, Http
+       }
+   }
+   ```
+
+#### 服务
+
+1. ServiceOptions： 服务配置
+
+   ```json
+   {
+       "ServiceOptions":{
+           "Path": "",//服务dll所在路径，默认当前目录
+           "LoadFilePattern": "IService.dll,Service.dll",//需要加载的服务dll，支持统配符:*.dll,*.txt
+           "WatchFilePattern": "",//监视文件修改，实现热加载,e.g.:IService.dll,Service.dll,支持通配符：*.dll,*.json
+           "EnableWatch": false//是否启动热加载
+       }
+   }
+   ```
+
+### 客户端
+
+#### 日志
+
+1. JimuLog4netOptions: Log4net 日志组件
+
+   ```json
+   {
+       "JimuLog4netOptions":{
+           "EnableConsoleLog":true,
+           "EnableFileLog":true,
+           "FileLogPath":"log",
+           "FileLogLevel":"Debug,Info,Warn,Error",
+           "ConsoleLogLevel":"Debug,Info,Warn,Error"
+       }
+   }
+   ```
+
+   
+
+2. JimuNLogOptions: NLog 组件
+
+#### 授权
+
+1. JwtAuthorizationOptions: Jwt 授权，支持在客户端实现 jwt 授权，服务端不需要配置
+
+```json
+{
+    "JwtAuthorizationOptions":{
+        "ServerIp": "192.168.10.195",
+        "ServerPort": 8001,
+        "Protocol": "Http", //传输协议：Http,Netty
+        "SecretKey": "123456",//生成token 的钥匙
+        "ValidateLifetime": true,
+        "ExpireTimeSpan": "1.1:1:0",//token 有效时长: day.hour:minute:second
+        "ValidateIssuer": false,//
+        "ValidIssuer": "",
+        "ValidateAudience": false,
+        "ValidAudience": "",
+        "TokenEndpointPath": "/api/v1/token",//获取 token 的路径
+    }
+}
+```
+
+#### 服务发现
+
+1. ConsulOptions： 使用 Consul 作为服务发现组件
+
+```json
+{
+    "ConsulOptions":{
+        "Ip": "127.0.0.1",//consul ip
+        "Port": 8500,// consul port
+        "ServiceGroups": "MyService",//服务注册所属的组别
+    }
+}
+```
+
+#### 服务发现刷新频率
+
+1. DiscoveryOptions：客户端会缓存已发现的服务，设定刷新频率
+
+   ```json
+   {
+       "DiscoveryOptions":{
+           "UpdateJobIntervalMinute":1//单位分钟，1分钟刷新一次
+       }
+   }
+   ```
+
+#### 容错机制
+
+1. FaultTolerantOptions：服务调用时的容错机制
+
+   ```json
+   {
+       "FaultTolerantOptions":{
+           "RetryTimes":0 //服务调用失败重试次数
+       }
+   }
+   ```
+
+   
+
+#### 服务健康监测
+
+1. HealthCheckOptions： 根据已发现服务的ip,port 定时进行服务器心跳监测（客户端主动连接）
+
+   ```json
+   {
+       "HealthCheckOptions":{
+           "IntervalMinute":1 //心跳监测时间间隔，单位分钟
+       }
+   }
+   ```
+
+   
+
+#### 负载均衡
+
+1. LoadBalanceOptions
+
+   ```json
+   {
+       "LoadBalanceOptions":{
+           "LoadBalance":"Polling" //负载均衡算法: Polling - 轮询
+       }
+   }
+   ```
+
+   
+
+#### 远程代理
+
+1. ServiceProxyOptions
+
+   ```json
+   {
+       "ServiceProxyOptions":{
+           "AssemblyNames":["IOrderServices.dll","IUserServices.dll"]//代理接口dll配置
+       }
+   }
+   ```
+
+#### 客户端获取请求 token 的方式
+
+1. TokenGetterOptions
+
+   ```json
+   {
+       "TokenGetterOptions":{
+           "GetType":"HttpHeader" //从http header 获取， Request.Headers["Authorization"]
+       }
+   }
+   ```
+
+#### 服务调用
+
+1. TransportOptions： 服务调用的传输组件
+
+   ```json
+   {
+       "TransportOptions":{
+           "Protocol":"Netty,Http" //传输协议： Netty, Http
+       }
+   }
+   ```
+
+#### 

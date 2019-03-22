@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Jimu.Logger;
+using System;
 using System.Collections.Concurrent;
 using System.Net;
 
@@ -40,7 +41,7 @@ namespace Jimu.Client
             {
                 _logger.Debug($"creating transport client for: {address.Code}");
                 //return Clients.GetOrAdd(address.CreateEndPoint(), ep => new Lazy<ITransportClient>(() =>
-                var val = ClientSenders.GetOrAdd($"{address.ServerFlag}-{address.Code}", (Func<string, Lazy<IClientSender>>)(ep => new Lazy<IClientSender>((Func<IClientSender>)(() =>
+                var val = ClientSenders.GetOrAdd($"{address.Protocol}-{address.Code}", (ep => new Lazy<IClientSender>((() =>
                {
                    IClientSender client = null;
                    ClientSenderCreator?.Invoke(address, ref client);
@@ -52,7 +53,7 @@ namespace Jimu.Client
             catch (Exception ex)
             {
                 //Clients.TryRemove(address.CreateEndPoint(), out _);
-                ClientSenders.TryRemove($"{address.ServerFlag}-{address.Code}", out _);
+                ClientSenders.TryRemove($"{address.Protocol}-{address.Code}", out _);
                 _logger.Error($"failed to create transport client for : {address.Code}", ex);
                 throw new TransportException(ex.Message, ex);
             }

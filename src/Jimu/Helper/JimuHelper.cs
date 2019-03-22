@@ -1,4 +1,5 @@
 ﻿using Jimu.Helper;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,6 +37,20 @@ namespace Jimu
         public static object ConvertType(object instance, Type destinationType)
         {
             return TypeConvertProvider.Convert(instance, destinationType);
+        }
+
+        /// <summary>
+        /// get config from specify file which locate in app root
+        /// </summary>
+        /// <param name="fileName">setting json file</param>
+        /// <returns></returns>
+        public static IConfigurationRoot GetConfig(string settingJson)
+        {
+            var provider = new JsonEnvParamParserFileProvider(settingJson);
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(AppContext.BaseDirectory)
+                .AddJsonFile(provider, settingJson, true, false);
+            return builder.Build();
         }
     }
 }

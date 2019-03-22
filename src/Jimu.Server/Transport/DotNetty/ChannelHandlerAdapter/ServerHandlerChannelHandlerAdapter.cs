@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using DotNetty.Transport.Channels;
+using Jimu.Logger;
 
 namespace Jimu.Server.Transport.DotNetty
 {

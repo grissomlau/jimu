@@ -5,6 +5,7 @@ using Jimu.Client;
 using IServices;
 using System.Threading;
 using System.Diagnostics;
+using Jimu.Logger;
 
 namespace Client
 {
@@ -17,18 +18,18 @@ namespace Client
 
             var container = new ContainerBuilder();
             var host = new ApplicationClientBuilder(container)
-                .UseLog4netLogger(new LogOptions { EnableConsoleLog = true })
-                .UsePollingAddressSelector()
-                .UseConsulForDiscovery(new Jimu.Client.Discovery.ConsulIntegration.ConsulOptions("127.0.0.1", 8500, "JimuService-"))
-                .UseHttpForTransfer()
-                .UseDotNettyForTransfer()
+                //.UseLog4netLogger(new JimuLog4netOptions { EnableConsoleLog = true })
+                //.UsePollingAddressSelector()
+                //.UseConsulForDiscovery(new Jimu.Client.Discovery.ConsulIntegration.ConsulOptions("127.0.0.1", 8500, "JimuService-"))
+                //.UseHttpForTransfer()
+                //.UseDotNettyForTransfer()
                 .UseToken(() => token)
-                .UseServiceProxy(new Jimu.Client.Proxy.ServiceProxyOptions( new[] { "IServices" }))
+                //.UseServiceProxy(new Jimu.Client.Proxy.ServiceProxyOptions( new[] { "IServices" }))
                 .Build();
             host.Run();
 
             Stopwatch watch = new Stopwatch();
-            while (Console.Read() != 'q')
+            while (Console.ReadLine() != "exit")
             {
                 watch.Reset();
                 watch.Start();

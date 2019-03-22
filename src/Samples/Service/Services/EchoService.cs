@@ -2,6 +2,8 @@
 using Jimu;
 using IServices;
 using System.Collections.Generic;
+using Jimu.Logger;
+using Jimu.Server.Auth;
 
 namespace Services
 {
@@ -14,6 +16,19 @@ namespace Services
         {
             _logger = logger;
             _payload = payload;
+        }
+
+        public void CheckUser(JwtAuthorizationContext context)
+        {
+            if (context.UserName == "admin" && context.Password == "admin")
+            {
+                context.AddClaim("username", "admin");
+                context.AddClaim("roles", "admin");
+            }
+            else
+            {
+                context.Rejected("401", "acount or password incorrect");
+            }
         }
 
         public string CreateUser(UserDTO user)

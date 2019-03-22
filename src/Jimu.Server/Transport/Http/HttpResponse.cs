@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Jimu.Logger;
 using Microsoft.AspNetCore.Http;
 
 namespace Jimu.Server.Transport.Http

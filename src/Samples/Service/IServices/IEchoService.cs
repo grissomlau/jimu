@@ -39,5 +39,8 @@ namespace IServices
         string CreateUser(UserDTO user);
         [JimuService(CreatedBy = "grissom", Comment = "create user friend")]
         string CreateUserFriend(UserDTO user, UserFriendDTO friend, string comment);
+
+        [JimuService()]
+        void CheckUser(Jimu.Server.Auth.JwtAuthorizationContext context);
     }
 }

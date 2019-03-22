@@ -13,9 +13,14 @@ namespace Jimu.Server
         private readonly List<JimuServiceEntry> _services = new List<JimuServiceEntry>();
 
         List<Action<ContainerBuilder>> _serviceRegisters;
-        public ServiceEntryContainer(List<Action<ContainerBuilder>> serviceRegisters)
+        List<Action<IContainer>> _serviceInitializers;
+
+        public event Action<List<JimuServiceEntry>> OnServiceLoaded;
+
+        public ServiceEntryContainer()
         {
-            this._serviceRegisters = serviceRegisters;
+            this._serviceRegisters = new List<Action<ContainerBuilder>>();
+            this._serviceInitializers = new List<Action<IContainer>>();
         }
         /// <summary>
         ///     load service
@@ -44,6 +49,8 @@ namespace Jimu.Server
             }
             _services.Clear();
             _services.AddRange(tmpServices);
+
+            OnServiceLoaded?.Invoke(_services);
         }
 
         private List<MethodInfo> GetMethodInfos(Type type)
@@ -72,11 +79,23 @@ namespace Jimu.Server
             this._serviceRegisters.ForEach(x => x(containerBuilder));
             containerBuilder.RegisterTypes(types.ToArray()).AsSelf().AsImplementedInterfaces().InstancePerDependency();
             containerBuilder.RegisterAssemblyModules(assemblies.ToArray());
-            return containerBuilder.Build();
+            var container = containerBuilder.Build();
+            this._serviceInitializers.ForEach(x => x(container));
+            return container;
         }
         public List<JimuServiceEntry> GetServiceEntry()
         {
             return _services;
+        }
+
+        public void DoRegister(Action<ContainerBuilder> serviceRegister)
+        {
+            this._serviceRegisters.Add(serviceRegister);
+        }
+
+        public void DoInitializer(Action<IContainer> initializer)
+        {
+            this._serviceInitializers.Add(initializer);
         }
     }
 }

@@ -14,9 +14,10 @@ namespace Jimu
         ///     delegate will be execute in host disposing
         /// </summary>
         /// <param name="action"></param>
-        void DisposeAction(Action<IContainer> action);
+        IApplication DisposeAction(Action<IContainer> action);
 
-        void RunAction(Action<IContainer> action);
+        IApplication RunAction(Action<IContainer> action);
+        IApplication BeforeRunAction(Action<IContainer> action);
 
         void Run();
     }

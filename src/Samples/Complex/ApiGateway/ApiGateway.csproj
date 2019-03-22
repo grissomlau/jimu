@@ -81,4 +81,10 @@
     <ProjectReference Include="..\..\..\Jimu.Extensions\Jimu.Client.Discovery.ConsulIntegration\Jimu.Client.Discovery.ConsulIntegration.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="JimuAppClientSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

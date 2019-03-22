@@ -8,6 +8,8 @@ namespace Jimu.Server.Auth
     {
         public string ServerIp { get; set; }
         public int ServerPort { get; set; }
+
+        public string Protocol { get; set; }
         public string SecretKey { get; set; }
 
         public bool ValidateLifetime { get; set; }
@@ -21,6 +23,8 @@ namespace Jimu.Server.Auth
         public string ValidAudience { get; set; }
 
         public string TokenEndpointPath { get; set; }
+
+        public string CheckCredentialServiceId { get; set; }
 
         public Action<JwtAuthorizationContext> CheckCredential;
 

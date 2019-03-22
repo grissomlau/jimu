@@ -8,6 +8,7 @@ using Quartz;
 using Quartz.Impl;
 using Quartz.Impl.Triggers;
 using Quartz.Spi;
+using Jimu.Logger;
 
 namespace Jimu.Client
 {

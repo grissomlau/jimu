@@ -6,6 +6,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="JimuAppServerSettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="JimuAppServerSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\Jimu.Client\Jimu.Client.csproj" />
     <ProjectReference Include="..\..\..\Jimu.Extensions\Jimu.Client.Discovery.ConsulIntegration\Jimu.Client.Discovery.ConsulIntegration.csproj" />
     <ProjectReference Include="..\..\..\Jimu.Extensions\Jimu.Server.Discovery.ConsulIntegration\Jimu.Server.Discovery.ConsulIntegration.csproj" />

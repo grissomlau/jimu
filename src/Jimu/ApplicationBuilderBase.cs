@@ -1,76 +1,137 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Autofac;
 using Jimu.Logger;
+using Microsoft.Extensions.Configuration;
 
 namespace Jimu
 {
     /// <summary>
     ///     base builder for both client and server
     /// </summary>
-    public abstract class ApplicationBuilderBase : IApplicationBuilder
+    public abstract class ApplicationBuilderBase<T> : IApplicationBuilder<T> where T : class
     {
         /// <summary>
         ///     action will be execute in intializing: after autofac container build
         /// </summary>
-        private readonly List<Action<IContainer>> _initializers;
+        protected List<Action<IContainer>> Initializers { get; }
 
         /// <summary>
         ///     action will be execute in server runing
         /// </summary>
-        private readonly List<Action<IContainer>> _runners;
+        protected List<Action<IContainer>> Runners { get; }
+
+        protected List<Action<IContainer>> BeforeRunners { get; }
 
         /// <summary>
         ///     action will be execute in registering: before autofac container build
         /// </summary>
-        private readonly List<Action<ContainerBuilder>> _componentRegisters;
+        protected List<Action<ContainerBuilder>> ComponentRegisters { get; }
 
-        private readonly ContainerBuilder _containerBuilder;
+        protected ContainerBuilder ContainerBuilder { get; }
+        /// <summary>
+        /// settings for jimu app
+        /// </summary>
+        protected IConfigurationRoot JimuAppSettings { get; }
 
-        protected ApplicationBuilderBase(ContainerBuilder containerBuilder)
+        /// <summary>
+        /// jimu setting without subfix of '.json', e.g.: JimuSetting
+        /// </summary>
+        protected string SettingName { get; }
+
+        protected ApplicationBuilderBase(ContainerBuilder containerBuilder, string settingName)
         {
-            _containerBuilder = containerBuilder;
-            _componentRegisters = new List<Action<ContainerBuilder>>();
-            _initializers = new List<Action<IContainer>>();
-            _runners = new List<Action<IContainer>>();
+            SettingName = settingName;
+            JimuAppSettings = ReadSetting();
+            ContainerBuilder = containerBuilder;
+            ComponentRegisters = new List<Action<ContainerBuilder>>();
+            Initializers = new List<Action<IContainer>>();
+            Runners = new List<Action<IContainer>>();
+            BeforeRunners = new List<Action<IContainer>>();
         }
 
-        public IApplication Build()
+
+        public virtual IApplication Build()
         {
             IContainer container = null;
-            var host = new Application(_runners);
-            _containerBuilder.Register(x => host).As<IApplication>().SingleInstance();
-            _containerBuilder.Register(x => container).As<IContainer>().SingleInstance();
-            //_containerBuilder.RegisterType<Log4netLogger>().As<ILogger>().SingleInstance();
-            _containerBuilder.RegisterType<ConsoleLogger>().As<ILogger>().SingleInstance();
+            var host = new Application(BeforeRunners, Runners);
+            ContainerBuilder.Register(x => host).As<IApplication>().SingleInstance();
+            ContainerBuilder.Register(x => container).As<IContainer>().SingleInstance();
+            ContainerBuilder.RegisterType<ConsoleLogger>().As<ILogger>().SingleInstance();
 
-
-            _componentRegisters.ForEach(x => { x(_containerBuilder); });
-
-            container = _containerBuilder.Build();
-            _initializers.ForEach(x => { x(container); });
-
+            ComponentRegisters.ForEach(x => { x(ContainerBuilder); });
+            container = ContainerBuilder.Build();
+            Initializers.ForEach(x => { x(container); });
             host.Container = container;
 
             return host;
         }
 
-        public IApplicationBuilder AddInitializer(Action<IContainer> initializer)
+        public virtual T AddInitializer(Action<IContainer> initializer)
         {
-            _initializers.Add(initializer);
-            return this;
+            Initializers.Add(initializer);
+            return this as T;
         }
 
-        public IApplicationBuilder AddRunner(Action<IContainer> runner)
+        public virtual T AddRunner(Action<IContainer> runner)
         {
-            _runners.Add(runner);
-            return this;
+            Runners.Add(runner);
+            return this as T;
         }
 
-        public IApplicationBuilder RegisterComponent(Action<ContainerBuilder> componentRegister)
+        public virtual T AddComponent(Action<ContainerBuilder> componentRegister)
         {
-            _componentRegisters.Add(componentRegister);
-            return this;
+            ComponentRegisters.Add(componentRegister);
+            return this as T;
+        }
+
+
+        private IConfigurationRoot ReadSetting()
+        {
+            var jimuAppSettings = $"{SettingName}.json";
+            var env = ReadJimuEvn();
+            if (!string.IsNullOrEmpty(env))
+            {
+                jimuAppSettings = $"{SettingName}.{env}.json";
+            }
+            if (!File.Exists(jimuAppSettings))
+            {
+                throw new FileNotFoundException($"{jimuAppSettings} not found!");
+            }
+            return JimuHelper.GetConfig(jimuAppSettings);
+        }
+
+        private string ReadJimuEvn()
+        {
+            var jimuSettings = "JimuSettings.json";
+            var jimuEnv = "JIMU_ENV";
+            string activeProfile = "";
+
+            if (File.Exists(jimuSettings))
+            {
+                var config = JimuHelper.GetConfig(jimuSettings);
+                if (config != null && config["ActiveProfile"] != null)
+                {
+                    activeProfile = config["ActiveProfile"];
+                }
+            }
+            if (string.IsNullOrEmpty(activeProfile?.Trim()))
+            {
+                var builder = new ConfigurationBuilder();
+                var config = builder.AddEnvironmentVariables().Build();
+                if (config != null && config[jimuEnv] != null)
+                {
+                    activeProfile = config[jimuEnv];
+                }
+            }
+            return activeProfile?.Trim();
+        }
+
+        public T AddBeforeRunner(Action<IContainer> beforeRunner)
+        {
+            BeforeRunners.Add(beforeRunner);
+            return this as T;
         }
     }
 }

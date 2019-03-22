@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Flurl;
 using Flurl.Http;
+using Jimu.Logger;
 
 namespace Jimu.Client
 {

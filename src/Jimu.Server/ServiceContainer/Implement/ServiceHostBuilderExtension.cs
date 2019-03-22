@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
 using Autofac;
+using Jimu.Logger;
 using Jimu.Server.ServiceContainer.Implement;
 
 namespace Jimu.Server

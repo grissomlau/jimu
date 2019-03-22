@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using IServices;
 using Jimu;
 using Jimu.Client;
+using Jimu.Logger;
 using Jimu.Server;
 
 namespace Server1
@@ -14,37 +16,52 @@ namespace Server1
         static IEchoService _echoService;
         static void Main(string[] args)
         {
+            var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
+
+            loadedAssemblies
+                .SelectMany(x => x.GetReferencedAssemblies())
+                .Distinct()
+                .Where(y => loadedAssemblies.Any((a) => a.FullName == y.FullName) == false)
+                .ToList()
+                .ForEach(x => loadedAssemblies.Add(AppDomain.CurrentDomain.Load(x)));
+            typeof(Program).Assembly.GetReferencedAssemblies().Distinct()
+                .Where(y => loadedAssemblies.Any((a) => a.FullName == y.FullName) == false)
+                .ToList()
+                .ForEach(x => loadedAssemblies.Add(AppDomain.CurrentDomain.Load(x)));
+
+
             var containerBuilder = new ContainerBuilder();
             var hostBuilder = new ApplicationServerBuilder(containerBuilder)
-                    .LoadServices(new[] { "IServices", "Services" })
-                    .UseLog4netLogger(new LogOptions { EnableConsoleLog = true })
-                    //.UseHttpForTransfer("127.0.0.1", 8007)// http server ip and port,becareful the firewall blocker
-                    .UseConsulForDiscovery(new Jimu.Server.Discovery.ConsulIntegration.ConsulOptions("127.0.0.1", 8500, "JimuService-", "127.0.0.1:8009"))
-                    .UseDotNettyForTransfer(new Jimu.Server.Transport.DotNetty.DotNettyOptions("127.0.0.1", 8009))
-                                                 .UseJoseJwtForOAuth<DotNettyAddress>(new Jimu.Server.Auth.JwtAuthorizationOptions
-                                                 {
-                                                     ServerIp = "127.0.0.1",
-                                                     ServerPort = 8009,
-                                                     SecretKey = "test",
-                                                     ExpireTimeSpan = new TimeSpan(1, 0, 0),
-                                                     TokenEndpointPath = "token",
-                                                     ValidateLifetime = true,
-                                                     CheckCredential = o =>
-                                                     {
-                                                         if (o.UserName == "admin" && o.Password == "admin")
-                                                         {
-                                                             o.AddClaim("department", "IT部");
-                                                         }
-                                                         else
-                                                         {
-                                                             o.Rejected("401", "acount or password incorrect");
-                                                         }
-                                                     }
-                                                 })
+                //.LoadServices(new[] { "IServices", "Services" })
+                //.UseLog4netLogger(new JimuLog4netOptions { EnableConsoleLog = true })
+                ////.UseHttpForTransfer("127.0.0.1", 8007)// http server ip and port,becareful the firewall blocker
+                //.UseConsulForDiscovery(new Jimu.Server.Discovery.ConsulIntegration.ConsulOptions("127.0.0.1", 8500, "JimuService-", "127.0.0.1:8009"))
+                //.UseDotNettyForTransfer(new Jimu.Server.Transport.DotNetty.DotNettyOptions("127.0.0.1", 8009))
+                //                             .UseJoseJwtForOAuth<DotNettyAddress>(new Jimu.Server.Auth.JwtAuthorizationOptions
+                //                             {
+                //                                 ServerIp = "127.0.0.1",
+                //                                 ServerPort = 8009,
+                //                                 SecretKey = "test",
+                //                                 ExpireTimeSpan = new TimeSpan(1, 0, 0),
+                //                                 TokenEndpointPath = "token",
+                //                                 ValidateLifetime = true,
+                //                                 CheckCredential = o =>
+                //                                 {
+                //                                     if (o.UserName == "admin" && o.Password == "admin")
+                //                                     {
+                //                                         o.AddClaim("department", "IT部");
+                //                                     }
+                //                                     else
+                //                                     {
+                //                                         o.Rejected("401", "acount or password incorrect");
+                //                                     }
+                //                                 }
+                //                             })
                 ;
             using (var host = hostBuilder.Build())
             {
                 //InitProxyService();
+                Console.WriteLine("haha");
                 host.Run();
                 Console.ReadLine();
             }
@@ -55,11 +72,11 @@ namespace Server1
             var containerBuilder = new ContainerBuilder();
             var host = new Jimu.Client.ApplicationClientBuilder(containerBuilder)
                 //.UseLog4netLogger(new LogOptions { EnableConsoleLog = true })
-                .UsePollingAddressSelector()
-                .UseConsulForDiscovery(new Jimu.Client.Discovery.ConsulIntegration.ConsulOptions("127.0.0.1", 8500, "JimuService-"))
-                .UseDotNettyForTransfer()
-                .UseHttpForTransfer()
-                .UseServiceProxy(new Jimu.Client.Proxy.ServiceProxyOptions(new[] { "IServices" }))
+                //.UsePollingAddressSelector()
+                //.UseConsulForDiscovery(new Jimu.Client.Discovery.ConsulIntegration.ConsulOptions("127.0.0.1", 8500, "JimuService-"))
+                //.UseDotNettyForTransfer()
+                //.UseHttpForTransfer()
+                //.UseServiceProxy(new Jimu.Client.Proxy.ServiceProxyOptions(new[] { "IServices" }))
                 .Build()
                 ;
             host.Run();

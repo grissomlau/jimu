@@ -1,16 +1,25 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 
 namespace Jimu
 {
+
     /// <summary>
     ///     server address
     /// </summary>
-    public abstract class JimuAddress
+    public class JimuAddress
     {
-        protected JimuAddress(string serverFlag)
+        public JimuAddress() { }
+        public JimuAddress(string ip, int port, string protocol)
         {
-            this.ServerFlag = serverFlag;
+            this.Ip = ip;
+            this.Port = port;
+            this.Protocol = protocol;
         }
+        //protected JimuAddress(string protocol)
+        //{
+        //    this.Protocol = protocol;
+        //}
         //public string Token { get; set; }
 
         /// <summary>
@@ -28,9 +37,9 @@ namespace Jimu
         public string Code => ToString();
 
         /// <summary>
-        ///     flag of the server type
+        /// communication protocol
         /// </summary>
-        public string ServerFlag { get; set; }
+        public string Protocol { get; set; }
 
         public virtual EndPoint CreateEndPoint()
         {

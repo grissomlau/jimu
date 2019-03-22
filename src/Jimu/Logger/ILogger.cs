@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Jimu
+namespace Jimu.Logger
 {
     public interface ILogger
     {

@@ -51,13 +51,13 @@ namespace ApiGateway
             // start jimu client host;
             _host = new ApplicationClientBuilder(_containerBuilder)
                 //.UseInServerForDiscovery(new DotNettyAddress("127.0.0.1", 8007), new HttpAddress("127.0.0.1", 8008))
-                .UseConsulForDiscovery(new Jimu.Client.Discovery.ConsulIntegration.ConsulOptions("127.0.0.1", 8500, "JimuService-"))
-                .UseDotNettyForTransfer()
-                .UseHttpForTransfer()
-                .UsePollingAddressSelector()
-                .UseServiceProxy(new Jimu.Client.Proxy.ServiceProxyOptions( new[] { "IServices" }))
-                .UseServerHealthCheck(1)
-                .SetDiscoveryAutoUpdateJobInterval(new Jimu.Client.Discovery.Implement.DiscoveryOptions(60))
+                //.UseConsulForDiscovery(new Jimu.Client.Discovery.ConsulIntegration.ConsulOptions("127.0.0.1", 8500, "JimuService-"))
+                //.UseDotNettyForTransfer()
+                //.UseHttpForTransfer()
+                //.UsePollingAddressSelector()
+                //.UseServiceProxy(new Jimu.Client.Proxy.ServiceProxyOptions( new[] { "IServices" }))
+                //.UseServerHealthCheck(1)
+                //.SetDiscoveryAutoUpdateJobInterval(new Jimu.Client.Discovery.Implement.DiscoveryOptions(60))
                 .Build();
 
             return this._host.Container.Resolve<IServiceProvider>();

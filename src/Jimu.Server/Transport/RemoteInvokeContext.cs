@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Jimu.Logger;
+using System;
 using System.Linq;
 
 namespace Jimu.Server

@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Jimu.Logger;
 using Polly;
 
 namespace Jimu.Client
@@ -38,6 +39,14 @@ namespace Jimu.Client
             {
                 _logger.Debug($"invoking service: {serviceIdOrPath} raising an error: {result.ExceptionMessage}");
                 throw new Exception(result.ExceptionMessage);
+            }
+            if (!string.IsNullOrEmpty(result.ErrorCode))
+            {
+                _logger.Debug($"invoking service: {serviceIdOrPath} raising an error: errorcode {result.ErrorCode}, error: {result.ErrorMsg}");
+                if (result.Result == null)
+                {
+                    return default(T);
+                }
             }
             if (result.Result == null)
             {

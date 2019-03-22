@@ -5,6 +5,7 @@ using Autofac;
 using Jimu.ApiGateway.Model;
 using Jimu.Client;
 using Jimu.Client.ApiGateway;
+using Jimu.Logger;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -85,40 +86,40 @@ namespace Jimu.ApiGateway
 
             // jimu client
             var host = new ApplicationClientBuilder(new ContainerBuilder())
-                .UseLog4netLogger(new LogOptions
-                //.UseNLogger(new LogOptions
-                {
-                    EnableConsoleLog = true,
-                    EnableFileLog = true,
-                    FileLogLevel = LogLevel.Info | LogLevel.Error,
-                })
-                .UseConsulForDiscovery(new Client.Discovery.ConsulIntegration.ConsulOptions("127.0.0.1", 8500, "hello"))
-                .UseDotNettyForTransfer()
-                .UseHttpForTransfer()
-                .UsePollingAddressSelector()
-                .UseServerHealthCheck(1)
-                .SetDiscoveryAutoUpdateJobInterval(new Client.Discovery.Implement.DiscoveryOptions(1))
-                .UseToken(() => { var headers = JimuHttpContext.Current.Request.Headers["Authorization"]; return headers.Any() ? headers[0] : null; })
-                .UseJoseJwtForOAuth<HttpAddress>(new Client.Auth.JwtAuthorizationOptions()
-                {
-                    ServerIp = "127.0.0.1",
-                    ServerPort = 5001,
-                    SecretKey = "test",
-                    ExpireTimeSpan = new TimeSpan(1, 0, 0),
-                    TokenEndpointPath = "/api/client/token",
-                    ValidateLifetime = true,
-                    CheckCredential = o =>
-                    {
-                        if (o.UserName == "admin" && o.Password == "admin")
-                        {
-                            o.AddClaim("department", "IT部");
-                        }
-                        else
-                        {
-                            o.Rejected("401", "acount or password incorrect");
-                        }
-                    }
-                })
+                //.UseLog4netLogger(new JimuLog4netOptions
+                ////.UseNLogger(new LogOptions
+                //{
+                //    EnableConsoleLog = true,
+                //    EnableFileLog = true,
+                //    FileLogLevel = LogLevel.Info | LogLevel.Error,
+                //})
+                //.UseConsulForDiscovery(new Client.Discovery.ConsulIntegration.ConsulOptions("127.0.0.1", 8500, "hello"))
+                //.UseDotNettyForTransfer()
+                //.UseHttpForTransfer()
+                //.UsePollingAddressSelector()
+                //.UseServerHealthCheck(1)
+                //.SetDiscoveryAutoUpdateJobInterval(new Client.Discovery.Implement.DiscoveryOptions(1))
+                //.UseToken(() => { var headers = JimuHttpContext.Current.Request.Headers["Authorization"]; return headers.Any() ? headers[0] : null; })
+                //.UseJoseJwtForOAuth<HttpAddress>(new Client.Auth.JwtAuthorizationOptions()
+                //{
+                //    ServerIp = "127.0.0.1",
+                //    ServerPort = 5001,
+                //    SecretKey = "test",
+                //    ExpireTimeSpan = new TimeSpan(1, 0, 0),
+                //    TokenEndpointPath = "/api/client/token",
+                //    ValidateLifetime = true,
+                //    CheckCredential = o =>
+                //    {
+                //        if (o.UserName == "admin" && o.Password == "admin")
+                //        {
+                //            o.AddClaim("department", "IT部");
+                //        }
+                //        else
+                //        {
+                //            o.Rejected("401", "acount or password incorrect");
+                //        }
+                //    }
+                //})
                 .Build();
             app.UseJimu(host);
             host.Run();

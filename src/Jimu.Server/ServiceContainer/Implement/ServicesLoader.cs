@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyModel;
+﻿using Jimu.Logger;
+using Jimu.Server.ServiceContainer.Implement;
+using Microsoft.Extensions.DependencyModel;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -14,16 +16,18 @@ namespace Jimu.Server
 {
     public class ServicesLoader : IDisposable
     {
-        readonly string _path;//where are the dll directory
-        readonly bool _enableWatchChanged;
+        //readonly string _path;//where are the dll directory
+        //readonly bool _enableWatchChanged;
         readonly ILogger _logger;
-        FileSystemWatcher _watcher;
         volatile bool _loading;//is loading the dll
         volatile bool _isWatching;//is watching the path
         static object _lockObj = new object();
         readonly IServiceEntryContainer _serviceEntryContainer;
-        readonly string _watchingFilePattern;
+        //readonly string _watchingFilePattern;
         volatile bool _changingInloading;
+
+        readonly ServiceOptions _options;
+        readonly List<FileSystemWatcher> _watchers = new List<FileSystemWatcher>();
 
         /// <summary>
         /// dll loader
@@ -33,13 +37,16 @@ namespace Jimu.Server
         /// <param name="path">where are the dll directory</param>
         /// <param name="watchingFilePattern">what type of file will be watch when enableWatchChanged is true</param>
         /// <param name="enableWatchChanged">whether enable watch file changed</param>
-        public ServicesLoader(IServiceEntryContainer serviceEntryContainer, ILogger logger, string path, string watchingFilePattern = "*.dll", bool enableWatchChanged = true)
+        public ServicesLoader(IServiceEntryContainer serviceEntryContainer, ILogger logger, ServiceOptions options)
         {
-            _path = path;
-            _enableWatchChanged = enableWatchChanged;
             _logger = logger;
             _serviceEntryContainer = serviceEntryContainer;
-            _watchingFilePattern = watchingFilePattern;
+            _options = options;
+
+            if (string.IsNullOrEmpty(_options.Path))
+            {
+                _options.Path = "./";
+            }
         }
 
 
@@ -62,7 +69,7 @@ namespace Jimu.Server
                     }
                 }
 
-                var foundDlls = Directory.GetFileSystemEntries(new FileInfo(_path).FullName, name.Name + ".dll", SearchOption.AllDirectories);
+                var foundDlls = Directory.GetFileSystemEntries(new FileInfo(_options.Path).FullName, name.Name + ".dll", SearchOption.AllDirectories);
                 if (foundDlls.Any())
                 {
                     using (var sr = File.OpenRead(foundDlls[0]))
@@ -71,28 +78,32 @@ namespace Jimu.Server
                     }
                 }
 
-                _logger.Warn($"cannot found assembly {name.Name}, path: { _path}");
+                _logger.Warn($"cannot found assembly {name.Name}, path: { _options.Path}");
                 return null;
                 //return context.LoadFromAssemblyName(name);
             };
 
             HashSet<Assembly> assemblies = new HashSet<Assembly>();
-            foreach (var file in Directory.GetFiles(_path, "*.dll"))
+            var patterns = _options.LoadFilePattern.Split(',');
+            foreach (var pattern in patterns)
             {
-                var key = Path.GetFileName(file);
-                using (var sr = File.OpenRead(file))
+                foreach (var file in Directory.GetFiles(_options.Path, pattern.Trim()))
                 {
-                    //var myAssembly = AssemblyLoadContext.Default.LoadFromStream(sr);
-                    var bytes = new byte[sr.Length];
-                    sr.Read(bytes, 0, (int)sr.Length);
-                    var myAssembly = Assembly.Load(bytes);
-                    assemblies.Add(myAssembly);
-                    //var types = myAssembly.ExportedTypes;
-                    //foreach (var type in types)
-                    //{
-                    //    //list.AddOrUpdate(type.FullName, type, (x, t) => type);
-                    //    _types.Add(type);
-                    //}
+                    var key = Path.GetFileName(file);
+                    using (var sr = File.OpenRead(file))
+                    {
+                        //var myAssembly = AssemblyLoadContext.Default.LoadFromStream(sr);
+                        var bytes = new byte[sr.Length];
+                        sr.Read(bytes, 0, (int)sr.Length);
+                        var myAssembly = Assembly.Load(bytes);
+                        assemblies.Add(myAssembly);
+                        //var types = myAssembly.ExportedTypes;
+                        //foreach (var type in types)
+                        //{
+                        //    //list.AddOrUpdate(type.FullName, type, (x, t) => type);
+                        //    _types.Add(type);
+                        //}
+                    }
                 }
             }
 
@@ -105,13 +116,20 @@ namespace Jimu.Server
             }
 
             _loading = false;
-            if (_enableWatchChanged && !_isWatching)
+            if (_options.EnableWatch && !_isWatching)
             {
                 _isWatching = true;
                 this.Watch();
             }
 
-            _logger.Debug($"[config]loaded services: {string.Join(",", assemblies)}");
+            if (!assemblies.Any())
+            {
+                _logger.Debug($"[config]loading services: Nothing to load.");
+            }
+            else
+            {
+                _logger.Debug($"[config]loading services: {string.Join(",", assemblies)}");
+            }
             _logger.Info($"[config]loaded services.");
         }
 
@@ -122,28 +140,34 @@ namespace Jimu.Server
         }
         private void Watch()
         {
-            _watcher = new FileSystemWatcher();
-            _watcher.Path = _path;
 
-            // Watch for changes in LastAccess and LastWrite times, and
-            // the renaming of files or directories.
-            _watcher.NotifyFilter = NotifyFilters.LastAccess
-                                 | NotifyFilters.LastWrite
-                                 | NotifyFilters.FileName
-                                 | NotifyFilters.DirectoryName;
+            var filters = _options.WatchFilePattern.Split(',');
+            foreach (var filter in filters)
+            {
+                FileSystemWatcher watcher = new FileSystemWatcher();
+                watcher.Path = _options.Path;
 
-            // Only watch text files.
-            //_watcher.Filter = "*.dll";
-            _watcher.Filter = this._watchingFilePattern;
+                // Watch for changes in LastAccess and LastWrite times, and
+                // the renaming of files or directories.
+                watcher.NotifyFilter = NotifyFilters.LastAccess
+                                     | NotifyFilters.LastWrite
+                                     | NotifyFilters.FileName
+                                     | NotifyFilters.DirectoryName;
 
-            // Add event handlers.
-            _watcher.Changed += Watcher_Changed;
-            _watcher.Created += Watcher_Changed;
-            _watcher.Deleted += Watcher_Changed;
-            _watcher.Renamed += Watcher_Changed;
+                // Only watch text files.
+                //_watcher.Filter = "*.dll";
+                watcher.Filter = filter;
 
-            // Begin watching.
-            _watcher.EnableRaisingEvents = true;
+                // Add event handlers.
+                watcher.Changed += Watcher_Changed;
+                watcher.Created += Watcher_Changed;
+                watcher.Deleted += Watcher_Changed;
+                watcher.Renamed += Watcher_Changed;
+
+                // Begin watching.
+                watcher.EnableRaisingEvents = true;
+                _watchers.Add(watcher);
+            }
         }
 
         private void Watcher_Changed(object sender, FileSystemEventArgs e)
@@ -161,12 +185,23 @@ namespace Jimu.Server
             }
         }
 
+        private void ClearWatchs()
+        {
+            _watchers.ForEach(x =>
+            {
+                try
+                {
+                    x.Dispose();
+                }
+                catch { }
+            });
+            _watchers.Clear();
+
+        }
+
         public void Dispose()
         {
-            if (_watcher != null)
-            {
-                _watcher.Dispose();
-            }
+            ClearWatchs();
         }
     }
 }

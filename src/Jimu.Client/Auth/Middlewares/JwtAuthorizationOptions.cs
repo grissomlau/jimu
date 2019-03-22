@@ -8,6 +8,7 @@ namespace Jimu.Client.Auth
     {
         public string ServerIp { get; set; }
         public int ServerPort { get; set; }
+        public string Protocol { get; set; }
         public string SecretKey { get; set; }
 
         public bool ValidateLifetime { get; set; }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
+using Jimu.Logger;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,41 +14,41 @@ namespace Jimu.Server.Transport.Http
 {
     public class HttpServer : IServer
     {
-        private readonly List<JimuServiceRoute> _serviceRoutes = new List<JimuServiceRoute>();
         private readonly IServiceEntryContainer _serviceEntryContainer;
         private readonly string _ip;
         private readonly int _port;
         private readonly ILogger _logger;
         private readonly Stack<Func<RequestDel, RequestDel>> _middlewares;
-        private readonly Action<IWebHostBuilder> _builderAction;
-        public HttpServer(string ip, int port, Action<IWebHostBuilder> builderAction, IServiceEntryContainer serviceEntryContainer, ILogger logger)
+        //private readonly Action<IWebHostBuilder> _builderAction;
+        public HttpServer(string ip, int port, IServiceEntryContainer serviceEntryContainer, ILogger logger)
         {
             _serviceEntryContainer = serviceEntryContainer;
             _ip = ip;
             _port = port;
             _logger = logger;
             _middlewares = new Stack<Func<RequestDel, RequestDel>>();
-            _builderAction = builderAction;
+            //_builderAction = builderAction;
         }
         public List<JimuServiceRoute> GetServiceRoutes()
         {
-            if (!_serviceRoutes.Any())
+            List<JimuServiceRoute> routes = new List<JimuServiceRoute>();
+            //if (!_serviceRoutes.Any())
+            //{
+            var serviceEntries = _serviceEntryContainer.GetServiceEntry();
+            serviceEntries.ForEach(entry =>
             {
-                var serviceEntries = _serviceEntryContainer.GetServiceEntry();
-                serviceEntries.ForEach(entry =>
+                var serviceRoute = new JimuServiceRoute
                 {
-                    var serviceRoute = new JimuServiceRoute
-                    {
-                        Address = new List<JimuAddress> {
-                            new HttpAddress(_ip, _port){IsHealth = true}
-                            },
-                        ServiceDescriptor = entry.Descriptor
-                    };
-                    _serviceRoutes.Add(serviceRoute);
-                });
-            }
+                    Address = new List<JimuAddress> {
+                            new JimuAddress(_ip,_port, "Http")
+                        },
+                    ServiceDescriptor = entry.Descriptor
+                };
+                routes.Add(serviceRoute);
+            });
+            //}
 
-            return _serviceRoutes;
+            return routes;
         }
 
         public Task StartAsync()
@@ -70,7 +71,7 @@ namespace Jimu.Server.Transport.Http
 
             //.UseStartup<Startup>()
             //.Build();
-            _builderAction?.Invoke(builder);
+            //_builderAction?.Invoke(builder);
             var host = builder.Build();
             host.Run();
             var endpoint = new IPEndPoint(IPAddress.Parse(_ip), _port);

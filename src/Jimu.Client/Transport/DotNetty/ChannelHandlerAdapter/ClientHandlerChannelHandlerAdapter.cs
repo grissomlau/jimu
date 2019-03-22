@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using DotNetty.Common.Utilities;
 using DotNetty.Transport.Channels;
+using Jimu.Logger;
 
 namespace Jimu.Client
 {

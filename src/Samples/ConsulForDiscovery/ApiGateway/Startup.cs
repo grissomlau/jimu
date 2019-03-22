@@ -48,10 +48,10 @@ namespace ApiGateway
 
             // start jimu client host;
             var host = new ApplicationClientBuilder(new ContainerBuilder())
-                .UseConsulForDiscovery(new Jimu.Client.Discovery.ConsulIntegration.ConsulOptions("127.0.0.1", 8500, "JimuService-"))
-                .UseDotNettyForTransfer()
-                .UseHttpForTransfer()
-                .UsePollingAddressSelector()
+                //.UseConsulForDiscovery(new Jimu.Client.Discovery.ConsulIntegration.ConsulOptions("127.0.0.1", 8500, "JimuService-"))
+                //.UseDotNettyForTransfer()
+                //.UseHttpForTransfer()
+                //.UsePollingAddressSelector()
                 .Build();
             app.UseJimu(host);
             host.Run();

@@ -1,4 +1,5 @@
-﻿using Polly;
+﻿using Jimu.Logger;
+using Polly;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;

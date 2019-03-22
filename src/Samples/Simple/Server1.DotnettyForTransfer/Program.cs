@@ -1,6 +1,7 @@
 ﻿using System;
 using Autofac;
 using Jimu;
+using Jimu.Logger;
 using Jimu.Server;
 
 namespace Server1.DotnettyForTransfer
@@ -11,13 +12,13 @@ namespace Server1.DotnettyForTransfer
         {
             var containerBuilder = new ContainerBuilder();
             var builder = new ApplicationServerBuilder(containerBuilder)
-                .UseLog4netLogger(new LogOptions
-                {
-                    EnableConsoleLog = true
-                })
-                .LoadServices(new[] { "IServices", "Services" })
-                .UseDotNettyForTransfer(new Jimu.Server.Transport.DotNetty.DotNettyOptions("127.0.0.1", 8007), server => { })
-                .UseConsulForDiscovery(new Jimu.Server.Discovery.ConsulIntegration.ConsulOptions("127.0.0.1", 8500, "JimuService-", "127.0.0.1:8007"))
+                //.UseLog4netLogger(new JimuLog4netOptions
+                //{
+                //    EnableConsoleLog = true
+                //})
+                //.LoadServices(new[] { "IServices", "Services" })
+                //.UseDotNettyForTransfer(new Jimu.Server.Transport.DotNetty.DotNettyOptions("127.0.0.1", 8007), server => { })
+                //.UseConsulForDiscovery(new Jimu.Server.Discovery.ConsulIntegration.ConsulOptions("127.0.0.1", 8500, "JimuService-", "127.0.0.1:8007"))
                 ;
             using (var hostJimu = builder.Build())
             {

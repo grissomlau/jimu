@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using Jimu.Logger;
 using Quartz;
 using Quartz.Impl;
 using Quartz.Impl.Triggers;

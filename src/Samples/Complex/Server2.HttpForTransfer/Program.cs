@@ -1,6 +1,7 @@
 ﻿using System;
 using Autofac;
 using Jimu;
+using Jimu.Logger;
 using Jimu.Server;
 
 namespace Server2.HttpForTransfer
@@ -11,19 +12,21 @@ namespace Server2.HttpForTransfer
         {
             Console.WriteLine("Hello World!");
 
-            var containerBuilder = new ContainerBuilder();
-            var builder = new ApplicationServerBuilder(containerBuilder)
-                .UseLog4netLogger(new LogOptions
-                {
-                    EnableConsoleLog = true
-                })
-                .LoadServices(new[] { "IServices", "Services" })
-                .UseHttpForTransfer(new Jimu.Server.Transport.Http.HttpOptions("127.0.0.1", 8006))
-                ;
-            using (var hostJimu = builder.Build())
-            {
-                hostJimu.Run();
-            }
+            //var containerBuilder = new ContainerBuilder();
+            //var builder = new ApplicationServerBuilder(containerBuilder)
+            //    //.UseLog4netLogger(new JimuLog4netOptions
+            //    //{
+            //    //    EnableConsoleLog = true
+            //    //})
+            //    //.LoadServices(new[] { "IServices", "Services" })
+            //    //.UseHttpForTransfer(new Jimu.Server.Transport.Http.HttpOptions("127.0.0.1", 8006))
+            //    ;
+            //using (var hostJimu = builder.Build())
+            //{
+            //    hostJimu.Run();
+            //}
+
+            ApplicationServer.Run();
 
         }
     }

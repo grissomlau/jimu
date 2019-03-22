@@ -20,6 +20,7 @@ namespace Jimu.Helper
             yield return EnumTypeConvert;
             yield return SimpleTypeConvert;
             yield return ComplexTypeConvert;
+
         }
 
         private static object EnumTypeConvert(object instance, Type destinationType)
@@ -32,6 +33,10 @@ namespace Jimu.Helper
         {
             if (instance is IConvertible && typeof(IConvertible).GetTypeInfo().IsAssignableFrom(destinationType))
                 return System.Convert.ChangeType(instance, destinationType);
+            else if (instance.GetType() == destinationType)
+            {
+                return instance;
+            }
             return null;
         }
 
@@ -51,5 +56,6 @@ namespace Jimu.Helper
                 throw ex;
             }
         }
+
     }
 }

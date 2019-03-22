@@ -10,21 +10,22 @@ using DotNetty.Transport.Bootstrapping;
 using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Sockets;
 using Jimu.Extension;
+using Jimu.Logger;
 
 namespace Jimu.Server.Transport.DotNetty
 {
     public class DotNettyServer : IServer
     {
-        private readonly List<JimuServiceRoute> _serviceRoutes = new List<JimuServiceRoute>();
+        //private readonly List<JimuServiceRoute> _serviceRoutes = new List<JimuServiceRoute>();
         private readonly IServiceEntryContainer _serviceEntryContainer;
-        private readonly DotNettyAddress _address;
+        private readonly JimuAddress _address;
         private readonly ILogger _logger;
         private IChannel _channel;
 
         private readonly Stack<Func<RequestDel, RequestDel>> _middlewares;
 
 
-        public DotNettyServer(DotNettyAddress address, IServiceEntryContainer serviceEntryContainer, ILogger logger)
+        public DotNettyServer(JimuAddress address, IServiceEntryContainer serviceEntryContainer, ILogger logger)
         {
             _serviceEntryContainer = serviceEntryContainer;
             _address = address;
@@ -33,23 +34,24 @@ namespace Jimu.Server.Transport.DotNetty
         }
         public List<JimuServiceRoute> GetServiceRoutes()
         {
-            if (!_serviceRoutes.Any())
+            List<JimuServiceRoute> routes = new List<JimuServiceRoute>();
+            //if (!_serviceRoutes.Any())
+            //{
+            var serviceEntries = _serviceEntryContainer.GetServiceEntry();
+            serviceEntries.ForEach(entry =>
             {
-                var serviceEntries = _serviceEntryContainer.GetServiceEntry();
-                serviceEntries.ForEach(entry =>
+                var serviceRoute = new JimuServiceRoute
                 {
-                    var serviceRoute = new JimuServiceRoute
-                    {
-                        Address = new List<JimuAddress> {
+                    Address = new List<JimuAddress> {
                              _address
-                            },
-                        ServiceDescriptor = entry.Descriptor
-                    };
-                    _serviceRoutes.Add(serviceRoute);
-                });
-            }
+                        },
+                    ServiceDescriptor = entry.Descriptor
+                };
+                routes.Add(serviceRoute);
+            });
+            //}
 
-            return _serviceRoutes;
+            return routes;
         }
 
         private async Task OnReceived(IChannelHandlerContext channel, JimuTransportMsg message)

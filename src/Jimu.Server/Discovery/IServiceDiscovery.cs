@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Jimu.Server
@@ -33,13 +34,13 @@ namespace Jimu.Server
         /// </summary>
         /// <param name="routes"></param>
         /// <returns></returns>
-        Task SetRoutesAsync(IEnumerable<JimuServiceRoute> routes);
+        Task SetRoutesAsync(List<JimuServiceRoute> routes);
         /// <summary>
         /// register service by service route
         /// </summary>
         /// <param name="route"></param>
         /// <returns></returns>
-        Task AddRouteAsync(List<JimuServiceRoute> routes);
+        //Task AddRouteAsync(List<JimuServiceRoute> routes);
 
         /// <summary>
         ///     get all registered service routes
@@ -52,5 +53,7 @@ namespace Jimu.Server
         /// </summary>
         /// <returns></returns>
         Task<List<JimuAddress>> GetAddressAsync();
+
+        event Action<List<JimuServiceRoute>> OnBeforeSetRoutes;
     }
 }

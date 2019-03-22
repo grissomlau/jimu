@@ -1,14 +1,15 @@
 ﻿using System;
 using Autofac;
+using Jimu.Logger;
 
 namespace Jimu.Client
 {
     public static partial class ServiceHostBuilderExtension
     {
-        public static IApplicationClientBuilder UseToken(
-            this IApplicationClientBuilder serviceHostBuilder, Func<string> getToken)
+        public static ApplicationClientBuilder UseToken(
+            this ApplicationClientBuilder serviceHostBuilder, Func<string> getToken)
         {
-            serviceHostBuilder.RegisterComponent(containerBuilder =>
+            serviceHostBuilder.AddComponent(containerBuilder =>
             {
                 containerBuilder.RegisterType<ServiceTokenGetter>().As<IServiceTokenGetter>().SingleInstance();
             });

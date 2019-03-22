@@ -189,7 +189,7 @@ namespace Jimu.Server.Implement.Parser
               && !prop.PropertyType.FullName.StartsWith("System."))
                 {
 
-                    sb.Append($"\"{prop.Name}\":{{{GetCustomTypeMembers(prop.PropertyType)}}}");
+                    sb.Append($"\"{prop.Name}\":{{{GetCustomTypeMembers(prop.PropertyType)}}},");
                 }
                 else
                 {
@@ -204,7 +204,7 @@ namespace Jimu.Server.Implement.Parser
                     sb.Append($"\"{prop.Name}\":\"{prop.PropertyType.ToString()}{proComment}\",");
                 }
             }
-            return sb.ToString();
+            return sb.ToString().TrimEnd(',');
         }
 
         private static string FilterJson(string objJson)
