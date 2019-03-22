@@ -59,8 +59,8 @@ namespace Jimu.Server.Discovery.ConsulIntegration
                     List<JimuAddress> addresses = new List<JimuAddress>(descriptor.AddressDescriptors.ToArray().Count());
                     foreach (var addDesc in descriptor.AddressDescriptors)
                     {
-                        var addrType = Type.GetType(addDesc.Type);
-                        addresses.Add(JimuHelper.Deserialize(addDesc.Value, addrType) as JimuAddress);
+                        //var addrType = Type.GetType(addDesc.Type);
+                        addresses.Add(JimuHelper.Deserialize(addDesc.Value, typeof(JimuAddress)) as JimuAddress);
                     }
 
                     _routes.Add(new JimuServiceRoute
@@ -115,7 +115,7 @@ namespace Jimu.Server.Discovery.ConsulIntegration
                     ServiceDescriptor = route.ServiceDescriptor,
                     AddressDescriptors = route.Address?.Select(x => new JimuAddressDesc
                     {
-                        Type = $"{x.GetType().FullName}, {x.GetType().Assembly.GetName()}",
+                        //Type = $"{x.GetType().FullName}, {x.GetType().Assembly.GetName()}",
                         Value = JimuHelper.Serialize<string>(x)
                     })
                 });
@@ -163,8 +163,8 @@ namespace Jimu.Server.Discovery.ConsulIntegration
             List<JimuAddress> addresses = new List<JimuAddress>(descriptor.AddressDescriptors.ToArray().Count());
             foreach (var addDesc in descriptor.AddressDescriptors)
             {
-                var addrType = Type.GetType(addDesc.Type);
-                addresses.Add(JimuHelper.Deserialize(addDesc.Value, addrType) as JimuAddress);
+                //var addrType = Type.GetType(addDesc.Type);
+                addresses.Add(JimuHelper.Deserialize(addDesc.Value, typeof(JimuAddress)) as JimuAddress);
             }
 
             return new JimuServiceRoute

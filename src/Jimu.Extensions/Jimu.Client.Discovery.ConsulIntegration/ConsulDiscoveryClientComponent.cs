@@ -63,8 +63,8 @@ namespace Jimu.Client.Discovery.ConsulIntegration
                                     new List<JimuAddress>(descriptor.AddressDescriptors.ToArray().Count());
                                 foreach (var addDesc in descriptor.AddressDescriptors)
                                 {
-                                    var addrType = Type.GetType(addDesc.Type);
-                                    addresses.Add(JimuHelper.Deserialize(addDesc.Value, addrType) as JimuAddress);
+                                    //var addrType = Type.GetType(addDesc.Type);
+                                    addresses.Add(JimuHelper.Deserialize(addDesc.Value, typeof(JimuAddress)) as JimuAddress);
                                 }
 
                                 routes.Add(new JimuServiceRoute
