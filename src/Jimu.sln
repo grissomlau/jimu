@@ -45,6 +45,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Client.Discovery.Consu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Server.Discovery.ConsulIntegration", "Jimu.Modules\Jimu.Server.Discovery.ConsulIntegration\Jimu.Server.Discovery.ConsulIntegration.csproj", "{00368FA9-E5D9-4DC3-A812-91AAD393EBBB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jimu.Server.Repository.MiniDDD.EFIntegration", "Jimu.Modules\Jimu.Server.Repository.MiniDDD.EFIntegration\Jimu.Server.Repository.MiniDDD.EFIntegration.csproj", "{E4183569-C106-4C6A-990F-EB3689EAE776}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jimu.Server.Repository.MiniDDD.SqlSugarIntegration", "Jimu.Modules\Jimu.Server.Repository.MiniDDD.SqlSugarIntegration\Jimu.Server.Repository.MiniDDD.SqlSugarIntegration.csproj", "{7BF7DBDE-C18A-47EF-AC7E-28756BEFE108}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -111,6 +115,14 @@ Global
 		{00368FA9-E5D9-4DC3-A812-91AAD393EBBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00368FA9-E5D9-4DC3-A812-91AAD393EBBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00368FA9-E5D9-4DC3-A812-91AAD393EBBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4183569-C106-4C6A-990F-EB3689EAE776}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4183569-C106-4C6A-990F-EB3689EAE776}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4183569-C106-4C6A-990F-EB3689EAE776}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4183569-C106-4C6A-990F-EB3689EAE776}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BF7DBDE-C18A-47EF-AC7E-28756BEFE108}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BF7DBDE-C18A-47EF-AC7E-28756BEFE108}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BF7DBDE-C18A-47EF-AC7E-28756BEFE108}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BF7DBDE-C18A-47EF-AC7E-28756BEFE108}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -131,6 +143,8 @@ Global
 		{43DEE7EE-7B94-4861-9287-D4D351D07CE0} = {AF5033F5-BA7F-49D5-98A8-A3786891C322}
 		{F57EF7C8-AB32-47E3-9D66-142337CE955A} = {238A367F-90BC-4E5A-B11B-4D04519621B7}
 		{00368FA9-E5D9-4DC3-A812-91AAD393EBBB} = {238A367F-90BC-4E5A-B11B-4D04519621B7}
+		{E4183569-C106-4C6A-990F-EB3689EAE776} = {238A367F-90BC-4E5A-B11B-4D04519621B7}
+		{7BF7DBDE-C18A-47EF-AC7E-28756BEFE108} = {238A367F-90BC-4E5A-B11B-4D04519621B7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B2F7F17C-34DB-4FBF-8BCD-49BC2FA3A10F}

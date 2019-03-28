@@ -177,3 +177,7 @@
 /src/Jimu.Modules/Jimu.Server.Discovery.ConsulIntegration/obj
 /src/Jimu.Modules/Jimu.Server.EventBus.MasstransitIntegration/bin
 /src/Jimu.Modules/Jimu.Server.EventBus.MasstransitIntegration/obj
+/src/Jimu.Modules/Jimu.Server.Repository.MiniDDD.EFIntegration/bin/Debug/netstandard2.0
+/src/Jimu.Modules/Jimu.Server.Repository.MiniDDD.EFIntegration/obj
+/src/Jimu.Modules/Jimu.Server.Repository.MiniDDD.SqlSugarIntegration/bin/Debug/netstandard2.0
+/src/Jimu.Modules/Jimu.Server.Repository.MiniDDD.SqlSugarIntegration/obj
