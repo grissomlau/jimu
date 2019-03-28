@@ -7,10 +7,10 @@ using Microsoft.Extensions.Configuration;
 
 namespace Jimu.Server.ServiceContainer.Implement
 {
-    public class ServiceLoaderServerComponent : ServerComponentBase
+    public class ServiceLoaderServerModule : ServerModuleBase
     {
         public ServiceOptions _options;
-        public ServiceLoaderServerComponent(IConfigurationRoot jimuAppSettings) : base(jimuAppSettings)
+        public ServiceLoaderServerModule(IConfigurationRoot jimuAppSettings) : base(jimuAppSettings)
         {
             _options = jimuAppSettings.GetSection(typeof(ServiceOptions).Name).Get<ServiceOptions>();
 

@@ -6,9 +6,9 @@ using System.Text;
 
 namespace Jimu
 {
-    public abstract class ClientComponentBase : ComponentBase
+    public abstract class ClientModuleBase : ModuleBase
     {
-        public ClientComponentBase(IConfigurationRoot jimuAppSettings) : base(jimuAppSettings)
+        public ClientModuleBase(IConfigurationRoot jimuAppSettings) : base(jimuAppSettings)
         {
         }
     }

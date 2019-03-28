@@ -6,10 +6,10 @@ using System.Text;
 
 namespace Jimu
 {
-    public abstract class ComponentBase
+    public abstract class ModuleBase
     {
         protected IConfigurationRoot JimuAppSettings { get; }
-        public ComponentBase(IConfigurationRoot jimuAppSettings)
+        public ModuleBase(IConfigurationRoot jimuAppSettings)
         {
             this.JimuAppSettings = jimuAppSettings;
         }

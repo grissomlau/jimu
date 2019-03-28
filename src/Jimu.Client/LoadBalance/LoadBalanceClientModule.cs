@@ -7,11 +7,11 @@ using System.Text;
 
 namespace Jimu.Client.LoadBalance
 {
-    public class LoadBalanceClientComponent : ClientComponentBase
+    public class LoadBalanceClientModule : ClientModuleBase
     {
 
         private readonly LoadBalanceOptions _options;
-        public LoadBalanceClientComponent(IConfigurationRoot jimuAppSettings) : base(jimuAppSettings)
+        public LoadBalanceClientModule(IConfigurationRoot jimuAppSettings) : base(jimuAppSettings)
         {
             _options = jimuAppSettings.GetSection(typeof(LoadBalanceOptions).Name).Get<LoadBalanceOptions>();
         }

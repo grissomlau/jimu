@@ -6,6 +6,6 @@ namespace Jimu.Client.Token.Implement
 {
     public class TokenGetterOptions
     {
-        public string GetType { get; set; }
+        public string GetFrom { get; set; }
     }
 }

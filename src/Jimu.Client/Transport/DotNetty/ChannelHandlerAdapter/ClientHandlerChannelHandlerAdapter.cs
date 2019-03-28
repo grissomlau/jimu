@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Threading.Tasks;
 using DotNetty.Common.Utilities;
 using DotNetty.Transport.Channels;
 using Jimu.Logger;
@@ -31,7 +32,7 @@ namespace Jimu.Client
             //var sender = context.Channel.GetAttribute(AttributeKey<IClientSender>.ValueOf(typeof(DefaultTransportClientFactory), nameof(IClientSender))).Get();
 
             //listener.Received(sender, msg);
-            listener.Received(msg);
+            Task.Run(() => listener.Received(msg));
         }
 
     }

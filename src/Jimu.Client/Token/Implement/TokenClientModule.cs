@@ -9,10 +9,10 @@ using Microsoft.Extensions.Configuration;
 
 namespace Jimu.Client.Token.Implement
 {
-    public class TokenClientComponent : ClientComponentBase
+    public class TokenClientModule : ClientModuleBase
     {
         private readonly TokenGetterOptions _options;
-        public TokenClientComponent(IConfigurationRoot jimuAppSettings) : base(jimuAppSettings)
+        public TokenClientModule(IConfigurationRoot jimuAppSettings) : base(jimuAppSettings)
         {
             _options = jimuAppSettings.GetSection(typeof(TokenGetterOptions).Name).Get<TokenGetterOptions>();
         }
@@ -28,7 +28,7 @@ namespace Jimu.Client.Token.Implement
 
         public override void DoInit(IContainer container)
         {
-            if (_options != null && _options.GetType == "HttpHeader")
+            if (_options != null && _options.GetFrom == "HttpHeader")
             {
                 var tokenGetter = container.Resolve<IServiceTokenGetter>();
                 tokenGetter.GetToken = () =>

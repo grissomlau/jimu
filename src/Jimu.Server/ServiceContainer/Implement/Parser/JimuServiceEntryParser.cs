@@ -12,7 +12,6 @@ namespace Jimu.Server.Implement.Parser
     class JimuServiceEntryParser
     {
         private readonly IContainer _container;
-        private readonly ConcurrentDictionary<Tuple<Type, string>, FastInvoke.FastInvokeHandler> _handler;
         public JimuServiceEntryParser(IContainer container)
         {
             _container = container;

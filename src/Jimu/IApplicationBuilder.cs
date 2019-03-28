@@ -9,9 +9,9 @@ namespace Jimu
         /// <summary>
         ///     register jimu framework autofac service where custom's Service cannot inject
         /// </summary>
-        /// <param name="componentRegister">jimu framework autofac ContainerBuilder</param>
+        /// <param name="moduleRegister">jimu framework autofac ContainerBuilder</param>
         /// <returns></returns>
-        T AddComponent(Action<ContainerBuilder> componentRegister);
+        T AddModule(Action<ContainerBuilder> moduleRegister);
 
 
         /// <summary>

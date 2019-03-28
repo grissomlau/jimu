@@ -10,10 +10,10 @@ using Microsoft.Extensions.Configuration;
 
 namespace Jimu.Server.Auth
 {
-    public class JwtAuthServerComponent : ServerComponentBase
+    public class JwtAuthServerModule : ServerModuleBase
     {
         private readonly JwtAuthorizationOptions _options;
-        public JwtAuthServerComponent(IConfigurationRoot jimuAppSettings) : base(jimuAppSettings)
+        public JwtAuthServerModule(IConfigurationRoot jimuAppSettings) : base(jimuAppSettings)
         {
             _options = jimuAppSettings.GetSection(typeof(JwtAuthorizationOptions).Name).Get<JwtAuthorizationOptions>();
         }

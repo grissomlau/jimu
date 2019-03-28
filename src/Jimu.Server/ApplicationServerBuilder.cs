@@ -18,9 +18,9 @@ namespace Jimu.Server
         {
         }
 
-        public override ApplicationServerBuilder AddComponent(Action<ContainerBuilder> componentRegister)
+        public override ApplicationServerBuilder AddModule(Action<ContainerBuilder> moduleRegister)
         {
-            return base.AddComponent(componentRegister);
+            return base.AddModule(moduleRegister);
         }
 
         public override ApplicationServerBuilder AddInitializer(Action<IContainer> initializer)
@@ -33,9 +33,9 @@ namespace Jimu.Server
             return base.AddRunner(runner);
         }
 
-        public virtual ApplicationServerBuilder AddServiceComponent(Action<ContainerBuilder> serviceRegister)
+        public virtual ApplicationServerBuilder AddServiceModule(Action<ContainerBuilder> moduleRegister)
         {
-            ServiceRegisters.Add(serviceRegister);
+            ServiceRegisters.Add(moduleRegister);
             return this;
         }
         public virtual ApplicationServerBuilder AddServiceInitializer(Action<IContainer> initializer)
@@ -47,7 +47,7 @@ namespace Jimu.Server
 
         public override IApplication Build()
         {
-            LoadComponent();
+            LoadModule();
             this.AddInitializer(container =>
             {
                 var serviceEntry = container.Resolve<IServiceEntryContainer>();
@@ -58,7 +58,7 @@ namespace Jimu.Server
             return base.Build();
         }
 
-        private void LoadComponent()
+        private void LoadModule()
         {
             var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
             var loadedPaths = loadedAssemblies.Select(a => a.Location).ToArray();
@@ -68,19 +68,19 @@ namespace Jimu.Server
             toLoad.ForEach(path => loadedAssemblies.Add(AppDomain.CurrentDomain.Load(AssemblyName.GetAssemblyName(path))));
 
 
-            var type = typeof(ServerComponentBase);
+            var type = typeof(ServerModuleBase);
             var components = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(x => x.GetTypes())
                 .Where(x => x.IsClass && type.IsAssignableFrom(x) && !x.IsAbstract);
             components.ToList().ForEach(x =>
             {
-                var comp = Activator.CreateInstance(x, this.JimuAppSettings) as ServerComponentBase;
+                var comp = Activator.CreateInstance(x, this.JimuAppSettings) as ServerModuleBase;
                 if (comp != null)
                 {
                     this.AddInitializer(comp.DoInit);
                     this.AddRunner(comp.DoRun);
-                    this.AddComponent(comp.DoRegister);
-                    this.AddServiceComponent(comp.DoServiceRegister);
+                    this.AddModule(comp.DoRegister);
+                    this.AddServiceModule(comp.DoServiceRegister);
                     this.AddServiceInitializer(comp.DoServiceInit);
                     this.AddBeforeRunner(comp.DoBeforeRun);
                 }

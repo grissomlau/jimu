@@ -6,10 +6,10 @@ using Microsoft.Extensions.Configuration;
 
 namespace Jimu.Logger
 {
-    public class Log4netClientComponent : ClientComponentBase
+    public class Log4netClientModule : ClientModuleBase
     {
         private readonly JimuLog4netOptions _options;
-        public Log4netClientComponent(IConfigurationRoot jimuAppSettings) : base(jimuAppSettings)
+        public Log4netClientModule(IConfigurationRoot jimuAppSettings) : base(jimuAppSettings)
         {
             _options = this.JimuAppSettings.GetSection(typeof(JimuLog4netOptions).Name).Get<JimuLog4netOptions>();
         }

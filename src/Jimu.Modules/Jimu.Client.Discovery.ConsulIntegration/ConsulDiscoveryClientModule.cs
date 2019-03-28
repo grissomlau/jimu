@@ -9,10 +9,10 @@ using Microsoft.Extensions.Configuration;
 
 namespace Jimu.Client.Discovery.ConsulIntegration
 {
-    public class ConsulDiscoveryClientComponent : ClientComponentBase
+    public class ConsulDiscoveryClientModule : ClientModuleBase
     {
         readonly ConsulOptions _options;
-        public ConsulDiscoveryClientComponent(IConfigurationRoot jimuAppSettings) : base(jimuAppSettings)
+        public ConsulDiscoveryClientModule(IConfigurationRoot jimuAppSettings) : base(jimuAppSettings)
         {
             _options = jimuAppSettings.GetSection(typeof(ConsulOptions).Name).Get<ConsulOptions>();
         }

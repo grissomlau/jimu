@@ -7,10 +7,10 @@ using Microsoft.Extensions.Configuration;
 
 namespace Jimu.Client.Discovery.Implement
 {
-    public class DiscoveryServiceClientComponent : ClientComponentBase
+    public class DiscoveryServiceClientModule : ClientModuleBase
     {
         private readonly DiscoveryOptions _options;
-        public DiscoveryServiceClientComponent(IConfigurationRoot jimuAppSettings) : base(jimuAppSettings)
+        public DiscoveryServiceClientModule(IConfigurationRoot jimuAppSettings) : base(jimuAppSettings)
         {
             _options = jimuAppSettings.GetSection(typeof(DiscoveryOptions).Name).Get<DiscoveryOptions>();
         }

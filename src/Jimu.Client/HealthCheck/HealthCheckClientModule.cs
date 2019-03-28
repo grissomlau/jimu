@@ -7,10 +7,10 @@ using Microsoft.Extensions.Configuration;
 
 namespace Jimu.Client.HealthCheck
 {
-    public class HealthCheckClientComponent : ClientComponentBase
+    public class HealthCheckClientModule : ClientModuleBase
     {
         private readonly HealthCheckOptions _options;
-        public HealthCheckClientComponent(IConfigurationRoot jimuAppSettings) : base(jimuAppSettings)
+        public HealthCheckClientModule(IConfigurationRoot jimuAppSettings) : base(jimuAppSettings)
         {
             _options = jimuAppSettings.GetSection(typeof(HealthCheckOptions).Name).Get<HealthCheckOptions>();
         }

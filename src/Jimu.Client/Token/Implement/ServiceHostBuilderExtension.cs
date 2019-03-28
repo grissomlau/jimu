@@ -9,7 +9,7 @@ namespace Jimu.Client
         public static ApplicationClientBuilder UseToken(
             this ApplicationClientBuilder serviceHostBuilder, Func<string> getToken)
         {
-            serviceHostBuilder.AddComponent(containerBuilder =>
+            serviceHostBuilder.AddModule(containerBuilder =>
             {
                 containerBuilder.RegisterType<ServiceTokenGetter>().As<IServiceTokenGetter>().SingleInstance();
             });

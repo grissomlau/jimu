@@ -7,11 +7,11 @@ using Microsoft.Extensions.Configuration;
 
 namespace Jimu.Client.FaultTolerant
 {
-    public class FaultTolerantClientComponent : ClientComponentBase
+    public class FaultTolerantClientModule : ClientModuleBase
 
     {
         private readonly FaultTolerantOptions _options;
-        public FaultTolerantClientComponent(IConfigurationRoot jimuAppSettings) : base(jimuAppSettings)
+        public FaultTolerantClientModule(IConfigurationRoot jimuAppSettings) : base(jimuAppSettings)
         {
             _options = jimuAppSettings.GetSection(typeof(FaultTolerantOptions).Name).Get<FaultTolerantOptions>();
         }

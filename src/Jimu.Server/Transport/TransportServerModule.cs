@@ -6,10 +6,10 @@ using Microsoft.Extensions.Configuration;
 
 namespace Jimu.Server.Transport
 {
-    public class TransportServerComponent : ServerComponentBase
+    public class TransportServerModule : ServerModuleBase
     {
         private readonly TransportOptions _options;
-        public TransportServerComponent(IConfigurationRoot jimuAppSettings) : base(jimuAppSettings)
+        public TransportServerModule(IConfigurationRoot jimuAppSettings) : base(jimuAppSettings)
         {
             _options = jimuAppSettings.GetSection(typeof(TransportOptions).Name).Get<TransportOptions>();
         }

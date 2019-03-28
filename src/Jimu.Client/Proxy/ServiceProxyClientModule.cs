@@ -11,10 +11,10 @@ using Microsoft.Extensions.Configuration;
 
 namespace Jimu.Client.Proxy
 {
-    public class ServiceProxyClientComponent : ClientComponentBase
+    public class ServiceProxyClientModule : ClientModuleBase
     {
         private readonly ServiceProxyOptions _options;
-        public ServiceProxyClientComponent(IConfigurationRoot jimuAppSettings) : base(jimuAppSettings)
+        public ServiceProxyClientModule(IConfigurationRoot jimuAppSettings) : base(jimuAppSettings)
         {
             _options = jimuAppSettings.GetSection(typeof(ServiceProxyOptions).Name).Get<ServiceProxyOptions>();
         }

@@ -27,7 +27,7 @@ namespace Jimu
         /// <summary>
         ///     action will be execute in registering: before autofac container build
         /// </summary>
-        protected List<Action<ContainerBuilder>> ComponentRegisters { get; }
+        protected List<Action<ContainerBuilder>> ModuleRegisters { get; }
 
         protected ContainerBuilder ContainerBuilder { get; }
         /// <summary>
@@ -45,7 +45,7 @@ namespace Jimu
             SettingName = settingName;
             JimuAppSettings = ReadSetting();
             ContainerBuilder = containerBuilder;
-            ComponentRegisters = new List<Action<ContainerBuilder>>();
+            ModuleRegisters = new List<Action<ContainerBuilder>>();
             Initializers = new List<Action<IContainer>>();
             Runners = new List<Action<IContainer>>();
             BeforeRunners = new List<Action<IContainer>>();
@@ -60,7 +60,7 @@ namespace Jimu
             ContainerBuilder.Register(x => container).As<IContainer>().SingleInstance();
             ContainerBuilder.RegisterType<ConsoleLogger>().As<ILogger>().SingleInstance();
 
-            ComponentRegisters.ForEach(x => { x(ContainerBuilder); });
+            ModuleRegisters.ForEach(x => { x(ContainerBuilder); });
             container = ContainerBuilder.Build();
             Initializers.ForEach(x => { x(container); });
             host.Container = container;
@@ -80,9 +80,9 @@ namespace Jimu
             return this as T;
         }
 
-        public virtual T AddComponent(Action<ContainerBuilder> componentRegister)
+        public virtual T AddModule(Action<ContainerBuilder> moduleRegister)
         {
-            ComponentRegisters.Add(componentRegister);
+            ModuleRegisters.Add(moduleRegister);
             return this as T;
         }
 

@@ -9,13 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu", "Jimu\Jimu.csproj", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Service", "Service", "{AB948E05-78EB-4878-B3AC-05D5A9185F24}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extensions", "Extensions", "{238A367F-90BC-4E5A-B11B-4D04519621B7}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{238A367F-90BC-4E5A-B11B-4D04519621B7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Client", "Jimu.Client\Jimu.Client.csproj", "{B5D6950B-5CC3-4316-928B-0E29C3B2A695}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Server", "Jimu.Server\Jimu.Server.csproj", "{79AF52C5-C8D5-499D-98FC-AC8346DEA139}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Server.EventBus.MasstransitIntegration", "Jimu.Extensions\Jimu.Server.EventBus.MasstransitIntegration\Jimu.Server.EventBus.MasstransitIntegration.csproj", "{7D762322-59F9-4D0E-8F4E-744C3F2B0520}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Server.EventBus.MasstransitIntegration", "Jimu.Modules\Jimu.Server.EventBus.MasstransitIntegration\Jimu.Server.EventBus.MasstransitIntegration.csproj", "{7D762322-59F9-4D0E-8F4E-744C3F2B0520}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CSMode", "CSMode", "{CB822244-8727-4E6A-9A40-F73CA00C7A1F}"
 EndProject
@@ -35,15 +35,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client", "Samples\CSMode\Cl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server", "Samples\CSMode\Server\Server.csproj", "{59623556-FC1B-485C-A105-C3D5EEE5AF9B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Client.ApiGateway.SwaggerIntegration", "Jimu.Extensions\Jimu.Client.ApiGateway.SwaggerIntegration\Jimu.Client.ApiGateway.SwaggerIntegration.csproj", "{202FD5E7-651F-4DD1-805D-F9C5EA167CE6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Client.ApiGateway.SwaggerIntegration", "Jimu.Modules\Jimu.Client.ApiGateway.SwaggerIntegration\Jimu.Client.ApiGateway.SwaggerIntegration.csproj", "{202FD5E7-651F-4DD1-805D-F9C5EA167CE6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{AF5033F5-BA7F-49D5-98A8-A3786891C322}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Test", "test\Jimu.Test\Jimu.Test.csproj", "{43DEE7EE-7B94-4861-9287-D4D351D07CE0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Server.Discovery.ConsulIntegration", "Jimu.Extensions\Jimu.Server.Discovery.ConsulIntegration\Jimu.Server.Discovery.ConsulIntegration.csproj", "{3B3B7B55-5C25-4134-9BAC-3E6B8DEDDEF9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Client.Discovery.ConsulIntegration", "Jimu.Modules\Jimu.Client.Discovery.ConsulIntegration\Jimu.Client.Discovery.ConsulIntegration.csproj", "{F57EF7C8-AB32-47E3-9D66-142337CE955A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Client.Discovery.ConsulIntegration", "Jimu.Extensions\Jimu.Client.Discovery.ConsulIntegration\Jimu.Client.Discovery.ConsulIntegration.csproj", "{F57EF7C8-AB32-47E3-9D66-142337CE955A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Server.Discovery.ConsulIntegration", "Jimu.Modules\Jimu.Server.Discovery.ConsulIntegration\Jimu.Server.Discovery.ConsulIntegration.csproj", "{00368FA9-E5D9-4DC3-A812-91AAD393EBBB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -103,14 +103,14 @@ Global
 		{43DEE7EE-7B94-4861-9287-D4D351D07CE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43DEE7EE-7B94-4861-9287-D4D351D07CE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43DEE7EE-7B94-4861-9287-D4D351D07CE0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3B3B7B55-5C25-4134-9BAC-3E6B8DEDDEF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3B3B7B55-5C25-4134-9BAC-3E6B8DEDDEF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3B3B7B55-5C25-4134-9BAC-3E6B8DEDDEF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3B3B7B55-5C25-4134-9BAC-3E6B8DEDDEF9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F57EF7C8-AB32-47E3-9D66-142337CE955A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F57EF7C8-AB32-47E3-9D66-142337CE955A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F57EF7C8-AB32-47E3-9D66-142337CE955A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F57EF7C8-AB32-47E3-9D66-142337CE955A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00368FA9-E5D9-4DC3-A812-91AAD393EBBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00368FA9-E5D9-4DC3-A812-91AAD393EBBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00368FA9-E5D9-4DC3-A812-91AAD393EBBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00368FA9-E5D9-4DC3-A812-91AAD393EBBB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -129,8 +129,8 @@ Global
 		{59623556-FC1B-485C-A105-C3D5EEE5AF9B} = {CB822244-8727-4E6A-9A40-F73CA00C7A1F}
 		{202FD5E7-651F-4DD1-805D-F9C5EA167CE6} = {238A367F-90BC-4E5A-B11B-4D04519621B7}
 		{43DEE7EE-7B94-4861-9287-D4D351D07CE0} = {AF5033F5-BA7F-49D5-98A8-A3786891C322}
-		{3B3B7B55-5C25-4134-9BAC-3E6B8DEDDEF9} = {238A367F-90BC-4E5A-B11B-4D04519621B7}
 		{F57EF7C8-AB32-47E3-9D66-142337CE955A} = {238A367F-90BC-4E5A-B11B-4D04519621B7}
+		{00368FA9-E5D9-4DC3-A812-91AAD393EBBB} = {238A367F-90BC-4E5A-B11B-4D04519621B7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B2F7F17C-34DB-4FBF-8BCD-49BC2FA3A10F}

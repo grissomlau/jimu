@@ -12,7 +12,7 @@ namespace Jimu.Client
     {
         public ApplicationClientBuilder(ContainerBuilder containerBuilder, string settingName = "JimuAppClientSettings") : base(containerBuilder, settingName)
         {
-            this.AddComponent(cb =>
+            this.AddModule(cb =>
             {
                 cb.RegisterType<RemoteServiceCaller>().As<IRemoteServiceCaller>().SingleInstance();
                 cb.RegisterType<ClientServiceDiscovery>().As<IClientServiceDiscovery>().SingleInstance();
@@ -31,11 +31,11 @@ namespace Jimu.Client
 
         public override IApplication Build()
         {
-            LoadComponent();
+            LoadModule();
             return base.Build();
         }
 
-        private void LoadComponent()
+        private void LoadModule()
         {
             var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
             var loadedNames = loadedAssemblies.Select(a => a.GetName().Name).ToArray();
@@ -45,18 +45,18 @@ namespace Jimu.Client
             var toLoad = referencedPaths.Where(r => !loadedNames.Contains(Path.GetFileNameWithoutExtension(r), StringComparer.InvariantCultureIgnoreCase)).ToList();
             toLoad.ForEach(path => loadedAssemblies.Add(AppDomain.CurrentDomain.Load(AssemblyName.GetAssemblyName(path))));
 
-            var type = typeof(ClientComponentBase);
+            var type = typeof(ClientModuleBase);
             var components = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(x => x.GetTypes())
                 .Where(x => x.IsClass && type.IsAssignableFrom(x) && !x.IsAbstract);
             components.ToList().ForEach(x =>
             {
-                var comp = Activator.CreateInstance(x, this.JimuAppSettings) as ClientComponentBase;
+                var comp = Activator.CreateInstance(x, this.JimuAppSettings) as ClientModuleBase;
                 if (comp != null)
                 {
                     this.AddInitializer(comp.DoInit);
                     this.AddRunner(comp.DoRun);
-                    this.AddComponent(comp.DoRegister);
+                    this.AddModule(comp.DoRegister);
                 }
             });
 

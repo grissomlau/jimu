@@ -12,10 +12,10 @@ using Microsoft.Extensions.Configuration;
 
 namespace Jimu.Client.Transport
 {
-    public class TransportClientComponent : ClientComponentBase
+    public class TransportClientModule : ClientModuleBase
     {
         private readonly TransportOptions _options;
-        public TransportClientComponent(IConfigurationRoot jimuAppSettings) : base(jimuAppSettings)
+        public TransportClientModule(IConfigurationRoot jimuAppSettings) : base(jimuAppSettings)
         {
             _options = jimuAppSettings.GetSection(typeof(TransportOptions).Name).Get<TransportOptions>();
         }

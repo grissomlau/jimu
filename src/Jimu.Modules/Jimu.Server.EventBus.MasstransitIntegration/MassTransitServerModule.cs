@@ -8,11 +8,11 @@ using Microsoft.Extensions.Configuration;
 
 namespace Jimu.Server.EventBus.MasstransitIntegration
 {
-    public class MassTransitServerComponent : ServerComponentBase
+    public class MassTransitServerModule : ServerModuleBase
     {
         readonly MassTransitOptions _options;
         IContainer _serverContainer;
-        public MassTransitServerComponent(IConfigurationRoot jimuAppSettings) : base(jimuAppSettings)
+        public MassTransitServerModule(IConfigurationRoot jimuAppSettings) : base(jimuAppSettings)
         {
             _options = jimuAppSettings.GetSection(typeof(MassTransitOptions).Name).Get<MassTransitOptions>();
         }

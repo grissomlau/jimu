@@ -169,3 +169,11 @@
 /src/Jimu.Extensions/Jimu.Client.Discovery.ConsulIntegration/obj
 /src/Jimu.Extensions/Jimu.Server.Discovery.ConsulIntegration/bin/Debug/netstandard2.0
 /src/Jimu.Extensions/Jimu.Server.Discovery.ConsulIntegration/obj
+/src/Jimu.Modules/Jimu.Client.ApiGateway.SwaggerIntegration/bin/Debug/netcoreapp2.0
+/src/Jimu.Modules/Jimu.Client.ApiGateway.SwaggerIntegration/obj
+/src/Jimu.Modules/Jimu.Client.Discovery.ConsulIntegration/bin/Debug/netstandard2.0
+/src/Jimu.Modules/Jimu.Client.Discovery.ConsulIntegration/obj
+/src/Jimu.Modules/Jimu.Server.Discovery.ConsulIntegration/bin/Debug/netstandard2.0
+/src/Jimu.Modules/Jimu.Server.Discovery.ConsulIntegration/obj
+/src/Jimu.Modules/Jimu.Server.EventBus.MasstransitIntegration/bin
+/src/Jimu.Modules/Jimu.Server.EventBus.MasstransitIntegration/obj

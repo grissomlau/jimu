@@ -36,7 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Jimu.Extensions\Jimu.Server.Discovery.ConsulIntegration\Jimu.Server.Discovery.ConsulIntegration.csproj" />
+    <ProjectReference Include="..\..\..\Jimu.Modules\Jimu.Server.Discovery.ConsulIntegration\Jimu.Server.Discovery.ConsulIntegration.csproj" />
     <ProjectReference Include="..\..\..\Jimu.Server\Jimu.Server.csproj" />
     <ProjectReference Include="..\..\Service\IServices\IServices.csproj" />
     <ProjectReference Include="..\..\Service\Services\Services.csproj" />

@@ -9,10 +9,10 @@ using Microsoft.Extensions.Configuration;
 
 namespace Jimu.Client.Auth
 {
-    public class JwtAuthClientComponent : ClientComponentBase
+    public class JwtAuthClientModule : ClientModuleBase
     {
         private readonly JwtAuthorizationOptions _options;
-        public JwtAuthClientComponent(IConfigurationRoot jimuAppSettings) : base(jimuAppSettings)
+        public JwtAuthClientModule(IConfigurationRoot jimuAppSettings) : base(jimuAppSettings)
         {
             _options = jimuAppSettings.GetSection(typeof(JwtAuthorizationOptions).Name).Get<JwtAuthorizationOptions>();
         }
