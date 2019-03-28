@@ -33,7 +33,7 @@ namespace Jimu.Server.Repository.MiniDDD.EFIntegration
                         if (_container != null && _container.IsRegistered<Jimu.Logger.ILogger>())
                         {
                             Jimu.Logger.ILogger logger = _container.Resolve<Jimu.Logger.ILogger>();
-                            logger.Info($"EF - LogLevel: {level} - {log}");
+                            logger.Info($"【EF】 - LogLevel: {level} - {log}");
                         }
                     };
                 }
