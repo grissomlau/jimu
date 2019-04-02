@@ -53,6 +53,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jimu.Server.Repository.Mini
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jimu.Server.ORM.DapperIntegration", "Jimu.Modules\Jimu.Server.ORM.DapperIntegration\Jimu.Server.ORM.DapperIntegration.csproj", "{B023E57F-2BD2-49A5-A3F5-72610B2CED34}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Auth.IService", "..\..\jimu.miniddd.demo\src\microservices\Auth\Auth.IService\Auth.IService.csproj", "{650A8955-AF46-42E7-849D-9AC260EE7AC8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Auth.Service", "..\..\jimu.miniddd.demo\src\microservices\Auth\Auth.Service\Auth.Service.csproj", "{5619E4A0-28E5-47AF-97B4-6963E1087F9E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Auth.Server", "Samples\Complex\Auth.Server\Auth.Server.csproj", "{8AC7E1B5-64B1-4E42-8AD9-F38D4540CE63}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -135,6 +141,18 @@ Global
 		{B023E57F-2BD2-49A5-A3F5-72610B2CED34}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B023E57F-2BD2-49A5-A3F5-72610B2CED34}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B023E57F-2BD2-49A5-A3F5-72610B2CED34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{650A8955-AF46-42E7-849D-9AC260EE7AC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{650A8955-AF46-42E7-849D-9AC260EE7AC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{650A8955-AF46-42E7-849D-9AC260EE7AC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{650A8955-AF46-42E7-849D-9AC260EE7AC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5619E4A0-28E5-47AF-97B4-6963E1087F9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5619E4A0-28E5-47AF-97B4-6963E1087F9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5619E4A0-28E5-47AF-97B4-6963E1087F9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5619E4A0-28E5-47AF-97B4-6963E1087F9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AC7E1B5-64B1-4E42-8AD9-F38D4540CE63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AC7E1B5-64B1-4E42-8AD9-F38D4540CE63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AC7E1B5-64B1-4E42-8AD9-F38D4540CE63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AC7E1B5-64B1-4E42-8AD9-F38D4540CE63}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -159,6 +177,9 @@ Global
 		{7BF7DBDE-C18A-47EF-AC7E-28756BEFE108} = {238A367F-90BC-4E5A-B11B-4D04519621B7}
 		{F01410C8-BDA7-435F-8FE8-17C3D949723C} = {238A367F-90BC-4E5A-B11B-4D04519621B7}
 		{B023E57F-2BD2-49A5-A3F5-72610B2CED34} = {238A367F-90BC-4E5A-B11B-4D04519621B7}
+		{650A8955-AF46-42E7-849D-9AC260EE7AC8} = {B64879C4-B8A5-4834-BE7B-4B74FEC183E5}
+		{5619E4A0-28E5-47AF-97B4-6963E1087F9E} = {B64879C4-B8A5-4834-BE7B-4B74FEC183E5}
+		{8AC7E1B5-64B1-4E42-8AD9-F38D4540CE63} = {B64879C4-B8A5-4834-BE7B-4B74FEC183E5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B2F7F17C-34DB-4FBF-8BCD-49BC2FA3A10F}

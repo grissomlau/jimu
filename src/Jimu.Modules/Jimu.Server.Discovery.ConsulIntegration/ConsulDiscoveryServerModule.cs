@@ -37,11 +37,11 @@ namespace Jimu.Server.Discovery.ConsulIntegration
         {
             if (_options != null)
             {
-                while (!container.IsRegistered<IServer>())
-                {
-                    //default(SpinWait).SpinOnce();
-                    Thread.Sleep(100);
-                }
+                //while (!container.IsRegistered<IServer>())
+                //{
+                //    //default(SpinWait).SpinOnce();
+                //    Thread.Sleep(100);
+                //}
 
                 var logger = container.Resolve<ILogger>();
                 logger.Info($"[config]use consul for services discovery, consul ip: {_options.Ip}:{_options.Port}, service group: {_options.ServiceGroups}, server address: {_options.ServerAddress} ");

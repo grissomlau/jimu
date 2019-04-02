@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="JimuAppServerSettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="JimuAppServerSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\jimu.miniddd.demo\src\microservices\Auth\Auth.IService\Auth.IService.csproj" />
+    <ProjectReference Include="..\..\..\..\..\jimu.miniddd.demo\src\microservices\Auth\Auth.Service\Auth.Service.csproj" />
+    <ProjectReference Include="..\..\..\..\..\jimu\src\Jimu.Modules\Jimu.Server.Discovery.ConsulIntegration\Jimu.Server.Discovery.ConsulIntegration.csproj" />
+    <ProjectReference Include="..\..\..\..\..\jimu\src\Jimu.Modules\Jimu.Server.ORM.DapperIntegration\Jimu.Server.ORM.DapperIntegration.csproj" />
+    <ProjectReference Include="..\..\..\..\..\jimu\src\Jimu.Server\Jimu.Server.csproj" />
+    <ProjectReference Include="..\..\..\..\..\jimu\src\Jimu\Jimu.csproj" />
+  </ItemGroup>
+
+</Project>

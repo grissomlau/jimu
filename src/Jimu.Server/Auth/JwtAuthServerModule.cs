@@ -25,10 +25,10 @@ namespace Jimu.Server.Auth
                 var logger = container.Resolve<ILogger>();
                 logger.Info($"[config]use jose.jwt for Auth");
 
-                while (!container.IsRegistered<IServer>() || !container.IsRegistered<IServiceDiscovery>())
-                {
-                    Thread.Sleep(200);
-                }
+                //while (!container.IsRegistered<IServer>() || !container.IsRegistered<IServiceDiscovery>())
+                //{
+                //    Thread.Sleep(200);
+                //}
                 var server = container.Resolve<IServer>();
                 server.UseMiddleware<JwtAuthorizationMiddleware>(_options, container);
 

@@ -104,7 +104,10 @@ namespace Jimu.Server.Discovery.ConsulIntegration
 
         public async Task SetRoutesAsync(List<JimuServiceRoute> routes)
         {
-            OnBeforeSetRoutes(routes);
+            if (OnBeforeSetRoutes != null)
+            {
+                OnBeforeSetRoutes(routes);
+            }
             //var existingRoutes = await GetRoutes(routes.Select(x => GetKey(x.ServiceDescriptor.Id)));
             _routes = routes.ToList();
             var routeDescriptors = new List<JimuServiceRouteDesc>(routes.Count());

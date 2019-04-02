@@ -24,10 +24,10 @@ namespace Jimu.Client.Auth
                 var logger = container.Resolve<ILogger>();
                 logger.Info($"[config]use jose.jwt for Auth");
 
-                while (!container.IsRegistered<IRemoteServiceCaller>() || !container.IsRegistered<IClientServiceDiscovery>())
-                {
-                    Thread.Sleep(100);
-                }
+                //while (!container.IsRegistered<IRemoteServiceCaller>() || !container.IsRegistered<IClientServiceDiscovery>())
+                //{
+                //    Thread.Sleep(100);
+                //}
 
                 var caller = container.Resolve<IRemoteServiceCaller>();
                 caller.UseMiddleware<JwtAuthorizationMiddleware>(_options);

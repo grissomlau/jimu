@@ -5,6 +5,10 @@ using System.Linq;
 using System.IO;
 using Microsoft.Extensions.Configuration;
 using System.Reflection;
+using System.Runtime.Loader;
+using Microsoft.Extensions.DependencyModel;
+using Microsoft.Extensions.DependencyModel.Resolution;
+using System.Collections.Generic;
 
 namespace Jimu.Client
 {
@@ -34,9 +38,46 @@ namespace Jimu.Client
             LoadModule();
             return base.Build();
         }
+        private static bool IsCandidateLibrary(RuntimeLibrary library, AssemblyName assemblyName)
+        {
+            return (library.Name == (assemblyName.Name))
+                    || (library.Dependencies.Any(d => d.Name.StartsWith(assemblyName.Name)));
+        }
 
         private void LoadModule()
         {
+
+            AssemblyLoadContext.Default.Resolving += (context, name) =>
+            {
+                // avoid loading *.resources dlls, because of: https://github.com/dotnet/coreclr/issues/8416
+                if (name.Name.EndsWith("resources"))
+                {
+                    return null;
+                }
+
+                var dependencies = DependencyContext.Default.RuntimeLibraries;
+                foreach (var library in dependencies)
+                {
+                    if (IsCandidateLibrary(library, name))
+                    {
+                        return context.LoadFromAssemblyName(new AssemblyName(library.Name));
+                    }
+                }
+
+                var foundDlls = Directory.GetFileSystemEntries(new FileInfo(AppDomain.CurrentDomain.BaseDirectory).FullName, name.Name + ".dll", SearchOption.AllDirectories);
+                if (foundDlls.Any())
+                {
+                    using (var sr = File.OpenRead(foundDlls[0]))
+                    {
+                        return context.LoadFromStream(sr);
+                    }
+                }
+
+                //_logger.Warn($"cannot found assembly {name.Name}, path: { _options.Path}");
+                return null;
+                //return context.LoadFromAssemblyName(name);
+            };
+
             var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
             var loadedNames = loadedAssemblies.Select(a => a.GetName().Name).ToArray();
             //var loadedPaths = loadedAssemblies.Select(a => a.Location).ToArray();
