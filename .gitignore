@@ -181,3 +181,7 @@
 /src/Jimu.Modules/Jimu.Server.Repository.MiniDDD.EFIntegration/obj
 /src/Jimu.Modules/Jimu.Server.Repository.MiniDDD.SqlSugarIntegration/bin/Debug/netstandard2.0
 /src/Jimu.Modules/Jimu.Server.Repository.MiniDDD.SqlSugarIntegration/obj
+/src/Jimu.Modules/Jimu.Server.ORM.DapperIntegration/bin/Debug/netstandard2.0
+/src/Jimu.Modules/Jimu.Server.ORM.DapperIntegration/obj
+/src/Jimu.Modules/Jimu.Server.Repository.MiniDDD.DapperIntegration/bin/Debug/netstandard2.0
+/src/Jimu.Modules/Jimu.Server.Repository.MiniDDD.DapperIntegration/obj

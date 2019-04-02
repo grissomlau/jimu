@@ -2,18 +2,16 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>0.1.1</Version>
     <Authors>grissomlau@qq.com</Authors>
-    <PackageLicenseUrl>https://github.com/grissomlau/Jimu/blob/master/LICENSE</PackageLicenseUrl>
-    <Copyright>Jimu</Copyright>
+    <Version>0.1.0</Version>
+    <Description>MiniDDD Repository for jimu with dapper</Description>
     <PackageProjectUrl>https://github.com/grissomlau/Jimu</PackageProjectUrl>
     <RepositoryUrl>https://github.com/grissomlau/Jimu</RepositoryUrl>
-    <Description>MiniDDD Repository for jimu with SqlSugar</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MiniDDD.UnitOfWork.SqlSugar" Version="0.2.0" />
+    <PackageReference Include="MiniDDD.UnitOfWork.Dapper" Version="0.2.0" />
   </ItemGroup>
 
   <ItemGroup>
