@@ -42,7 +42,8 @@ namespace Jimu.Server.Repository.MiniDDD.EFIntegration
 
                 DefaultDbContext dbContext = new DefaultDbContext(dbContextOptions, _options.TableModelAssemblyName, logAction, _options.LogLevel);
                 serviceContainerBuilder.RegisterType<UnitOfWork>()
-                    .WithMetadata("context", dbContext)
+                    .WithParameter("context", dbContext)
+                    .AsImplementedInterfaces()
                     .InstancePerLifetimeScope();
 
                 // register repository
@@ -54,7 +55,8 @@ namespace Jimu.Server.Repository.MiniDDD.EFIntegration
                     {
                         foreach (var face in x.GetInterfaces())
                         {
-                            return face.IsGenericType && face.GetGenericTypeDefinition() == typeof(IRepository<,>);
+                            var isRepository = face.IsGenericType && face.GetGenericTypeDefinition() == typeof(IRepository<,>);
+                            if (isRepository) return true;
                         }
                     }
                     return false;

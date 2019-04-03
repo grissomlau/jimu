@@ -44,7 +44,9 @@ namespace Jimu.Server.Repository.MiniDDD.SqlSugarIntegration
 
                 serviceContainerBuilder.RegisterType<UnitOfWork>()
                     .WithParameter("options", dbContextOptions)
-                    .WithParameter("logAction", logAction).InstancePerLifetimeScope();
+                    .WithParameter("logAction", logAction)
+                    .AsImplementedInterfaces()
+                    .InstancePerLifetimeScope();
 
                 // register repository
                 var repositoryType = typeof(InlineEventHandler);
@@ -55,7 +57,8 @@ namespace Jimu.Server.Repository.MiniDDD.SqlSugarIntegration
                     {
                         foreach (var face in x.GetInterfaces())
                         {
-                            return face.IsGenericType && face.GetGenericTypeDefinition() == typeof(IRepository<,>);
+                            var isRepository = face.IsGenericType && face.GetGenericTypeDefinition() == typeof(IRepository<,>);
+                            if (isRepository) return true;
                         }
                     }
                     return false;

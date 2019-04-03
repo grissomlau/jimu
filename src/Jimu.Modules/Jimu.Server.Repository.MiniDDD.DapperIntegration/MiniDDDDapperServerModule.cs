@@ -6,6 +6,7 @@ using Autofac;
 using Microsoft.Extensions.Configuration;
 using MiniDDD;
 using MiniDDD.UnitOfWork;
+using MiniDDD.UnitOfWork.Dapper;
 
 namespace Jimu.Server.Repository.MiniDDD.DapperIntegration
 {
@@ -27,7 +28,10 @@ namespace Jimu.Server.Repository.MiniDDD.DapperIntegration
                     DbType = _options.DbType
                 };
 
-                serviceContainerBuilder.RegisterType<IUnitOfWork>().WithParameter("options", dbContextOptions).InstancePerLifetimeScope();
+                serviceContainerBuilder.RegisterType<UnitOfWork>()
+                    .WithParameter("options", dbContextOptions)
+                    .AsImplementedInterfaces()
+                    .InstancePerLifetimeScope();
 
                 // register repository
                 var repositoryType = typeof(InlineEventHandler);
@@ -38,7 +42,8 @@ namespace Jimu.Server.Repository.MiniDDD.DapperIntegration
                     {
                         foreach (var face in x.GetInterfaces())
                         {
-                            return face.IsGenericType && face.GetGenericTypeDefinition() == typeof(IRepository<,>);
+                            var isRepository = face.IsGenericType && face.GetGenericTypeDefinition() == typeof(IRepository<,>);
+                            if (isRepository) return true;
                         }
                     }
                     return false;

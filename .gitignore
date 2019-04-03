@@ -187,3 +187,5 @@
 /src/Jimu.Modules/Jimu.Server.Repository.MiniDDD.DapperIntegration/obj
 /src/Samples/Complex/Auth.Server/bin/Debug/netcoreapp2.0
 /src/Samples/Complex/Auth.Server/obj
+/src/Samples/Complex/User
+/src/ConsoleApp1
