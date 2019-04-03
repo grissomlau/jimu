@@ -2,8 +2,10 @@
 using Autofac;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using MiniDDD;
 using MiniDDD.UnitOfWork;
 using MiniDDD.UnitOfWork.EF;
+using System.Linq;
 
 namespace Jimu.Server.Repository.MiniDDD.EFIntegration
 {
@@ -42,6 +44,22 @@ namespace Jimu.Server.Repository.MiniDDD.EFIntegration
                 serviceContainerBuilder.RegisterType<UnitOfWork>()
                     .WithMetadata("context", dbContext)
                     .InstancePerLifetimeScope();
+
+                // register repository
+                var repositoryType = typeof(InlineEventHandler);
+                var assembies = AppDomain.CurrentDomain.GetAssemblies();
+                var repositories = assembies.SelectMany(x => x.GetTypes()).Where(x =>
+                {
+                    if (x.IsClass && !x.IsAbstract && typeof(InlineEventHandler).IsAssignableFrom(x))
+                    {
+                        foreach (var face in x.GetInterfaces())
+                        {
+                            return face.IsGenericType && face.GetGenericTypeDefinition() == typeof(IRepository<,>);
+                        }
+                    }
+                    return false;
+                }).ToList();
+                repositories.ForEach(x => serviceContainerBuilder.RegisterType(x).AsImplementedInterfaces().InstancePerLifetimeScope());
             }
             base.DoServiceRegister(serviceContainerBuilder);
         }
