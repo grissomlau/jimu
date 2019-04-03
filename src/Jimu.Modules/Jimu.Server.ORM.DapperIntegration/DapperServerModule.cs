@@ -5,6 +5,8 @@ using System.Data.SqlClient;
 using System.Data.SQLite;
 using System.Text;
 using Autofac;
+using Autofac.Core;
+using Jimu.Database;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 using Npgsql;
@@ -24,6 +26,7 @@ namespace Jimu.Server.ORM.DapperIntegration
         {
             if (_options != null)
             {
+                // register DbConnection
                 serviceContainerBuilder.Register((context) =>
                 {
                     DbConnection cnn = null;
@@ -49,6 +52,14 @@ namespace Jimu.Server.ORM.DapperIntegration
                     }
                     return cnn;
                 }).As<DbConnection>().InstancePerLifetimeScope();
+
+
+                // register dbfactory
+                DbFactory dbFactory = new DbFactory(_options);
+                serviceContainerBuilder.Register((context) =>
+                {
+                    return dbFactory;
+                }).As<IDbFactory>().SingleInstance();
 
             }
             base.DoServiceRegister(serviceContainerBuilder);

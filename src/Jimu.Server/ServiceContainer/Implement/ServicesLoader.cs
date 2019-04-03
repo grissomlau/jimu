@@ -89,7 +89,18 @@ namespace Jimu.Server
             {
                 foreach (var file in Directory.GetFiles(_options.Path, pattern.Trim()))
                 {
-                    var key = Path.GetFileName(file);
+                    //var key = Path.GetFileName(file);
+
+#if DEBUG
+                    var path = _options.Path;
+                    if (string.IsNullOrEmpty(path) || path == "./")
+                    {
+                        path = AppDomain.CurrentDomain.BaseDirectory;
+                    }
+                    var myAssembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Combine(path, file));
+                    assemblies.Add(myAssembly);
+#else
+
                     using (var sr = File.OpenRead(file))
                     {
                         //var myAssembly = AssemblyLoadContext.Default.LoadFromStream(sr);
@@ -104,6 +115,7 @@ namespace Jimu.Server
                         //    _types.Add(type);
                         //}
                     }
+#endif
                 }
             }
 
