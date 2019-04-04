@@ -13,7 +13,7 @@ namespace Jimu.ApiGateway.Controllers
         public string Password { set; get; }
     }
 
-    [Route("api/token")]
+    [Route("api/client/token")]
     public class TokenApiController : Controller
     {
         private readonly AuthService _authService;

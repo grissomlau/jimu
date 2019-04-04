@@ -155,6 +155,7 @@ using Jimu.Client.ApiGateway;
            "ValidateAudience": false,
            "ValidAudience": "",
            "TokenEndpointPath": "/api/v1/token",//获取 token 的路径
+           "CheckCredentialServiceId": "Auth.IService.IAuthService.Check(context)" //验证用户名密码是否正确的 service id, context 是 JwtAuthorizationContext，包含 UserName，Password等调用上下文信息
        }
    }
    ```
@@ -209,6 +210,73 @@ using Jimu.Client.ApiGateway;
    }
    ```
 
+##### ORM
+
+数据库接入
+
+1. Dapper
+
+   ```json
+   {
+      "DapperOptions": {
+        "ConnectionString": "server=localhost;database=grissom_dev;user=root;pwd=root;",
+        "DbType": "MySql" //数据库类型，支持： MySQL,SQLServer,Oracle,SQLite, PostgreSQL
+     }
+   }
+   ```
+
+   
+
+##### MiniDDD Repository
+
+MiniDDD 是一个轻量级的 DDD 框架， MiniDDD Repository 就是基于该框架的数据仓储，支持以下仓储
+
+1. Dapper
+
+   ```json
+   {
+     "MiniDDDDapperOptions": {
+       "ConnectionString": "server=localhost;database=grissom_dev;user=root;pwd=root;",
+       "DbType": "MySql" //数据库类型，支持： MySQL,SQLServer,Oracle,SQLite, PostgreSQL
+         // 没有 sql 日志可输出
+     }
+   }
+   ```
+
+   
+
+2. EF
+
+   ```json
+   {
+      "MiniDDDEFOptions": {
+        "ConnectionString": "server=localhost;database=grissom_dev;user=root;pwd=root;",
+        "DbType": "MySql", //数据库类型，支持： MySQL,SQLServer,Oracle,SQLite, PostgreSQL
+        "TableModelAssemblyName": "",//EF对应的表的实体类dll, Server 项目引用了则不需要设置
+        "OpenLogTrace":false, //是否开启 sql 日志,一般 debug 时开启方面查看生成的 sql
+        "LogLevel":"Debug" //日志级别： Debug,Information,Warning,Error
+      }
+   }
+   ```
+
+   
+
+3. SqlSugar
+
+   ```json
+   {
+       "MiniDDDSqlSugarOptions": {
+         "ConnectionString": "server=localhost;database=grissom_dev;user=root;pwd=root;",
+         "DbType": "MySql", //数据库类型，支持： MySQL,SQLServer,Oracle,SQLite, PostgreSQL
+         "OpenLogTrace":false, //是否开启 sql 日志,一般 debug 时开启方面查看生成的 sql，没有日志级别可选
+      }
+   }
+   ```
+
+   
+
+
+
 ### 客户端
 
 #### 日志
@@ -249,6 +317,7 @@ using Jimu.Client.ApiGateway;
         "ValidateAudience": false,
         "ValidAudience": "",
         "TokenEndpointPath": "/api/v1/token",//获取 token 的路径
+        "CheckCredentialServiceId": "Auth.IService.IAuthService.Check(context)" //验证用户名密码是否正确的 service id, context 是 JwtAuthorizationContext，包含 UserName，Password等调用上下文信息
     }
 }
 ```
@@ -340,7 +409,7 @@ using Jimu.Client.ApiGateway;
    ```json
    {
        "TokenGetterOptions":{
-           "GetType":"HttpHeader" //从http header 获取， Request.Headers["Authorization"]
+           "GetFrom":"HttpHeader" //从http header 获取， Request.Headers["Authorization"]
        }
    }
    ```
