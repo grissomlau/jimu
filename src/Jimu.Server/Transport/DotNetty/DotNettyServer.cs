@@ -160,7 +160,8 @@ namespace Jimu.Server.Transport.DotNetty
                 }));
 
             //var endpoint = new IPEndPoint(IPAddress.Parse(this.addre), this._port);
-            _channel = await bootstrap.BindAsync(_address.CreateEndPoint());
+            //_channel = await bootstrap.BindAsync(_address.CreateEndPoint()); // bind with ip not support in docker, will not connected
+            _channel = await bootstrap.BindAsync(_address.Port);
 
             _logger.Info($"server start successfuly, address is： {_address.Code}");
         }

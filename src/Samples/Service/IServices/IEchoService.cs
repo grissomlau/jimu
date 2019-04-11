@@ -12,6 +12,15 @@ namespace IServices
         /// </summary>
         /// <param name="anything">任何值")]</param>
         /// <returns>返回anything"""\"</returns>
+        [JimuService(CreatedBy = "grissom", Comment = "get input things", EnableAuthorization = false)]
+        //[JimuFieldComment("anything", "任何值")]
+        //[JimuReturnComment("返回anything")]
+        string GetEchoAnonymous(string anything);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="anything">任何值")]</param>
+        /// <returns>返回anything"""\"</returns>
         [JimuService(CreatedBy = "grissom", Comment = "get input things", EnableAuthorization = true)]
         //[JimuFieldComment("anything", "任何值")]
         //[JimuReturnComment("返回anything")]

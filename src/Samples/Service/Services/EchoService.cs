@@ -46,6 +46,11 @@ namespace Services
             return $"the echo is  {anything}";
         }
 
+        public string GetEchoAnonymous(string anything)
+        {
+            return anything;
+        }
+
         public Task<string> SetEcho(string anything)
         {
             //return Task.FromResult(new UserDTO());

@@ -189,3 +189,6 @@
 /src/Samples/Complex/Auth.Server/obj
 /src/Samples/Complex/User
 /src/ConsoleApp1
+/src/.vs/Jimu
+/src/bin/Debug
+/src/obj

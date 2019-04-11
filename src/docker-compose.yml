@@ -1,0 +1,10 @@
+version: '3.4'
+
+services:
+  auth.server:
+    image: ${DOCKER_REGISTRY-}authserver
+    build:
+      context: .
+      dockerfile: Samples/Complex/Auth.Server/Dockerfile
+    ports:
+      - 8010:80

@@ -22,7 +22,7 @@
   //  "CheckCredentialServiceId": "IServices.IEchoService.CheckUser(context)"
   //},
   "ConsulOptions": {
-    "Ip": "127.0.0.1", //consul ip
+    "Ip": "192.168.10.195", //consul ip
     "Port": 8500, // consul port
     "ServiceGroups": "MyService", //服务注册所属的组别
     "ServerAddress": "192.168.10.195:8001" //服务宿主的地址
@@ -32,8 +32,8 @@
     "DbType": "MySql"
   },
   "TransportOptions": {
-    "Ip": "192.168.10.195", //服务宿主ip
-    "Port": 8001, //服务宿主端口
+    "Ip": "127.0.0.1", //服务宿主ip
+    "Port": 80, //服务宿主端口
     "Protocol": "Netty" //传输协议： Netty, Http
   },
   "ServiceOptions": {

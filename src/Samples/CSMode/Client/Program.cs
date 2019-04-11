@@ -31,6 +31,7 @@ namespace Client
             Stopwatch watch = new Stopwatch();
             while (Console.ReadLine() != "exit")
             {
+                Console.WriteLine("GetEcho with Token");
                 watch.Reset();
                 watch.Start();
 
@@ -39,6 +40,16 @@ namespace Client
                 var name = echo.GetEcho("test");
                 watch.Stop();
                 Console.WriteLine($"take time {watch.ElapsedMilliseconds}," + "return:  " + name);
+
+                Console.WriteLine("GetEchoAnonymous with no token");
+
+
+                watch.Reset();
+                watch.Start();
+
+                var ret = echo.GetEchoAnonymous("test2");
+                watch.Stop();
+                Console.WriteLine($"take time {watch.ElapsedMilliseconds}," + "return:  " + ret);
             }
 
             Console.ReadKey();
