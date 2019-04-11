@@ -18,7 +18,7 @@ namespace Jimu.Client.FaultTolerant
 
         public override void DoRegister(ContainerBuilder componentContainerBuilder)
         {
-            if (_options != null && _options.RetryTimes > 0)
+            if (_options != null)
             {
                 componentContainerBuilder.RegisterType<RemoteServiceCaller>().As<IRemoteServiceCaller>().WithParameter("retryTimes", _options.RetryTimes).SingleInstance();
             }
@@ -27,12 +27,12 @@ namespace Jimu.Client.FaultTolerant
 
         public override void DoInit(IContainer container)
         {
-            if (_options != null && _options.RetryTimes > 0)
+            if (_options != null)
             {
                 var logger = container.Resolve<ILogger>();
                 var caller = container.Resolve<IRemoteServiceCaller>();
                 var addressSelector = container.Resolve<IAddressSelector>();
-                caller.UseMiddleware<RetryCallMiddleware>(addressSelector, _options.RetryTimes, logger);
+                caller.UseMiddleware<RetryCallMiddleware>(addressSelector, logger, _options.RetryTimes);
                 logger.Info($"[config]remote service call failure retry times: {_options.RetryTimes}");
             }
             base.DoInit(container);

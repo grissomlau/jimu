@@ -22,9 +22,9 @@ namespace Jimu.Client.FaultTolerant
             _logger = logger;
         }
 
-        public Task<JimuRemoteCallResultData> InvokeAsyn(RemoteCallerContext context)
+        public Task<JimuRemoteCallResultData> InvokeAsync(RemoteCallerContext context)
         {
-            if (_retryTimes < 0)
+            if (_retryTimes <= 0)
             {
                 _retryTimes = context.Service.Address.Count;
             }

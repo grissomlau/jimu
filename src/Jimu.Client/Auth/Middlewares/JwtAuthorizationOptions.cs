@@ -6,8 +6,8 @@ namespace Jimu.Client.Auth
 {
     public class JwtAuthorizationOptions
     {
-        public string ServerIp { get; set; }
-        public int ServerPort { get; set; }
+        public string ServiceInvokeIp { get; set; }
+        public string ServiceInvokePort { get; set; }
         public string Protocol { get; set; }
         public string SecretKey { get; set; }
 

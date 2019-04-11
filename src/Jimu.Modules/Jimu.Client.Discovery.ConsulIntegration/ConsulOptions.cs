@@ -9,14 +9,14 @@
         /// <summary>
         /// consul port
         /// </summary>
-        public int Port { get; set; }
+        public string Port { get; set; }
         /// <summary>
         /// which groups to extract, multiple seperate with ','
         /// </summary>
         public string ServiceGroups { get; set; }
 
 
-        public ConsulOptions(string ip, int port, string serviceGroups)
+        public ConsulOptions(string ip, string port, string serviceGroups)
         {
             this.Ip = ip;
             this.Port = port;

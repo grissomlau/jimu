@@ -24,9 +24,9 @@ namespace Jimu.Server.Discovery.ConsulIntegration
             {
                 componentContainerBuilder.RegisterType<ConsulServiceDiscovery>().As<IServiceDiscovery>()
                                         .WithParameter("ip", _options.Ip)
-                                        .WithParameter("port", _options.Port)
+                                        .WithParameter("port", Convert.ToInt32(_options.Port))
                                         .WithParameter("serviceGroups", _options.ServiceGroups)
-                                        .WithParameter("serverAddress", _options.ServerAddress)
+                                        .WithParameter("serverAddress", $"{_options.ServiceInvokeIp}:{_options.ServiceInvokePort}")
                                         .SingleInstance();
 
             }
@@ -44,7 +44,7 @@ namespace Jimu.Server.Discovery.ConsulIntegration
                 //}
 
                 var logger = container.Resolve<ILogger>();
-                logger.Info($"[config]use consul for services discovery, consul ip: {_options.Ip}:{_options.Port}, service group: {_options.ServiceGroups}, server address: {_options.ServerAddress} ");
+                logger.Info($"[config]use consul for services discovery, consul ip: {_options.Ip}:{_options.Port}, service group: {_options.ServiceGroups}, server address: {_options.ServiceInvokeIp}:{_options.ServiceInvokePort} ");
 
                 var serviceEntry = container.Resolve<IServiceEntryContainer>();
 

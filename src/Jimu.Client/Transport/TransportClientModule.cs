@@ -9,6 +9,7 @@ using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Sockets;
 using Jimu.Logger;
 using Microsoft.Extensions.Configuration;
+using Jimu.Extension;
 
 namespace Jimu.Client.Transport
 {
@@ -62,7 +63,7 @@ namespace Jimu.Client.Transport
                 {
                     var listener = new ClientListener();
                     //var sender = new HttpClientSender(address, listener);
-                    client = new global::Jimu.Client.HttpClientSender(listener, logger, address);
+                    client = new HttpClientSender(listener, logger, address);
                 }
             };
         }

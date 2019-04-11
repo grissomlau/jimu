@@ -34,7 +34,7 @@ namespace Jimu.Client.Auth
 
                 if (string.IsNullOrEmpty(_options.TokenEndpointPath)) return;
                 var discovery = container.Resolve<IClientServiceDiscovery>();
-                var addr = new JimuAddress(_options.ServerIp, _options.ServerPort, _options.Protocol);
+                var addr = new JimuAddress(_options.ServiceInvokeIp, Convert.ToInt32(_options.ServiceInvokePort), _options.Protocol);
                 var tokenRoute = new List<JimuServiceRoute> {
                     new JimuServiceRoute
                     {

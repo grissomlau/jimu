@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,19 +19,23 @@ namespace Jimu.Server.Transport.DotNetty
     {
         //private readonly List<JimuServiceRoute> _serviceRoutes = new List<JimuServiceRoute>();
         private readonly IServiceEntryContainer _serviceEntryContainer;
-        private readonly JimuAddress _address;
+        private readonly JimuAddress _serviceInvokeAddress;
         private readonly ILogger _logger;
         private IChannel _channel;
+        private readonly string _serverIp;
+        private readonly int _serverPort;
 
         private readonly Stack<Func<RequestDel, RequestDel>> _middlewares;
 
 
-        public DotNettyServer(JimuAddress address, IServiceEntryContainer serviceEntryContainer, ILogger logger)
+        public DotNettyServer(string serverIp, int serverPort, JimuAddress serviceInvokeAddress, IServiceEntryContainer serviceEntryContainer, ILogger logger)
         {
             _serviceEntryContainer = serviceEntryContainer;
-            _address = address;
+            _serviceInvokeAddress = serviceInvokeAddress;
             _logger = logger;
             _middlewares = new Stack<Func<RequestDel, RequestDel>>();
+            _serverIp = serverIp;
+            _serverPort = serverPort;
         }
         public List<JimuServiceRoute> GetServiceRoutes()
         {
@@ -43,7 +48,7 @@ namespace Jimu.Server.Transport.DotNetty
                 var serviceRoute = new JimuServiceRoute
                 {
                     Address = new List<JimuAddress> {
-                             _address
+                             _serviceInvokeAddress
                         },
                     ServiceDescriptor = entry.Descriptor
                 };
@@ -137,7 +142,7 @@ namespace Jimu.Server.Transport.DotNetty
 
         public async Task StartAsync()
         {
-            _logger.Info($"start server: {_address.Code}");
+            _logger.Info($"start server: {_serverIp}:{_serverPort}");
             var bossGroup = new MultithreadEventLoopGroup();
             var workerGroup = new MultithreadEventLoopGroup(4);
             var bootstrap = new ServerBootstrap();
@@ -161,15 +166,16 @@ namespace Jimu.Server.Transport.DotNetty
 
             //var endpoint = new IPEndPoint(IPAddress.Parse(this.addre), this._port);
             //_channel = await bootstrap.BindAsync(_address.CreateEndPoint()); // bind with ip not support in docker, will not connected
-            if (_address.Ip != "0.0.0.0")
+            if (_serverIp != "0.0.0.0")
             {
-                _channel = await bootstrap.BindAsync(_address.CreateEndPoint()); // bind with ip not support in docker, will not connected
-                _logger.Info($"server start successfuly, address is： {_address.Code}");
+                var endpoint = new IPEndPoint(IPAddress.Parse(this._serverIp), this._serverPort);
+                _channel = await bootstrap.BindAsync(endpoint); // bind with ip not support in docker, will not connected
+                _logger.Info($"server start successfuly, address is： {_serverIp}:{_serverPort}");
             }
             else
             {
-                _channel = await bootstrap.BindAsync(_address.Port);
-                _logger.Info($"server start successfuly, address is： {JimuHelper.GetLocalIPAddress()}:{_address.Port}");
+                _channel = await bootstrap.BindAsync(_serverPort);
+                _logger.Info($"server start successfuly, address is： {JimuHelper.GetLocalIPAddress()}:{_serverPort}");
             }
 
         }

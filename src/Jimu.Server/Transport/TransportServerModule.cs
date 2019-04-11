@@ -3,6 +3,7 @@ using Jimu.Logger;
 using Jimu.Server.Transport.DotNetty;
 using Jimu.Server.Transport.Http;
 using Microsoft.Extensions.Configuration;
+using System;
 
 namespace Jimu.Server.Transport
 {
@@ -22,10 +23,18 @@ namespace Jimu.Server.Transport
                 {
 
                     case "Netty":
-                        componentContainerBuilder.RegisterType<DotNettyServer>().As<IServer>().WithParameter("address", new JimuAddress(_options.Ip, _options.Port, _options.Protocol)).SingleInstance();
+                        componentContainerBuilder.RegisterType<DotNettyServer>().As<IServer>()
+                            .WithParameter("serverIp", _options.Ip)
+                            .WithParameter("serverPort", Convert.ToInt32(_options.Port))
+                            .WithParameter("serviceInvokeAddress", new JimuAddress(_options.ServiceInvokeIp, Convert.ToInt32(_options.ServiceInvokePort), _options.Protocol))
+                            .SingleInstance();
                         break;
                     case "Http":
-                        componentContainerBuilder.RegisterType<HttpServer>().As<IServer>().WithParameter("ip", _options.Ip).WithParameter("port", _options.Port).SingleInstance();
+                        componentContainerBuilder.RegisterType<HttpServer>().As<IServer>()
+                            .WithParameter("ip", _options.Ip)
+                            .WithParameter("port", Convert.ToInt32(_options.Port))
+                            .WithParameter("serviceInvokeAddress", new JimuAddress(_options.ServiceInvokeIp, Convert.ToInt32(_options.ServiceInvokePort), _options.Protocol))
+                            .SingleInstance();
                         break;
                     default: break;
                 }
