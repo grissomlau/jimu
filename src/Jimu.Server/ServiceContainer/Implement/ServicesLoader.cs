@@ -43,10 +43,10 @@ namespace Jimu.Server
             _serviceEntryContainer = serviceEntryContainer;
             _options = options;
 
-            if (string.IsNullOrEmpty(_options.Path))
-            {
-                _options.Path = "./";
-            }
+            //if (string.IsNullOrEmpty(_options.Path))
+            //{
+            //    _options.Path = "./";
+            //}
         }
 
 
@@ -87,7 +87,16 @@ namespace Jimu.Server
             var patterns = _options.LoadFilePattern.Split(',');
             foreach (var pattern in patterns)
             {
-                foreach (var file in Directory.GetFiles(_options.Path, pattern.Trim()))
+                string[] files;
+                if (string.IsNullOrEmpty(_options.Path))
+                {
+                    files = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, pattern.Trim());
+                }
+                else
+                {
+                    files = Directory.GetFiles(_options.Path, pattern.Trim());
+                }
+                foreach (var file in files)
                 {
                     //var key = Path.GetFileName(file);
 

@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Jimu" Version="0.5.0" />
+    <PackageReference Include="Jimu.Server" Version="0.5.0" />
+  </ItemGroup>
+
+</Project>

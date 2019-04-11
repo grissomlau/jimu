@@ -25,7 +25,7 @@
     "Ip": "192.168.10.195", //consul ip
     "Port": 8500, // consul port
     "ServiceGroups": "MyService", //服务注册所属的组别
-    "ServerAddress": "192.168.10.195:8001" //服务宿主的地址
+    "ServerAddress": "192.168.10.195:8010" //服务宿主的地址
   },
   "DapperOptions": {
     "ConnectionString": "server=local;database=grissom_dev;uid=root;pwd=root;",

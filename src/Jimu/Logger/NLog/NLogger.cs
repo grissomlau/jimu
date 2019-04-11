@@ -14,17 +14,18 @@ namespace Jimu.Logger
         {
             options = options ?? new JimuLog4netOptions { EnableConsoleLog = true };
             var config = new NLog.Config.LoggingConfiguration();
+            var ip = JimuHelper.GetLocalIPAddress();
             if (options.EnableFileLog)
             {
                 var fileConf = new NLog.Targets.FileTarget("jimuLogFile")
                 {
                     FileName = ".\\log\\${level:lowercase=true}\\${shortdate}.log",
                     ArchiveAboveSize = 10000000,
-                    Layout = @"${date:format=yyyy-MM-dd HH\:mm\:ss.fff} ${level:uppercase=true}  ${message}"
+                    Layout = @"${date:format=yyyy-MM-dd HH\:mm\:ss.fff} ${level:uppercase=true} [" + ip + "] ${message}"
                 };
-                if(options.FileLogPath!= null)
+                if (options.FileLogPath != null)
                 {
-                    fileConf.FileName = options.FileLogPath+"\\${level:lowercase=true}\\${shortdate}.log";
+                    fileConf.FileName = options.FileLogPath + "\\${level:lowercase=true}\\${shortdate}.log";
 
                 }
                 if ((options.FileLogLevel & LogLevel.Error) == LogLevel.Error)
@@ -52,7 +53,7 @@ namespace Jimu.Logger
             {
                 var consoleLog = new NLog.Targets.ConsoleTarget("jimuLogconsole")
                 {
-                    Layout = @"${date:format=yyyy-MM-dd HH\:mm\:ss.fff} ${level:uppercase=true}  ${message}"
+                    Layout = @"${date:format=yyyy-MM-dd HH\:mm\:ss.fff} ${level:uppercase=true} [" + ip + "] ${message}"
                 };
                 if ((options.ConsoleLogLevel & LogLevel.Error) == LogLevel.Error)
                 {

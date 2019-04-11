@@ -62,11 +62,12 @@ namespace Jimu.Logger
         void UseCodeConfig(Hierarchy repository, LogLevel logLevel)
         {
 
+            var ip = JimuHelper.GetLocalIPAddress();
             if (_options.EnableFileLog && (_options.FileLogLevel & logLevel) == logLevel)
             {
                 PatternLayout layout = new PatternLayout
                 {
-                    ConversionPattern = "%date{yyyy-MM-dd HH:mm:ss.fff} %-5p %m%n"
+                    ConversionPattern = "%date{yyyy-MM-dd HH:mm:ss.fff} %-5p ["+ip+"] %m%n"
                 };
                 layout.ActivateOptions();
 
@@ -109,7 +110,7 @@ namespace Jimu.Logger
                 ManagedColoredConsoleAppender console = new ManagedColoredConsoleAppender();
                 PatternLayout layoutConsole = new PatternLayout
                 {
-                    ConversionPattern = "%n%date{yyyy-MM-dd HH:mm:ss.fff} %-5level %m",
+                    ConversionPattern = "%n%date{yyyy-MM-dd HH:mm:ss.fff} %-5level [" + ip + "] %m",
                 };
                 switch (logLevel)
                 {

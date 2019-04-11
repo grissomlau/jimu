@@ -161,9 +161,17 @@ namespace Jimu.Server.Transport.DotNetty
 
             //var endpoint = new IPEndPoint(IPAddress.Parse(this.addre), this._port);
             //_channel = await bootstrap.BindAsync(_address.CreateEndPoint()); // bind with ip not support in docker, will not connected
-            _channel = await bootstrap.BindAsync(_address.Port);
+            if (_address.Ip != "0.0.0.0")
+            {
+                _channel = await bootstrap.BindAsync(_address.CreateEndPoint()); // bind with ip not support in docker, will not connected
+                _logger.Info($"server start successfuly, address is： {_address.Code}");
+            }
+            else
+            {
+                _channel = await bootstrap.BindAsync(_address.Port);
+                _logger.Info($"server start successfuly, address is： {JimuHelper.GetLocalIPAddress()}:{_address.Port}");
+            }
 
-            _logger.Info($"server start successfuly, address is： {_address.Code}");
         }
 
         private async Task InvokeMiddleware(RequestDel next, RemoteCallerContext context)

@@ -3,6 +3,8 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
 
@@ -51,6 +53,19 @@ namespace Jimu
                 .SetBasePath(AppContext.BaseDirectory)
                 .AddJsonFile(provider, settingJson, true, false);
             return builder.Build();
+        }
+        public static string GetLocalIPAddress()
+        {
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (var ip in host.AddressList)
+            {
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    return ip.ToString();
+                }
+            }
+            return null;
+            //throw new Exception("No network adapters with an IPv4 address in the system!");
         }
     }
 }

@@ -192,3 +192,7 @@
 /src/.vs/Jimu
 /src/bin/Debug
 /src/obj
+/src/Samples/Complex/Auth.IService/bin
+/src/Samples/Complex/Auth.IService/obj
+/src/Samples/Complex/Auth.Service/bin
+/src/Samples/Complex/Auth.Service/obj

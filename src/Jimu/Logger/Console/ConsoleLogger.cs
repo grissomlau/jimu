@@ -8,24 +8,30 @@ namespace Jimu.Logger
     /// </summary>
     public class ConsoleLogger : ILogger
     {
+        string _ip;
+        public ConsoleLogger()
+        {
+
+            _ip = JimuHelper.GetLocalIPAddress();
+        }
         public void Debug(string info)
         {
-            Console.WriteLine($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")} DEBUG {info}");
+            Console.WriteLine($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")} DEBUG [{_ip}] {info}");
         }
 
         public void Error(string info, Exception ex)
         {
-            Console.WriteLine($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")} ERROR {info},{ex.ToStackTraceString()}");
+            Console.WriteLine($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")} ERROR [{_ip}] {info},{ex.ToStackTraceString()}");
         }
 
         public void Info(string info)
         {
-            Console.WriteLine($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")} INFO  {info}");
+            Console.WriteLine($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")} INFO [{_ip}] {info}");
         }
 
         public void Warn(string info)
         {
-            Console.WriteLine($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")} WARN  {info}");
+            Console.WriteLine($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")} WARN [{_ip}] {info}");
         }
     }
 }
