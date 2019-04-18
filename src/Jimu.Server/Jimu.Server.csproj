@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>0.5.2</Version>
+    <Version>0.5.3</Version>
     <Authors>grissomlau@qq.com</Authors>
     <Company>grissomlau@qq.com</Company>
     <Product>Jimu.Server</Product>
@@ -12,8 +12,8 @@
     <PackageProjectUrl>https://github.com/grissomlau/Jimu</PackageProjectUrl>
     <RepositoryUrl>https://github.com/grissomlau/Jimu</RepositoryUrl>
     <PackageTags>netcore,microservice</PackageTags>
-    <AssemblyVersion>0.5.2.0</AssemblyVersion>
-    <FileVersion>0.5.2.0</FileVersion>
+    <AssemblyVersion>0.5.3.0</AssemblyVersion>
+    <FileVersion>0.5.3.0</FileVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 

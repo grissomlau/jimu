@@ -8,3 +8,12 @@ services:
       dockerfile: Samples/Complex/ApiGateway/Dockerfile
     ports:
       - 9000:80
+  auth.server:
+    image: ${DOCKER_REGISTRY-}authserver
+    build:
+      context: .
+      dockerfile: Samples/Complex/Auth.Server/Dockerfile
+    environment:
+      - HOST_IP=192.168.10.195
+      - HOST_PORT=9001
+

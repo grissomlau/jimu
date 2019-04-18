@@ -26,8 +26,10 @@
     "Port": "8500", // consul port
     "ServiceGroups": "jimu.miniddd.demo", //服务注册所属的组别
     //"ServerAddress": "192.168.10.195:8010" //服务宿主的地址
-    "ServiceInvokeIp": "${HOST_IP}",
-    "ServiceInvokePort": "${HOST_PORT}"
+    //"ServiceInvokeIp": "${HOST_IP}",
+    //"ServiceInvokePort": "${HOST_PORT}"
+    "ServiceInvokeIp": "192.168.10.195",
+    "ServiceInvokePort": "9001"
   },
   "DapperOptions": {
     "ConnectionString": "server=local;database=grissom_dev;uid=root;pwd=root;",
@@ -37,8 +39,10 @@
     "Ip": "0.0.0.0", //服务宿主ip
     "Port": 80, //服务宿主端口
     "Protocol": "Netty", //传输协议： Netty, Http
-    "ServiceInvokeIp": "${HOST_IP}",
-    "ServiceInvokePort": "${HOST_PORT}"
+    //"ServiceInvokeIp": "${HOST_IP}",
+    //"ServiceInvokePort": "${HOST_PORT}"
+    "ServiceInvokeIp": "192.168.10.195",
+    "ServiceInvokePort": "9001"
   },
   "ServiceOptions": {
     "Path": "", //服务dll所在路径，默认当前目录

@@ -1,14 +1,14 @@
-FROM microsoft/dotnet:2.2-runtime AS base
+FROM microsoft/dotnet:2.0-runtime AS base
 WORKDIR /app
 
-FROM microsoft/dotnet:2.2-sdk AS build
+FROM microsoft/dotnet:2.0-sdk AS build
 WORKDIR /src
 COPY Samples/Complex/Auth.Server/Auth.Server.csproj Samples/Complex/Auth.Server/
-COPY ../../jimu.miniddd.demo/src/microservices/Auth/Auth.IService/Auth.IService.csproj ../../jimu.miniddd.demo/src/microservices/Auth/Auth.IService/
 COPY Jimu.Modules/Jimu.Server.Discovery.ConsulIntegration/Jimu.Server.Discovery.ConsulIntegration.csproj Jimu.Modules/Jimu.Server.Discovery.ConsulIntegration/
 COPY Jimu.Server/Jimu.Server.csproj Jimu.Server/
 COPY Jimu/Jimu.csproj Jimu/
-COPY ../../jimu.miniddd.demo/src/microservices/Auth/Auth.Service/Auth.Service.csproj ../../jimu.miniddd.demo/src/microservices/Auth/Auth.Service/
+COPY Samples/Complex/Auth.IService/Auth.IService.csproj Samples/Complex/Auth.IService/
+COPY Samples/Complex/Auth.Service/Auth.Service.csproj Samples/Complex/Auth.Service/
 COPY Jimu.Modules/Jimu.Server.ORM.DapperIntegration/Jimu.Server.ORM.DapperIntegration.csproj Jimu.Modules/Jimu.Server.ORM.DapperIntegration/
 RUN dotnet restore Samples/Complex/Auth.Server/Auth.Server.csproj
 COPY . .

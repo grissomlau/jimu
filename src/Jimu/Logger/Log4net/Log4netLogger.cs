@@ -76,7 +76,7 @@ namespace Jimu.Logger
                     AppendToFile = false
                 };
                 var path = _options.EnableFileLog ? _options.FileLogPath : "log";
-                roller.File = $@"{path}\{logLevel.ToString().ToLower()}\";
+                roller.File = $@"{path}/{logLevel.ToString().ToLower()}/";
                 roller.PreserveLogFileNameExtension = true;
                 roller.StaticLogFileName = false;
                 roller.MaxSizeRollBackups = 0;
