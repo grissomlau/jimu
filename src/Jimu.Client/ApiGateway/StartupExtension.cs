@@ -15,10 +15,10 @@ namespace Jimu.Client.ApiGateway
         {
             Console.WriteLine();
             app.UseMiddleware<JimuHttpStatusCodeExceptionMiddleware>();
-            app.UseCors(builder =>
-            {
-                builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
-            });
+            //app.UseCors(builder =>
+            //{
+            //    builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+            //});
 
             var httpContextAccessor = app.ApplicationServices.GetRequiredService<IHttpContextAccessor>();
             JimuHttpContext.Configure(httpContextAccessor);
@@ -46,7 +46,7 @@ namespace Jimu.Client.ApiGateway
         }
         public static IServiceCollection UseJimu(this IServiceCollection services)
         {
-            services.AddCors();
+            //services.AddCors();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddMvc(o =>
             {
