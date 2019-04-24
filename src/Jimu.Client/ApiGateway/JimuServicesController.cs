@@ -26,7 +26,8 @@ namespace Jimu.Client.ApiGateway.Controllers
             }
             var result = await JimuClient.Invoke(path, paras);
 
-            if (result.ResultType != typeof(JimuFile).ToString())
+            //if (result.ResultType != typeof(JimuFile).ToString())
+            if (!result.ResultType.StartsWith("{\"ReturnType\":\"Jimu.JimuFile\""))
                 return new JsonResult(result.Result);
 
             var file = result.Result as JimuFile;
