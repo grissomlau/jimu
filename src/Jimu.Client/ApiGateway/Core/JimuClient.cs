@@ -33,7 +33,7 @@ namespace Jimu.Client.ApiGateway
                 return new JimuRemoteCallResultData { ErrorCode = result.ErrorCode, ErrorMsg = result.ErrorMsg };
             }
             //if (result.ResultType == typeof(JimuFile).ToString())
-            if (result.ResultType.StartsWith("{\"ReturnType\":\"Jimu.JimuFile\""))
+            if (result?.ResultType != null && result.ResultType.StartsWith("{\"ReturnType\":\"Jimu.JimuFile\""))
             {
                 var file = JimuHelper.Deserialize(result.Result, typeof(JimuFile));
                 result.Result = file;

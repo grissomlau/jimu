@@ -27,11 +27,12 @@ namespace Jimu.Client.ApiGateway.Controllers
             var result = await JimuClient.Invoke(path, paras);
 
             //if (result.ResultType != typeof(JimuFile).ToString())
-            if (!result.ResultType.StartsWith("{\"ReturnType\":\"Jimu.JimuFile\""))
-                return new JsonResult(result.Result);
-
-            var file = result.Result as JimuFile;
-            return File(file?.Data, "application/octet-stream", file?.FileName);
+            if (result?.ResultType != null && result.ResultType.StartsWith("{\"ReturnType\":\"Jimu.JimuFile\""))
+            {
+                var file = result.Result as JimuFile;
+                return File(file?.Data, "application/octet-stream", file?.FileName);
+            }
+            return new JsonResult(result.Result);
         }
     }
 }
