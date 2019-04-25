@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Auth.IService</name>
+    </assembly>
+    <members>
+        <member name="M:Auth.IService.IAuthService.Check(Jimu.Server.Auth.JwtAuthorizationContext)">
+            <summary>
+            测试
+            </summary>
+            <param name="context"></param>
+        </member>
+    </members>
+</doc>

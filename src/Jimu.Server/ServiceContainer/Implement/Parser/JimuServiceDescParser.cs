@@ -74,7 +74,7 @@ namespace Jimu.Server.Implement.Parser
                 if (xml != null && xml.TryGetValue(key, out var node))
                 {
                     var returnNode = node.SelectSingleNode("returns");
-                    desc.Comment = returnNode.Value.Trim();
+                    desc.Comment = returnNode?.Value.Trim();
                 }
 
             }
