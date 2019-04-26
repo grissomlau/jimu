@@ -129,6 +129,7 @@ namespace Jimu.Client
                  {
                      Parameters = context.Paras,
                      ServiceId = context.Service.ServiceDescriptor.Id,
+                     Payload = context.PayLoad,
                      Token = context.Token,
                      Descriptor = context.Service.ServiceDescriptor
                  });

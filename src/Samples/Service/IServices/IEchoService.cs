@@ -37,7 +37,9 @@ namespace IServices
         //[JimuFieldComment("anything", "任何值")]
         //[JimuFieldComment("anything2", "任何值2")]
         //[JimuReturnComment("返回是否成功")]
-        Task<List<UserDTO>> SetEcho(string anything, string anything2);
+        //Task<List<UserDTO>> SetEcho(string anything, string anything2);
+        //[JimuService(EnableAuthorization = true)]
+        Task<string> SetEcho(string anything);
         /// <summary>
         /// 创建用户
         /// </summary>

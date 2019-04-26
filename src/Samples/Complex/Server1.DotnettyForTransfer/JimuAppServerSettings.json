@@ -8,25 +8,26 @@
     "UseInService": true
 
   },
-  "JwtAuthorizationOptions": {
-    "ServerIp": "192.168.10.195",
-    "ServerPort": 8001,
-    "Protocol": "Netty", //传输协议：Http,Netty
-    "SecretKey": "123456", //生成token 的钥匙
-    "ValidateLifetime": true,
-    "ExpireTimeSpan": "1.1:1:0", //token 有效时长: day.hour:minute:second
-    "ValidateIssuer": false, //
-    "ValidIssuer": "",
-    "ValidateAudience": false,
-    "ValidAudience": "",
-    "TokenEndpointPath": "/api/v1/token", //获取 token 的路径
-    "CheckCredentialServiceId": "IServices.IEchoService.CheckUser(context)"
-  },
+  //"JwtAuthorizationOptions": {
+  //  "ServiceInvokeIp": "127.0.0.1", //服务宿主的地址
+  //  "ServiceInvokePort": "8001",
+  //  "Protocol": "Netty", //传输协议：Http,Netty
+  //  "SecretKey": "123456", //生成token 的钥匙
+  //  "ValidateLifetime": true,
+  //  "ExpireTimeSpan": "1.1:1:0", //token 有效时长: day.hour:minute:second
+  //  "ValidateIssuer": false, //
+  //  "ValidIssuer": "",
+  //  "ValidateAudience": false,
+  //  "ValidAudience": "",
+  //  "TokenEndpointPath": "/api/v1/token", //获取 token 的路径
+  //  "CheckCredentialServiceId": "IServices.IEchoService.CheckUser(context)"
+  //},
   "ConsulOptions": {
     "Ip": "127.0.0.1", //consul ip
-    "Port": 8500, // consul port
+    "Port": "8500", // consul port
     "ServiceGroups": "MyService", //服务注册所属的组别
-    "ServerAddress": "192.168.10.195:8001" //服务宿主的地址
+    "ServiceInvokeIp": "127.0.0.1", //服务宿主的地址
+    "ServiceInvokePort": "8001"
   },
   "ServiceOptions": {
     "Path": "", //服务dll所在路径，默认当前目录
@@ -35,8 +36,10 @@
     "EnableWatch": false //是否启动热加载
   },
   "TransportOptions": {
-    "Ip": "192.168.10.195", //服务宿主ip
+    "Ip": "127.0.0.1", //服务宿主ip
     "Port": 8001, //服务宿主端口
-    "Protocol": "Netty" //传输协议： Netty, Http
+    "Protocol": "Netty", //传输协议： Netty, Http
+    "ServiceInvokeIp": "127.0.0.1", //服务宿主的地址
+    "ServiceInvokePort": "8001"
   }
 }
