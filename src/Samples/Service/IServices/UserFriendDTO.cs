@@ -9,5 +9,6 @@ namespace IServices
         public string UserId { get; set; }
         public string FriendId { get; set; }
         public UserDTO FriendInfo { get; set; }
+        public List<UserDTO> FriendInfos { get; set; }
     }
 }

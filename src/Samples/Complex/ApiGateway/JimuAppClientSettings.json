@@ -23,8 +23,8 @@
     "GetFrom": "HttpHeader" //从http header 获取， Request.Headers["Authorization"]
   },
   "ConsulOptions": {
-    //"Ip": "127.0.0.1", //consul ip
-    "Ip": "192.168.10.195", //consul ip
+    "Ip": "127.0.0.1", //consul ip
+    //"Ip": "192.168.10.195", //consul ip
     "Port": 8500, // consul port
     //"ServiceGroups": "jimu.miniddd.demo" //服务注册所属的组别
     "ServiceGroups": "MyService" //服务注册所属的组别

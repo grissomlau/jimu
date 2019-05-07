@@ -24,7 +24,7 @@ namespace Jimu.Logger
         public Log4netLogger(JimuLog4netOptions options = null)
         {
             _options = options ?? new JimuLog4netOptions { EnableConsoleLog = true };
-            string repositoryName = $"jimuLogger-{DateTime.Now}";
+            string repositoryName = $"jimuLogger-{Guid.NewGuid()}";
             var repLogger = LogManager.CreateRepository(repositoryName);
             //var repDebug = LogManager.CreateRepository("debug");
             //var repInfo = LogManager.CreateRepository("info");
@@ -67,7 +67,7 @@ namespace Jimu.Logger
             {
                 PatternLayout layout = new PatternLayout
                 {
-                    ConversionPattern = "%date{yyyy-MM-dd HH:mm:ss.fff} %-5p ["+ip+"] %m%n"
+                    ConversionPattern = "%date{yyyy-MM-dd HH:mm:ss.fff} %-5p [" + ip + "] %m%n"
                 };
                 layout.ActivateOptions();
 

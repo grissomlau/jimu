@@ -191,6 +191,14 @@ namespace Jimu.Server.Implement.Parser
 
                     sb.Append($"\"{prop.Name}\":{{{GetCustomTypeMembers(prop.PropertyType)}}},");
                 }
+                else if (prop.PropertyType.IsClass
+                    && prop.PropertyType.FullName.StartsWith("System.Collections.Generic.List")
+                    && prop.PropertyType.GenericTypeArguments.Length == 1
+                    )
+                {
+
+                    sb.Append($"\"{prop.Name}\":[{{{GetCustomTypeMembers(prop.PropertyType.GenericTypeArguments[0])}}}],");
+                }
                 else
                 {
                     var comment = prop.GetCustomAttribute<JimuFieldCommentAttribute>();
