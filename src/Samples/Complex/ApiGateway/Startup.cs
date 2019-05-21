@@ -28,7 +28,16 @@ namespace Jimu.ApiGateway
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("any",
+                builder =>
+                {
+                    //builder.AllowCredentials().AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                    builder.AllowCredentials().AllowAnyMethod().AllowAnyHeader().WithOrigins("http://localhost:8080",
+                                        "http://webapp.store.test.ctauto.cn");
+                });
+            });
             services.UseJimuSwagger(new Client.ApiGateway.SwaggerIntegration.JimuSwaggerOptions("My API"));
             services.UseJimu();
 
@@ -73,7 +82,7 @@ namespace Jimu.ApiGateway
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder app, IHostingEnvironment env)
         {
-
+            app.UseCors("any");
             app.UseStaticFiles();
             app.UseAuthentication();
 
@@ -85,42 +94,21 @@ namespace Jimu.ApiGateway
             app.UseJimuSwagger();
 
             // jimu client
-            var host = new ApplicationClientBuilder(new ContainerBuilder())
-                //.UseLog4netLogger(new JimuLog4netOptions
-                ////.UseNLogger(new LogOptions
-                //{
-                //    EnableConsoleLog = true,
-                //    EnableFileLog = true,
-                //    FileLogLevel = LogLevel.Info | LogLevel.Error,
-                //})
-                //.UseConsulForDiscovery(new Client.Discovery.ConsulIntegration.ConsulOptions("127.0.0.1", 8500, "hello"))
-                //.UseDotNettyForTransfer()
-                //.UseHttpForTransfer()
-                //.UsePollingAddressSelector()
-                //.UseServerHealthCheck(1)
-                //.SetDiscoveryAutoUpdateJobInterval(new Client.Discovery.Implement.DiscoveryOptions(1))
-                //.UseToken(() => { var headers = JimuHttpContext.Current.Request.Headers["Authorization"]; return headers.Any() ? headers[0] : null; })
-                //.UseJoseJwtForOAuth<HttpAddress>(new Client.Auth.JwtAuthorizationOptions()
-                //{
-                //    ServerIp = "127.0.0.1",
-                //    ServerPort = 5001,
-                //    SecretKey = "test",
-                //    ExpireTimeSpan = new TimeSpan(1, 0, 0),
-                //    TokenEndpointPath = "/api/client/token",
-                //    ValidateLifetime = true,
-                //    CheckCredential = o =>
-                //    {
-                //        if (o.UserName == "admin" && o.Password == "admin")
-                //        {
-                //            o.AddClaim("department", "IT部");
-                //        }
-                //        else
-                //        {
-                //            o.Rejected("401", "acount or password incorrect");
-                //        }
-                //    }
-                //})
-                .Build();
+
+            Jimu.IApplication host;
+#if DEBUG
+            if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("SERVICE_GROUPS")))
+            {
+                host = new ApplicationClientBuilder(new ContainerBuilder(), "JimuAppClientSettings.local").Build();
+            }
+            else
+            {
+                host = new ApplicationClientBuilder(new ContainerBuilder()).Build();
+            }
+#else
+             host = new ApplicationClientBuilder(new ContainerBuilder()).Build();
+#endif
+
             app.UseJimu(host);
             host.Run();
         }

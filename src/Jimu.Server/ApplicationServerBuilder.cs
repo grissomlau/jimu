@@ -122,19 +122,18 @@ namespace Jimu.Server
             var type = typeof(ServerModuleBase);
             var components = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(x => x.GetTypes())
-                .Where(x => x.IsClass && type.IsAssignableFrom(x) && !x.IsAbstract);
+                .Where(x => x.IsClass && type.IsAssignableFrom(x) && !x.IsAbstract)
+                .Select(x => Activator.CreateInstance(x, this.JimuAppSettings) as ServerModuleBase)
+                .OrderBy(x => x.Priority); ;
             components.ToList().ForEach(x =>
                 {
-                    var comp = Activator.CreateInstance(x, this.JimuAppSettings) as ServerModuleBase;
-                    if (comp != null)
-                    {
-                        this.AddInitializer(comp.DoInit);
-                        this.AddRunner(comp.DoRun);
-                        this.AddModule(comp.DoRegister);
-                        this.AddServiceModule(comp.DoServiceRegister);
-                        this.AddServiceInitializer(comp.DoServiceInit);
-                        this.AddBeforeRunner(comp.DoBeforeRun);
-                    }
+                    this.AddInitializer(x.DoInit);
+                    this.AddRunner(x.DoRun);
+                    this.AddModule(x.DoRegister);
+                    this.AddServiceModule(x.DoServiceRegister);
+                    this.AddServiceInitializer(x.DoServiceInit);
+                    this.AddBeforeRunner(x.DoBeforeRun);
+
                 });
 
         }

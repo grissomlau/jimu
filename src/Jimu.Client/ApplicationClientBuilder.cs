@@ -89,16 +89,14 @@ namespace Jimu.Client
             var type = typeof(ClientModuleBase);
             var components = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(x => x.GetTypes())
-                .Where(x => x.IsClass && type.IsAssignableFrom(x) && !x.IsAbstract);
+                .Where(x => x.IsClass && type.IsAssignableFrom(x) && !x.IsAbstract)
+                .Select(x => Activator.CreateInstance(x, this.JimuAppSettings) as ClientModuleBase)
+                .OrderBy(x => x.Priority);
             components.ToList().ForEach(x =>
             {
-                var comp = Activator.CreateInstance(x, this.JimuAppSettings) as ClientModuleBase;
-                if (comp != null)
-                {
-                    this.AddInitializer(comp.DoInit);
-                    this.AddRunner(comp.DoRun);
-                    this.AddModule(comp.DoRegister);
-                }
+                this.AddInitializer(x.DoInit);
+                this.AddRunner(x.DoRun);
+                this.AddModule(x.DoRegister);
             });
 
         }

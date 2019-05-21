@@ -6,8 +6,29 @@ using System.Text;
 
 namespace Jimu
 {
+    public enum ModuleExecPriority
+    {
+        /// <summary>
+        ///  execute first
+        /// </summary>
+        Critical = 0,
+        /// <summary>
+        /// after Critical
+        /// </summary>
+        Important = 1,
+        /// <summary>
+        /// after Important
+        /// </summary>
+        Normal = 2,
+        /// <summary>
+        ///  last
+        /// </summary>
+        Low = 3
+    }
+
     public abstract class ModuleBase
     {
+        public virtual ModuleExecPriority Priority => ModuleExecPriority.Important;
         protected IConfigurationRoot JimuAppSettings { get; }
         public ModuleBase(IConfigurationRoot jimuAppSettings)
         {

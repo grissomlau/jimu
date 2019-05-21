@@ -16,7 +16,7 @@ namespace Jimu.Client.Auth
         {
             _options = jimuAppSettings.GetSection(typeof(JwtAuthorizationOptions).Name).Get<JwtAuthorizationOptions>();
         }
-
+        public override ModuleExecPriority Priority => ModuleExecPriority.Critical;
         public override void DoInit(IContainer container)
         {
             if (_options != null)
