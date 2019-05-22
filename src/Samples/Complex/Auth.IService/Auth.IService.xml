@@ -4,6 +4,11 @@
         <name>Auth.IService</name>
     </assembly>
     <members>
+        <member name="T:Auth.IService.IAuthService">
+            <summary>
+            鉴权
+            </summary>
+        </member>
         <member name="M:Auth.IService.IAuthService.Check(Jimu.Server.Auth.JwtAuthorizationContext)">
             <summary>
             测试

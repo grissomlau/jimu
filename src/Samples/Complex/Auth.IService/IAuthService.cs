@@ -5,6 +5,9 @@ using Jimu.Server.Auth;
 
 namespace Auth.IService
 {
+    /// <summary>
+    /// 鉴权
+    /// </summary>
     [JimuServiceRoute("/api/{Service}")]
     public interface IAuthService : IJimuService
     {

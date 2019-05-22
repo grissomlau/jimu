@@ -44,6 +44,7 @@ namespace Jimu.Server.Auth
                         ServiceDescriptor = new JimuServiceDesc
                         {
                             Id = _options.GetServiceId(),
+                            Service = "Token",
                             RoutePath = JimuServiceRoute.ParseRoutePath("", "", _options.TokenEndpointPath, new[] { "username", "password" }, false),
                             Parameters = JimuHelper.Serialize<string>(new List<JimuServiceParameterDesc>{
                                  new JimuServiceParameterDesc

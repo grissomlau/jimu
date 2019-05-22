@@ -57,7 +57,8 @@ namespace Jimu.Client.ApiGateway.SwaggerIntegration
                               Parameters = paras,
                               Produces = new List<string> { "application/json" },
                               Responses = response,
-                              Description = x.Comment
+                              Description = x.Comment,
+                              Tags = GetTags(x)
                           }
                       });
                   }
@@ -72,11 +73,27 @@ namespace Jimu.Client.ApiGateway.SwaggerIntegration
                               Parameters = paras,
                               Produces = new List<string> { "application/json" },
                               Responses = response,
-                              Description = x.Comment
+                              Description = x.Comment,
+                              Tags = GetTags(x)
                           }
                       });
                   }
               });
+
+        }
+
+        private List<string> GetTags(JimuServiceDesc desc)
+        {
+            string tag = desc.Service;
+            if (!string.IsNullOrEmpty(desc.ServiceComment))
+            {
+                tag += $"({desc.ServiceComment})";
+            }
+            if (!string.IsNullOrEmpty(tag))
+            {
+                return new List<string> { tag };
+            }
+            return null;
 
         }
 

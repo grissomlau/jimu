@@ -54,10 +54,24 @@ namespace Jimu.Server.Implement.Parser
             if (routeTemplate != null)
                 desc.RoutePath = JimuServiceRoute.ParseRoutePath(routeTemplate.RouteTemplate, type.Name,
                     methodInfo.Name, methodInfo.GetParameters().Select(x => x.Name).ToArray(), type.IsInterface);
+            desc.Service = methodInfo.DeclaringType.FullName;
+            desc.ServiceComment = GetServiceComment(methodInfo);
             return desc;
         }
 
+        private string GetServiceComment(MethodInfo methodInfo)
+        {
 
+            var xml = GetXmlComment(methodInfo.DeclaringType);
+            var key = XmlCommentsMemberNameHelper.GetMemberNameForType(methodInfo.DeclaringType);
+            if (xml != null && xml.TryGetValue(key, out var node))
+            {
+                var returnNode = node.SelectSingleNode("summary");
+                return returnNode?.Value.Trim();
+            }
+            return null;
+
+        }
         private string GetReturnDesc(MethodInfo methodInfo)
         {
             JimuServiceReturnDesc desc = new JimuServiceReturnDesc();

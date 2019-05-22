@@ -4,6 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Jimu.ApiGateway.Controllers
 {
+    public class User
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
@@ -14,7 +19,7 @@ namespace Jimu.ApiGateway.Controllers
         /// <returns></returns>
         [HttpGet]
         [Authorize]
-        public IEnumerable<string> Get()
+        public IEnumerable<string> Get(User user)
         {
             return new[] { "value1", "value2" };
         }

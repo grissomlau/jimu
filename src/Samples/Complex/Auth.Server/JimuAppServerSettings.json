@@ -8,41 +8,36 @@
     "UseInService": true
   },
   "JwtAuthorizationOptions": {
-    "ServerIp": "192.168.10.195",
-    "ServerPort": 8001,
+    "ServiceInvokeIp": "127.0.0.1", //服务宿主的地址
+    "ServiceInvokePort": "8001",
     "Protocol": "Netty", //传输协议：Http,Netty
     "SecretKey": "123456", //生成token 的钥匙
     "ValidateLifetime": true,
-    "ExpireTimeSpan": "1.1:1:0", //token 有效时长: day.hour:minute:second
+    "ExpireTimeSpan": "0.16:0:0", //token 有效时长: day.hour:minute:second
     "ValidateIssuer": false, //
     "ValidIssuer": "",
     "ValidateAudience": false,
     "ValidAudience": "",
-    "TokenEndpointPath": "/api/v1/token", //获取 token 的路径
-    "CheckCredentialServiceId": "IServices.IEchoService.CheckUser(context)"
+    "TokenEndpointPath": "/v2/token", //获取 token 的路径
+    "CheckCredentialServiceId": "Auth.IServices.IAuthService.Check(context)"
   },
   "ConsulOptions": {
-    "Ip": "192.168.10.195", //consul ip
+    "Ip": "127.0.0.1", //consul ip
     "Port": "8500", // consul port
     "ServiceGroups": "jimu.miniddd.demo", //服务注册所属的组别
-    //"ServerAddress": "192.168.10.195:8010" //服务宿主的地址
-    //"ServiceInvokeIp": "${HOST_IP}",
-    //"ServiceInvokePort": "${HOST_PORT}"
-    "ServiceInvokeIp": "192.168.10.195",
-    "ServiceInvokePort": "9001"
+    "ServiceInvokeIp": "127.0.0.1", //服务宿主的地址
+    "ServiceInvokePort": "8001"
   },
   "DapperOptions": {
-    "ConnectionString": "server=local;database=grissom_dev;uid=root;pwd=root;",
+    "ConnectionString": "server=120.25.217.42;database=ctauto_system_uat;user=jujia_uat;pwd=ct123auto",
     "DbType": "MySql"
   },
   "TransportOptions": {
-    "Ip": "0.0.0.0", //服务宿主ip
-    "Port": 80, //服务宿主端口
+    "Ip": "127.0.0.1", //服务宿主ip
+    "Port": 8001, //服务宿主端口
     "Protocol": "Netty", //传输协议： Netty, Http
-    //"ServiceInvokeIp": "${HOST_IP}",
-    //"ServiceInvokePort": "${HOST_PORT}"
-    "ServiceInvokeIp": "192.168.10.195",
-    "ServiceInvokePort": "9001"
+    "ServiceInvokeIp": "127.0.0.1", //服务宿主的地址
+    "ServiceInvokePort": "8001"
   },
   "ServiceOptions": {
     "Path": "", //服务dll所在路径，默认当前目录
