@@ -1,107 +1,12 @@
 
 ## Description
 jimu 是一个基于.Net Core 2.0 简单易用的微服务框架，使用了大量的开源库（如 DotNetty, consul.net, Flurl.Http, Json.net, Log4net, Quartz.net ... ）, 支持分布式、高并发和负载均衡， 实现了服务治理（如服务注册、发现、健康检测 ...）和 RPC 调用。  
-jimu 在持续迭代开发中，很多功能还在排期（如可视化监控和管理工具，热更新，服务熔断、限流和降级 ...），如非高手，不建议上生产环境。  
 
 jimu(积木)，正如其中文名，希望用她来开发项目像搭积木一样简单快速可控，使项目安全可靠稳定，整体架构可拓展、高并发、分布式。
 
 更多详情，[查看 Wiki](https://github.com/grissomlau/jimu/wiki)
 
 ## Quick Start
-### 1. 微服务项目
-创建一个基于 .Net Core 2.0 的类库项目，并添加 jimu 依赖
-```bash
-Install-Package  Jimu
-```
-添加服务  
-注意引用空间： using Jimu;
-```csharp 
-[JimuServiceRoute("api/{Service}")] // RPC 调用路径
- public class UserService : IJimuService
- {
-     [JimuService(CreatedBy = "grissom")] // 指定服务的元数据, 该服务调用路径为 api/user/getname?id=
-     public string GetName(string id)
-     {
-         return $"user id {id}, name enjoy!";
-     }
- }
-
-```
-### 2. 微服务服务端项目
-创建一个基于 .Net Core 2.0 的控制台项目， 并添加 jimu.server 依赖
-```bash
-Install-Package  Jimu.Server
-```
-在 Main 函数中添加服务器启动代码  
-注意引用空间： using Jimu.Server;
-```csharp
-static void Main(string[] args)
-{
-    var hostBuilder = new ServiceHostServerBuilder(new Autofac.ContainerBuilder())
-        .UseLog4netLogger()
-        .LoadServices("QuickStart.Services")
-        .UseDotNettyForTransfer("127.0.0.1", 8001)
-        .UseInServerForDiscovery()
-        ;
-    using (var host = hostBuilder.Build())
-    {
-        host.Run();
-        Console.ReadLine();
-    }
-
-}
-```
-### 3. 微服务客户端项目
-创建一个基于 .Net Core 2.0 的 Asp.Net Core Web 应用程序（可选择 API 项目模版），并添加 jimu.client 依赖
-```bash
-Install-Package  Jimu.Client
-```
-修改 Startup.cs 类的代码， 以便添加对 jimu 的支持
-
-```csharp
-using Jimu.Client;
-using Jimu.Client.ApiGateway;
-
- public class Startup
-    {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
-        public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
-        {
-            //services.AddMvc();
-            services.UseJimu();
-        }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            //app.UseMvc();
-            var host = new ServiceHostClientBuilder(new Autofac.ContainerBuilder())
-                .UseLog4netLogger()
-                .UsePollingAddressSelector()
-                .UseDotNettyForTransfer()
-                .UseInServerForDiscovery(new Jimu.DotNettyAddress("127.0.0.1", 8001))
-                .Build();
-            app.UseJimu(host);
-            host.Run();
-        }
-    }
-```
-### 4. 同时启动 服务端 和 客户端 
-然后在浏览器访问： http://localhost:58156/api/user/getname?id=666
-
-### 5. 更多 demo 
 请下载 jimu 源码, 或者下载项目  [jimu.demo](https://github.com/grissomlau/jimu.demo)
 
 ## About Me 
@@ -109,11 +14,15 @@ using Jimu.Client.ApiGateway;
 项目的更多资料正在断断续续地整理， 可关注我的 [博客园](http://www.cnblogs.com/grissom007/)  
 联系我请发邮件： grissomlau@qq.com
 
+## 核心
+
+jimu 最核心的思想是 IOC 和 DI, 通过配置文件使用了 autofac 将组件注入到框架中，用组件来驱动框架，使框架更具弹性。
+
 
 
 ## 配置
 
-### 服务器
+### 服务端
 
 #### 日志
 
@@ -127,7 +36,7 @@ using Jimu.Client.ApiGateway;
            "FileLogPath":"log",
            "FileLogLevel":"Debug,Info,Warn,Error",
            "ConsoleLogLevel":"Debug,Info,Warn,Error",
-           "UseInService": true
+           "UseInService": true // ILogger 是否注入到 service 
            
        }
    }
@@ -144,18 +53,18 @@ using Jimu.Client.ApiGateway;
    ```json
    {
        "JwtAuthorizationOptions":{
-           "ServerIp": "192.168.10.195",
-           "ServerPort": 8001,
-           "Protocol": "Http", //传输协议：Http,Netty
-           "SecretKey": "123456",//生成token 的钥匙
+            "ServiceInvokeIp": "${SERVICE_INVOKE_IP}", //服务宿主的地址
+           "ServiceInvokePort": "${SERVICE_INVOKE_PORT}",
+           "Protocol": "Netty", //传输协议：Http,Netty
+           "SecretKey": "123456", //生成token 的钥匙
            "ValidateLifetime": true,
-           "ExpireTimeSpan": "1.1:1:0",//token 有效时长: day.hour:minute:second
-           "ValidateIssuer": false,//
+           "ExpireTimeSpan": "0.16:0:0", //token 有效时长: day.hour:minute:second
+           "ValidateIssuer": false, //
            "ValidIssuer": "",
            "ValidateAudience": false,
            "ValidAudience": "",
-           "TokenEndpointPath": "/api/v1/token",//获取 token 的路径
-           "CheckCredentialServiceId": "Auth.IService.IAuthService.Check(context)" //验证用户名密码是否正确的 service id, context 是 JwtAuthorizationContext，包含 UserName，Password等调用上下文信息
+           "TokenEndpointPath": "/v2/token", //获取 token 的路径
+           "CheckCredentialServiceId": "Auth.IServices.IAuthService.Check(context)" //验证用户名密码是否正确的 service id, context 是 JwtAuthorizationContext，包含 UserName，Password等调用上下文信息         
        }
    }
    ```
@@ -169,16 +78,17 @@ using Jimu.Client.ApiGateway;
       ```json
       {
           "ConsulOptions":{
-              "Ip": "127.0.0.1",//consul ip
-              "Port": 8500,// consul port
-              "ServiceGroups": "MyService",//服务注册所属的组别
-              "ServerAddress": "192.168.10.195:8001",//服务宿主的地址
+       		 "Ip": "127.0.0.1", //consul ip
+         		 "Port": "8500", // consul port
+         		 "ServiceGroups": "ctauto.test.store", //服务注册所属的组别
+         		 "ServiceInvokeIp": "127.0.0.1", //服务宿主的地址
+         		 "ServiceInvokePort": "8004 //服务宿主的端口
           }
       }
-      ```
-
+```
       
-
+   
+   
    
 
 #### 服务调用协议
@@ -188,9 +98,11 @@ using Jimu.Client.ApiGateway;
    ```json
    {
        "TransportOptions":{
-           "Ip":"192.168.10.195",//服务宿主ip
+           "Ip": "127.0.0.1", //服务宿主ip
            "Port": 8001, //服务宿主端口
-           "Protocol":"Netty" //传输协议： Netty, Http
+           "Protocol": "Netty", //传输协议： Netty, Http
+           "ServiceInvokeIp": "127.0.0.1", //服务宿主的地址
+           "ServiceInvokePort": "8001"
        }
    }
    ```
@@ -306,18 +218,14 @@ MiniDDD 是一个轻量级的 DDD 框架， MiniDDD Repository 就是基于该�
 ```json
 {
     "JwtAuthorizationOptions":{
-        "ServerIp": "192.168.10.195",
-        "ServerPort": 8001,
         "Protocol": "Http", //传输协议：Http,Netty
-        "SecretKey": "123456",//生成token 的钥匙
+        "SecretKey": "123456", //生成token 的钥匙
         "ValidateLifetime": true,
-        "ExpireTimeSpan": "1.1:1:0",//token 有效时长: day.hour:minute:second
-        "ValidateIssuer": false,//
+        "ExpireTimeSpan": "0.16:1:0", //token 有效时长: day.hour:minute:second
+        "ValidateIssuer": false, //
         "ValidIssuer": "",
         "ValidateAudience": false,
-        "ValidAudience": "",
-        "TokenEndpointPath": "/api/v1/token",//获取 token 的路径
-        "CheckCredentialServiceId": "Auth.IService.IAuthService.Check(context)" //验证用户名密码是否正确的 service id, context 是 JwtAuthorizationContext，包含 UserName，Password等调用上下文信息
+        "ValidAudience": ""
     }
 }
 ```
@@ -426,4 +334,3 @@ MiniDDD 是一个轻量级的 DDD 框架， MiniDDD Repository 就是基于该�
    }
    ```
 
-#### 
