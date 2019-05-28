@@ -29,7 +29,7 @@
     "ServiceInvokePort": "8001"
   },
   "DapperOptions": {
-    "ConnectionString": "server=120.25.217.82;database=ctauto_system_uat;user=jujia_uat;pwd=ct123auto",
+    "ConnectionString": "",
     "DbType": "MySql"
   },
   "TransportOptions": {
