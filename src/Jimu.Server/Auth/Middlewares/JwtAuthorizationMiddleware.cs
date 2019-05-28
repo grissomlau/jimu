@@ -57,8 +57,10 @@ namespace Jimu.Server.Auth
                     Dictionary<string, object> dic = new Dictionary<string, object>();
                     dic.Add("context", context);
                     service.Func(dic, null);
+                    return;
                 }
             }
+            throw new EntryPointNotFoundException($"{serviceId} not found, cannot check token generate credential");
         }
 
         Task CreateToken(RemoteCallerContext context)

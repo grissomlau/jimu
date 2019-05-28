@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Authors>grissomlau@qq.com</Authors>
-    <Version>0.5.7</Version>
+    <Version>0.5.8</Version>
     <Description>MiniDDD Repository for jimu with dapper</Description>
     <PackageProjectUrl>https://github.com/grissomlau/Jimu</PackageProjectUrl>
     <RepositoryUrl>https://github.com/grissomlau/Jimu</RepositoryUrl>

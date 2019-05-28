@@ -21,7 +21,6 @@
     <ProjectReference Include="..\..\..\..\..\jimu\src\Jimu.Modules\Jimu.Server.ORM.DapperIntegration\Jimu.Server.ORM.DapperIntegration.csproj" />
     <ProjectReference Include="..\..\..\..\..\jimu\src\Jimu.Server\Jimu.Server.csproj" />
     <ProjectReference Include="..\..\..\..\..\jimu\src\Jimu\Jimu.csproj" />
-    <ProjectReference Include="..\Auth.IService\Auth.IService.csproj" />
     <ProjectReference Include="..\Auth.Service\Auth.Service.csproj" />
   </ItemGroup>
 

@@ -95,7 +95,18 @@ namespace Jimu.Server.Transport.DotNetty
                 {
                     lastInvoke = middleware(lastInvoke);
                 }
-                await lastInvoke(thisContext);
+                try
+                {
+                    await lastInvoke(thisContext);
+                }
+                catch (Exception ex)
+                {
+                    JimuRemoteCallResultData resultMessage = new JimuRemoteCallResultData();
+                    resultMessage.ErrorCode = "500";
+                    resultMessage.ExceptionMessage = ex.ToStackTraceString();
+                    _logger.Error("throw exception when excuting local service: \r\n " + JimuHelper.Serialize<string>(message), ex);
+                    await response.WriteAsync(message.Id, resultMessage);
+                }
 
             }
             else
