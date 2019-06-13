@@ -26,19 +26,19 @@
     "Port": 8500, // consul port
     "ServiceGroups": "jimu.miniddd.demo", //服务注册所属的组别
     "ServiceInvokeIp": "127.0.0.1", //服务宿主的地址
-    "ServiceInvokePort": 8002
+    "ServiceInvokePort": 8003
   },
   "ServiceOptions": {
     "Path": "", //服务dll所在路径，默认当前目录
-    "LoadFilePattern": "IServices.dll,Services.dll", //需要加载的服务dll
+    "LoadFilePattern": "TestService.dll", //需要加载的服务dll
     "WatchFilePattern": "", //监视文件修改，实现热加载
     "EnableWatch": false //是否启动热加载
   },
   "TransportOptions": {
     "Ip": "127.0.0.1", //服务宿主ip
-    "Port": 8002, //服务宿主端口
+    "Port": 8003, //服务宿主端口
     "Protocol": "Netty", //传输协议： Netty, Http
     "ServiceInvokeIp": "127.0.0.1", //服务宿主的地址
-    "ServiceInvokePort": 8002
+    "ServiceInvokePort": 8003
   }
 }

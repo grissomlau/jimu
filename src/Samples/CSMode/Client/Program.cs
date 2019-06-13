@@ -37,7 +37,7 @@ namespace Client
 
                 var proxy = host.Container.Resolve<IServiceProxy>();
                 var echo = proxy.GetService<IEchoService>();
-                var name = echo.GetEcho("test");
+                var name = echo.GetEchoAnonymous("test");
                 watch.Stop();
                 Console.WriteLine($"take time {watch.ElapsedMilliseconds}," + "return:  " + name);
 

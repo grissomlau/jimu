@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="JimuAppClientSettings.json" />
+    <None Remove="JimuAppServerSettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="JimuAppClientSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="JimuAppServerSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Serilog" Version="2.8.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Jimu.Client\Jimu.Client.csproj" />
+    <ProjectReference Include="..\..\..\Jimu.Modules\Jimu.Client.Discovery.ConsulIntegration\Jimu.Client.Discovery.ConsulIntegration.csproj" />
+    <ProjectReference Include="..\..\..\Jimu.Modules\Jimu.Server.Discovery.ConsulIntegration\Jimu.Server.Discovery.ConsulIntegration.csproj" />
+    <ProjectReference Include="..\..\..\Jimu.Server\Jimu.Server.csproj" />
+    <ProjectReference Include="..\..\Service\IServices\IServices.csproj" />
+    <ProjectReference Include="..\..\Service\TestService\TestService.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -197,3 +197,12 @@
 /src/Samples/Complex/Auth.Service/bin
 /src/Samples/Complex/Auth.Service/obj
 /src/Samples/Complex/Auth.Server/log
+/src/Jimu.Modules/Jimu.Client.Discovery.ConsulIntegration/bin/Release/netstandard2.0
+/src/Jimu.Modules/Jimu.Server.Discovery.ConsulIntegration/bin/Release/netstandard2.0
+/src/Samples/CSMode/Server2/bin
+/src/Samples/CSMode/Server2/obj
+/src/Samples/CSMode/Server2/Properties/PublishProfiles
+/TestService/bin
+/TestService/obj
+/src/Samples/Service/TestService/bin
+/src/Samples/Service/TestService/obj

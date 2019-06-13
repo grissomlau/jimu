@@ -249,7 +249,7 @@ namespace Jimu.Server.Implement.Parser
             if (!File.Exists(fileFullName))
             {
                 var assemblyPath = Path.GetDirectoryName(type.Assembly.Location);
-                fileFullName = Path.Combine(assemblyPath, fileFullName);
+                fileFullName = Path.Combine(assemblyPath + "", fileFullName);
             }
             if (!_xmlComments.TryGetValue(key, out var xmlComments)
                 && File.Exists(fileFullName)
