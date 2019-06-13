@@ -11,11 +11,18 @@ namespace Auth.IService
     [JimuServiceRoute("/api/{Service}")]
     public interface IAuthService : IJimuService
     {
+        
         /// <summary>
         /// 测试
         /// </summary>
         /// <param name="context"></param>
         [JimuService()]
         void Check(JwtAuthorizationContext context);
+        /// <summary>
+        /// 获取当前用户名称
+        /// </summary>
+        /// <returns></returns>
+        [JimuService(EnableAuthorization =true)]
+        string GetCurrentUserName();
     }
 }

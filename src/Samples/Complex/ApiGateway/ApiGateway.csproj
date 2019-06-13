@@ -17,6 +17,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Modules\Auth\RoleAuthMiddleware.cs" />
+    <Compile Remove="Modules\Auth\RoleAuthModule.cs" />
+    <Compile Remove="Modules\Auth\RoleAuthOptions.cs" />
     <Compile Remove="Utils\MyQueryStringValueProvider.cs" />
     <Compile Remove="Utils\MyQueryStringValueProviderFactory.cs" />
   </ItemGroup>
@@ -72,6 +75,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Modules\Auth\" />
     <Folder Include="wwwroot\assets\images\" />
     <Folder Include="wwwroot\assets\libs\Bootstrap-Table\" />
   </ItemGroup>
