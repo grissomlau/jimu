@@ -38,21 +38,25 @@ namespace Jimu
             result.Append(method);
             result = new StringBuilder(result.ToString().ToLower());
 
-            if (!paraNames.Any())
-                return result.ToString().TrimEnd('&', '/', '\\').TrimStart('/', '\\');
+            if (paraNames.Any())
+            {
+                //return result.ToString().TrimEnd('&', '/', '\\').TrimStart('/', '\\');
+                //return "/" + result.ToString().TrimEnd('&', '/', '\\').TrimStart('/', '\\');
 
-            result.Append("?");
-            foreach (var para in paraNames)
-                //if (para.IsOptional)
-                //{
-                //    result.Append($"[{para.Name}]=&");
+                result.Append("?");
+                foreach (var para in paraNames)
+                    //if (para.IsOptional)
+                    //{
+                    //    result.Append($"[{para.Name}]=&");
+                    //}
+                    //else
+                    //{
+                    result.Append($"{para}=&");
                 //}
-                //else
-                //{
-                result.Append($"{para}=&");
-            //}
+            }
 
-            return result.ToString().TrimEnd('&', '/', '\\').TrimStart('/', '\\');
+            //return result.ToString().TrimEnd('&', '/', '\\').TrimStart('/', '\\');
+            return "/" + result.ToString().TrimEnd('&', '/', '\\').TrimStart('/', '\\');
         }
 
         private static List<string> GetParameters(string text)

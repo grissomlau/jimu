@@ -24,6 +24,10 @@ namespace Jimu.Client.ApiGateway.Controllers
                     paras[key] = query.Collection[key];
                 }
             }
+            if (!path.StartsWith("/"))
+            {
+                path = "/" + path;
+            }
             var result = await JimuClient.Invoke(path, paras);
 
             //if (result.ResultType != typeof(JimuFile).ToString())
