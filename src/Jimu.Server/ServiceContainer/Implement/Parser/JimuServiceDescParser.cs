@@ -237,8 +237,15 @@ namespace Jimu.Server.Implement.Parser
 
         private string GetHttpMethod(MethodInfo method)
         {
-            return method.GetParameters().Any(x => x.ParameterType.IsClass
-                && !x.ParameterType.FullName.StartsWith("System.")) ? "POST" : "GET";
+            if (method.Name.StartsWith("get", StringComparison.OrdinalIgnoreCase))
+            {
+                return "GET";
+            }
+            else
+            {
+                return method.GetParameters().Any(x => x.ParameterType.IsClass
+                    && !x.ParameterType.FullName.StartsWith("System.")) ? "POST" : "GET";
+            }
         }
 
         private Dictionary<string, XPathNavigator> GetXmlComment(Type type)

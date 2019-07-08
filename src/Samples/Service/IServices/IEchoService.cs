@@ -45,7 +45,7 @@ namespace IServices
         /// </summary>
         /// <param name="user">用户</param>
         /// <returns></returns>
-        [JimuService(CreatedBy = "grissom", Comment = "create user")]
+        [JimuService(CreatedBy = "grissom", Comment = "create user", EnableAuthorization = false, HttpMethod = "GET")]
         //[JimuFieldComment("user", "想创建的用户对象")]
         string CreateUser(UserDTO user);
         [JimuService(CreatedBy = "grissom", Comment = "create user friend")]
@@ -53,6 +53,7 @@ namespace IServices
 
         [JimuService()]
         void CheckUser(Jimu.Server.Auth.JwtAuthorizationContext context);
+
 
     }
 }
