@@ -54,6 +54,8 @@ namespace IServices
         [JimuService()]
         void CheckUser(Jimu.Server.Auth.JwtAuthorizationContext context);
 
+   
+
 
     }
 }

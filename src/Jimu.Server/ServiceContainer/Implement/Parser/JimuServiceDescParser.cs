@@ -108,7 +108,10 @@ namespace Jimu.Server.Implement.Parser
             {
                 //desc.ReturnType = string.Join(",", methodInfo.ReturnType.GenericTypeArguments.Select(x => x.FullName));
                 desc.ReturnType = methodInfo.ReturnType.ToString();
-                customTypes = methodInfo.ReturnType.GenericTypeArguments.ToList();
+                if (desc.ReturnType.StartsWith("System."))
+                    customTypes = methodInfo.ReturnType.GenericTypeArguments.ToList();
+                else
+                    customTypes = new List<Type> { methodInfo.ReturnType };
             }
             else
             {
