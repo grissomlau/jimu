@@ -10,6 +10,7 @@ namespace Jimu.Server.Auth
 
         public string UserName { get; }
         public string Password { get; }
+        public string GrantType { get; }
 
         public JimuRemoteCallData RemoteInvokeMessage { get; }
 
@@ -25,6 +26,8 @@ namespace Jimu.Server.Auth
                 UserName = remoteInvokeMessage.Parameters["username"] + "";
             if (remoteInvokeMessage.Parameters.ContainsKey("password"))
                 Password = remoteInvokeMessage.Parameters["password"] + "";
+            if (remoteInvokeMessage.Parameters.ContainsKey("grant_type"))
+                GrantType = remoteInvokeMessage.Parameters["grant_type"] + "";
             Payload.Add("username", UserName);
         }
         //public Dictionary<string, string> Claims { get; }
