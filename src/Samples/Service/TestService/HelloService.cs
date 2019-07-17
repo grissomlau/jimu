@@ -19,8 +19,8 @@ namespace TestService
         public string GetEcho()
         {
             var echoService = _serviceProxy.GetService<IEchoService>();
-            var ret = echoService.GetEchoAnonymous("echo from hello service!");
-            return "hello return: " + ret;
+            var ret = echoService.GetEchoAnonymous2("echo from hello service!");
+            return "hello return: " + ret.Name;
         }
 
         [JimuService(EnableAuthorization = false)]

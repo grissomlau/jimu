@@ -6,7 +6,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Jimu.Client\Jimu.Client.csproj" />
-    <ProjectReference Include="..\IServices\IServices.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="IServices">
+      <HintPath>dll\IServices.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

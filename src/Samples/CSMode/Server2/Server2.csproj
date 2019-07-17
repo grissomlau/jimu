@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -32,7 +32,6 @@
     <ProjectReference Include="..\..\..\Jimu.Modules\Jimu.Client.Discovery.ConsulIntegration\Jimu.Client.Discovery.ConsulIntegration.csproj" />
     <ProjectReference Include="..\..\..\Jimu.Modules\Jimu.Server.Discovery.ConsulIntegration\Jimu.Server.Discovery.ConsulIntegration.csproj" />
     <ProjectReference Include="..\..\..\Jimu.Server\Jimu.Server.csproj" />
-    <ProjectReference Include="..\..\Service\IServices\IServices.csproj" />
     <ProjectReference Include="..\..\Service\TestService\TestService.csproj" />
   </ItemGroup>
 

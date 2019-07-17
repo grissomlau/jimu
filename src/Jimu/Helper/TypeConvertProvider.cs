@@ -12,6 +12,11 @@ namespace Jimu.Helper
     {
         public static object Convert(object instance, Type destinationType)
         {
+            if(instance == null)
+            {
+                return null;
+            }
+
             return GetConvertor().Select(convertor => convertor(instance, destinationType)).FirstOrDefault(result => result != null);
         }
 

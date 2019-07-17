@@ -51,6 +51,13 @@ namespace Services
             return anything;
         }
 
+        public UserDTO GetEchoAnonymous2(string anything)
+        {
+            return new UserDTO {
+                 Name = "just test"
+            };
+        }
+
         public Task<string> SetEcho(string anything)
         {
             //return Task.FromResult(new UserDTO());
@@ -59,6 +66,11 @@ namespace Services
 
         //public Task<UserDTO> SetEcho(string anything, List<string> anything2)
         public Task<List<UserDTO>> SetEcho(string anything, string anything2)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public List<UserDTO> Test()
         {
             throw new System.NotImplementedException();
         }

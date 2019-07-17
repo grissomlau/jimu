@@ -3,7 +3,6 @@ using Jimu.Server;
 using System;
 using Autofac;
 using Jimu;
-using IServices;
 
 namespace Server2
 {

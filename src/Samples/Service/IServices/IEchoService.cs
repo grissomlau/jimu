@@ -16,6 +16,16 @@ namespace IServices
         //[JimuFieldComment("anything", "任何值")]
         //[JimuReturnComment("返回anything")]
         string GetEchoAnonymous(string anything);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="anything">任何值")]</param>
+        /// <returns>返回anything"""\"</returns>
+        [JimuService(CreatedBy = "grissom", Comment = "get input things", EnableAuthorization = false)]
+        //[JimuFieldComment("anything", "任何值")]
+        //[JimuReturnComment("返回anything")]
+        UserDTO GetEchoAnonymous2(string anything);
         /// <summary>
         /// 
         /// </summary>
@@ -53,6 +63,9 @@ namespace IServices
 
         [JimuService()]
         void CheckUser(Jimu.Server.Auth.JwtAuthorizationContext context);
+
+        [JimuService()]
+        List<UserDTO> Test();
 
    
 

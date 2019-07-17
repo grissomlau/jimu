@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="MsgModel.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\Jimu.Server\Jimu.Server.csproj" />
     <ProjectReference Include="..\..\..\Jimu\Jimu.csproj" />
   </ItemGroup>
