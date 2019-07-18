@@ -196,8 +196,12 @@ namespace Jimu.Server.Implement.Parser
             return paras;
         }
 
-        private string GetCustomTypeMembers(Type customType)
+        private string GetCustomTypeMembers(Type customType, int level = 0)
         {
+            if (level > 3)
+                return "";
+
+            level++;
             StringBuilder sb = new StringBuilder(); ;
             var xmlNode = GetXmlComment(customType);
             foreach (var prop in customType.GetProperties())
@@ -206,15 +210,22 @@ namespace Jimu.Server.Implement.Parser
               && !prop.PropertyType.FullName.StartsWith("System."))
                 {
 
-                    sb.Append($"\"{prop.Name}\":{{{GetCustomTypeMembers(prop.PropertyType)}}},");
+                    sb.Append($"\"{prop.Name}\":{{{GetCustomTypeMembers(prop.PropertyType, level)}}},");
                 }
                 else if (prop.PropertyType.IsClass
                     && prop.PropertyType.FullName.StartsWith("System.Collections.Generic.List")
                     && prop.PropertyType.GenericTypeArguments.Length == 1
                     )
                 {
+                    if (prop.PropertyType.GenericTypeArguments[0].FullName.StartsWith("System."))
+                    {
+                        sb.Append($"\"{prop.Name}\":[{{}}],");
+                    }
+                    else
+                    {
 
-                    sb.Append($"\"{prop.Name}\":[{{{GetCustomTypeMembers(prop.PropertyType.GenericTypeArguments[0])}}}],");
+                        sb.Append($"\"{prop.Name}\":[{{{GetCustomTypeMembers(prop.PropertyType.GenericTypeArguments[0], level)}}}],");
+                    }
                 }
                 else
                 {

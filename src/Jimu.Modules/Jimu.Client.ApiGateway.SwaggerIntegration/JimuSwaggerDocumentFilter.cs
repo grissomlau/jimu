@@ -144,6 +144,7 @@ namespace Jimu.Client.ApiGateway.SwaggerIntegration
                     {
                         Name = p.Name,
                         Type = p.Type,
+                        Format = p.Format,
                         //Format = typeInfo.Format,
                         In = "query",
                         Description = $"{p.Comment}",

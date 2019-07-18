@@ -65,7 +65,7 @@ namespace IServices
         void CheckUser(Jimu.Server.Auth.JwtAuthorizationContext context);
 
         [JimuService()]
-        List<UserDTO> Test();
+        List<UserDTO> GetTest(UserDTO userDTO);
 
    
 

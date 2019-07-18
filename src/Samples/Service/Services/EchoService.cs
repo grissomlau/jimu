@@ -70,7 +70,7 @@ namespace Services
             throw new System.NotImplementedException();
         }
 
-        public List<UserDTO> Test()
+        public List<UserDTO> GetTest(UserDTO userDTO)
         {
             throw new System.NotImplementedException();
         }
