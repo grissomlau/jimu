@@ -58,6 +58,7 @@ namespace Jimu.Client.ApiGateway.SwaggerIntegration
                               Produces = new List<string> { "application/json" },
                               Responses = response,
                               Description = x.Comment,
+                              Summary = x.Comment,
                               Tags = GetTags(x)
                           }
                       });
@@ -74,6 +75,7 @@ namespace Jimu.Client.ApiGateway.SwaggerIntegration
                               Produces = new List<string> { "application/json" },
                               Responses = response,
                               Description = x.Comment,
+                              Summary = x.Comment,
                               Tags = GetTags(x)
                           }
                       });
@@ -144,8 +146,7 @@ namespace Jimu.Client.ApiGateway.SwaggerIntegration
                     {
                         Name = p.Name,
                         Type = p.Type,
-                        Format = p.Format,
-                        //Format = typeInfo.Format,
+                        //Format = p.Format,
                         In = "query",
                         Description = $"{p.Comment}",
                     };
@@ -159,6 +160,10 @@ namespace Jimu.Client.ApiGateway.SwaggerIntegration
                             Type = TypeHelper.GetArrayType(p.Type)
                         };
                         param.Type = "array";
+                    }
+                    if (TypeHelper.CheckIsObject(p.Type))
+                    {
+                        param.Default = p.Format;
                     }
                     parameters.Add(param);
                 }
