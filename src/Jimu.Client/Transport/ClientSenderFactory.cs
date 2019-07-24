@@ -47,6 +47,19 @@ namespace Jimu.Client
                    ClientSenderCreator?.Invoke(address, ref client);
                    return client;
                })))).Value;
+                if (!val.CheckValid())
+                {
+                    _logger.Debug($"transport client for: {address.Code} is invalid, retry to created");
+                    ClientSenders.TryRemove($"{address.Protocol}-{address.Code}", out _);
+                    val = ClientSenders.GetOrAdd($"{address.Protocol}-{address.Code}", (ep => new Lazy<IClientSender>((() =>
+                                  {
+                                      IClientSender client = null;
+                                      ClientSenderCreator?.Invoke(address, ref client);
+                                      return client;
+                                  })))).Value;
+
+
+                }
                 _logger.Debug($"succed to create transport client for: {address.Code}");
                 return val;
             }

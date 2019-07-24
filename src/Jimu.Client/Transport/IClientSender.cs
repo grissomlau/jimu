@@ -11,6 +11,12 @@ namespace Jimu.Client
         /// <returns></returns>
         Task<JimuRemoteCallResultData> SendAsync(JimuRemoteCallData invokeMessage);
 
+        /// <summary>
+        /// check whether closed or disposed 
+        /// </summary>
+        /// <returns></returns>
+        bool CheckValid();
+
         //Task OnReceive(TransportMessage message);
     }
 }

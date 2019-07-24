@@ -92,5 +92,6 @@ namespace Jimu.Client
         /// <param name="msg"></param>
         /// <returns></returns>
         protected abstract Task DoSendAsync(JimuTransportMsg msg);
+        public abstract bool CheckValid();
     }
 }

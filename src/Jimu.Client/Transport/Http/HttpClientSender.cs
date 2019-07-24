@@ -15,6 +15,12 @@ namespace Jimu.Client
             _address = address;
             _clientListener = clientListener;
         }
+
+        public override bool CheckValid()
+        {
+            return true;
+        }
+
         protected override async Task DoSendAsync(JimuTransportMsg msg)
         {
             var invokeMessage = msg.GetContent<JimuRemoteCallData>();

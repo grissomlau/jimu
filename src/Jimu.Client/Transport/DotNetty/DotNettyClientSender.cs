@@ -14,6 +14,11 @@ namespace Jimu.Client
             _channel = channel;
         }
 
+        public override bool CheckValid()
+        {
+            return _channel.Active;
+        }
+
         public override void Dispose()
         {
             Task.Run(async () =>
