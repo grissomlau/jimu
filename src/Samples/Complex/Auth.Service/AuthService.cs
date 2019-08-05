@@ -5,32 +5,35 @@ using System.Data.Common;
 using Dapper;
 using Jimu.Server.Auth;
 using Jimu;
+using Jimu.Database;
 
 namespace Auth.Service
 {
     public class AuthService : IAuthService
     {
-        readonly DbConnection _cnn;
+        readonly IDbFactory _dbFactory;
         readonly JimuPayload _payload;
-        public AuthService(DbConnection cnn, JimuPayload payload)
+        public AuthService(IDbFactory dbFactory, JimuPayload payload)
         {
-            _cnn = cnn;
+            _dbFactory = dbFactory;
             _payload = payload;
         }
         public void Check(JwtAuthorizationContext context)
         {
             Console.WriteLine("open database");
-            /*       
-             *       // using database
-             *       _cnn.Open();
-                       var auth = _cnn.QuerySingleOrDefault<User>(@"Select id, name, email From users Where email = @email and pwd = @pwd", new { email = context.UserName, pwd = context.Password });
-                       if (auth != null)
-                       {
-                           context.AddClaim("email", auth.Email);
-                       }
-                       */
 
-            // hardcode
+            //// 1.using database
+            //using (var cnn = _dbFactory.Create())
+            //{
+            //    var auth = cnn.QuerySingleOrDefault<User>(@"Select id, name, email From users Where email = @email and pwd = @pwd", new { email = context.UserName, pwd = context.Password });
+            //    if (auth != null)
+            //    {
+            //        context.AddClaim("email", auth.Email);
+            //    }
+            //}
+
+
+            // 2.hardcode
             if (context.UserName == "admin" && context.Password == "admin")
             {
                 context.AddClaim("username", "admin");
