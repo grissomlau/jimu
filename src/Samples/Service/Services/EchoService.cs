@@ -48,13 +48,20 @@ namespace Services
 
         public string GetEchoAnonymous(string anything)
         {
-            return anything;
+
+            string xml = string.Format(@"<xml>
+<return_code><![CDATA[{0}]]></return_code>
+<return_msg><![CDATA[{1}]]></return_msg>
+</xml>", "ok", "haha");
+
+            return xml;
         }
 
         public UserDTO GetEchoAnonymous2(string anything)
         {
-            return new UserDTO {
-                 Name = "just test"
+            return new UserDTO
+            {
+                Name = "just test"
             };
         }
 

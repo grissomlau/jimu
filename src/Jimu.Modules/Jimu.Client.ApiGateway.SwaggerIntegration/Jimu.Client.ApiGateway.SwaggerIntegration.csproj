@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <Version>0.5.18</Version>
-    <AssemblyVersion>0.5.18.0</AssemblyVersion>
+    <Version>0.5.19</Version>
+    <AssemblyVersion>0.5.19.0</AssemblyVersion>
     <Authors>grissomlau@qq.com</Authors>
     <Description>swagger support for jimu</Description>
     <PackageLicenseUrl>https://github.com/grissomlau/Jimu/blob/master/LICENSE</PackageLicenseUrl>
@@ -12,7 +12,7 @@
     <RepositoryUrl>https://github.com/grissomlau/Jimu</RepositoryUrl>
     <PackageTags>netcore, micorservice, swagger</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <FileVersion>0.5.18.0</FileVersion>
+    <FileVersion>0.5.19.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

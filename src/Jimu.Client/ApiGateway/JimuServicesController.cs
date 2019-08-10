@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
@@ -36,7 +37,8 @@ namespace Jimu.Client.ApiGateway.Controllers
                 var file = result.Result as JimuFile;
                 return File(file?.Data, "application/octet-stream", file?.FileName);
             }
-            return new JsonResult(result.Result);
+            //return new JsonResult(result.Result);
+            return Ok(result.Result);
         }
     }
 }

@@ -52,10 +52,13 @@ namespace Jimu.Client.ApiGateway
             {
                 o.ModelBinderProviders.Insert(0, new JimuQueryStringModelBinderProvider());
                 o.ModelBinderProviders.Insert(1, new JimuModelBinderProvider());
+                o.RespectBrowserAcceptHeader = true;
             }).AddJsonOptions(options =>
             {
                 options.SerializerSettings.ContractResolver = new DefaultContractResolver();
-            });
+            })
+            .AddXmlSerializerFormatters()
+            ;
 
             return services;
         }
