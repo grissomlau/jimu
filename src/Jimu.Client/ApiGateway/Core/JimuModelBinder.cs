@@ -58,7 +58,7 @@ namespace Jimu.Client.ApiGateway
                 {
                     try
                     {
-                        model = new JimuModel(body);
+                        model = new JimuModel(body,req.ContentType);
                     }
                     catch (Exception ex)
                     {
