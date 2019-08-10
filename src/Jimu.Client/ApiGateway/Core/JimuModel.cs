@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,14 +12,30 @@ namespace Jimu.Client.ApiGateway
     {
         public Dictionary<string, object> Data { get; set; } = new Dictionary<string, object>();
         public JimuModel() { }
-        public JimuModel(Stream content)
+        public JimuModel(Stream content, string contentType = "application/json")
         {
             using (var sr = new StreamReader(content))
             {
                 var json = sr.ReadToEnd();
-                Data = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
-            }
+                try
+                {
+                    Data = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
+                }
+                catch (Exception ex)
+                {
+                    if (contentType == "text/plain" || contentType == "text/xml")
+                    {
+                        Data = new Dictionary<string, object>();
+                        Data.Add("data", json);
+                    }
+                    else
+                    {
+                        throw ex;
+                    }
 
+                }
+
+            }
         }
 
         public JimuModel(IFormCollection form)
