@@ -12,9 +12,10 @@ namespace Jimu.Client
         /// </summary>
         /// <param name="serviceIdOrPath">service id or route path</param>
         /// <param name="paras">service parameters </param>
+        /// <param name="payload">context payload</param>
         /// <param name="token">authorization token</param>
         /// <returns></returns>
-        Task<JimuRemoteCallResultData> InvokeAsync(string serviceIdOrPath, IDictionary<string, object> paras, string token = null);
+        Task<JimuRemoteCallResultData> InvokeAsync(string serviceIdOrPath, IDictionary<string, object> paras, JimuPayload payload=null, string token = null);
 
         /// <summary>
         ///     invoke remote service
@@ -22,10 +23,11 @@ namespace Jimu.Client
         /// <typeparam name="T">specify return type</typeparam>
         /// <param name="serviceIdOrPath">service id or route path</param>
         /// <param name="paras">service parameters</param>
+        /// <param name="payload">context payload</param>
         /// <returns></returns>
-        Task<T> InvokeAsync<T>(string serviceIdOrPath, IDictionary<string, object> paras);
+        Task<T> InvokeAsync<T>(string serviceIdOrPath, IDictionary<string, object> paras, JimuPayload payload);
 
-        Task<JimuRemoteCallResultData> InvokeAsync(JimuServiceRoute service, IDictionary<string, object> paras, string token);
+        Task<JimuRemoteCallResultData> InvokeAsync(JimuServiceRoute service, IDictionary<string, object> paras, JimuPayload payload, string token);
 
 
         /// <summary>

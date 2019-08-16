@@ -16,10 +16,15 @@ namespace TestService
             _serviceProxy = proxy;
         }
 
-        //[JimuService()]
+        [JimuService()]
         public string GetEcho()
         {
-            var echoService = _serviceProxy.GetService<IEchoService>();
+            JimuPayload payload = new JimuPayload
+            {
+                Items = new Dictionary<string, object>()
+            };
+            payload.Items["userid"] = "fuck";
+            var echoService = _serviceProxy.GetService<IEchoService>(payload);
             var ret = echoService.GetEchoAnonymous2("echo from hello service!");
             return "hello return: " + ret.Name;
         }
@@ -54,11 +59,11 @@ namespace TestService
         /// 用户名
         /// </summary>
         public string Name { get; set; }
-      /// <summary>
+        /// <summary>
         /// 很好
         /// </summary>
         public List<string> Name5 { get; set; }
-         /// <summary>
+        /// <summary>
         /// name7
         /// </summary>
         public DateTime Name7 { get; set; }

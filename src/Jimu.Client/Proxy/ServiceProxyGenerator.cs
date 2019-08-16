@@ -107,7 +107,7 @@ namespace Jimu.Client.Proxy.CodeAnalysisIntegration
                     SyntaxFactory.UsingDirective(GetQualifiedNameSyntax("System.Threading.Tasks")),
                     SyntaxFactory.UsingDirective(GetQualifiedNameSyntax("System.Collections.Generic")),
                     SyntaxFactory.UsingDirective(GetQualifiedNameSyntax(typeof(IRemoteServiceCaller).Namespace)),
-                    //SyntaxFactory.UsingDirective(GetQualifiedNameSyntax(typeof(ISerializer).Namespace)),
+                    //SyntaxFactory.UsingDirective(GetQualifiedNameSyntax(typeof(JimuPayload).Namespace)),
                     SyntaxFactory.UsingDirective(GetQualifiedNameSyntax(typeof(ServiceProxyBase).Namespace))
                 });
         }
@@ -150,7 +150,9 @@ namespace Jimu.Client.Proxy.CodeAnalysisIntegration
                        SyntaxFactory.SeparatedList<ParameterSyntax>(
                            new SyntaxNodeOrToken[]
                            {
-                               SyntaxFactory.Parameter(SyntaxFactory.Identifier("remoteServiceCaller")).WithType(SyntaxFactory.IdentifierName("IRemoteServiceCaller"))
+                               SyntaxFactory.Parameter(SyntaxFactory.Identifier("remoteServiceCaller")).WithType(SyntaxFactory.IdentifierName("IRemoteServiceCaller")),
+                            SyntaxFactory.Token(SyntaxKind.CommaToken),
+                               SyntaxFactory.Parameter(SyntaxFactory.Identifier("payload")).WithType(SyntaxFactory.IdentifierName("JimuPayload"))
                            }
                            )
                        )
@@ -160,7 +162,9 @@ namespace Jimu.Client.Proxy.CodeAnalysisIntegration
                     SyntaxFactory.SeparatedList<ArgumentSyntax>(
                         new SyntaxNodeOrToken[]
                         {
-                            SyntaxFactory.Argument(SyntaxFactory.IdentifierName("remoteServiceCaller"))
+                            SyntaxFactory.Argument(SyntaxFactory.IdentifierName("remoteServiceCaller")),
+                            SyntaxFactory.Token(SyntaxKind.CommaToken),
+                            SyntaxFactory.Argument(SyntaxFactory.IdentifierName("payload"))
                         }
                         )
                     )

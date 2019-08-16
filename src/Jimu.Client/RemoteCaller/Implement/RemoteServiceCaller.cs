@@ -31,10 +31,10 @@ namespace Jimu.Client
             _middlewares = new Stack<Func<ClientRequestDel, ClientRequestDel>>();
         }
 
-        public async Task<T> InvokeAsync<T>(string serviceIdOrPath, IDictionary<string, object> paras)
+        public async Task<T> InvokeAsync<T>(string serviceIdOrPath, IDictionary<string, object> paras,JimuPayload payload)
         {
             _logger.Debug($"begin to invoke service: {serviceIdOrPath}");
-            var result = await InvokeAsync(serviceIdOrPath, paras);
+            var result = await InvokeAsync(serviceIdOrPath, paras,payload);
             if (!string.IsNullOrEmpty(result.ExceptionMessage))
             {
                 _logger.Debug($"invoking service: {serviceIdOrPath} raising an error: {result.ExceptionMessage}");
@@ -64,8 +64,7 @@ namespace Jimu.Client
 
         }
 
-        public async Task<JimuRemoteCallResultData> InvokeAsync(string serviceIdOrPath, IDictionary<string, object> paras,
-            string token = null)
+        public async Task<JimuRemoteCallResultData> InvokeAsync(string serviceIdOrPath, IDictionary<string, object> paras,JimuPayload payload =null,string token = null)
         {
             if (paras == null)
             {
@@ -80,7 +79,7 @@ namespace Jimu.Client
                 };
 
             if (token == null && _serviceTokenGetter?.GetToken != null) token = _serviceTokenGetter.GetToken();
-            var result = await InvokeAsync(service, paras, token);
+            var result = await InvokeAsync(service, paras,payload,token);
             if (!string.IsNullOrEmpty(result.ExceptionMessage))
                 return new JimuRemoteCallResultData
                 {
@@ -99,8 +98,7 @@ namespace Jimu.Client
 
         }
 
-        public async Task<JimuRemoteCallResultData> InvokeAsync(JimuServiceRoute service, IDictionary<string, object> paras,
-            string token)
+        public async Task<JimuRemoteCallResultData> InvokeAsync(JimuServiceRoute service, IDictionary<string, object> paras, JimuPayload payload, string token)
         {
             var lastInvoke = GetLastInvoke();
 
@@ -109,7 +107,7 @@ namespace Jimu.Client
                 lastInvoke = mid(lastInvoke);
             }
 
-            return await lastInvoke(new RemoteCallerContext(service, paras, token, service.Address.First()));
+            return await lastInvoke(new RemoteCallerContext(service, paras,payload, token, service.Address.First()));
         }
 
         private ClientRequestDel GetLastInvoke()

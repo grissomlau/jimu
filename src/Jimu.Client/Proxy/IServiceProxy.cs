@@ -10,6 +10,6 @@
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        T GetService<T>() where T : class;
+        T GetService<T>(JimuPayload payload = null) where T : class;
     }
 }

@@ -59,9 +59,10 @@ namespace Services
 
         public UserDTO GetEchoAnonymous2(string anything)
         {
+            
             return new UserDTO
             {
-                Name = "just test"
+                Name = "just test" + _payload.Items["userid"]
             };
         }
 

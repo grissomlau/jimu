@@ -16,13 +16,14 @@ namespace Jimu.Client
         public JimuAddress ServiceAddress { get; set; }
 
 
-        public RemoteCallerContext(JimuServiceRoute service, IDictionary<string, object> paras, string token, JimuAddress jimuAddress)
+        public RemoteCallerContext(JimuServiceRoute service, IDictionary<string, object> paras, JimuPayload payload, string token, JimuAddress jimuAddress)
         {
             if (paras == null) paras = new ConcurrentDictionary<string, object>();
             this.Service = service;
             this.Paras = paras;
             this.Token = token;
             this.ServiceAddress = jimuAddress;
+            this.PayLoad = payload;
         }
     }
 }

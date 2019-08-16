@@ -31,6 +31,7 @@ namespace Jimu.Client.Proxy.CodeAnalysisIntegration
                 MetadataReference.CreateFromFile(typeof(Task).GetTypeInfo().Assembly.Location),
                 MetadataReference.CreateFromFile(typeof(JimuServiceDesc).GetTypeInfo().Assembly.Location),
                 MetadataReference.CreateFromFile(typeof(IRemoteServiceCaller).GetTypeInfo().Assembly.Location),
+                MetadataReference.CreateFromFile(typeof(JimuPayload).GetTypeInfo().Assembly.Location),
                 MetadataReference.CreateFromFile(typeof(ServiceProxyGenerator).GetTypeInfo().Assembly.Location)
             }.Concat(references).Distinct();
             return Compile(AssemblyInfo.Create("Jimu.Proxy.ClientProxy"), trees, references, logger);
