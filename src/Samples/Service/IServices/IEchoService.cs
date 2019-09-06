@@ -12,7 +12,7 @@ namespace IServices
         /// </summary>
         /// <param name="anything">任何值")]</param>
         /// <returns>返回anything"""\"</returns>
-        [JimuService(CreatedBy = "grissom", Comment = "get input things", EnableAuthorization = false)]
+        [JimuService(CreatedBy = "grissom", Comment = "get input things", AllowAnonymous = true)]
         //[JimuFieldComment("anything", "任何值")]
         //[JimuReturnComment("返回anything")]
         string GetEchoAnonymous(string anything);
@@ -22,7 +22,7 @@ namespace IServices
         /// </summary>
         /// <param name="anything">任何值")]</param>
         /// <returns>返回anything"""\"</returns>
-        [JimuService(CreatedBy = "grissom", Comment = "get input things", EnableAuthorization = false)]
+        [JimuService(CreatedBy = "grissom", Comment = "get input things", AllowAnonymous = true)]
         //[JimuFieldComment("anything", "任何值")]
         //[JimuReturnComment("返回anything")]
         UserDTO GetEchoAnonymous2(string anything);
@@ -31,7 +31,7 @@ namespace IServices
         /// </summary>
         /// <param name="anything">任何值")]</param>
         /// <returns>返回anything"""\"</returns>
-        [JimuService(CreatedBy = "grissom", Comment = "get input things", EnableAuthorization = true)]
+        [JimuService(CreatedBy = "grissom", Comment = "get input things")]
         //[JimuFieldComment("anything", "任何值")]
         //[JimuReturnComment("返回anything")]
         string GetEcho(string anything);
@@ -43,7 +43,7 @@ namespace IServices
         /// <param name="anything2">任何值2</param>
         /// <returns></returns>
         //[JimuService(CreatedBy = "grissom", EnableAuthorization = true, Comment = "set echo and return the echo with indicate whether success flag")]
-        [JimuService(CreatedBy = "grissom", EnableAuthorization = true)]
+        [JimuService(CreatedBy = "grissom")]
         //[JimuFieldComment("anything", "任何值")]
         //[JimuFieldComment("anything2", "任何值2")]
         //[JimuReturnComment("返回是否成功")]
@@ -55,7 +55,7 @@ namespace IServices
         /// </summary>
         /// <param name="user">用户</param>
         /// <returns></returns>
-        [JimuService(CreatedBy = "grissom", Comment = "create user", EnableAuthorization = false, HttpMethod = "GET")]
+        [JimuService(CreatedBy = "grissom", Comment = "create user", AllowAnonymous = true, HttpMethod = "GET")]
         //[JimuFieldComment("user", "想创建的用户对象")]
         string CreateUser(UserDTO user);
         [JimuService(CreatedBy = "grissom", Comment = "create user friend")]

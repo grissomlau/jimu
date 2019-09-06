@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Jimu.Client.ApiGateway.SwaggerIntegration
 {
@@ -14,74 +15,101 @@ namespace Jimu.Client.ApiGateway.SwaggerIntegration
         {
             var serviceDiscovery = JimuClient.Host.Container.Resolve<IClientServiceDiscovery>();
             var routes = serviceDiscovery.GetRoutesAsync().GetAwaiter().GetResult();
+            var groupRoutes = routes.GroupBy(x => x.ServiceDescriptor.RoutePath);
+            foreach (var gr in groupRoutes)
+            {
+                var route = gr.Key;
+                //var subsIndex = origRoute.IndexOf('?');
+                //subsIndex = subsIndex < 0 ? origRoute.Length : subsIndex;
+                //var route = origRoute.Substring(0, subsIndex);
+                //route = route.StartsWith('/') ? route : "/" + route;
+                var pathItem = new PathItem();
+                foreach (var r in gr)
+                {
+                    var x = r.ServiceDescriptor;
+                    var paras = new List<IParameter>();
+                    if (!string.IsNullOrEmpty(x.Parameters))
+                    {
+                        var parameters = JimuHelper.Deserialize(TypeHelper.ReplaceTypeToJsType(x.Parameters), typeof(List<JimuServiceParameterDesc>)) as List<JimuServiceParameterDesc>;
+                        paras = GetParameters(route, parameters, x.HttpMethod);
+                    }
 
-            (from route in routes select route.ServiceDescriptor).OrderBy(x => x.RoutePath).ToList().ForEach(x =>
-              {
-                  var subsIndex = x.RoutePath.IndexOf('?');
-                  subsIndex = subsIndex < 0 ? x.RoutePath.Length : subsIndex;
-                  var route = x.RoutePath.Substring(0, subsIndex);
-                  route = route.StartsWith('/') ? route : "/" + route;
+                    if (x.GetMetadata<bool>("EnableAuthorization"))
+                    {
+                        paras.Add(new NonBodyParameter
+                        {
+                            Name = "Authorization",
+                            Type = "string",
+                            In = "header",
+                            Description = "Token",
+                            Required = true,
+                            Default = "Bearer "
+                        });
+                    }
 
-                  var paras = new List<IParameter>();
-                  if (!string.IsNullOrEmpty(x.Parameters))
-                  {
-                      var parameters = JimuHelper.Deserialize(TypeHelper.ReplaceTypeToJsType(x.Parameters), typeof(List<JimuServiceParameterDesc>)) as List<JimuServiceParameterDesc>;
-                      paras = GetParameters(parameters, x.HttpMethod);
-                  }
+                    var response = new Dictionary<string, Response>();
+                    response.Add("200", GetResponse(x.ReturnDesc));
 
-                  if (x.GetMetadata<bool>("EnableAuthorization"))
-                  {
-                      paras.Add(new NonBodyParameter
-                      {
-                          Name = "Authorization",
-                          Type = "string",
-                          In = "header",
-                          Description = "Token",
-                          Required = true,
-                          Default = "Bearer "
-                      });
-                  }
+                    if (x.HttpMethod.Equals("GET", StringComparison.OrdinalIgnoreCase))
+                    {
 
-                  var response = new Dictionary<string, Response>();
-                  response.Add("200", GetResponse(x.ReturnDesc));
-
-                  if (x.HttpMethod == "GET")
-                  {
-
-                      swaggerDoc.Paths.Add(route, new PathItem
-                      {
-                          Get = new Operation
-                          {
-                              Consumes = new List<string> { "application/json" },
-                              OperationId = x.RoutePath,
-                              Parameters = paras,
-                              Produces = new List<string> { "application/json" },
-                              Responses = response,
-                              Description = x.Comment,
-                              Summary = x.Comment,
-                              Tags = GetTags(x)
-                          }
-                      });
-                  }
-                  else
-                  {
-                      swaggerDoc.Paths.Add(route, new PathItem
-                      {
-                          Post = new Operation
-                          {
-                              Consumes = new List<string> { "application/json" },
-                              OperationId = x.RoutePath,
-                              Parameters = paras,
-                              Produces = new List<string> { "application/json" },
-                              Responses = response,
-                              Description = x.Comment,
-                              Summary = x.Comment,
-                              Tags = GetTags(x)
-                          }
-                      });
-                  }
-              });
-
+                        pathItem.Get = new Operation
+                        {
+                            Consumes = new List<string> { "application/json" },
+                            OperationId = x.RoutePath,
+                            Parameters = paras,
+                            Produces = new List<string> { "application/json" },
+                            Responses = response,
+                            Description = x.Comment,
+                            Summary = x.Comment,
+                            Tags = GetTags(x)
+                        };
+                    }
+                    else if (x.HttpMethod.Equals("POST", StringComparison.OrdinalIgnoreCase))
+                    {
+                        pathItem.Post = new Operation
+                        {
+                            Consumes = new List<string> { "application/json" },
+                            OperationId = x.RoutePath,
+                            Parameters = paras,
+                            Produces = new List<string> { "application/json" },
+                            Responses = response,
+                            Description = x.Comment,
+                            Summary = x.Comment,
+                            Tags = GetTags(x)
+                        };
+                    }
+                    else if (x.HttpMethod.Equals("PUT", StringComparison.OrdinalIgnoreCase))
+                    {
+                        pathItem.Put = new Operation
+                        {
+                            Consumes = new List<string> { "application/json" },
+                            OperationId = x.RoutePath,
+                            Parameters = paras,
+                            Produces = new List<string> { "application/json" },
+                            Responses = response,
+                            Description = x.Comment,
+                            Summary = x.Comment,
+                            Tags = GetTags(x),
+                        };
+                    }
+                    else if (x.HttpMethod.Equals("DELETE", StringComparison.OrdinalIgnoreCase))
+                    {
+                        pathItem.Delete = new Operation
+                        {
+                            Consumes = new List<string> { "application/json" },
+                            OperationId = x.RoutePath,
+                            Parameters = paras,
+                            Produces = new List<string> { "application/json" },
+                            Responses = response,
+                            Description = x.Comment,
+                            Summary = x.Comment,
+                            Tags = GetTags(x)
+                        };
+                    }
+                }
+                swaggerDoc.Paths.Add(route, pathItem);
+            }
         }
 
         private List<string> GetTags(JimuServiceDesc desc)
@@ -132,7 +160,7 @@ namespace Jimu.Client.ApiGateway.SwaggerIntegration
             return response;
         }
 
-        private static List<IParameter> GetParameters(List<JimuServiceParameterDesc> paras, string httpMethod)
+        private static List<IParameter> GetParameters(string route, List<JimuServiceParameterDesc> paras, string httpMethod)
         {
             List<IParameter> parameters = new List<IParameter>();
             int idx = 0;
@@ -140,14 +168,14 @@ namespace Jimu.Client.ApiGateway.SwaggerIntegration
             foreach (var p in paras)
             {
                 idx++;
-                if (httpMethod == "GET")
+                if (route.IndexOf($"{{{p.Name}}}") > 0 || httpMethod.Equals("GET", StringComparison.OrdinalIgnoreCase))
                 {
                     var param = new NonBodyParameter
                     {
                         Name = p.Name,
                         Type = p.Type,
                         //Format = p.Format,
-                        In = "query",
+                        In = "path",
                         Description = $"{p.Comment}",
                     };
                     //if (typeInfo.IsArray)

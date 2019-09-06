@@ -12,10 +12,19 @@ namespace Jimu.Client
         /// </summary>
         /// <param name="serviceIdOrPath">service id or route path</param>
         /// <param name="paras">service parameters </param>
+        /// <param name="httpMethod">httpMethod </param>
+        /// <returns></returns>
+        Task<JimuRemoteCallResultData> InvokeAsync(string serviceIdOrPath, IDictionary<string, object> paras, string httpMethod);
+        /// <summary>
+        ///     invoke remote service
+        /// </summary>
+        /// <param name="serviceIdOrPath">service id or route path</param>
+        /// <param name="paras">service parameters </param>
         /// <param name="payload">context payload</param>
         /// <param name="token">authorization token</param>
+        /// <param name="httpMethod">httpMethod </param>
         /// <returns></returns>
-        Task<JimuRemoteCallResultData> InvokeAsync(string serviceIdOrPath, IDictionary<string, object> paras, JimuPayload payload=null, string token = null);
+        Task<JimuRemoteCallResultData> InvokeAsync(string serviceIdOrPath, IDictionary<string, object> paras, JimuPayload payload = null, string token = null, string httpMethod = null);
 
         /// <summary>
         ///     invoke remote service

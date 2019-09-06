@@ -208,3 +208,8 @@
 /src/Samples/Service/TestService/obj
 /src/Jimu.Modules/Jimu.Client.ApiGateway.SwaggerIntegration/bin/Release/netcoreapp2.0
 /src/Samples/CSMode/Server/Properties/PublishProfiles
+/src/Jimu.Modules/Jimu.Client.Discovery.ConsulIntegration/bin/Debug/netcoreapp2.2
+/src/Jimu.Modules/Jimu.Client.ApiGateway.SwaggerIntegration/bin/Debug/netcoreapp2.2
+/src/Samples/Complex/ApiGateway/bin/Debug/netcoreapp2.2
+/src/Samples/CSMode/Client/bin/Debug/netcoreapp2.2
+/src/test/Jimu.Test/bin/Debug/netcoreapp2.2

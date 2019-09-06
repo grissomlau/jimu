@@ -9,7 +9,7 @@ namespace Jimu.Client.ApiGateway.Controllers
     //[Route("api/[controller]")]
     public class JimuServicesController : Controller
     {
-        [HttpGet, HttpPost]
+        [HttpGet, HttpPost, HttpDelete, HttpPut]
         //public async Task<object> Path(string path, [FromQuery] MyQueryString query, [FromBody] Dictionary<string, object> model)
         public async Task<IActionResult> JimuPath(string path, [FromQuery] JimuQueryString query, [ModelBinder]JimuModel model)
         {
@@ -29,7 +29,7 @@ namespace Jimu.Client.ApiGateway.Controllers
             {
                 path = "/" + path;
             }
-            var result = await JimuClient.Invoke(path, paras);
+            var result = await JimuClient.Invoke($"{path}{(query.Query ?? "")}", paras, Request.Method);
 
             //if (result.ResultType != typeof(JimuFile).ToString())
             if (result?.ResultType != null && result.ResultType.StartsWith("{\"ReturnType\":\"Jimu.JimuFile\""))

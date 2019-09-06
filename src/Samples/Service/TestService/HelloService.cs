@@ -16,6 +16,49 @@ namespace TestService
             _serviceProxy = proxy;
         }
 
+        [JimuService(AllowAnonymous = true)]
+        public string Hi2()
+        {
+            return "hi";
+        }
+        [JimuService(RoutePath = "/api/hello/hi2?name={name}", AllowAnonymous = true)]
+        public string Hi2(string name)
+        {
+            return $"hi, {name}";
+        }
+        [JimuService(RestPath = "/echo/{name}", AllowAnonymous = true)]
+        public string Echo(string name, string from)
+        {
+            return name + from;
+        }
+        [JimuService(RestPath = "/{id}/{name}", AllowAnonymous = true)]
+        public string Get(int id, string name)
+        {
+            return "get: " + id + ", name: " + name;
+        }
+
+        [JimuService(RestPath = "/users/{uid}/friends/{fid}", AllowAnonymous = true)]
+        public string Get(int uid, int fid)
+        {
+            return $"get2 uid: {uid}, fid: {fid}";
+        }
+
+        [JimuService(HttpMethod = "POST", AllowAnonymous = true)]
+        public string Post(string id, User user)
+        {
+            return $"post uname: {user.Name5}, usernam2: {user.Name}";
+        }
+        [JimuService(RestPath = "/{id}", HttpMethod = "PUT", AllowAnonymous = true)]
+        public string Put(int id, User user)
+        {
+            return $"put uid: {id}, user: {user.Name}";
+        }
+
+        [JimuService(RestPath = "/{id}", HttpMethod = "DELETE", AllowAnonymous = true)]
+        public string Delete(int id)
+        {
+            return $"delete uid: {id}";
+        }
         [JimuService()]
         public string GetEcho()
         {
@@ -42,7 +85,7 @@ namespace TestService
         /// </summary>
         /// <param name="user2">用户</param>
         /// <param name="foo">foof</param>
-        [JimuService(EnableAuthorization = false)]
+        [JimuService(AllowAnonymous = true)]
         public Task<MsgModel<User>> GetComplexReturn(User user2, string foo)
         {
             return Task.FromResult(MsgModel<User>.Success(new User()));

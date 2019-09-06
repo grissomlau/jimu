@@ -36,7 +36,7 @@ namespace Jimu.Server.Auth
             }
             // jwt authentication, alse authentication the role
 
-            if (context.ServiceEntry != null && context.ServiceEntry.Descriptor.EnableAuthorization)
+            if (context.ServiceEntry != null && !context.ServiceEntry.Descriptor.AllowAnonymous)
             {
                 return InvokeService(context);
             }

@@ -12,8 +12,54 @@ namespace Jimu
 
         public JimuServiceDesc ServiceDescriptor { get; set; }
 
-        public static string ParseRoutePath(string routeTemplet, string service, string method,
-            string[] paraNames, bool isInterface)
+        //public static string ParseRoutePath(string routeTemplet, string service, string method,
+        //    string[] paraNames, bool isInterface)
+        //{
+        //    var result = new StringBuilder();
+        //    var parameters = routeTemplet?.Split('/');// "/api/{ServiceName}" or "/api/UserService"
+        //    foreach (var parameter in parameters)
+        //    {
+        //        var param = GetParameters(parameter).FirstOrDefault();
+        //        if (param == null)
+        //            result.Append($"{parameter}/");
+        //        else if (service.EndsWith(param))
+        //        {
+        //            var curService = isInterface ? service.TrimStart('I') : service;
+        //            curService = curService.Substring(0, curService.Length - param.Length);
+        //            result.Append($"{curService}/");
+        //        }
+        //        //else if (param == "Method")
+        //        //{
+        //        //    result.Append(method);
+        //        //}
+        //        //result.Append("/");
+        //    }
+
+        //    result.Append(method);
+        //    result = new StringBuilder(result.ToString().ToLower());
+
+        //    if (paraNames.Any())
+        //    {
+        //        //return result.ToString().TrimEnd('&', '/', '\\').TrimStart('/', '\\');
+        //        //return "/" + result.ToString().TrimEnd('&', '/', '\\').TrimStart('/', '\\');
+
+        //        result.Append("?");
+        //        foreach (var para in paraNames)
+        //            //if (para.IsOptional)
+        //            //{
+        //            //    result.Append($"[{para.Name}]=&");
+        //            //}
+        //            //else
+        //            //{
+        //            result.Append($"{para}={{{para}}}&");
+        //        //}
+        //    }
+
+        //    //return result.ToString().TrimEnd('&', '/', '\\').TrimStart('/', '\\');
+        //    return "/" + result.ToString().TrimEnd('&', '/', '\\').TrimStart('/', '\\');
+        //}
+
+        public static string ParseRoutePath(string httpMethod, string routeTemplet, string service, string method, string[] paraNames, bool isInterface)
         {
             var result = new StringBuilder();
             var parameters = routeTemplet?.Split('/');// "/api/{ServiceName}" or "/api/UserService"
@@ -28,35 +74,25 @@ namespace Jimu
                     curService = curService.Substring(0, curService.Length - param.Length);
                     result.Append($"{curService}/");
                 }
-                //else if (param == "Method")
-                //{
-                //    result.Append(method);
-                //}
-                //result.Append("/");
             }
 
-            result.Append(method);
+            result.Append(method.TrimStart('/'));
             result = new StringBuilder(result.ToString().ToLower());
 
-            if (paraNames.Any())
+            if (paraNames.Any()
+                && (httpMethod.Equals("GET", System.StringComparison.OrdinalIgnoreCase)
+                    || httpMethod.Equals("DELETE", System.StringComparison.OrdinalIgnoreCase)))
             {
-                //return result.ToString().TrimEnd('&', '/', '\\').TrimStart('/', '\\');
-                //return "/" + result.ToString().TrimEnd('&', '/', '\\').TrimStart('/', '\\');
-
                 result.Append("?");
                 foreach (var para in paraNames)
-                    //if (para.IsOptional)
-                    //{
-                    //    result.Append($"[{para.Name}]=&");
-                    //}
-                    //else
-                    //{
-                    result.Append($"{para}=&");
-                //}
+                {
+                    if (method.IndexOf($"{{{para}}}") < 0)
+                    {
+                        result.Append($"{para}={{{para}}}&");
+                    }
+                }
             }
-
-            //return result.ToString().TrimEnd('&', '/', '\\').TrimStart('/', '\\');
-            return "/" + result.ToString().TrimEnd('&', '/', '\\').TrimStart('/', '\\');
+            return "/" + result.ToString().TrimEnd('?', '&', '/', '\\').TrimStart('/', '\\');
         }
 
         private static List<string> GetParameters(string text)

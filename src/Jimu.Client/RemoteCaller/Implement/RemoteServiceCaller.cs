@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Jimu.Logger;
 using Polly;
@@ -31,10 +32,10 @@ namespace Jimu.Client
             _middlewares = new Stack<Func<ClientRequestDel, ClientRequestDel>>();
         }
 
-        public async Task<T> InvokeAsync<T>(string serviceIdOrPath, IDictionary<string, object> paras,JimuPayload payload)
+        public async Task<T> InvokeAsync<T>(string serviceIdOrPath, IDictionary<string, object> paras, JimuPayload payload)
         {
             _logger.Debug($"begin to invoke service: {serviceIdOrPath}");
-            var result = await InvokeAsync(serviceIdOrPath, paras,payload);
+            var result = await InvokeAsync(serviceIdOrPath, paras, payload);
             if (!string.IsNullOrEmpty(result.ExceptionMessage))
             {
                 _logger.Debug($"invoking service: {serviceIdOrPath} raising an error: {result.ExceptionMessage}");
@@ -63,14 +64,27 @@ namespace Jimu.Client
             return (T)value;
 
         }
+        public async Task<JimuRemoteCallResultData> InvokeAsync(string serviceIdOrPath, IDictionary<string, object> paras, string httpMethod)
+        {
+            return await InvokeAsync(serviceIdOrPath, paras, null, null, httpMethod);
 
-        public async Task<JimuRemoteCallResultData> InvokeAsync(string serviceIdOrPath, IDictionary<string, object> paras,JimuPayload payload =null,string token = null)
+        }
+
+        public async Task<JimuRemoteCallResultData> InvokeAsync(string serviceIdOrPath, IDictionary<string, object> paras, JimuPayload payload = null, string token = null, string httpMethod = null)
         {
             if (paras == null)
             {
                 paras = new ConcurrentDictionary<string, object>();
             }
-            var service = await GetServiceByIdAsync(serviceIdOrPath) ?? await GetServiceByPathAsync(serviceIdOrPath, paras);
+            JimuServiceRoute service = null;
+            if (!string.IsNullOrEmpty(httpMethod))
+            {
+                service = await GetServiceByPathAsync(serviceIdOrPath, paras, httpMethod);
+            }
+            if (service == null)
+            {
+                service = await GetServiceByIdAsync(serviceIdOrPath);
+            }
             if (service == null)
                 return new JimuRemoteCallResultData
                 {
@@ -79,7 +93,7 @@ namespace Jimu.Client
                 };
 
             if (token == null && _serviceTokenGetter?.GetToken != null) token = _serviceTokenGetter.GetToken();
-            var result = await InvokeAsync(service, paras,payload,token);
+            var result = await InvokeAsync(service, paras, payload, token);
             if (!string.IsNullOrEmpty(result.ExceptionMessage))
                 return new JimuRemoteCallResultData
                 {
@@ -107,7 +121,7 @@ namespace Jimu.Client
                 lastInvoke = mid(lastInvoke);
             }
 
-            return await lastInvoke(new RemoteCallerContext(service, paras,payload, token, service.Address.First()));
+            return await lastInvoke(new RemoteCallerContext(service, paras, payload, token, service.Address.First()));
         }
 
         private ClientRequestDel GetLastInvoke()
@@ -134,13 +148,49 @@ namespace Jimu.Client
              });
         }
 
-        private async Task<JimuServiceRoute> GetServiceByPathAsync(string path, IDictionary<string, object> paras)
+        private async Task<JimuServiceRoute> GetServiceByPathAsync(string path, IDictionary<string, object> paras, string httpMethod)
         {
-            path = ParsePath(path, paras);
+            //path = ParsePath(path, paras);
             var routes = await _serviceDiscovery.GetRoutesAsync();
-            var service = routes.FirstOrDefault(x =>
-                (x.ServiceDescriptor.RoutePath ?? "").Equals(path, StringComparison.InvariantCultureIgnoreCase));
+
+            // restpath priority
+            var service = await GetServiceByRestPathAsync(routes, paras, path, httpMethod);
+
+            if (service == null)
+            {
+                service = routes.FirstOrDefault(x =>
+                   x.ServiceDescriptor.HttpMethod == httpMethod
+                   && (x.ServiceDescriptor.RoutePath ?? "").Equals(path, StringComparison.InvariantCultureIgnoreCase));
+            }
+
             return service;
+        }
+        private Task<JimuServiceRoute> GetServiceByRestPathAsync(List<JimuServiceRoute> routes, IDictionary<string, object> paras, string path, string httpMethod)
+        {
+            //var purePath = path.Split('?')[0];
+            //var path = path;
+            var service = routes.Where(x => !string.IsNullOrEmpty(x.ServiceDescriptor.RestPath)).FirstOrDefault(x =>
+              {
+                  if (httpMethod != x.ServiceDescriptor.HttpMethod)
+                      return false;
+
+                  var restPathPattern = $"^{Regex.Replace(x.ServiceDescriptor.RestPath.Replace("?", "[?]"), @"{([^{}?/\\]+)}", @"(?<$1>[^?/\\]+)", RegexOptions.IgnoreCase)}$";
+                  var matches = Regex.Matches((string)path, restPathPattern, RegexOptions.IgnoreCase);
+                  // has parameters
+                  if (matches.Count > 0 && matches[0].Groups.Count > 1)
+                  {
+                      for (var i = 1; i < matches[0].Groups.Count; ++i)
+                      {
+                          //System.Text.RegularExpressions.MatchEvaluator matchEvaluator = new MatchEvaluator();
+                          Group g = matches[0].Groups[i];
+                          if (!paras.ContainsKey(g.Name))
+                              paras.Add(g.Name, g.Value);
+                      }
+                  }
+                  return matches.Count > 0;
+              }
+                );
+            return Task.FromResult(service);
         }
 
         private async Task<JimuServiceRoute> GetServiceByIdAsync(string serviceId)
@@ -155,7 +205,7 @@ namespace Jimu.Client
         {
             if (!paras.Any()) return path;
             path += "?";
-            path = paras.Keys.Aggregate(path, (current, key) => current + (key + "=&"));
+            path = paras.Keys.Aggregate(path, (current, key) => $"{current}{key}={{{key}}}");
             path = path.TrimEnd('&');
 
             return path;
@@ -166,5 +216,6 @@ namespace Jimu.Client
             this._middlewares.Push(middleware);
             return this;
         }
+
     }
 }

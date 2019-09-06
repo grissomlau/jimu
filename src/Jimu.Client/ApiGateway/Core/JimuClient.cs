@@ -14,10 +14,10 @@ namespace Jimu.Client.ApiGateway
     {
         public static IApplication Host { get; set; }
 
-        public static async Task<JimuRemoteCallResultData> Invoke(string path, IDictionary<string, object> paras)
+        public static async Task<JimuRemoteCallResultData> Invoke(string path, IDictionary<string, object> paras, string httpMethod)
         {
             var remoteServiceInvoker = Host.Container.Resolve<IRemoteServiceCaller>();
-            var result = await remoteServiceInvoker.InvokeAsync(path, paras);
+            var result = await remoteServiceInvoker.InvokeAsync(path, paras, httpMethod);
             if (!string.IsNullOrEmpty(result.ExceptionMessage))
             {
                 throw new JimuHttpStatusCodeException(400, $"{result.ToErrorString()}", path);

@@ -44,9 +44,9 @@ namespace Jimu
         public string CreatedDate { get; set; }
 
         /// <summary>
-        ///     before invoke this service, need to be authorization
+        ///    whether allow anonymous call, default false
         /// </summary>
-        public bool EnableAuthorization { get; set; }
+        public bool AllowAnonymous { get; set; }
 
         /// <summary>
         ///     just for specify roles to invoke this service
@@ -58,10 +58,15 @@ namespace Jimu
         /// </summary>
         public string HttpMethod { get; set; }
 
+        /// <summary>
+        /// the path for rest, e.g.: /users/{uid}/friends/{fid}
+        /// </summary>
+        public string RestPath { get; set; }
+
         public override void Apply(JimuServiceDesc descriptor)
         {
             descriptor.WaitExecution = IsWaitExecution;
-            descriptor.EnableAuthorization = EnableAuthorization;
+            descriptor.AllowAnonymous = AllowAnonymous;
             if (!string.IsNullOrEmpty(Id))
                 descriptor.Id = Id;
             if (!string.IsNullOrEmpty(RoutePath))
@@ -76,6 +81,8 @@ namespace Jimu
                 descriptor.Roles = Roles;
             if (!string.IsNullOrEmpty(HttpMethod))
                 descriptor.HttpMethod = HttpMethod;
+            if (!string.IsNullOrEmpty(RestPath))
+                descriptor.RestPath = RestPath;
         }
     }
 }

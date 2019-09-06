@@ -52,8 +52,23 @@ namespace Jimu.Server.Implement.Parser
             var type = methodInfo.DeclaringType;
             var routeTemplate = type.GetCustomAttribute<JimuServiceRouteAttribute>();
             if (routeTemplate != null)
-                desc.RoutePath = JimuServiceRoute.ParseRoutePath(routeTemplate.RouteTemplate, type.Name,
-                    methodInfo.Name, methodInfo.GetParameters().Select(x => x.Name).ToArray(), type.IsInterface);
+            {
+
+                if (string.IsNullOrEmpty(desc.RoutePath))
+                {
+                    var setPath = methodInfo.Name;
+                    if (!string.IsNullOrEmpty(desc.RestPath))
+                    {
+                        setPath = desc.RestPath;
+                    }
+                    desc.RoutePath = JimuServiceRoute.ParseRoutePath(desc.HttpMethod,routeTemplate.RouteTemplate, type.Name, setPath, methodInfo.GetParameters().Select(x => x.Name).ToArray(), type.IsInterface);
+                    if (!string.IsNullOrEmpty(desc.RestPath))
+                    {
+                        desc.RestPath = desc.RoutePath;
+                    }
+                }
+            }
+
             desc.Service = methodInfo.DeclaringType.FullName;
             desc.ServiceComment = GetServiceComment(methodInfo);
             return desc;

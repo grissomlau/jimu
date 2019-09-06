@@ -45,7 +45,8 @@ namespace Jimu.Server.Auth
                         {
                             Id = _options.GetServiceId(),
                             Service = "Token",
-                            RoutePath = JimuServiceRoute.ParseRoutePath("", "", _options.TokenEndpointPath, new[] { "username", "password", "grant_type" }, false),
+                            HttpMethod = "POST",
+                            RoutePath = JimuServiceRoute.ParseRoutePath("POST", "", "", _options.TokenEndpointPath, new[] { "username", "password", "grant_type" }, false),
                             Parameters = JimuHelper.Serialize<string>(new List<JimuServiceParameterDesc>{
                                  new JimuServiceParameterDesc
                                  {

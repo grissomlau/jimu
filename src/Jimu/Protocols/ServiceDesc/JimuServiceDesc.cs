@@ -49,10 +49,10 @@ namespace Jimu
             set => Metadatas["WaitExecution"] = value;
         }
 
-        public bool EnableAuthorization
+        public bool AllowAnonymous
         {
-            get => GetMetadata<bool>("EnableAuthorization");
-            set => Metadatas["EnableAuthorization"] = value;
+            get => GetMetadata<bool>("AllowAnonymous");
+            set => Metadatas["AllowAnonymous"] = value;
         }
 
         public string CreatedDate
@@ -94,6 +94,12 @@ namespace Jimu
         {
             get => GetMetadata<string>("Parameters");
             set => Metadatas["Parameters"] = value;
+        }
+
+        public string RestPath
+        {
+            get => GetMetadata<string>("RestPath");
+            set => Metadatas["RestPath"] = value;
         }
         /// <summary>
         ///     other useful data
