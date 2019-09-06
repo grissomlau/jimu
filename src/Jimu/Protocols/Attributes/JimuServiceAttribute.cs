@@ -8,6 +8,11 @@ namespace Jimu
     [AttributeUsage(AttributeTargets.Method)]
     public class JimuServiceAttribute : JimuServiceDescAttribute
     {
+        public JimuServiceAttribute(string rest, string httpMethod)
+        {
+            this.Rest = rest;
+            this.HttpMethod = httpMethod;
+        }
         public JimuServiceAttribute()
         {
             IsWaitExecution = true;
@@ -61,7 +66,7 @@ namespace Jimu
         /// <summary>
         /// the path for rest, e.g.: /users/{uid}/friends/{fid}
         /// </summary>
-        public string RestPath { get; set; }
+        public string Rest { get; set; }
 
         public override void Apply(JimuServiceDesc descriptor)
         {
@@ -81,8 +86,133 @@ namespace Jimu
                 descriptor.Roles = Roles;
             if (!string.IsNullOrEmpty(HttpMethod))
                 descriptor.HttpMethod = HttpMethod;
-            if (!string.IsNullOrEmpty(RestPath))
-                descriptor.RestPath = RestPath;
+            if (!string.IsNullOrEmpty(Rest))
+                descriptor.Rest = Rest;
+        }
+    }
+
+    [AttributeUsage(AttributeTargets.Method)]
+    public class JimuGetAttribute : JimuServiceAttribute
+    {
+        public JimuGetAttribute(string rest, bool allowAnonymous = false) : base()
+        {
+            this.Rest = rest;
+            this.HttpMethod = "GET";
+            this.AllowAnonymous = allowAnonymous;
+        }
+
+        public JimuGetAttribute(bool allowAnonymous = false) : base()
+        {
+            this.HttpMethod = "GET";
+            this.AllowAnonymous = allowAnonymous;
+
+        }
+
+    }
+
+    [AttributeUsage(AttributeTargets.Method)]
+    public class JimuPostAttribute : JimuServiceAttribute
+    {
+        public JimuPostAttribute(string rest, bool allowAnonymous = false) : base()
+        {
+            this.Rest = rest;
+            this.HttpMethod = "POST";
+            this.AllowAnonymous = allowAnonymous;
+        }
+
+        public JimuPostAttribute(bool allowAnonymous = false) : base()
+        {
+            this.HttpMethod = "POST";
+            this.AllowAnonymous = allowAnonymous;
+
+        }
+
+    }
+    [AttributeUsage(AttributeTargets.Method)]
+    public class JimuPutAttribute : JimuServiceAttribute
+    {
+        public JimuPutAttribute(string rest, bool allowAnonymous = false) : base()
+        {
+            this.Rest = rest;
+            this.HttpMethod = "PUT";
+            this.AllowAnonymous = allowAnonymous;
+        }
+
+        public JimuPutAttribute(bool allowAnonymous = false) : base()
+        {
+            this.HttpMethod = "PUT";
+            this.AllowAnonymous = allowAnonymous;
+
+        }
+
+    }
+
+    [AttributeUsage(AttributeTargets.Method)]
+    public class JimuDeleteAttribute : JimuServiceAttribute
+    {
+        public JimuDeleteAttribute(string rest, bool allowAnonymous = false) : base()
+        {
+            this.Rest = rest;
+            this.HttpMethod = "DELETE";
+            this.AllowAnonymous = allowAnonymous;
+        }
+
+        public JimuDeleteAttribute(bool allowAnonymous = false) : base()
+        {
+            this.HttpMethod = "DELETE";
+            this.AllowAnonymous = allowAnonymous;
+        }
+
+    }
+
+    [AttributeUsage(AttributeTargets.Method)]
+    public class JimuHeadAttribute : JimuServiceAttribute
+    {
+        public JimuHeadAttribute(string rest, bool allowAnonymous = false) : base()
+        {
+            this.Rest = rest;
+            this.HttpMethod = "HEAD";
+            this.AllowAnonymous = allowAnonymous;
+        }
+
+        public JimuHeadAttribute(bool allowAnonymous = false) : base()
+        {
+            this.HttpMethod = "HEAD";
+            this.AllowAnonymous = allowAnonymous;
+        }
+    }
+
+    [AttributeUsage(AttributeTargets.Method)]
+    public class JimuPatchAttribute : JimuServiceAttribute
+    {
+        public JimuPatchAttribute(string rest, bool allowAnonymous = false) : base()
+        {
+            this.Rest = rest;
+            this.HttpMethod = "PATCH";
+            this.AllowAnonymous = allowAnonymous;
+        }
+
+        public JimuPatchAttribute(bool allowAnonymous = false) : base()
+        {
+            this.HttpMethod = "PATCH";
+            this.AllowAnonymous = allowAnonymous;
+        }
+    }
+
+    [AttributeUsage(AttributeTargets.Method)]
+    public class JimuOptionsAttribute : JimuServiceAttribute
+    {
+        public JimuOptionsAttribute(string rest, bool allowAnonymous = false) : base()
+        {
+            this.Rest = rest;
+            this.HttpMethod = "OPTIONS";
+            this.AllowAnonymous = allowAnonymous;
+        }
+
+        public JimuOptionsAttribute(bool allowAnonymous = false) : base()
+        {
+            this.HttpMethod = "OPTIONS";
+            this.AllowAnonymous = allowAnonymous;
         }
     }
 }

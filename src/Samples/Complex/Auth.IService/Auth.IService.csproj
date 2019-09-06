@@ -9,8 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Jimu" Version="0.5.0" />
-    <PackageReference Include="Jimu.Server" Version="0.5.0" />
+    <ProjectReference Include="..\..\..\Jimu.Server\Jimu.Server.csproj" />
+    <ProjectReference Include="..\..\..\Jimu\Jimu.csproj" />
   </ItemGroup>
 
 </Project>

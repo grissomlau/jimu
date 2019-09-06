@@ -26,35 +26,40 @@ namespace TestService
         {
             return $"hi, {name}";
         }
-        [JimuService(RestPath = "/echo/{name}", AllowAnonymous = true)]
+        [JimuService(Rest = "/echo/{name}", AllowAnonymous = true)]
         public string Echo(string name, string from)
         {
             return name + from;
         }
-        [JimuService(RestPath = "/{id}/{name}", AllowAnonymous = true)]
+        //[JimuService(Rest = "/{id}/{name}", AllowAnonymous = true)]
+        [JimuGet("/{id}/{name}", true)]
         public string Get(int id, string name)
         {
             return "get: " + id + ", name: " + name;
         }
 
-        [JimuService(RestPath = "/users/{uid}/friends/{fid}", AllowAnonymous = true)]
+        [JimuService(Rest = "/users/{uid}/friends/{fid}", AllowAnonymous = true)]
         public string Get(int uid, int fid)
         {
             return $"get2 uid: {uid}, fid: {fid}";
         }
 
-        [JimuService(HttpMethod = "POST", AllowAnonymous = true)]
+        //[JimuService(HttpMethod = "POST", AllowAnonymous = true)]
+        [JimuPost(true)]
         public string Post(string id, User user)
         {
             return $"post uname: {user.Name5}, usernam2: {user.Name}";
         }
-        [JimuService(RestPath = "/{id}", HttpMethod = "PUT", AllowAnonymous = true)]
+        //[JimuService(Rest = "/{id}", HttpMethod = "PUT", AllowAnonymous = true)]
+        [JimuPut("/{id}", true)]
         public string Put(int id, User user)
         {
             return $"put uid: {id}, user: {user.Name}";
         }
 
-        [JimuService(RestPath = "/{id}", HttpMethod = "DELETE", AllowAnonymous = true)]
+        //[JimuService(RestPath = "/{id}", HttpMethod = "DELETE", AllowAnonymous = true)]
+        //[JimuService("/{id}","DELETE")]
+        [JimuDelete("/{id}", true)]
         public string Delete(int id)
         {
             return $"delete uid: {id}";

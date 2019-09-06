@@ -34,7 +34,7 @@ namespace Jimu.Client.ApiGateway.SwaggerIntegration
                         paras = GetParameters(route, parameters, x.HttpMethod);
                     }
 
-                    if (x.GetMetadata<bool>("EnableAuthorization"))
+                    if (!x.GetMetadata<bool>("AllowAnonymous"))
                     {
                         paras.Add(new NonBodyParameter
                         {
@@ -50,62 +50,42 @@ namespace Jimu.Client.ApiGateway.SwaggerIntegration
                     var response = new Dictionary<string, Response>();
                     response.Add("200", GetResponse(x.ReturnDesc));
 
-                    if (x.HttpMethod.Equals("GET", StringComparison.OrdinalIgnoreCase))
+                    Operation operation = new Operation
                     {
-
-                        pathItem.Get = new Operation
-                        {
-                            Consumes = new List<string> { "application/json" },
-                            OperationId = x.RoutePath,
-                            Parameters = paras,
-                            Produces = new List<string> { "application/json" },
-                            Responses = response,
-                            Description = x.Comment,
-                            Summary = x.Comment,
-                            Tags = GetTags(x)
-                        };
-                    }
-                    else if (x.HttpMethod.Equals("POST", StringComparison.OrdinalIgnoreCase))
+                        Consumes = new List<string> { "application/json" },
+                        OperationId = x.RoutePath,
+                        Parameters = paras,
+                        Produces = new List<string> { "application/json" },
+                        Responses = response,
+                        Description = x.Comment,
+                        Summary = x.Comment,
+                        Tags = GetTags(x)
+                    };
+                    switch (x.HttpMethod.ToUpper())
                     {
-                        pathItem.Post = new Operation
-                        {
-                            Consumes = new List<string> { "application/json" },
-                            OperationId = x.RoutePath,
-                            Parameters = paras,
-                            Produces = new List<string> { "application/json" },
-                            Responses = response,
-                            Description = x.Comment,
-                            Summary = x.Comment,
-                            Tags = GetTags(x)
-                        };
-                    }
-                    else if (x.HttpMethod.Equals("PUT", StringComparison.OrdinalIgnoreCase))
-                    {
-                        pathItem.Put = new Operation
-                        {
-                            Consumes = new List<string> { "application/json" },
-                            OperationId = x.RoutePath,
-                            Parameters = paras,
-                            Produces = new List<string> { "application/json" },
-                            Responses = response,
-                            Description = x.Comment,
-                            Summary = x.Comment,
-                            Tags = GetTags(x),
-                        };
-                    }
-                    else if (x.HttpMethod.Equals("DELETE", StringComparison.OrdinalIgnoreCase))
-                    {
-                        pathItem.Delete = new Operation
-                        {
-                            Consumes = new List<string> { "application/json" },
-                            OperationId = x.RoutePath,
-                            Parameters = paras,
-                            Produces = new List<string> { "application/json" },
-                            Responses = response,
-                            Description = x.Comment,
-                            Summary = x.Comment,
-                            Tags = GetTags(x)
-                        };
+                        case "GET":
+                            pathItem.Get = operation;
+                            break;
+                        case "POST":
+                            pathItem.Post = operation;
+                            break;
+                        case "PUT":
+                            pathItem.Put = operation;
+                            break;
+                        case "DELETE":
+                            pathItem.Delete = operation;
+                            break;
+                        case "HEAD":
+                            pathItem.Head = operation;
+                            break;
+                        case "PATCH":
+                            pathItem.Patch = operation;
+                            break;
+                        case "OPTIONS":
+                            pathItem.Options = operation;
+                            break;
+                        default:
+                            break;
                     }
                 }
                 swaggerDoc.Paths.Add(route, pathItem);

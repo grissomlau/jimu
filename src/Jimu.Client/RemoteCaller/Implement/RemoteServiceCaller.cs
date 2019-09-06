@@ -153,44 +153,30 @@ namespace Jimu.Client
             //path = ParsePath(path, paras);
             var routes = await _serviceDiscovery.GetRoutesAsync();
 
-            // restpath priority
-            var service = await GetServiceByRestPathAsync(routes, paras, path, httpMethod);
-
-            if (service == null)
+            var service = routes.FirstOrDefault(x =>
             {
-                service = routes.FirstOrDefault(x =>
-                   x.ServiceDescriptor.HttpMethod == httpMethod
-                   && (x.ServiceDescriptor.RoutePath ?? "").Equals(path, StringComparison.InvariantCultureIgnoreCase));
+                if (httpMethod != x.ServiceDescriptor.HttpMethod)
+                    return false;
+
+                //var restPathPattern = $"^{Regex.Replace(x.ServiceDescriptor.RestPath.Replace("?", "[?]"), @"{([^{}?/\\]+)}", @"(?<$1>[^?/\\]+)", RegexOptions.IgnoreCase)}$";
+                var restPathPattern = $"^{Regex.Replace(x.ServiceDescriptor.RoutePath.Replace("?", "[?]"), @"{([^{}?/\\]+)}", @"(?<$1>[^?/\\]+)", RegexOptions.IgnoreCase)}$";
+                var matches = Regex.Matches((string)path, restPathPattern, RegexOptions.IgnoreCase);
+                // has parameters
+                if (matches.Count > 0 && matches[0].Groups.Count > 1)
+                {
+                    for (var i = 1; i < matches[0].Groups.Count; ++i)
+                    {
+                        //System.Text.RegularExpressions.MatchEvaluator matchEvaluator = new MatchEvaluator();
+                        Group g = matches[0].Groups[i];
+                        if (!paras.ContainsKey(g.Name))
+                            paras.Add(g.Name, g.Value);
+                    }
+                }
+                return matches.Count > 0;
             }
+                 );
 
             return service;
-        }
-        private Task<JimuServiceRoute> GetServiceByRestPathAsync(List<JimuServiceRoute> routes, IDictionary<string, object> paras, string path, string httpMethod)
-        {
-            //var purePath = path.Split('?')[0];
-            //var path = path;
-            var service = routes.Where(x => !string.IsNullOrEmpty(x.ServiceDescriptor.RestPath)).FirstOrDefault(x =>
-              {
-                  if (httpMethod != x.ServiceDescriptor.HttpMethod)
-                      return false;
-
-                  var restPathPattern = $"^{Regex.Replace(x.ServiceDescriptor.RestPath.Replace("?", "[?]"), @"{([^{}?/\\]+)}", @"(?<$1>[^?/\\]+)", RegexOptions.IgnoreCase)}$";
-                  var matches = Regex.Matches((string)path, restPathPattern, RegexOptions.IgnoreCase);
-                  // has parameters
-                  if (matches.Count > 0 && matches[0].Groups.Count > 1)
-                  {
-                      for (var i = 1; i < matches[0].Groups.Count; ++i)
-                      {
-                          //System.Text.RegularExpressions.MatchEvaluator matchEvaluator = new MatchEvaluator();
-                          Group g = matches[0].Groups[i];
-                          if (!paras.ContainsKey(g.Name))
-                              paras.Add(g.Name, g.Value);
-                      }
-                  }
-                  return matches.Count > 0;
-              }
-                );
-            return Task.FromResult(service);
         }
 
         private async Task<JimuServiceRoute> GetServiceByIdAsync(string serviceId)

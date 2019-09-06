@@ -11,7 +11,7 @@ namespace Auth.IService
     [JimuServiceRoute("/api/{Service}")]
     public interface IAuthService : IJimuService
     {
-        
+
         /// <summary>
         /// 测试
         /// </summary>
@@ -22,7 +22,7 @@ namespace Auth.IService
         /// 获取当前用户名称
         /// </summary>
         /// <returns></returns>
-        [JimuService(EnableAuthorization =true)]
+        [JimuService()]
         string GetCurrentUserName();
     }
 }

@@ -96,10 +96,10 @@ namespace Jimu
             set => Metadatas["Parameters"] = value;
         }
 
-        public string RestPath
+        public string Rest
         {
-            get => GetMetadata<string>("RestPath");
-            set => Metadatas["RestPath"] = value;
+            get => GetMetadata<string>("Rest");
+            set => Metadatas["Rest"] = value;
         }
         /// <summary>
         ///     other useful data
