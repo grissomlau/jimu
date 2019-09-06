@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Jimu.Client\Jimu.Client.csproj" />
-    <ProjectReference Include="..\..\..\Jimu.Modules\Jimu.Client.Discovery.ConsulIntegration\Jimu.Client.Discovery.ConsulIntegration.csproj" />
+    <ProjectReference Include="..\..\..\Jimu.Modules\Jimu.Client.Discovery.Consul\Jimu.Client.Discovery.Consul.csproj" />
     <ProjectReference Include="..\..\Service\IServices\IServices.csproj" />
   </ItemGroup>
 

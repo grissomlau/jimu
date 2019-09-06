@@ -82,8 +82,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Jimu.Client\Jimu.Client.csproj" />
-    <ProjectReference Include="..\..\..\Jimu.Modules\Jimu.Client.ApiGateway.SwaggerIntegration\Jimu.Client.ApiGateway.SwaggerIntegration.csproj" />
-    <ProjectReference Include="..\..\..\Jimu.Modules\Jimu.Client.Discovery.ConsulIntegration\Jimu.Client.Discovery.ConsulIntegration.csproj" />
+    <ProjectReference Include="..\..\..\Jimu.Modules\Jimu.Client.ApiGateway.Swagger\Jimu.Client.ApiGateway.Swagger.csproj" />
+    <ProjectReference Include="..\..\..\Jimu.Modules\Jimu.Client.Discovery.Consul\Jimu.Client.Discovery.Consul.csproj" />
   </ItemGroup>
 
   <ItemGroup>

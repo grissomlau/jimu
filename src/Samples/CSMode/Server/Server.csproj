@@ -17,8 +17,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Jimu.Client\Jimu.Client.csproj" />
-    <ProjectReference Include="..\..\..\Jimu.Modules\Jimu.Client.Discovery.ConsulIntegration\Jimu.Client.Discovery.ConsulIntegration.csproj" />
-    <ProjectReference Include="..\..\..\Jimu.Modules\Jimu.Server.Discovery.ConsulIntegration\Jimu.Server.Discovery.ConsulIntegration.csproj" />
+    <ProjectReference Include="..\..\..\Jimu.Modules\Jimu.Client.Discovery.Consul\Jimu.Client.Discovery.Consul.csproj" />
+    <ProjectReference Include="..\..\..\Jimu.Modules\Jimu.Server.Discovery.Consul\Jimu.Server.Discovery.Consul.csproj" />
     <ProjectReference Include="..\..\..\Jimu.Server\Jimu.Server.csproj" />
     <ProjectReference Include="..\..\Service\IServices\IServices.csproj" />
     <ProjectReference Include="..\..\Service\Services\Services.csproj" />

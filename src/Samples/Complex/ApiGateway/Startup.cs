@@ -38,7 +38,7 @@ namespace Jimu.ApiGateway
                                         "http://webapp.store.test.ctauto.cn");
                 });
             });
-            services.UseJimuSwagger(new Client.ApiGateway.SwaggerIntegration.JimuSwaggerOptions("My API"));
+            services.UseJimuSwagger(new Client.ApiGateway.Swagger.JimuSwaggerOptions("My API"));
             services.UseJimu();
 
             /********** below is the jwt just for local apigateway controller not for the services

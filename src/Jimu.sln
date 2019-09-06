@@ -33,23 +33,23 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client", "Samples\CSMode\Cl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server", "Samples\CSMode\Server\Server.csproj", "{59623556-FC1B-485C-A105-C3D5EEE5AF9B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Client.ApiGateway.SwaggerIntegration", "Jimu.Modules\Jimu.Client.ApiGateway.SwaggerIntegration\Jimu.Client.ApiGateway.SwaggerIntegration.csproj", "{202FD5E7-651F-4DD1-805D-F9C5EA167CE6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Client.ApiGateway.Swagger", "Jimu.Modules\Jimu.Client.ApiGateway.Swagger\Jimu.Client.ApiGateway.Swagger.csproj", "{202FD5E7-651F-4DD1-805D-F9C5EA167CE6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{AF5033F5-BA7F-49D5-98A8-A3786891C322}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Test", "test\Jimu.Test\Jimu.Test.csproj", "{43DEE7EE-7B94-4861-9287-D4D351D07CE0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Client.Discovery.ConsulIntegration", "Jimu.Modules\Jimu.Client.Discovery.ConsulIntegration\Jimu.Client.Discovery.ConsulIntegration.csproj", "{F57EF7C8-AB32-47E3-9D66-142337CE955A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Client.Discovery.Consul", "Jimu.Modules\Jimu.Client.Discovery.Consul\Jimu.Client.Discovery.Consul.csproj", "{F57EF7C8-AB32-47E3-9D66-142337CE955A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Server.Discovery.ConsulIntegration", "Jimu.Modules\Jimu.Server.Discovery.ConsulIntegration\Jimu.Server.Discovery.ConsulIntegration.csproj", "{00368FA9-E5D9-4DC3-A812-91AAD393EBBB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Server.Discovery.Consul", "Jimu.Modules\Jimu.Server.Discovery.Consul\Jimu.Server.Discovery.Consul.csproj", "{00368FA9-E5D9-4DC3-A812-91AAD393EBBB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Server.Repository.MiniDDD.EFIntegration", "Jimu.Modules\Jimu.Server.Repository.MiniDDD.EFIntegration\Jimu.Server.Repository.MiniDDD.EFIntegration.csproj", "{E4183569-C106-4C6A-990F-EB3689EAE776}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Server.Repository.MiniDDD.EF", "Jimu.Modules\Jimu.Server.Repository.MiniDDD.EF\Jimu.Server.Repository.MiniDDD.EF.csproj", "{E4183569-C106-4C6A-990F-EB3689EAE776}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Server.Repository.MiniDDD.SqlSugarIntegration", "Jimu.Modules\Jimu.Server.Repository.MiniDDD.SqlSugarIntegration\Jimu.Server.Repository.MiniDDD.SqlSugarIntegration.csproj", "{7BF7DBDE-C18A-47EF-AC7E-28756BEFE108}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Server.Repository.MiniDDD.SqlSugar", "Jimu.Modules\Jimu.Server.Repository.MiniDDD.SqlSugar\Jimu.Server.Repository.MiniDDD.SqlSugar.csproj", "{7BF7DBDE-C18A-47EF-AC7E-28756BEFE108}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Server.Repository.MiniDDD.DapperIntegration", "Jimu.Modules\Jimu.Server.Repository.MiniDDD.DapperIntegration\Jimu.Server.Repository.MiniDDD.DapperIntegration.csproj", "{F01410C8-BDA7-435F-8FE8-17C3D949723C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Server.Repository.MiniDDD.Dapper", "Jimu.Modules\Jimu.Server.Repository.MiniDDD.Dapper\Jimu.Server.Repository.MiniDDD.Dapper.csproj", "{F01410C8-BDA7-435F-8FE8-17C3D949723C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Server.ORM.DapperIntegration", "Jimu.Modules\Jimu.Server.ORM.DapperIntegration\Jimu.Server.ORM.DapperIntegration.csproj", "{B023E57F-2BD2-49A5-A3F5-72610B2CED34}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Server.ORM.Dapper", "Jimu.Modules\Jimu.Server.ORM.Dapper\Jimu.Server.ORM.Dapper.csproj", "{B023E57F-2BD2-49A5-A3F5-72610B2CED34}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Auth.Server", "Samples\Complex\Auth.Server\Auth.Server.csproj", "{8AC7E1B5-64B1-4E42-8AD9-F38D4540CE63}"
 EndProject

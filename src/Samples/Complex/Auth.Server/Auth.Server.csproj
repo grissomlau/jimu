@@ -17,10 +17,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\jimu\src\Jimu.Modules\Jimu.Server.Discovery.ConsulIntegration\Jimu.Server.Discovery.ConsulIntegration.csproj" />
-    <ProjectReference Include="..\..\..\..\..\jimu\src\Jimu.Modules\Jimu.Server.ORM.DapperIntegration\Jimu.Server.ORM.DapperIntegration.csproj" />
     <ProjectReference Include="..\..\..\..\..\jimu\src\Jimu.Server\Jimu.Server.csproj" />
     <ProjectReference Include="..\..\..\..\..\jimu\src\Jimu\Jimu.csproj" />
+    <ProjectReference Include="..\..\..\Jimu.Modules\Jimu.Server.Discovery.Consul\Jimu.Server.Discovery.Consul.csproj" />
+    <ProjectReference Include="..\..\..\Jimu.Modules\Jimu.Server.ORM.Dapper\Jimu.Server.ORM.Dapper.csproj" />
     <ProjectReference Include="..\Auth.Service\Auth.Service.csproj" />
   </ItemGroup>
 
