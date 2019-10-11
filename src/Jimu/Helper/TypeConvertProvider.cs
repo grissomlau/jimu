@@ -12,7 +12,7 @@ namespace Jimu.Helper
     {
         public static object Convert(object instance, Type destinationType)
         {
-            if(instance == null)
+            if (instance == null)
             {
                 return null;
             }
@@ -58,6 +58,10 @@ namespace Jimu.Helper
             }
             catch (Exception ex)
             {
+                if (destinationType.IsArray)
+                {
+                    return (instance + "").Split(',');
+                }
                 throw ex;
             }
         }

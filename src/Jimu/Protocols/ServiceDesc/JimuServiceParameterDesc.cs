@@ -10,6 +10,7 @@ namespace Jimu
         public string Type { get; set; }
         public string Comment { get; set; }
 
-        public string Format { get; set; }
+        public string Default { get; set; }
+        public List<JimuServiceParameterDesc> Properties { get; set; }
     }
 }

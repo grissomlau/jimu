@@ -33,7 +33,7 @@ namespace IServices
         /// <returns>返回anything"""\"</returns>
         [JimuService(CreatedBy = "grissom", Comment = "get input things")]
         //[JimuFieldComment("anything", "任何值")]
-        //[JimuReturnComment("返回anything")]
+        [JimuReturnComment("返回anything")]
         string GetEcho(string anything);
 
         /// <summary>
@@ -67,7 +67,13 @@ namespace IServices
         [JimuService()]
         List<UserDTO> GetTest(UserDTO userDTO);
 
-   
+        [JimuService()]
+        string[] GetTest2();
+        [JimuService(AllowAnonymous = true)]
+        UserDTO[] GetTest3(string[] arr);
+
+
+
 
 
     }

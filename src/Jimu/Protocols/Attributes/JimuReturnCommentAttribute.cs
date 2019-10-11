@@ -12,16 +12,16 @@ namespace Jimu
         {
             this.Comment = comment;
         }
-        public JimuReturnCommentAttribute(string comment, string format)
+        public JimuReturnCommentAttribute(string comment, string defaultVal)
         {
             this.Comment = comment;
-            this.Format = format;
+            this.Default = defaultVal;
         }
         /// <summary>
         /// <summary>
         /// comment can be used for swagger
         /// </summary>
         public string Comment { get; set; }
-        public string Format { get; set; }
+        public string Default { get; set; }
     }
 }

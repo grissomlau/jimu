@@ -79,6 +79,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server2", "Samples\CSMode\S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestService", "Samples\Service\TestService\TestService.csproj", "{086D42DD-890E-4407-BFBD-9FD336821D00}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiGateway2", "..\ApiGateway2\ApiGateway2.csproj", "{BB678D10-FAD1-4968-87B9-17034835D8AF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -205,6 +207,10 @@ Global
 		{086D42DD-890E-4407-BFBD-9FD336821D00}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{086D42DD-890E-4407-BFBD-9FD336821D00}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{086D42DD-890E-4407-BFBD-9FD336821D00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB678D10-FAD1-4968-87B9-17034835D8AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB678D10-FAD1-4968-87B9-17034835D8AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB678D10-FAD1-4968-87B9-17034835D8AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB678D10-FAD1-4968-87B9-17034835D8AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -241,6 +247,7 @@ Global
 		{8D60FC36-2748-4EF1-983E-B1AC446CF7BC} = {B64879C4-B8A5-4834-BE7B-4B74FEC183E5}
 		{50B68BDE-5FDB-4140-B93F-830FD8510CE6} = {CB822244-8727-4E6A-9A40-F73CA00C7A1F}
 		{086D42DD-890E-4407-BFBD-9FD336821D00} = {AB948E05-78EB-4878-B3AC-05D5A9185F24}
+		{BB678D10-FAD1-4968-87B9-17034835D8AF} = {B64879C4-B8A5-4834-BE7B-4B74FEC183E5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B2F7F17C-34DB-4FBF-8BCD-49BC2FA3A10F}

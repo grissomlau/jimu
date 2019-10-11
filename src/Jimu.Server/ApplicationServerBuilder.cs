@@ -68,47 +68,47 @@ namespace Jimu.Server
         private void LoadModule()
         {
 
-            AssemblyLoadContext.Default.Resolving += (context, name) =>
-            {
-                // avoid loading *.resources dlls, because of: https://github.com/dotnet/coreclr/issues/8416
-                if (name.Name.EndsWith("resources"))
-                {
-                    return null;
-                }
+            //            AssemblyLoadContext.Default.Resolving += (context, name) =>
+            //            {
+            //                // avoid loading *.resources dlls, because of: https://github.com/dotnet/coreclr/issues/8416
+            //                if (name.Name.EndsWith("resources"))
+            //                {
+            //                    return null;
+            //                }
 
-                var dependencies = DependencyContext.Default.RuntimeLibraries;
-                foreach (var library in dependencies)
-                {
-                    if (IsCandidateLibrary(library, name))
-                    {
-                        return context.LoadFromAssemblyName(new AssemblyName(library.Name));
-                    }
-                }
+            //                var dependencies = DependencyContext.Default.RuntimeLibraries;
+            //                foreach (var library in dependencies)
+            //                {
+            //                    if (IsCandidateLibrary(library, name))
+            //                    {
+            //                        return context.LoadFromAssemblyName(new AssemblyName(library.Name));
+            //                    }
+            //                }
 
-                var foundDlls = Directory.GetFileSystemEntries(new FileInfo(AppDomain.CurrentDomain.BaseDirectory).FullName, name.Name + ".dll", SearchOption.AllDirectories);
-                if (foundDlls.Any())
-                {
-                    using (var sr = File.OpenRead(foundDlls[0]))
-                    {
-                        return context.LoadFromStream(sr);
-                    }
-                }
+            //                var foundDlls = Directory.GetFileSystemEntries(new FileInfo(AppDomain.CurrentDomain.BaseDirectory).FullName, name.Name + ".dll", SearchOption.AllDirectories);
+            //                if (foundDlls.Any())
+            //                {
+            //                    using (var sr = File.OpenRead(foundDlls[0]))
+            //                    {
+            //                        return context.LoadFromStream(sr);
+            //                    }
+            //                }
 
-                //_logger.Warn($"cannot found assembly {name.Name}, path: { _options.Path}");
-                Console.WriteLine($"【Error】load {name.Name} failed.");
-                return null;
-                //return context.LoadFromAssemblyName(name);
-            };
+            //                //_logger.Warn($"cannot found assembly {name.Name}, path: { _options.Path}");
+            //                Console.WriteLine($"【Error】load {name.Name} failed.");
+            //                return null;
+            //                //return context.LoadFromAssemblyName(name);
+            //            };
 
-#if DEBUG
+            //#if DEBUG
 
-            var debugReferencedPaths = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll");
-            debugReferencedPaths.ToList().ForEach(path =>
-            {
-                AssemblyDependencyResolver(path);
-            });
+            //            var debugReferencedPaths = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll");
+            //            debugReferencedPaths.ToList().ForEach(path =>
+            //            {
+            //                AssemblyDependencyResolver(path);
+            //            });
 
-#endif
+            //#endif
 
 
             var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
@@ -117,6 +117,11 @@ namespace Jimu.Server
             var referencedPaths = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll");
             var toLoad = referencedPaths.Where(r => !loadedPaths.Contains(r, StringComparer.InvariantCultureIgnoreCase)).ToList();
             toLoad.ForEach(path => loadedAssemblies.Add(AppDomain.CurrentDomain.Load(AssemblyName.GetAssemblyName(path))));
+
+            //foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+            //{
+            //    this.LoadReferencedAssembly(assembly);
+            //}
 
 
             var type = typeof(ServerModuleBase);
@@ -137,7 +142,16 @@ namespace Jimu.Server
                 });
 
         }
-
+        private void LoadReferencedAssembly(Assembly assembly)
+        {
+            foreach (AssemblyName name in assembly.GetReferencedAssemblies())
+            {
+                if (!AppDomain.CurrentDomain.GetAssemblies().Any(a => a.FullName == name.FullName))
+                {
+                    this.LoadReferencedAssembly(Assembly.Load(name));
+                }
+            }
+        }
 
         private void AssemblyDependencyResolver(string path)
         {

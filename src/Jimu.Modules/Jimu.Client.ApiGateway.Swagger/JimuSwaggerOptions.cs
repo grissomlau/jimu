@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Jimu.Client.ApiGateway.Swagger
+﻿namespace Jimu.Client.ApiGateway.Swagger
 {
     public class JimuSwaggerOptions
     {

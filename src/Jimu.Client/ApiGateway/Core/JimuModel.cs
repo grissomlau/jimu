@@ -12,11 +12,12 @@ namespace Jimu.Client.ApiGateway
     {
         public Dictionary<string, object> Data { get; set; } = new Dictionary<string, object>();
         public JimuModel() { }
-        public JimuModel(Stream content, string contentType = "application/json")
+        public async void ReadFromContentAsync(Stream content, string contentType = "application/json")
         {
+
             using (var sr = new StreamReader(content))
             {
-                var json = sr.ReadToEnd();
+                var json = await sr.ReadToEndAsync();
                 try
                 {
                     Data = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
@@ -37,6 +38,8 @@ namespace Jimu.Client.ApiGateway
 
             }
         }
+
+
 
         public JimuModel(IFormCollection form)
         {

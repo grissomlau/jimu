@@ -50,13 +50,18 @@ namespace Jimu.Client.ApiGateway
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddMvc(o =>
             {
+                o.EnableEndpointRouting = false;
                 o.ModelBinderProviders.Insert(0, new JimuQueryStringModelBinderProvider());
                 o.ModelBinderProviders.Insert(1, new JimuModelBinderProvider());
                 o.RespectBrowserAcceptHeader = true;
-            }).AddJsonOptions(options =>
+            }).AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.ContractResolver = new DefaultContractResolver();
             })
+            //.AddJsonOptions(options =>
+            //{
+            //    options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+            //})
             .AddXmlSerializerFormatters()
             ;
 

@@ -1,25 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Autofac;
-using Jimu.Client.ApiGateway.Swagger;
+﻿using Jimu.Client.ApiGateway.Swagger;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json.Serialization;
-using Swashbuckle.AspNetCore;
-using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.OpenApi.Models;
 
 namespace Jimu.Client.ApiGateway
 {
     public static class StartupExtension
     {
-        public static Microsoft.AspNetCore.Builder.IApplicationBuilder UseJimuSwagger(this Microsoft.AspNetCore.Builder.IApplicationBuilder app, string version = "v1")
+        public static Microsoft.AspNetCore.Builder.IApplicationBuilder UseJimuSwagger(this Microsoft.AspNetCore.Builder.IApplicationBuilder app, JimuSwaggerOptions options)
         {
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint($"/swagger/{version}/swagger.json", $"Jimu API {version}");
+                c.SwaggerEndpoint($"/swagger/{options.Version}/swagger.json", $"{options.Title} {options.Version}");
             });
             app.UseSwagger();
             return app;
@@ -29,7 +21,7 @@ namespace Jimu.Client.ApiGateway
             services.AddSwaggerGen(c =>
             {
                 c.DocumentFilter<JimuSwaggerDocumentFilter>();
-                c.SwaggerDoc(options.Version, new Info { Title = options.Title, Version = options.Version });
+                c.SwaggerDoc(options.Version, new OpenApiInfo { Title = options.Title, Version = options.Version });
             });
             return services;
         }

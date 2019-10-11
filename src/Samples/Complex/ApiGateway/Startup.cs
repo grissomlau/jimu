@@ -1,18 +1,12 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using Autofac;
-using Jimu.ApiGateway.Model;
+﻿using Autofac;
 using Jimu.Client;
 using Jimu.Client.ApiGateway;
-using Jimu.Logger;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json.Serialization;
+using Microsoft.Extensions.Hosting;
+using System;
 
 namespace Jimu.ApiGateway
 {
@@ -34,8 +28,7 @@ namespace Jimu.ApiGateway
                 builder =>
                 {
                     //builder.AllowCredentials().AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
-                    builder.AllowCredentials().AllowAnyMethod().AllowAnyHeader().WithOrigins("http://localhost:8080",
-                                        "http://webapp.store.test.ctauto.cn");
+                    builder.AllowCredentials().AllowAnyMethod().AllowAnyHeader().WithOrigins("http://localhost:8080");
                 });
             });
             services.UseJimuSwagger(new Client.ApiGateway.Swagger.JimuSwaggerOptions("My API"));
@@ -80,7 +73,7 @@ namespace Jimu.ApiGateway
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseCors("any");
             app.UseStaticFiles();
@@ -91,7 +84,7 @@ namespace Jimu.ApiGateway
                 //app.UseDeveloperExceptionPage();
             }
             app.UseStatusCodePages();
-            app.UseJimuSwagger();
+            app.UseJimuSwagger(new Jimu.Client.ApiGateway.Swagger.JimuSwaggerOptions("My API"));
 
             // jimu client
 

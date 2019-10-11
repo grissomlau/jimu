@@ -9,5 +9,6 @@ namespace Jimu
         public string ReturnType { get; set; }
         public string ReturnFormat { get; set; }
         public string Comment { get; set; }
+        public List<JimuServiceParameterDesc> Properties { get; set; }
     }
 }

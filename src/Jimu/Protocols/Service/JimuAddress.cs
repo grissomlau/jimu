@@ -16,12 +16,6 @@ namespace Jimu
             this.Port = port;
             this.Protocol = protocol;
         }
-        //protected JimuAddress(string protocol)
-        //{
-        //    this.Protocol = protocol;
-        //}
-        //public string Token { get; set; }
-
         /// <summary>
         ///     whether is health of the server
         /// </summary>

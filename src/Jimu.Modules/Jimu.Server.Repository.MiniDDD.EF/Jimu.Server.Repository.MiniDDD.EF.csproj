@@ -1,20 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.6.0</Version>
+    <Version>1.0.0-beta.1</Version>
     <Authors>grissomlau@qq.com</Authors>
     <PackageLicenseUrl>https://github.com/grissomlau/Jimu/blob/master/LICENSE</PackageLicenseUrl>
     <Copyright>Jimu</Copyright>
     <PackageProjectUrl>https://github.com/grissomlau/Jimu</PackageProjectUrl>
     <RepositoryUrl>https://github.com/grissomlau/Jimu</RepositoryUrl>
     <Description>MiniDDD Repository for jimu with EF Core</Description>
-    <AssemblyVersion>0.6.0.0</AssemblyVersion>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MiniDDD.UnitOfWork.EF" Version="0.2.0" />
+    <PackageReference Include="MiniDDD.UnitOfWork.EF" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>

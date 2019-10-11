@@ -15,19 +15,4 @@ namespace Jimu.Client.ApiGateway
             _accessor = accessor;
         }
     }
-
-    //public static class StaticHttpContextExtensions
-    //{
-    //    public static void AddHttpContextAccessor(this IServiceCollection services)
-    //    {
-    //        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-    //    }
-
-    //    public static IApplicationBuilder UseStaticHttpContext(this IApplicationBuilder app)
-    //    {
-    //        var httpContextAccessor = app.ApplicationServices.GetRequiredService<IHttpContextAccessor>();
-    //        JimuHttpContext.Configure(httpContextAccessor);
-    //        return app;
-    //    }
-    //}
-}
+ }

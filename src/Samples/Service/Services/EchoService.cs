@@ -59,7 +59,7 @@ namespace Services
 
         public UserDTO GetEchoAnonymous2(string anything)
         {
-            
+
             return new UserDTO
             {
                 Name = "just test" + _payload.Items["userid"]
@@ -81,6 +81,16 @@ namespace Services
         public List<UserDTO> GetTest(UserDTO userDTO)
         {
             throw new System.NotImplementedException();
+        }
+
+        public string[] GetTest2()
+        {
+            return new string[] { "a", "b" };
+        }
+
+        public UserDTO[] GetTest3(string[] arr)
+        {
+            return null;
         }
     }
 }

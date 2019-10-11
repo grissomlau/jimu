@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>0.6.0</Version>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Version>1.0.0-beta.1</Version>
     <Authors>grissomlau@qq.com</Authors>
     <PackageLicenseUrl>https://github.com/grissomlau/Jimu/blob/master/LICENSE</PackageLicenseUrl>
     <Copyright>Jimu</Copyright>
@@ -13,7 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MiniDDD.UnitOfWork.SqlSugar" Version="0.2.0" />
+    <PackageReference Include="MiniDDD.UnitOfWork.SqlSugar" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>

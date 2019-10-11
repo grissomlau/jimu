@@ -19,15 +19,8 @@ namespace Jimu.Server
         //readonly string _path;//where are the dll directory
         //readonly bool _enableWatchChanged;
         readonly ILogger _logger;
-        volatile bool _loading;//is loading the dll
-        volatile bool _isWatching;//is watching the path
-        static object _lockObj = new object();
         readonly IServiceEntryContainer _serviceEntryContainer;
-        //readonly string _watchingFilePattern;
-        volatile bool _changingInloading;
-
         readonly ServiceOptions _options;
-        readonly List<FileSystemWatcher> _watchers = new List<FileSystemWatcher>();
 
         /// <summary>
         /// dll loader
@@ -130,18 +123,7 @@ namespace Jimu.Server
 
             _serviceEntryContainer.LoadServices(assemblies.ToList());
 
-            if (_changingInloading)
-            {
-                _changingInloading = false;
-                this.LoadServices();
-            }
 
-            _loading = false;
-            if (_options.EnableWatch && !_isWatching)
-            {
-                _isWatching = true;
-                this.Watch();
-            }
 
             if (!assemblies.Any())
             {
@@ -159,70 +141,9 @@ namespace Jimu.Server
             return (library.Name == (assemblyName.Name))
                     || (library.Dependencies.Any(d => d.Name.StartsWith(assemblyName.Name)));
         }
-        private void Watch()
-        {
-
-            var filters = _options.WatchFilePattern.Split(',');
-            foreach (var filter in filters)
-            {
-                FileSystemWatcher watcher = new FileSystemWatcher();
-                watcher.Path = _options.Path;
-
-                // Watch for changes in LastAccess and LastWrite times, and
-                // the renaming of files or directories.
-                watcher.NotifyFilter = NotifyFilters.LastAccess
-                                     | NotifyFilters.LastWrite
-                                     | NotifyFilters.FileName
-                                     | NotifyFilters.DirectoryName;
-
-                // Only watch text files.
-                //_watcher.Filter = "*.dll";
-                watcher.Filter = filter;
-
-                // Add event handlers.
-                watcher.Changed += Watcher_Changed;
-                watcher.Created += Watcher_Changed;
-                watcher.Deleted += Watcher_Changed;
-                watcher.Renamed += Watcher_Changed;
-
-                // Begin watching.
-                watcher.EnableRaisingEvents = true;
-                _watchers.Add(watcher);
-            }
-        }
-
-        private void Watcher_Changed(object sender, FileSystemEventArgs e)
-        {
-            _changingInloading = true;
-            lock (_lockObj)
-            {
-                if (!_loading)
-                {
-                    _loading = true;
-                    Thread.Sleep(10000);//waiting for changing finish
-                    _changingInloading = false;
-                    Task.Run(() => this.LoadServices());
-                }
-            }
-        }
-
-        private void ClearWatchs()
-        {
-            _watchers.ForEach(x =>
-            {
-                try
-                {
-                    x.Dispose();
-                }
-                catch { }
-            });
-            _watchers.Clear();
-
-        }
 
         public void Dispose()
         {
-            ClearWatchs();
         }
     }
 }

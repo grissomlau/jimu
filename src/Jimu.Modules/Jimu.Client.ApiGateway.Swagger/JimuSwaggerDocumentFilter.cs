@@ -1,98 +1,130 @@
 ﻿using Autofac;
-using Swashbuckle.AspNetCore.Swagger;
+using Jimu.Client.ApiGateway.Swagger.Schema;
+using Microsoft.OpenApi.Any;
+using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 
 namespace Jimu.Client.ApiGateway.Swagger
 {
     public class JimuSwaggerDocumentFilter : IDocumentFilter
     {
-        public void Apply(SwaggerDocument swaggerDoc, DocumentFilterContext context)
+
+        static ISchemaFactory _schemaFactory = new SchemaFactory();
+        public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
         {
             var serviceDiscovery = JimuClient.Host.Container.Resolve<IClientServiceDiscovery>();
             var routes = serviceDiscovery.GetRoutesAsync().GetAwaiter().GetResult();
             var groupRoutes = routes.GroupBy(x => x.ServiceDescriptor.RoutePath);
+
+            //if (!swaggerDoc.Components.SecuritySchemes.ContainsKey("bearerAuth"))
+            //{
+            //    swaggerDoc.Components.SecuritySchemes.Add("bearerAuth", new OpenApiSecurityScheme
+            //    {
+            //        Type = SecuritySchemeType.Http,
+            //        In = ParameterLocation.Header,
+            //        //Scheme = "bearer",
+            //        //BearerFormat = "JWT",
+            //        Name = "bearerAuth",
+            //        Reference = new OpenApiReference()
+            //        {
+            //            Id = "bearerAuth",
+            //            Type = ReferenceType.SecurityScheme
+            //        },
+            //        UnresolvedReference = false
+            //    });
+            //}
+            swaggerDoc.Components.SecuritySchemes = new Dictionary<string, OpenApiSecurityScheme> {
+                { "bearerAuth",new OpenApiSecurityScheme
+                {
+                    Type = SecuritySchemeType.Http,
+                    In = ParameterLocation.Header,
+                    Scheme = "bearer",
+                    BearerFormat = "JWT",
+                    Name = "bearerAuth",
+                    Reference = new OpenApiReference()
+                    {
+                        Id = "bearerAuth",
+                        Type = ReferenceType.SecurityScheme
+                    },
+                    UnresolvedReference = false
+                } }
+
+            };
+
             foreach (var gr in groupRoutes)
             {
                 var route = gr.Key;
-                //var subsIndex = origRoute.IndexOf('?');
-                //subsIndex = subsIndex < 0 ? origRoute.Length : subsIndex;
-                //var route = origRoute.Substring(0, subsIndex);
-                //route = route.StartsWith('/') ? route : "/" + route;
-                var pathItem = new PathItem();
+                var pathItem = new OpenApiPathItem();
                 foreach (var r in gr)
                 {
                     var x = r.ServiceDescriptor;
-                    var paras = new List<IParameter>();
+                    var paras = new List<OpenApiParameter>();
+                    var jimuParas = new List<JimuServiceParameterDesc>();
                     if (!string.IsNullOrEmpty(x.Parameters))
                     {
-                        var parameters = JimuHelper.Deserialize(TypeHelper.ReplaceTypeToJsType(x.Parameters), typeof(List<JimuServiceParameterDesc>)) as List<JimuServiceParameterDesc>;
-                        paras = GetParameters(route, parameters, x.HttpMethod);
+                        jimuParas = JimuHelper.Deserialize(TypeHelper.ReplaceTypeToJsType(x.Parameters), typeof(List<JimuServiceParameterDesc>)) as List<JimuServiceParameterDesc>;
+                        paras = GetParameters(route, jimuParas, x.HttpMethod);
                     }
 
-                    if (!x.GetMetadata<bool>("AllowAnonymous"))
-                    {
-                        paras.Add(new NonBodyParameter
-                        {
-                            Name = "Authorization",
-                            Type = "string",
-                            In = "header",
-                            Description = "Token",
-                            Required = true,
-                            Default = "Bearer "
-                        });
-                    }
+                    //if (!x.GetMetadata<bool>("AllowAnonymous"))
+                    //{
+                    //    paras.Add(new OpenApiParameter
+                    //    {
+                    //        Name = "Authorization",
+                    //        In = ParameterLocation.Header,
+                    //        Description = "Token",
+                    //        Required = true,
+                    //        Schema = new OpenApiSchema { Type = "string", Default = new OpenApiString("Bearer ") }
+                    //    });
+                    //}
 
-                    var response = new Dictionary<string, Response>();
-                    response.Add("200", GetResponse(x.ReturnDesc));
+                    var responses = new OpenApiResponses();
+                    responses.Add("200", GetResponse(x.ReturnDesc));
 
-                    Operation operation = new Operation
+
+                    OpenApiOperation operation = new OpenApiOperation
                     {
-                        Consumes = new List<string> { "application/json" },
+                        //Consumes = new List<string> { "application/json" },
                         OperationId = x.RoutePath,
                         Parameters = paras,
-                        Produces = new List<string> { "application/json" },
-                        Responses = response,
+                        //Produces = new List<string> { "application/json" },
+                        Responses = responses,
                         Description = x.Comment,
                         Summary = x.Comment,
-                        Tags = GetTags(x)
+                        Tags = GetTags(x),
+                        RequestBody = GetRequestBody(route, jimuParas, x.HttpMethod)
                     };
-                    switch (x.HttpMethod.ToUpper())
+                    if (Enum.TryParse(typeof(OperationType), CultureInfo.CurrentCulture.TextInfo.ToTitleCase(x.HttpMethod.ToLower()), out var opType))
                     {
-                        case "GET":
-                            pathItem.Get = operation;
-                            break;
-                        case "POST":
-                            pathItem.Post = operation;
-                            break;
-                        case "PUT":
-                            pathItem.Put = operation;
-                            break;
-                        case "DELETE":
-                            pathItem.Delete = operation;
-                            break;
-                        case "HEAD":
-                            pathItem.Head = operation;
-                            break;
-                        case "PATCH":
-                            pathItem.Patch = operation;
-                            break;
-                        case "OPTIONS":
-                            pathItem.Options = operation;
-                            break;
-                        default:
-                            break;
+                        pathItem.AddOperation((OperationType)opType, operation);
+                    }
+                    if (!x.GetMetadata<bool>("AllowAnonymous"))
+                    {
+                        operation.Security = new List<OpenApiSecurityRequirement> {
+                           new OpenApiSecurityRequirement{
+                            {
+                                new OpenApiSecurityScheme {
+                                    Reference = new OpenApiReference()
+                                            {
+                                                Id = "bearerAuth",
+                                                Type = ReferenceType.SecurityScheme
+                                            },
+                                    UnresolvedReference = true   },
+                                new List<string>() }
+                           }
+                        };
                     }
                 }
                 swaggerDoc.Paths.Add(route, pathItem);
             }
         }
 
-        private List<string> GetTags(JimuServiceDesc desc)
+        private List<OpenApiTag> GetTags(JimuServiceDesc desc)
         {
             string tag = desc.Service;
             if (!string.IsNullOrEmpty(desc.ServiceComment))
@@ -101,115 +133,167 @@ namespace Jimu.Client.ApiGateway.Swagger
             }
             if (!string.IsNullOrEmpty(tag))
             {
-                return new List<string> { tag };
+                return new List<OpenApiTag>
+                {
+                    new OpenApiTag
+                    {
+                         Description = tag,
+                          Name = tag
+                    }
+                };
+
             }
             return null;
 
         }
 
-        private static Response GetResponse(string returnDescStr)
+        private static OpenApiResponse GetResponse(string returnDescStr)
         {
 
             if (string.IsNullOrEmpty(returnDescStr) || !returnDescStr.StartsWith('{'))
             {
-                return new Response
+                var resp = new OpenApiResponse
                 {
                     Description = "Success",
-                    Schema = new Schema
-                    {
-                        Type = returnDescStr
-                    }
+                    Content = new Dictionary<string, OpenApiMediaType>()
                 };
+                resp.Content.Add("application/json", new OpenApiMediaType
+                {
+                    Schema = new OpenApiSchema
+                    {
+                        Type = "object",
+                        Default = new OpenApiString(returnDescStr)
+                    }
+                });
+                return resp;
             }
-            var returnDesc = Newtonsoft.Json.JsonConvert.DeserializeObject<JimuServiceReturnDesc>(TypeHelper.ReplaceTypeToJsType(returnDescStr));
-            var isObject = TypeHelper.CheckIsObject(returnDesc.ReturnType);
-            var response = new Response
+            var returnDesc = JsonConvert.DeserializeObject<JimuServiceReturnDesc>(TypeHelper.ReplaceTypeToJsType(returnDescStr));
+            var response = new OpenApiResponse
             {
                 Description = string.IsNullOrEmpty(returnDesc.Comment) ? "Success" : returnDesc.Comment,
-                Schema = new Schema
-                {
-                    Type = isObject ? "object" : returnDesc.ReturnType,
-                    Example = (isObject && returnDesc.ReturnFormat.StartsWith('{')) ? Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(returnDesc.ReturnFormat) : returnDesc.ReturnFormat,
-                }
+                Content = new Dictionary<string, OpenApiMediaType>()
             };
-            var isArray = TypeHelper.CheckIsArray(returnDesc.ReturnType);
-            if (isArray)
+
+            var isVoid = returnDesc.ReturnType == "System.Void";
+            if (isVoid)
             {
-                response.Schema.Example = (isObject && returnDesc.ReturnFormat.StartsWith('{')) ? Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>($"[{returnDesc.ReturnFormat}]") : $"[{returnDesc.ReturnFormat}]";
+                return response;
             }
+
+            var isObject = TypeHelper.CheckIsObject(returnDesc.ReturnType);
+            var isArray = TypeHelper.CheckIsArray(returnDesc.ReturnType);
+            var schema = new OpenApiSchema
+            {
+                Type = returnDesc.ReturnType
+            };
+
+            if ((isObject || isArray) && returnDesc.Properties != null && returnDesc.Properties.Any())
+            {
+                if (isObject && !isArray)
+                {
+                    schema = new OpenApiSchema
+                    {
+                        Type = "object",
+                        Title = returnDesc.Comment,
+                        Description = returnDesc.Comment,
+                        Properties = _schemaFactory.GetProperties(returnDesc.Properties)
+                    };
+                }
+                else if (isArray)
+                {
+                    schema = _schemaFactory.GetProperties(returnDesc.Properties).First().Value;
+                }
+            }
+            response.Content.Add("application/json", new OpenApiMediaType
+            {
+                Schema = schema
+            });
             return response;
         }
 
-        private static List<IParameter> GetParameters(string route, List<JimuServiceParameterDesc> paras, string httpMethod)
+        private static OpenApiRequestBody GetRequestBody(string route, List<JimuServiceParameterDesc> paras, string httpMethod)
         {
-            List<IParameter> parameters = new List<IParameter>();
-            int idx = 0;
-            StringBuilder sbExample = new StringBuilder();
+            if (httpMethod.Equals("GET", StringComparison.OrdinalIgnoreCase))
+            {
+                return null;
+            }
+            var bodyParas = paras.Where(x => route.IndexOf($"{{{x.Name}}}") < 0).ToList();
+
+            var reqBody = new OpenApiRequestBody
+            {
+                Content = new Dictionary<string, OpenApiMediaType>(),
+            };
+            var schema = new OpenApiSchema
+            {
+                Type = "object",
+                Properties = _schemaFactory.GetProperties(bodyParas)
+            };
+            reqBody.Content.Add("application/json", new OpenApiMediaType
+            {
+                Schema = schema
+            });
+            return reqBody;
+        }
+
+        private static List<OpenApiParameter> GetParameters(string route, List<JimuServiceParameterDesc> paras, string httpMethod)
+        {
+            List<OpenApiParameter> parameters = new List<OpenApiParameter>();
+
             foreach (var p in paras)
             {
-                idx++;
-                if (route.IndexOf($"{{{p.Name}}}") > 0 || httpMethod.Equals("GET", StringComparison.OrdinalIgnoreCase))
+                OpenApiParameter param = null;
+                if (route.IndexOf($"{{{p.Name}}}") > 0)
                 {
-                    var param = new NonBodyParameter
+                    param = new OpenApiParameter
                     {
                         Name = p.Name,
-                        Type = p.Type,
-                        //Format = p.Format,
-                        In = "path",
+                        In = ParameterLocation.Path,
                         Description = $"{p.Comment}",
+                        Schema = new OpenApiSchema
+                        {
+                            Type = p.Type,
+                            Properties = _schemaFactory.GetProperties(p.Properties)
+                        }
                     };
+
+                }
+                else if (httpMethod.Equals("GET", StringComparison.OrdinalIgnoreCase))
+                {
+                    param = new OpenApiParameter
+                    {
+                        Name = p.Name,
+                        In = ParameterLocation.Query,
+                        Description = $"{p.Comment}",
+                        Schema = new OpenApiSchema
+                        {
+                            Type = p.Type,
+                            Properties = _schemaFactory.GetProperties(p.Properties)
+                        }
+                    };
+                }
+                if (param != null)
+                {
                     //if (typeInfo.IsArray)
                     if (TypeHelper.CheckIsArray(p.Type))
                     {
-                        param.Format = null;
-                        param.Items = new PartialSchema
+                        //param.Schema.Items = new OpenApiSchema
+                        //{
+                        //    //Type = typeInfo.Type
+                        //    Type = TypeHelper.GetArrayType(p.Type)
+                        //};
+                        //param.Schema.Items = param.Schema.Properties;
+                        param.Schema.Type = "array";
+                        param.Schema.Items = new OpenApiSchema
                         {
-                            //Type = typeInfo.Type
-                            Type = TypeHelper.GetArrayType(p.Type)
+                            Properties = param.Schema.Properties
                         };
-                        param.Type = "array";
                     }
-                    if (TypeHelper.CheckIsObject(p.Type))
+                    else if (TypeHelper.CheckIsObject(p.Type))
                     {
-                        param.Default = p.Format;
+                        //param.Schema.Default = new OpenApiString(p.Format);
+                        param.Schema.Type = "object";
                     }
                     parameters.Add(param);
-                }
-                else
-                {
-
-                    var bodyPara = new BodyParameter
-                    {
-                        Name = p.Name,
-                        In = "body",
-                        Description = $"{p.Comment}",
-                        Schema = new Schema
-                        {
-                            Format = p.Format,
-                        }
-
-                    };
-                    // swagger bug: two or more object parameter in post, when execute it, just post the last one,so we put all parameter in the last one that it can post it
-                    if (!string.IsNullOrEmpty(p.Format) && p.Format.IndexOf("{") < 0)
-                    {
-                        sbExample.Append($"{p.Name}:\"{ p.Format}\",");
-                    }
-                    else if (!string.IsNullOrEmpty(p.Format))
-                    {
-
-                        sbExample.Append($"{p.Name}:{ p.Format},");
-                    }
-                    if (idx == paras.Count && sbExample.Length > 0 && paras.Count > 1)
-                    {
-                        bodyPara.Schema.Example = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>($"{{{sbExample.ToString().TrimEnd(',')}}}");
-                    }
-                    else if (idx == paras.Count && sbExample.Length > 0)
-                    {
-                        bodyPara.Schema.Example = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>($"{{{sbExample.ToString().TrimEnd(',')}}}");
-
-                    }
-
-                    parameters.Add(bodyPara);
                 }
             }
             return parameters;

@@ -15,7 +15,7 @@ namespace Jimu.Client.ApiGateway
         {
             _modelBinder = modelBinder;
         }
-        public Task BindModelAsync(ModelBindingContext bindingContext)
+        public async Task BindModelAsync(ModelBindingContext bindingContext)
         {
             JimuModel model = null;
             var req = bindingContext.ActionContext.HttpContext.Request;
@@ -32,7 +32,7 @@ namespace Jimu.Client.ApiGateway
                             using (var sr = file.OpenReadStream())
                             {
                                 var bytes = new byte[sr.Length];
-                                sr.ReadAsync(bytes, 0, bytes.Length);
+                                await sr.ReadAsync(bytes, 0, bytes.Length);
                                 var myFile = new JimuFile
                                 {
                                     FileName = file.FileName,
@@ -58,7 +58,8 @@ namespace Jimu.Client.ApiGateway
                 {
                     try
                     {
-                        model = new JimuModel(body,req.ContentType);
+                        model = new JimuModel();
+                        model.ReadFromContentAsync(body, req.ContentType);
                     }
                     catch (Exception ex)
                     {
@@ -70,7 +71,6 @@ namespace Jimu.Client.ApiGateway
             }
             bindingContext.ModelState.SetModelValue("model", model, null);
             bindingContext.Result = ModelBindingResult.Success(model);
-            return Task.CompletedTask;
         }
     }
 }

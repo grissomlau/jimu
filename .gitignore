@@ -229,3 +229,16 @@
 /src/Jimu.Modules/Jimu.Server.Repository.MiniDDD.EF/obj
 /src/Jimu.Modules/Jimu.Server.Repository.MiniDDD.SqlSugar/bin/Debug/netstandard2.0
 /src/Jimu.Modules/Jimu.Server.Repository.MiniDDD.SqlSugar/obj
+/ApiGateway2
+/src/Jimu.Modules/Jimu.Server.ORM.Dapper/bin/Debug/netstandard2.1
+/src/Jimu.Modules/Jimu.Server.Repository.MiniDDD.Dapper/bin/Debug/netstandard2.1
+/src/Jimu.Modules/Jimu.Server.Repository.MiniDDD.EF/bin/Debug/netstandard2.1
+/src/Jimu.Modules/Jimu.Server.Repository.MiniDDD.SqlSugar/bin/Debug/netstandard2.1
+/src/Samples/Complex/ApiGateway/bin/Debug/netcoreapp3.0
+/src/Samples/Complex/Auth.Server/bin/Debug/netcoreapp3.0
+/src/Samples/Complex/Server1.DotnettyForTransfer/bin/Debug/netcoreapp3.0
+/src/Samples/Complex/Server2.HttpForTransfer/bin/Debug/netcoreapp3.0
+/src/Samples/CSMode/Client/bin/Debug/netcoreapp3.0
+/src/Samples/Service/IServices/bin/Debug/netcoreapp3.0
+/src/Samples/Service/Services/bin/Debug/netcoreapp3.0
+/src/test/Jimu.Test/bin/Debug/netcoreapp3.0

@@ -26,5 +26,9 @@ namespace Jimu
         ///     the name of field which comment for
         /// </summary>
         public string FieldName { get; set; }
+        /// <summary>
+        /// default value for the field
+        /// </summary>
+        public string Default { get; set; }
     }
 }
