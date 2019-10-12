@@ -1,12 +1,6 @@
-﻿using System;
+﻿using Autofac;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Autofac;
-using Jimu.Client;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Jimu.Client.ApiGateway
 {

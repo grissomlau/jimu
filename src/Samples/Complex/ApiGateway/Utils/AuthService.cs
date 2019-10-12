@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Jimu.ApiGateway.Utils;
+using Jose;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Jimu.ApiGateway.Utils;
-using Jose;
 
 namespace Jimu.ApiGateway
 {

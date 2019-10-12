@@ -1,8 +1,8 @@
-﻿using Jimu.Client;
+﻿using Autofac;
+using Jimu;
+using Jimu.Client;
 using Jimu.Server;
 using System;
-using Autofac;
-using Jimu;
 
 namespace Server2
 {

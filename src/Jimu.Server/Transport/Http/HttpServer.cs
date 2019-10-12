@@ -1,21 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Reflection;
-using System.Threading.Tasks;
-using Jimu.Logger;
+﻿using Jimu.Logger;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Jimu.Server.Transport.Http
 {
     public class HttpServer : IServer
     {
         private readonly IServiceEntryContainer _serviceEntryContainer;
-        private  string _ip;
+        private string _ip;
         private readonly int _port;
         private readonly ILogger _logger;
         private readonly Stack<Func<RequestDel, RequestDel>> _middlewares;

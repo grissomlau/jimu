@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -77,7 +76,8 @@ namespace Jimu
             }
 
             result.Append(method.TrimStart('/'));
-            result = new StringBuilder(result.ToString().ToLower());
+            //result = new StringBuilder(result.ToString().ToLower());
+            result = new StringBuilder(lowerFirstLetter(result.ToString()));
 
             if (paraNames.Any()
                 && (httpMethod.Equals("GET", System.StringComparison.OrdinalIgnoreCase)
@@ -93,6 +93,19 @@ namespace Jimu
                 }
             }
             return "/" + result.ToString().TrimEnd('?', '&', '/', '\\').TrimStart('/', '\\');
+        }
+
+        private static string lowerFirstLetter(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path)) return path;
+            var arr = path.Split('/');
+            string newPath = "";
+            foreach (var s in arr)
+            {
+                if (!string.IsNullOrWhiteSpace(s))
+                    newPath += "/" + char.ToLower(s[0]) + s.Substring(1);
+            }
+            return newPath;
         }
 
         private static List<string> GetParameters(string text)

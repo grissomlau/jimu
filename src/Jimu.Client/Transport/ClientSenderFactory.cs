@@ -1,7 +1,6 @@
 ﻿using Jimu.Logger;
 using System;
 using System.Collections.Concurrent;
-using System.Net;
 
 namespace Jimu.Client
 {

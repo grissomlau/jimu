@@ -18,13 +18,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Transport\Http\**" />
+    <EmbeddedResource Remove="Transport\Http\**" />
+    <None Remove="Transport\Http\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="DotNetty.Codecs" Version="0.6.0" />
-    <PackageReference Include="Flurl.Http" Version="2.4.2" />
     <PackageReference Include="jose-jwt" Version="2.4.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
-    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Xml" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.3.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.0.0" />

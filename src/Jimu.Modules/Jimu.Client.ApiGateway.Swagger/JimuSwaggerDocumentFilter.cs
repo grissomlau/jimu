@@ -21,23 +21,6 @@ namespace Jimu.Client.ApiGateway.Swagger
             var routes = serviceDiscovery.GetRoutesAsync().GetAwaiter().GetResult();
             var groupRoutes = routes.GroupBy(x => x.ServiceDescriptor.RoutePath);
 
-            //if (!swaggerDoc.Components.SecuritySchemes.ContainsKey("bearerAuth"))
-            //{
-            //    swaggerDoc.Components.SecuritySchemes.Add("bearerAuth", new OpenApiSecurityScheme
-            //    {
-            //        Type = SecuritySchemeType.Http,
-            //        In = ParameterLocation.Header,
-            //        //Scheme = "bearer",
-            //        //BearerFormat = "JWT",
-            //        Name = "bearerAuth",
-            //        Reference = new OpenApiReference()
-            //        {
-            //            Id = "bearerAuth",
-            //            Type = ReferenceType.SecurityScheme
-            //        },
-            //        UnresolvedReference = false
-            //    });
-            //}
             swaggerDoc.Components.SecuritySchemes = new Dictionary<string, OpenApiSecurityScheme> {
                 { "bearerAuth",new OpenApiSecurityScheme
                 {
@@ -70,29 +53,14 @@ namespace Jimu.Client.ApiGateway.Swagger
                         jimuParas = JimuHelper.Deserialize(TypeHelper.ReplaceTypeToJsType(x.Parameters), typeof(List<JimuServiceParameterDesc>)) as List<JimuServiceParameterDesc>;
                         paras = GetParameters(route, jimuParas, x.HttpMethod);
                     }
-
-                    //if (!x.GetMetadata<bool>("AllowAnonymous"))
-                    //{
-                    //    paras.Add(new OpenApiParameter
-                    //    {
-                    //        Name = "Authorization",
-                    //        In = ParameterLocation.Header,
-                    //        Description = "Token",
-                    //        Required = true,
-                    //        Schema = new OpenApiSchema { Type = "string", Default = new OpenApiString("Bearer ") }
-                    //    });
-                    //}
-
                     var responses = new OpenApiResponses();
                     responses.Add("200", GetResponse(x.ReturnDesc));
 
 
                     OpenApiOperation operation = new OpenApiOperation
                     {
-                        //Consumes = new List<string> { "application/json" },
                         OperationId = x.RoutePath,
                         Parameters = paras,
-                        //Produces = new List<string> { "application/json" },
                         Responses = responses,
                         Description = x.Comment,
                         Summary = x.Comment,

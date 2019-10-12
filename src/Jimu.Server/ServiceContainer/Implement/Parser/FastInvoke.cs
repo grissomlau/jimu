@@ -4,7 +4,7 @@ using System.Reflection.Emit;
 
 namespace Jimu.Server.Implement.Parser
 {
-     class FastInvoke
+    class FastInvoke
     {
         public delegate object FastInvokeHandler(object target, object[] paramters);
 
@@ -17,7 +17,7 @@ namespace Jimu.Server.Implement.Parser
         public static FastInvokeHandler GetMethodInvoker(MethodInfo methodInfo)
         {
             var dynamicMethod = new DynamicMethod(string.Empty, typeof(object),
-                new[] {typeof(object), typeof(object[])}, methodInfo.DeclaringType.Module);
+                new[] { typeof(object), typeof(object[]) }, methodInfo.DeclaringType.Module);
             var il = dynamicMethod.GetILGenerator();
             var ps = methodInfo.GetParameters();
             var paramTypes = new Type[ps.Length];
@@ -65,7 +65,7 @@ namespace Jimu.Server.Implement.Parser
                 }
 
             il.Emit(OpCodes.Ret);
-            var invoder = (FastInvokeHandler) dynamicMethod.CreateDelegate(typeof(FastInvokeHandler));
+            var invoder = (FastInvokeHandler)dynamicMethod.CreateDelegate(typeof(FastInvokeHandler));
             return invoder;
         }
 
@@ -119,7 +119,7 @@ namespace Jimu.Server.Implement.Parser
             }
 
             if (value > -129 && value < 128)
-                il.Emit(OpCodes.Ldc_I4_S, (sbyte) value);
+                il.Emit(OpCodes.Ldc_I4_S, (sbyte)value);
             else
                 il.Emit(OpCodes.Ldc_I4, value);
         }

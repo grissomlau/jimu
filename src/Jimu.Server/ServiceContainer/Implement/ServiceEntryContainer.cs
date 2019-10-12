@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Autofac.Core;
 using Jimu.Server.Implement.Parser;
 using System;
 using System.Collections.Generic;

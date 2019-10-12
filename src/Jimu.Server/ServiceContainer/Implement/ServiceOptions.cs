@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Jimu.Server.ServiceContainer.Implement
+﻿namespace Jimu.Server.ServiceContainer.Implement
 {
     public class ServiceOptions
     {

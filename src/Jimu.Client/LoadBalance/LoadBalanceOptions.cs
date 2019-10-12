@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Jimu.Client.LoadBalance
+﻿namespace Jimu.Client.LoadBalance
 {
     public class LoadBalanceOptions
     {

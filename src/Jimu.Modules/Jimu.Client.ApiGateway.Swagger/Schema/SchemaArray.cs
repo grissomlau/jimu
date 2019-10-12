@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.OpenApi.Models;
 using System.Linq;
-using System.Text;
-using Microsoft.OpenApi.Models;
 
 namespace Jimu.Client.ApiGateway.Swagger.Schema
 {

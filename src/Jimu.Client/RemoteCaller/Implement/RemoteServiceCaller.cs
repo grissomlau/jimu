@@ -1,11 +1,10 @@
-﻿using System;
+﻿using Jimu.Logger;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Jimu.Logger;
-using Polly;
 
 namespace Jimu.Client
 {

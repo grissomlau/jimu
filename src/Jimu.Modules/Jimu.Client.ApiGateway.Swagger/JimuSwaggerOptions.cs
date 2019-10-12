@@ -19,6 +19,10 @@
 
         }
 
-        public JimuSwaggerOptions() { }
+        public JimuSwaggerOptions()
+        {
+            this.Title = "Jimu";
+            this.Version = "v1";
+        }
     }
 }

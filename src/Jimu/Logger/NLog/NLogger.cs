@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using NLog;
-using NLog.Targets;
 
 namespace Jimu.Logger
 {

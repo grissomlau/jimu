@@ -1,12 +1,12 @@
-﻿using System;
-using System.Linq;
-using System.Net.Sockets;
-using System.Threading.Tasks;
-using Jimu.Logger;
+﻿using Jimu.Logger;
 using Quartz;
 using Quartz.Impl;
 using Quartz.Impl.Triggers;
 using Quartz.Spi;
+using System;
+using System.Linq;
+using System.Net.Sockets;
+using System.Threading.Tasks;
 
 namespace Jimu.Client.HealthCheck
 {

@@ -1,7 +1,5 @@
-﻿using System;
-using Autofac;
-using Jimu;
-using Jimu.Server;
+﻿using Jimu.Server;
+using System;
 
 namespace Auth.Server
 {

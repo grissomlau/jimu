@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using Jimu.ApiGateway.Model;
+﻿using Jimu.ApiGateway.Model;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace Jimu.ApiGateway.Controllers
 {

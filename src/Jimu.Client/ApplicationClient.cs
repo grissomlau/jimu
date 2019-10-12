@@ -1,9 +1,4 @@
-﻿using Jimu.Client;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Jimu.Client
+﻿namespace Jimu.Client
 {
     public class ApplicationClient
     {

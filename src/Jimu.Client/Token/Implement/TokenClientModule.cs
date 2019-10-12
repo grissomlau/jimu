@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Autofac;
+﻿using Autofac;
 using Jimu.Client.ApiGateway;
 using Jimu.Logger;
 using Microsoft.Extensions.Configuration;
+using System.Linq;
 
 namespace Jimu.Client.Token.Implement
 {

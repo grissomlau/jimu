@@ -1,10 +1,8 @@
 ﻿using Autofac;
 using Autofac.Core;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Jimu.Server.Implement.Parser

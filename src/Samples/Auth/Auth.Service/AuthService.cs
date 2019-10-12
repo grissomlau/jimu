@@ -1,11 +1,8 @@
 ﻿using Auth.IService;
-using Auth.IService.DTO;
-using System;
-using System.Data.Common;
-using Dapper;
-using Jimu.Server.Auth;
 using Jimu;
 using Jimu.Database;
+using Jimu.Server.Auth;
+using System;
 
 namespace Auth.Service
 {

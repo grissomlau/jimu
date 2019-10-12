@@ -1,9 +1,6 @@
 ﻿using Autofac;
 using Jimu.Logger;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Jimu.Client.LoadBalance
 {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TestService
+﻿namespace TestService
 {
     public class MsgModel<T> where T : class
     {

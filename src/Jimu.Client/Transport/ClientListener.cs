@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Jimu.Client
@@ -24,7 +22,7 @@ namespace Jimu.Client
         {
             if (OnReceived == null)
                 return;
-            await OnReceived( message);
+            await OnReceived(message);
         }
     }
 }

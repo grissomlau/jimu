@@ -3,11 +3,9 @@ using MySql.Data.MySqlClient;
 using Npgsql;
 using Oracle.ManagedDataAccess.Client;
 using System;
-using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Data.SQLite;
-using System.Text;
 
 namespace Jimu.Server.ORM.Dapper
 {
@@ -20,7 +18,7 @@ namespace Jimu.Server.ORM.Dapper
         }
         public DbConnection Create()
         {
-            DbConnection cnn = null;
+            DbConnection cnn;
             switch (_options.DbType)
             {
                 case DbType.MySQL:

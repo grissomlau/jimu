@@ -1,8 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using DotNetty.Buffers;
+﻿using DotNetty.Buffers;
 using DotNetty.Transport.Channels;
 using Jimu.Logger;
+using System;
+using System.Threading.Tasks;
 
 namespace Jimu.Server.Transport.DotNetty
 {

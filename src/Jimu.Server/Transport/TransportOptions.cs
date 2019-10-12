@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Jimu.Server.Transport
+﻿namespace Jimu.Server.Transport
 {
     public class TransportOptions
     {

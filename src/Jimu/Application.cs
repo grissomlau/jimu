@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Autofac;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Autofac;
 
 namespace Jimu
 {
-    public  class Application : IApplication
+    public class Application : IApplication
     {
         private readonly List<Action<IContainer>> _disposeActions;
         private readonly List<Action<IContainer>> _runActions;

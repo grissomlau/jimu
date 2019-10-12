@@ -1,6 +1,6 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using Jimu.Logger;
+using System;
 
 namespace Jimu.Client
 {

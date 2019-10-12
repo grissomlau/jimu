@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Jimu.Client.Proxy
+﻿namespace Jimu.Client.Proxy
 {
     public class ServiceProxyOptions
     {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Auth.IService.DTO
+﻿namespace Auth.IService.DTO
 {
     public class AuthReq
     {

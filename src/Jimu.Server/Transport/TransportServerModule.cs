@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Jimu.Logger;
 using Jimu.Server.Transport.DotNetty;
-using Jimu.Server.Transport.Http;
 using Microsoft.Extensions.Configuration;
 using System;
 
@@ -29,13 +28,13 @@ namespace Jimu.Server.Transport
                             .WithParameter("serviceInvokeAddress", new JimuAddress(_options.ServiceInvokeIp, Convert.ToInt32(_options.ServiceInvokePort), _options.Protocol))
                             .SingleInstance();
                         break;
-                    case "Http":
-                        componentContainerBuilder.RegisterType<HttpServer>().As<IServer>()
-                            .WithParameter("ip", _options.Ip)
-                            .WithParameter("port", Convert.ToInt32(_options.Port))
-                            .WithParameter("serviceInvokeAddress", new JimuAddress(_options.ServiceInvokeIp, Convert.ToInt32(_options.ServiceInvokePort), _options.Protocol))
-                            .SingleInstance();
-                        break;
+                    //case "Http":
+                    //    componentContainerBuilder.RegisterType<HttpServer>().As<IServer>()
+                    //        .WithParameter("ip", _options.Ip)
+                    //        .WithParameter("port", Convert.ToInt32(_options.Port))
+                    //        .WithParameter("serviceInvokeAddress", new JimuAddress(_options.ServiceInvokeIp, Convert.ToInt32(_options.ServiceInvokePort), _options.Protocol))
+                    //        .SingleInstance();
+                    //    break;
                     default: break;
                 }
 
@@ -55,11 +54,11 @@ namespace Jimu.Server.Transport
                         var nettyServer = container.Resolve<IServer>();
                         nettyServer.StartAsync();
                         break;
-                    case "Http":
-                        logger.Info($"[config]use http for transfer");
-                        var httpServer = container.Resolve<IServer>();
-                        httpServer.StartAsync();
-                        break;
+                    //case "Http":
+                    //    logger.Info($"[config]use http for transfer");
+                    //    var httpServer = container.Resolve<IServer>();
+                    //    httpServer.StartAsync();
+                    //    break;
                     default: break;
                 }
             }

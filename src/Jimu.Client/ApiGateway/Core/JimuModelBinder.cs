@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Autofac;
+using Jimu.Logger;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Autofac;
-using Jimu.Logger;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Jimu.Client.ApiGateway
 {

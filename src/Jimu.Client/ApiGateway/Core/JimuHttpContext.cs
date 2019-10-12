@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Http;
 
 namespace Jimu.Client.ApiGateway
 {
@@ -15,4 +13,4 @@ namespace Jimu.Client.ApiGateway
             _accessor = accessor;
         }
     }
- }
+}

@@ -1,8 +1,6 @@
 using Autofac;
 using Jimu.Server;
-using NSubstitute;
 using System;
-using System.Linq;
 using System.Reflection;
 using Xunit;
 using Xunit.Abstractions;

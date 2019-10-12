@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Jimu.Client.Discovery.Implement
+﻿namespace Jimu.Client.Discovery.Implement
 {
     public class DiscoveryOptions
     {

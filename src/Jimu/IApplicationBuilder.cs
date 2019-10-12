@@ -1,6 +1,5 @@
-﻿using System;
-using Autofac;
-using Microsoft.Extensions.Configuration;
+﻿using Autofac;
+using System;
 
 namespace Jimu
 {

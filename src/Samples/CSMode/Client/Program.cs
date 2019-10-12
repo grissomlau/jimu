@@ -1,11 +1,8 @@
-﻿using System;
-using Autofac;
-using Jimu;
-using Jimu.Client;
+﻿using Autofac;
 using IServices;
-using System.Threading;
+using Jimu.Client;
+using System;
 using System.Diagnostics;
-using Jimu.Logger;
 
 namespace Client
 {

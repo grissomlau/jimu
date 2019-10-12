@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Autofac;
+using Jimu.Extension;
+using Jose;
+using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Autofac;
-using Jimu.Extension;
-using Jose;
 
 namespace Jimu.Server.Auth
 {

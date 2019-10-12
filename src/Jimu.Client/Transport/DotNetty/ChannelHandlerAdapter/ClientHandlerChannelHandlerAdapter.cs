@@ -1,8 +1,7 @@
-﻿using System.Net;
-using System.Threading.Tasks;
-using DotNetty.Common.Utilities;
+﻿using DotNetty.Common.Utilities;
 using DotNetty.Transport.Channels;
 using Jimu.Logger;
+using System.Threading.Tasks;
 
 namespace Jimu.Client
 {

@@ -1,14 +1,10 @@
-﻿using System;
-using Autofac;
-using Jimu.Logger;
-using System.Linq;
+﻿using Autofac;
+using Microsoft.Extensions.DependencyModel;
+using System;
 using System.IO;
-using Microsoft.Extensions.Configuration;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
-using Microsoft.Extensions.DependencyModel;
-using Microsoft.Extensions.DependencyModel.Resolution;
-using System.Collections.Generic;
 
 namespace Jimu.Client
 {

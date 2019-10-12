@@ -1,12 +1,9 @@
+using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Resources;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Jimu.Server
 {
@@ -39,19 +36,19 @@ namespace Jimu.Server
                     || string.Equals(m.Name, InvokeAsyncMethodName, StringComparison.Ordinal)
                 ).ToArray();
 
-            if (invokeMethods.Length > 1)
-                throw new InvalidOperationException($"Exception_UseMiddleMutlipleInvokes:{middleware.Name},{InvokeMethodName},{InvokeAsyncMethodName}");
+                if (invokeMethods.Length > 1)
+                    throw new InvalidOperationException($"Exception_UseMiddleMutlipleInvokes:{middleware.Name},{InvokeMethodName},{InvokeAsyncMethodName}");
 
-            if (invokeMethods.Length == 0)
-                throw new InvalidOperationException($"Exception_UseMiddlewareNoInvokeMethod:{middleware.Name},{InvokeMethodName},{InvokeAsyncMethodName}");
+                if (invokeMethods.Length == 0)
+                    throw new InvalidOperationException($"Exception_UseMiddlewareNoInvokeMethod:{middleware.Name},{InvokeMethodName},{InvokeAsyncMethodName}");
 
                 var methodinfo = invokeMethods[0];
-            if (!typeof(Task).IsAssignableFrom(methodinfo.ReturnType))
-                throw new InvalidOperationException($"Exception_UseMiddlewareNonTaskReturnType:{middleware.Name},{InvokeMethodName},{InvokeAsyncMethodName}");
+                if (!typeof(Task).IsAssignableFrom(methodinfo.ReturnType))
+                    throw new InvalidOperationException($"Exception_UseMiddlewareNonTaskReturnType:{middleware.Name},{InvokeMethodName},{InvokeAsyncMethodName}");
 
                 var parameters = methodinfo.GetParameters();
-            if (parameters.Length == 0 || parameters[0].ParameterType != typeof(RemoteCallerContext))
-                throw new InvalidOperationException($"Exception_UseMiddlewareNoParameters:{middleware.Name},{InvokeMethodName},{InvokeAsyncMethodName}");
+                if (parameters.Length == 0 || parameters[0].ParameterType != typeof(RemoteCallerContext))
+                    throw new InvalidOperationException($"Exception_UseMiddlewareNoParameters:{middleware.Name},{InvokeMethodName},{InvokeAsyncMethodName}");
 
 
                 var ctorArgs = new object[args.Length + 1];
@@ -60,7 +57,7 @@ namespace Jimu.Server
                 var instance = ActivatorUtilities.CreateInstance(null, middleware, ctorArgs);
 
                 if (parameters.Length == 1)
-                    return (RequestDel) methodinfo.CreateDelegate(typeof(RequestDel), instance);
+                    return (RequestDel)methodinfo.CreateDelegate(typeof(RequestDel), instance);
 
                 var factory = Compile<object>(methodinfo, parameters);
 
