@@ -263,3 +263,16 @@
 /src/Samples/User/User.Server/obj
 /src/Samples/User/User.Service/bin/Debug/netcoreapp3.0
 /src/Samples/User/User.Service/obj
+/src/Jimu/bin/Release/netstandard2.1
+/src/Jimu.Client/bin/Release/netcoreapp3.0
+/src/Jimu.Modules/Jimu.Server.ORM.Dapper/bin/Release/netcoreapp3.0
+/src/Jimu.Modules/Jimu.Server.Repository.MiniDDD.Dapper/bin/Release/netcoreapp3.0
+/src/Jimu.Modules/Jimu.Server.Repository.MiniDDD.EF/bin/Release/netcoreapp3.0
+/src/Jimu.Modules/Jimu.Server.Repository.MiniDDD.SqlSugar/bin/Release/netcoreapp3.0
+/src/Jimu.Server/bin/Release/netcoreapp3.0
+/src/Samples/ApiGateway/bin/Release/netcoreapp3.0
+/src/Samples/Auth/Auth.Server/bin/Release/netcoreapp3.0
+/src/Samples/User/User.IService/bin/Release/netcoreapp3.0
+/src/Samples/User/User.Server/bin/Release/netcoreapp3.0
+/src/Samples/User/User.Service/bin/Release/netcoreapp3.0
+/src/test/Jimu.Test/bin/Release/netcoreapp3.0
