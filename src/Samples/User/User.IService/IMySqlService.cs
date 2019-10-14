@@ -48,10 +48,9 @@ Id int PRIMARY KEY auto_increment,
         /// <returns></returns>
         [JimuGet(true)]
         List<UserModel> GetAllUser();
+
         [JimuGet(true)]
         Task<UserModel[]> GetAllUserArray();
-        [JimuGet(true)]
-        Task GetVoid();
 
         /// <summary>
         ///  get user by id

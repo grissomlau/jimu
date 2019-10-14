@@ -56,9 +56,5 @@ namespace User.Service
             }
         }
 
-        public Task GetVoid()
-        {
-            return Task.CompletedTask;
-        }
-    }
+         }
 }

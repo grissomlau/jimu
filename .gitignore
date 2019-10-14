@@ -279,3 +279,6 @@
 /src/Samples/Complex
 /src/Samples/CSMode
 /src/Samples/Service
+/src/Jimu.Modules/Jimu.Server.Repository.MiniDDD.Dapper/bin/Debug/netcoreapp3.0
+/src/Jimu.Modules/Jimu.Server.Repository.MiniDDD.EF/bin/Debug/netcoreapp3.0
+/src/Jimu.Modules/Jimu.Server.Repository.MiniDDD.SqlSugar/bin/Debug/netcoreapp3.0
