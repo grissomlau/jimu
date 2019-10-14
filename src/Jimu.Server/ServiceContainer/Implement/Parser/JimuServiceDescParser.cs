@@ -100,38 +100,33 @@ namespace Jimu.Server.Implement.Parser
 
             }
 
-            List<Type> customTypes = new List<Type>();
-            if (methodInfo.ReturnType.ToString().IndexOf("System.Threading.Tasks.Task", StringComparison.Ordinal) == 0 &&
-                      methodInfo.ReturnType.IsGenericType)
+            Type returnType = methodInfo.ReturnType;
+
+            if (methodInfo.ReturnType.ToString().IndexOf("System.Threading.Tasks.Task", StringComparison.Ordinal) == 0)
             {
-                //desc.ReturnType = methodInfo.ReturnType.ToString();
-                desc.ReturnType = string.Join(",", methodInfo.ReturnType.GenericTypeArguments.Select(x => x.FullName));
-                customTypes = (from type in methodInfo.ReturnType.GenericTypeArguments
-                               from childType in type.GenericTypeArguments
-                               select childType).ToList();
-            }
-            else if (methodInfo.ReturnType.IsGenericType)
-            //if (methodInfo.ReturnType.IsGenericType)
-            {
-                //desc.ReturnType = string.Join(",", methodInfo.ReturnType.GenericTypeArguments.Select(x => x.FullName));
-                desc.ReturnType = methodInfo.ReturnType.ToString();
-                if (desc.ReturnType.StartsWith("System."))
-                    customTypes = methodInfo.ReturnType.GenericTypeArguments.ToList();
+                if (methodInfo.ReturnType.GenericTypeArguments.Any())
+                {
+                    returnType = methodInfo.ReturnType.GenericTypeArguments[0];
+                }
                 else
-                    customTypes = new List<Type> { methodInfo.ReturnType };
+                {
+                    returnType = typeof(void);
+                }
             }
-            else
+            desc.ReturnType = returnType.ToString();
+            if (returnType.IsGenericType && returnType.ToString().StartsWith("System."))
             {
-                desc.ReturnType = methodInfo.ReturnType.ToString();
-                customTypes = new List<Type> { methodInfo.ReturnType };
+                returnType = returnType.GenericTypeArguments[0];
+            }
+            else if (returnType.IsArray)
+            {
+                var arrayBaseType = returnType.Assembly.ExportedTypes.FirstOrDefault(x => x.FullName == returnType.FullName.TrimEnd('[', ']'));
+                returnType = arrayBaseType;
             }
 
-            // if not specify the return format in method attribute, we auto generate it.
-            //if (string.IsNullOrEmpty(desc.ReturnFormat) && customTypes != null && customTypes.Any())
-            if (customTypes != null && customTypes.Any())
+            if (returnType != null)
             {
-                var para = customTypes[0];
-                desc.Properties = GetProperties(para);
+                desc.Properties = GetProperties(returnType);
 
             }
             return JimuHelper.Serialize<string>(desc);

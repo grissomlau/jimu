@@ -30,18 +30,15 @@ namespace Jimu.Logger
                 }
                 if ((options.FileLogLevel & LogLevel.Warn) == LogLevel.Warn)
                 {
-                    //config.AddRuleForOneLevel(NLog.LogLevel.Warn, fileConf);
                     config.AddRule(NLog.LogLevel.Warn, NLog.LogLevel.Error, fileConf);
                 }
                 if ((options.FileLogLevel & LogLevel.Info) == LogLevel.Info)
                 {
                     config.AddRule(NLog.LogLevel.Info, NLog.LogLevel.Error, fileConf);
-                    //config.AddRuleForOneLevel(NLog.LogLevel.Info, fileConf);
                 }
                 if ((options.FileLogLevel & LogLevel.Debug) == LogLevel.Debug)
                 {
                     config.AddRule(NLog.LogLevel.Debug, NLog.LogLevel.Error, fileConf);
-                    //config.AddRuleForOneLevel(NLog.LogLevel.Debug, fileConf);
                 }
             }
 
@@ -58,17 +55,14 @@ namespace Jimu.Logger
                 if ((options.ConsoleLogLevel & LogLevel.Warn) == LogLevel.Warn)
                 {
                     config.AddRule(NLog.LogLevel.Warn, NLog.LogLevel.Error, consoleLog);
-                    //config.AddRuleForOneLevel(NLog.LogLevel.Warn, consoleLog);
                 }
                 if ((options.ConsoleLogLevel & LogLevel.Info) == LogLevel.Info)
                 {
                     config.AddRule(NLog.LogLevel.Info, NLog.LogLevel.Error, consoleLog);
-                    //config.AddRuleForOneLevel(NLog.LogLevel.Info, consoleLog);
                 }
                 if ((options.ConsoleLogLevel & LogLevel.Debug) == LogLevel.Debug)
                 {
                     config.AddRule(NLog.LogLevel.Debug, NLog.LogLevel.Error, consoleLog);
-                    //config.AddRuleForOneLevel(NLog.LogLevel.Debug, consoleLog);
                 }
             }
             NLog.LogManager.Configuration = config;

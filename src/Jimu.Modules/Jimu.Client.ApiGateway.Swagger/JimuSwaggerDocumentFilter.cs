@@ -157,20 +157,13 @@ namespace Jimu.Client.ApiGateway.Swagger
 
             if ((isObject || isArray) && returnDesc.Properties != null && returnDesc.Properties.Any())
             {
-                if (isObject && !isArray)
+                schema = new OpenApiSchema
                 {
-                    schema = new OpenApiSchema
-                    {
-                        Type = "object",
-                        Title = returnDesc.Comment,
-                        Description = returnDesc.Comment,
-                        Properties = _schemaFactory.GetProperties(returnDesc.Properties)
-                    };
-                }
-                else if (isArray)
-                {
-                    schema = _schemaFactory.GetProperties(returnDesc.Properties).First().Value;
-                }
+                    Type = isArray ? "array" : "object",
+                    Title = returnDesc.Comment,
+                    Description = returnDesc.Comment,
+                    Properties = _schemaFactory.GetProperties(returnDesc.Properties)
+                };
             }
             response.Content.Add("application/json", new OpenApiMediaType
             {
@@ -241,15 +234,8 @@ namespace Jimu.Client.ApiGateway.Swagger
                 }
                 if (param != null)
                 {
-                    //if (typeInfo.IsArray)
                     if (TypeHelper.CheckIsArray(p.Type))
                     {
-                        //param.Schema.Items = new OpenApiSchema
-                        //{
-                        //    //Type = typeInfo.Type
-                        //    Type = TypeHelper.GetArrayType(p.Type)
-                        //};
-                        //param.Schema.Items = param.Schema.Properties;
                         param.Schema.Type = "array";
                         param.Schema.Items = new OpenApiSchema
                         {
@@ -258,7 +244,6 @@ namespace Jimu.Client.ApiGateway.Swagger
                     }
                     else if (TypeHelper.CheckIsObject(p.Type))
                     {
-                        //param.Schema.Default = new OpenApiString(p.Format);
                         param.Schema.Type = "object";
                     }
                     parameters.Add(param);

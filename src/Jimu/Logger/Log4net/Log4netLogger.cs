@@ -11,10 +11,6 @@ namespace Jimu.Logger
 {
     public class Log4netLogger : ILogger
     {
-        //private readonly ILog _logDebug;
-        //private readonly ILog _logInfo;
-        //private readonly ILog _logError;
-        //private readonly ILog _logWarn;
         private readonly ILog _logger;
         private readonly JimuLog4netOptions _options;
 
@@ -23,39 +19,12 @@ namespace Jimu.Logger
             _options = options ?? new JimuLog4netOptions { EnableConsoleLog = true };
             string repositoryName = $"jimuLogger-{Guid.NewGuid()}";
             var repLogger = LogManager.CreateRepository(repositoryName);
-            //var repDebug = LogManager.CreateRepository("debug");
-            //var repInfo = LogManager.CreateRepository("info");
-            //var repWarn = LogManager.CreateRepository("warn");
-            //var repError = LogManager.CreateRepository("error");
-            //UseCodeConfig((Hierarchy)repDebug, "debug");
-            //UseCodeConfig((Hierarchy)repInfo, "info");
-            //UseCodeConfig((Hierarchy)repError, "error");
-            //UseCodeConfig((Hierarchy)repWarn, "warn");
             UseCodeConfig((Hierarchy)repLogger, LogLevel.Debug);
             UseCodeConfig((Hierarchy)repLogger, LogLevel.Info);
             UseCodeConfig((Hierarchy)repLogger, LogLevel.Warn);
             UseCodeConfig((Hierarchy)repLogger, LogLevel.Error);
             _logger = LogManager.GetLogger(repositoryName, MethodBase.GetCurrentMethod().DeclaringType);
-            //_logDebug = LogManager.GetLogger("debug", MethodBase.GetCurrentMethod().DeclaringType);
-            //_logInfo = LogManager.GetLogger("info", MethodBase.GetCurrentMethod().DeclaringType);
-            //_logError = LogManager.GetLogger("error", MethodBase.GetCurrentMethod().DeclaringType);
-            //_logWarn = LogManager.GetLogger("warn", MethodBase.GetCurrentMethod().DeclaringType);
-
         }
-        //void UseFileCofnig(ILoggerRepository rep)
-        //{
-        //    var type = MethodBase.GetCurrentMethod().DeclaringType;
-        //    if (type != null)
-        //    {
-        //        var ns = type.Namespace;
-        //        Assembly assembly = Assembly.GetExecutingAssembly();
-        //        string resourceName = ns + ".log4net.config";
-        //        Stream stream = assembly.GetManifestResourceStream(resourceName);
-        //        XmlConfigurator.Configure(rep, stream);
-        //    }
-        //}
-
-        //void UseCodeConfig(Hierarchy repository, string type)
         void UseCodeConfig(Hierarchy repository, LogLevel logLevel)
         {
 
@@ -70,7 +39,7 @@ namespace Jimu.Logger
 
                 RollingFileAppender roller = new RollingFileAppender
                 {
-                    AppendToFile = false
+                    AppendToFile = true
                 };
                 var path = _options.EnableFileLog ? _options.FileLogPath : "log";
                 roller.File = $@"{path}/{logLevel.ToString().ToLower()}/";
@@ -103,7 +72,6 @@ namespace Jimu.Logger
             if (_options.EnableConsoleLog && (_options.ConsoleLogLevel & logLevel) == logLevel)
             {
 
-                //ManagedColoredConsoleAppender managedColoredConsoleAppender = new
                 ManagedColoredConsoleAppender console = new ManagedColoredConsoleAppender();
                 PatternLayout layoutConsole = new PatternLayout
                 {
@@ -112,24 +80,16 @@ namespace Jimu.Logger
                 switch (logLevel)
                 {
                     case LogLevel.Debug:
-                        //console.Threshold = Level.Debug;
                         console.AddFilter(new LevelRangeFilter() { LevelMax = Level.Debug, LevelMin = Level.Debug });
-                        //console.AddFilter(new LevelMatchFilter() { LevelToMatch = Level.Debug, AcceptOnMatch = true });
                         break;
                     case LogLevel.Info:
-                        //console.Threshold = Level.Info;
                         console.AddFilter(new LevelRangeFilter() { LevelMax = Level.Info, LevelMin = Level.Info });
-                        //console.AddFilter(new LevelMatchFilter() { LevelToMatch = Level.Info, AcceptOnMatch = true });
                         break;
                     case LogLevel.Warn:
-                        //console.Threshold = Level.Warn;
                         console.AddFilter(new LevelRangeFilter() { LevelMax = Level.Warn, LevelMin = Level.Warn });
-                        //console.AddFilter(new LevelMatchFilter() { LevelToMatch = Level.Warn, AcceptOnMatch = true });
                         break;
                     case LogLevel.Error:
-                        //console.Threshold = Level.Error;
                         console.AddFilter(new LevelRangeFilter() { LevelMax = Level.Error, LevelMin = Level.Error });
-                        //console.AddFilter(new LevelMatchFilter() { LevelToMatch = Level.Error });
                         break;
                 }
                 console.AddMapping(
@@ -143,11 +103,6 @@ namespace Jimu.Logger
                 repository.Root.AddAppender(console);
             }
 
-            //MemoryAppender memory = new MemoryAppender();
-            //memory.ActivateOptions();
-            //repository.Root.AddAppender(memory);
-
-            //repository.Root.Level = Level.Debug;
             repository.Configured = true;
         }
 
@@ -158,23 +113,17 @@ namespace Jimu.Logger
 
         public void Error(string msg, Exception ex)
         {
-            //if ((_options.ConsoleLogLevel & LogLevel.Error) == LogLevel.Error)
-            //    _logError.Error(msg, ex);
             _logger.Error(msg, ex);
 
         }
 
         public void Debug(string info)
         {
-            //if ((_options.ConsoleLogLevel & LogLevel.Debug) == LogLevel.Debug)
-            //    _logDebug.Debug(info);
             _logger.Debug(info);
         }
 
         public void Info(string msg)
         {
-            //if ((_options.ConsoleLogLevel & LogLevel.Info) == LogLevel.Info)
-            //    _logInfo.Info(msg);
             _logger.Info(msg);
         }
     }

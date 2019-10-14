@@ -6,6 +6,7 @@ using System.Text;
 using User.IService;
 using User.IService.dto;
 using Dapper;
+using System.Threading.Tasks;
 
 namespace User.Service
 {
@@ -42,12 +43,22 @@ namespace User.Service
             }
         }
 
+        public Task<UserModel[]> GetAllUserArray()
+        {
+            return Task.FromResult(new UserModel[] { });
+        }
+
         public UserModel GetUser(int id)
         {
             using (var db = _dbFactory.Create())
             {
                 return db.QuerySingleOrDefault<UserModel>("Select * From user Where Id = @id", new { id });
             }
+        }
+
+        public Task GetVoid()
+        {
+            return Task.CompletedTask;
         }
     }
 }

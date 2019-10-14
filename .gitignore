@@ -276,3 +276,6 @@
 /src/Samples/User/User.Server/bin/Release/netcoreapp3.0
 /src/Samples/User/User.Service/bin/Release/netcoreapp3.0
 /src/test/Jimu.Test/bin/Release/netcoreapp3.0
+/src/Samples/Complex
+/src/Samples/CSMode
+/src/Samples/Service
