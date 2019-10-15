@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <Version>1.0.0-beta.2</Version>
+    <Version>1.0.0-beta.3</Version>
     <Authors>grissomlau@qq.com</Authors>
     <PackageLicenseUrl>https://github.com/grissomlau/Jimu/blob/master/LICENSE</PackageLicenseUrl>
     <Copyright>Jimu</Copyright>
