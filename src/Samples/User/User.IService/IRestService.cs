@@ -44,5 +44,8 @@ namespace User.IService
         /// <returns></returns>
         [JimuDelete(true, Rest = "/{id}")]
         int Delete(int id);
+
+        [JimuGet(true, Rest = "/{id}/address")]
+        string Address(int id);
     }
 }

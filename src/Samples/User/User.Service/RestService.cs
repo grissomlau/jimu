@@ -27,5 +27,10 @@ namespace User.Service
         {
             return $"name: {user.Name}";
         }
+
+        public string Address(int id)
+        {
+            return $"userid: {id}, address: guangzhou";
+        }
     }
 }
