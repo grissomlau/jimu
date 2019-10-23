@@ -65,7 +65,7 @@ namespace Jimu.Client.ApiGateway
                     {
                         var logger = JimuClient.Host.Container.Resolve<ILogger>();
                         logger.Error("JimuModelBinder.BindModelAsync", ex);
-                        throw;
+                        //throw;
                     }
                 }
             }

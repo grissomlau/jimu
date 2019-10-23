@@ -34,7 +34,7 @@ namespace User.IService
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        [JimuPost(true)]
+        [JimuPost(true, Rest = "/")]
         string Post(UserModel user);
 
         /// <summary>

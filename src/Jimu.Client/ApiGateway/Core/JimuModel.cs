@@ -24,7 +24,7 @@ namespace Jimu.Client.ApiGateway
                 }
                 catch (Exception ex)
                 {
-                    if (contentType == "text/plain" || contentType == "text/xml")
+                    if (contentType == "text/plain" || contentType == "text/xml" || contentType == "application/xml")
                     {
                         Data = new Dictionary<string, object>();
                         Data.Add("data", json);
