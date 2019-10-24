@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -30,6 +31,11 @@ namespace Jimu.Client.ApiGateway.Controllers
             }
             var result = await JimuClient.Invoke($"{path}{(query.Query ?? "")}", paras, Request.Method);
 
+            if (result?.ResultType != null && result.ResultType.StartsWith("{\"ReturnType\":\"Jimu.JimuRedirect\""))
+            {
+                var redirect = result.Result as JimuRedirect;
+                return Redirect(redirect.RedirectUrl);
+            }
             //if (result.ResultType != typeof(JimuFile).ToString())
             if (result?.ResultType != null && result.ResultType.StartsWith("{\"ReturnType\":\"Jimu.JimuFile\""))
             {

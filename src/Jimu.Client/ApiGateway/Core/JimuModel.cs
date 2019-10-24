@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Autofac;
+using Jimu.Logger;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
@@ -31,7 +33,8 @@ namespace Jimu.Client.ApiGateway
                     }
                     else
                     {
-                        throw ex;
+                        var logger = JimuClient.Host.Container.Resolve<ILogger>();
+                        logger.Error($"JimuModel.ReadFromContentAsync, unsupport content-type: {contentType}, ", ex);
                     }
 
                 }

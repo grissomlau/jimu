@@ -56,17 +56,8 @@ namespace Jimu.Client.ApiGateway
                 var body = req.Body;
                 if (body != null)
                 {
-                    try
-                    {
-                        model = new JimuModel();
-                        model.ReadFromContentAsync(body, req.ContentType);
-                    }
-                    catch (Exception ex)
-                    {
-                        var logger = JimuClient.Host.Container.Resolve<ILogger>();
-                        logger.Error("JimuModelBinder.BindModelAsync", ex);
-                        //throw;
-                    }
+                    model = new JimuModel();
+                    model.ReadFromContentAsync(body, req.ContentType);
                 }
             }
             bindingContext.ModelState.SetModelValue("model", model, null);

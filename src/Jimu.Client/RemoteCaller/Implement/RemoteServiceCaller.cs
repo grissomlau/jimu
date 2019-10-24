@@ -85,20 +85,25 @@ namespace Jimu.Client
                 service = await GetServiceByIdAsync(serviceIdOrPath);
             }
             if (service == null)
+            {
+                _logger.Debug($"{serviceIdOrPath} 404, service is null");
                 return new JimuRemoteCallResultData
                 {
                     ErrorCode = "404",
                     ErrorMsg = $"{serviceIdOrPath}, not found!"
                 };
+            }
 
             if (token == null && _serviceTokenGetter?.GetToken != null) token = _serviceTokenGetter.GetToken();
             var result = await InvokeAsync(service, paras, payload, token);
             if (!string.IsNullOrEmpty(result.ExceptionMessage))
+            {
                 return new JimuRemoteCallResultData
                 {
                     ErrorCode = "500",
                     ErrorMsg = $"{serviceIdOrPath}, {result.ToErrorString()}"
                 };
+            }
 
             if (string.IsNullOrEmpty(result.ErrorCode) && string.IsNullOrEmpty(result.ErrorMsg)) return result;
             if (int.TryParse(result.ErrorCode, out var erroCode) && erroCode > 200 && erroCode < 600)
