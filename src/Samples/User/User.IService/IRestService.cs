@@ -17,8 +17,10 @@ namespace User.IService
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [JimuGet(true, Rest = "/{id}")]
-        int Get(int id);
+        [JimuGet(true, Rest = "/{id}?name={name}")]
+        string Get(int id, string name);
+        //[JimuGet(true, Rest = "/{id}")]
+        // Get(int id);
         /// <summary>
         /// get and return name and email
         /// </summary>

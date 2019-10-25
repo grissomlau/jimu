@@ -192,6 +192,16 @@ namespace Jimu.Server.Implement.Parser
                             }
                         };
             }
+            else if (customType.IsEnum)
+            {
+
+                return new List<JimuServiceParameterDesc>{new JimuServiceParameterDesc
+                    {
+                        Name = specifyName?? customType.Name,
+                        Type = "System.Int",
+
+                    } };
+            }
             else if (!customType.GetProperties().Any() || (customType.FullName.StartsWith("System.") && !customType.FullName.StartsWith("System.Collections")))
             {
                 if (customType.FullName.StartsWith("System."))
