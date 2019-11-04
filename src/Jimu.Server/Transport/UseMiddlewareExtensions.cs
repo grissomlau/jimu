@@ -47,7 +47,7 @@ namespace Jimu.Server
                     throw new InvalidOperationException($"Exception_UseMiddlewareNonTaskReturnType:{middleware.Name},{InvokeMethodName},{InvokeAsyncMethodName}");
 
                 var parameters = methodinfo.GetParameters();
-                if (parameters.Length == 0 || parameters[0].ParameterType != typeof(RemoteCallerContext))
+                if (parameters.Length == 0 || parameters[0].ParameterType != typeof(ServiceInvokerContext))
                     throw new InvalidOperationException($"Exception_UseMiddlewareNoParameters:{middleware.Name},{InvokeMethodName},{InvokeAsyncMethodName}");
 
 
@@ -65,12 +65,12 @@ namespace Jimu.Server
             });
         }
 
-        private static Func<T, RemoteCallerContext, IServiceProvider, Task> Compile<T>(MethodInfo methodinfo,
+        private static Func<T, ServiceInvokerContext, IServiceProvider, Task> Compile<T>(MethodInfo methodinfo,
             ParameterInfo[] parameters)
         {
             var middleware = typeof(T);
 
-            var httpContextArg = Expression.Parameter(typeof(RemoteCallerContext), "httpContext");
+            var httpContextArg = Expression.Parameter(typeof(ServiceInvokerContext), "httpContext");
             var providerArg = Expression.Parameter(typeof(IServiceProvider), "serviceProvider");
             var instanceArg = Expression.Parameter(middleware, "middleware");
 
@@ -100,7 +100,7 @@ namespace Jimu.Server
             var body = Expression.Call(middlewareInstanceArg, methodinfo, methodArguments);
 
             var lambda =
-                Expression.Lambda<Func<T, RemoteCallerContext, IServiceProvider, Task>>(body, instanceArg,
+                Expression.Lambda<Func<T, ServiceInvokerContext, IServiceProvider, Task>>(body, instanceArg,
                     httpContextArg, providerArg);
 
             return lambda.Compile();

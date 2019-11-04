@@ -41,7 +41,7 @@ namespace Jimu.Client.ApiGateway
             JimuClient.Host = host;
             return app;
         }
-        public static IServiceCollection UseJimu(this IServiceCollection services)
+        public static IServiceCollection AddJimu(this IServiceCollection services)
         {
             //services.AddCors();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

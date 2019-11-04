@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Jimu.Server
 {
-    public delegate Task RequestDel(RemoteCallerContext context);
+    public delegate Task RequestDel(ServiceInvokerContext context);
     /// <summary>
     ///     transport server
     /// </summary>

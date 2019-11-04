@@ -1,7 +1,9 @@
-﻿using Jimu.Logger;
+﻿using Jimu.Client.Diagnostics;
+using Jimu.Logger;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -16,6 +18,7 @@ namespace Jimu.Client
         private readonly IServiceTokenGetter _serviceTokenGetter;
         private readonly ClientSenderFactory _clientSenderFactory;
         private readonly Stack<Func<ClientRequestDel, ClientRequestDel>> _middlewares;
+        private static DiagnosticListener _diagnosticListener = JimuClientDiagnosticListenerExtensions.Listener;
 
         public RemoteServiceCaller(IClientServiceDiscovery serviceDiscovery,
             IAddressSelector addressSelector,
@@ -118,14 +121,25 @@ namespace Jimu.Client
 
         public async Task<JimuRemoteCallResultData> InvokeAsync(JimuServiceRoute service, IDictionary<string, object> paras, JimuPayload payload, string token)
         {
-            var lastInvoke = GetLastInvoke();
-
-            foreach (var mid in _middlewares)
+            var context = new RemoteCallerContext(service, paras, payload, token, service.Address.First());
+            var operationId = _diagnosticListener.WriteRPCExecuteBefore(context);
+            try
             {
-                lastInvoke = mid(lastInvoke);
-            }
+                var lastInvoke = GetLastInvoke();
 
-            return await lastInvoke(new RemoteCallerContext(service, paras, payload, token, service.Address.First()));
+                foreach (var mid in _middlewares)
+                {
+                    lastInvoke = mid(lastInvoke);
+                }
+                var result = await lastInvoke(context);
+                _diagnosticListener.WriteRPCExecuteAfter(operationId, context, result);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _diagnosticListener.WriteRPCExecuteError(operationId, context, ex);
+                throw ex;
+            }
         }
 
         private ClientRequestDel GetLastInvoke()

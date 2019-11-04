@@ -16,7 +16,7 @@ namespace Jimu.Client.ApiGateway
             app.UseSwagger();
             return app;
         }
-        public static IServiceCollection UseJimuSwagger(this IServiceCollection services, JimuSwaggerOptions options)
+        public static IServiceCollection AddJimuSwagger(this IServiceCollection services, JimuSwaggerOptions options)
         {
             services.AddSwaggerGen(c =>
             {

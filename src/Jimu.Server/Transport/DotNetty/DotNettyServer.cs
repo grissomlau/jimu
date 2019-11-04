@@ -65,7 +65,7 @@ namespace Jimu.Server.Transport.DotNetty
             if (message.ContentType == typeof(JimuRemoteCallData).FullName)
             {
                 IResponse response = new DotNettyResponse(channel, _logger);
-                var thisContext = new RemoteCallerContext(message, _serviceEntryContainer, response, _logger);
+                var thisContext = new ServiceInvokerContext(message, _serviceEntryContainer, response, _logger);
 
                 var lastInvoke = new RequestDel(async context =>
                 {
@@ -190,7 +190,7 @@ namespace Jimu.Server.Transport.DotNetty
 
         }
 
-        private async Task InvokeMiddleware(RequestDel next, RemoteCallerContext context)
+        private async Task InvokeMiddleware(RequestDel next, ServiceInvokerContext context)
         {
             await next.Invoke(context);
         }

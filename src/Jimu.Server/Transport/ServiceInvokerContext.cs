@@ -7,9 +7,9 @@ namespace Jimu.Server
     /// <summary>
     ///     context of service invoker
     /// </summary>
-    public class RemoteCallerContext
+    public class ServiceInvokerContext
     {
-        public RemoteCallerContext(JimuTransportMsg transportMessage, IServiceEntryContainer serviceEntryContainer,
+        public ServiceInvokerContext(JimuTransportMsg transportMessage, IServiceEntryContainer serviceEntryContainer,
             IResponse response, ILogger logger)
         {
             Response = response;

@@ -25,7 +25,7 @@ namespace Jimu.Server.Auth
             _container = container;
         }
 
-        public Task Invoke(RemoteCallerContext context)
+        public Task Invoke(ServiceInvokerContext context)
         {
             // get jwt token 
             if (!string.IsNullOrEmpty(_options.TokenEndpointPath)
@@ -63,7 +63,7 @@ namespace Jimu.Server.Auth
             throw new EntryPointNotFoundException($"{serviceId} not found, cannot check token generate credential");
         }
 
-        Task CreateToken(RemoteCallerContext context)
+        Task CreateToken(ServiceInvokerContext context)
         {
             if (string.IsNullOrEmpty(_options.CheckCredentialServiceId))
             {
@@ -102,7 +102,7 @@ namespace Jimu.Server.Auth
             });
         }
 
-        Task InvokeService(RemoteCallerContext context)
+        Task InvokeService(ServiceInvokerContext context)
         {
 
             try

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Autofac;
 using Jimu.Client;
 using Jimu.Client.ApiGateway;
+using Jimu.Client.ApiGateway.Skywalking;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -30,9 +31,9 @@ namespace ApiGateway
             services.AddControllers();
 
             //jimu
-            services.UseJimu();
-            //jimu swagger
-            services.UseJimuSwagger(new Jimu.Client.ApiGateway.Swagger.JimuSwaggerOptions());
+            services.AddJimu()
+                .AddJimuSwagger(new Jimu.Client.ApiGateway.Swagger.JimuSwaggerOptions())
+                .AddJimuSkywalking();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

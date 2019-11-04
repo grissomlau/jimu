@@ -59,19 +59,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "User", "User", "{0CF3A967-A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Auth", "Auth", "{FC71E1F8-C9DF-4C5D-9F38-0B6CDF24CA0C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "User.Server", "Samples\User\User.Server\User.Server.csproj", "{271E0E08-1FAD-4F7B-8071-3376AB733552}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "User.Server", "Samples\User\User.Server\User.Server.csproj", "{271E0E08-1FAD-4F7B-8071-3376AB733552}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "User.IService", "Samples\User\User.IService\User.IService.csproj", "{1D49CE22-A937-489B-A43F-2DBD0EF44D6C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "User.IService", "Samples\User\User.IService\User.IService.csproj", "{1D49CE22-A937-489B-A43F-2DBD0EF44D6C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "User.Service", "Samples\User\User.Service\User.Service.csproj", "{3A28EE4E-AFCF-45D6-8E2E-E95FD8812A55}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "User.Service", "Samples\User\User.Service\User.Service.csproj", "{3A28EE4E-AFCF-45D6-8E2E-E95FD8812A55}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiGateway", "Samples\ApiGateway\ApiGateway.csproj", "{7D6571C6-7B78-4971-9B6B-8C41F9BF91D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiGateway", "Samples\ApiGateway\ApiGateway.csproj", "{7D6571C6-7B78-4971-9B6B-8C41F9BF91D9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Auth.Service", "Samples\Auth\Auth.Service\Auth.Service.csproj", "{3694B020-4FF5-4B4E-9D43-8C94AB21B1F7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Auth.Server", "Samples\Auth\Auth.Server\Auth.Server.csproj", "{2EBA0E05-C852-4A30-8314-D2199B53328D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Auth.IService", "Samples\Auth\Auth.IService\Auth.IService.csproj", "{D5D8DEEB-CF4A-4047-BC3D-A90AEA927AC0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jimu.Client.ApiGateway.Skywalking", "Jimu.Modules\Jimu.Client.ApiGateway.Skywalking\Jimu.Client.ApiGateway.Skywalking.csproj", "{0297AF5B-A298-4B14-9169-85E1CDB5E2FB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -187,6 +189,10 @@ Global
 		{D5D8DEEB-CF4A-4047-BC3D-A90AEA927AC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5D8DEEB-CF4A-4047-BC3D-A90AEA927AC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5D8DEEB-CF4A-4047-BC3D-A90AEA927AC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0297AF5B-A298-4B14-9169-85E1CDB5E2FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0297AF5B-A298-4B14-9169-85E1CDB5E2FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0297AF5B-A298-4B14-9169-85E1CDB5E2FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0297AF5B-A298-4B14-9169-85E1CDB5E2FB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -221,6 +227,7 @@ Global
 		{3694B020-4FF5-4B4E-9D43-8C94AB21B1F7} = {FC71E1F8-C9DF-4C5D-9F38-0B6CDF24CA0C}
 		{2EBA0E05-C852-4A30-8314-D2199B53328D} = {FC71E1F8-C9DF-4C5D-9F38-0B6CDF24CA0C}
 		{D5D8DEEB-CF4A-4047-BC3D-A90AEA927AC0} = {FC71E1F8-C9DF-4C5D-9F38-0B6CDF24CA0C}
+		{0297AF5B-A298-4B14-9169-85E1CDB5E2FB} = {238A367F-90BC-4E5A-B11B-4D04519621B7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B2F7F17C-34DB-4FBF-8BCD-49BC2FA3A10F}
