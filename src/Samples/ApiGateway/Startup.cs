@@ -30,10 +30,6 @@ namespace ApiGateway
         {
             services.AddControllers();
 
-            //jimu
-            services.AddJimu()
-                .AddJimuSwagger(new Jimu.Client.ApiGateway.Swagger.JimuSwaggerOptions())
-                .AddJimuSkywalking();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,13 +49,6 @@ namespace ApiGateway
                 endpoints.MapControllers();
             });
 
-            //jimu swagger
-            app.UseJimuSwagger(new Jimu.Client.ApiGateway.Swagger.JimuSwaggerOptions());
-
-            //jimu
-            var host = new ApplicationClientBuilder(new ContainerBuilder()).Build();
-            app.UseJimu(host);
-            host.Run();
         }
     }
 }

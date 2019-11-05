@@ -20,7 +20,7 @@ namespace Jimu
         }
 
         /// <summary>
-        /// when custom's service has been read
+        /// when custom's service has been ready
         /// </summary>
         /// <param name="container"></param>
         public virtual void DoServiceInit(IContainer container)

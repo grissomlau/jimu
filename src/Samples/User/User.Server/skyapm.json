@@ -1,6 +1,6 @@
 {
   "SkyWalking": {
-    "ServiceName": "jimu_apigateway",
+    "ServiceName": "jimu_user",
     "Namespace": "",
     "HeaderVersions": [
       "sw6"
@@ -19,7 +19,7 @@
       "QueueSize": 30000,
       "BatchSize": 3000,
       "gRPC": {
-        "Servers": "192.168.10.163:11800",
+        "Servers": "192.168.10.115:11800",
         "Timeout": 10000,
         "ConnectTimeout": 10000,
         "ReportTimeout": 600000

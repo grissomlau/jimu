@@ -7,11 +7,17 @@
 
   <ItemGroup>
     <None Remove="JimuAppServerSettings.json" />
+    <None Remove="skyapm.json" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="JimuAppServerSettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skyapm.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
   </ItemGroup>
 
