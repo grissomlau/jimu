@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Jimu.Client.Diagnostics
+namespace Jimu.Client.APM
 {
     public class RPCExecuteBeforeEventData : RPCExecuteEventData
     {

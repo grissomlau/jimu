@@ -1,17 +1,18 @@
 ﻿using SkyApm;
 using System;
-using Jimu.Client.Diagnostics;
+using Jimu.Client.APM;
 using SkyApm.Tracing;
 using SkyApm.Diagnostics;
 using System.Collections.Generic;
 using SkyApm.Tracing.Segments;
 using System.Linq;
+using SkyWalking.NetworkProtocol;
 
 namespace Jimu.Client.ApiGateway.Skywalking
 {
     public class JimuClientDiagnosticProcessor : ITracingDiagnosticProcessor
     {
-        public string ListenerName => JimuClientDiagnosticListenerExtensions.JIMU_CLIENT_DIAGNOSTIC_LISTENER;
+        public string ListenerName => ApmClientType.ListenerName;
 
         private readonly ITracingContext _tracingContext;
         private readonly IExitSegmentContextAccessor _exitSegmentContextAccessor;
@@ -24,42 +25,44 @@ namespace Jimu.Client.ApiGateway.Skywalking
             _exitSegmentContextAccessor = exitSegmentContextAccessor;
         }
 
-        [DiagnosticName(JimuClientDiagnosticListenerExtensions.JIMU_CLIENT_BEFORE_PRC_EXECUTE)]
+        [DiagnosticName(ApmClientType.RpcExecuteBefore)]
         public void BeforeRPCExecute([Object] RPCExecuteBeforeEventData eventData)
         {
-            var context = _tracingContext.CreateExitSegmentContext(eventData.Operation, eventData.Context.ServiceAddress.ToString());
+            if (eventData.Data.PayLoad == null)
+                eventData.Data.PayLoad = new JimuPayload();
+            var operation = $"RPC: {eventData.Data.Service.ServiceDescriptor.RoutePath}";
+            var context = _tracingContext.CreateExitSegmentContext(operation, eventData.Data.ServiceAddress.ToString(), new JimuClientCarrierHeaderCollection(eventData.Data.PayLoad));
 
-            if (eventData.Context.Service != null)
+            if (eventData.Data.Service != null)
             {
-                context.Span.AddTag("Service", eventData.Context.Service.ServiceDescriptor.Id);
-                context.Span.AddTag("AllowAnonymous", eventData.Context.Service.ServiceDescriptor.AllowAnonymous);
+                context.Span.AddTag("Service", eventData.Data.Service.ServiceDescriptor.Id);
+                context.Span.AddTag("AllowAnonymous", eventData.Data.Service.ServiceDescriptor.AllowAnonymous);
             }
-            context.Span.AddLog(new LogEvent("event", "Invoke starting"));
+            context.Span.AddLog(LogEvent.Event("Invoke starting"));
 
         }
 
-        [DiagnosticName(JimuClientDiagnosticListenerExtensions.JIMU_CLIENT_AFTER_PRC_EXECUTE)]
+        [DiagnosticName(ApmClientType.RpcExecuteAfter)]
         public void AfterRPCExecute([Object] RPCExecuteAfterEventData eventData)
         {
             //_tracingContext.Release(_entrySegmentContextAccessor.Context);
             var context = _exitSegmentContextAccessor.Context;
             context.Span.AddTag("HasError", eventData.ResultData.HasError);
-            var logMsg = $"Invoke finished, HasError: {eventData.ResultData.HasError}";
+            var logEvent = $"Invoke finished";
+            var logMsg = $"HasError: {eventData.ResultData.HasError}";
             if (eventData.ResultData.HasError)
             {
                 logMsg += $",ErrorCode: {eventData.ResultData.ErrorCode}";
                 logMsg += $",ErrorMsg: {eventData.ResultData.ErrorMsg}";
                 logMsg += $",Exception: {eventData.ResultData.ExceptionMessage}";
             }
-            context.Span.AddLog(new LogEvent("event", logMsg));
-            //context.Span.AddTag("ResultType", eventData.ResultData.ResultType);
+            context.Span.AddLog(LogEvent.Event(logEvent), LogEvent.Message(logMsg));
             _tracingContext.Release(_exitSegmentContextAccessor.Context);
         }
 
-        [DiagnosticName(JimuClientDiagnosticListenerExtensions.JIMU_CLIENT_ERROR_PRC_EXECUTE)]
+        [DiagnosticName(ApmClientType.RpcExecuteError)]
         public void ErrorRPCExecute([Object] RPCExecuteErrorEventData eventData)
         {
-            //var context = _entrySegmentContextAccessor.Context;
             var context = _exitSegmentContextAccessor.Context;
             if (context != null)
             {

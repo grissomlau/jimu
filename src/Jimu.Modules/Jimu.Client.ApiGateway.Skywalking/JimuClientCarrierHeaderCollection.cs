@@ -10,25 +10,31 @@ namespace Jimu.Client.ApiGateway.Skywalking
     {
 
 
-        private readonly List<KeyValuePair<string, string>> _tracingHeaders;
+        private readonly JimuPayload _payload;
 
-        public JimuClientCarrierHeaderCollection()
+        public JimuClientCarrierHeaderCollection(JimuPayload payload)
         {
-            _tracingHeaders = new List<KeyValuePair<string, string>>();
+            _payload = payload;
         }
         public void Add(string key, string value)
         {
-            _tracingHeaders.Add(new KeyValuePair<string, string>(key, value));
+            _payload.Items.Add(key, value);
         }
 
         public IEnumerator<KeyValuePair<string, string>> GetEnumerator()
         {
-            return _tracingHeaders.GetEnumerator();
+            foreach (var item in _payload.Items)
+            {
+                yield return new KeyValuePair<string, string>(item.Key, item.Value + "");
+            }
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return _tracingHeaders.GetEnumerator();
+            foreach (var item in _payload.Items)
+            {
+                yield return new KeyValuePair<string, string>(item.Key, item.Value + "");
+            }
         }
     }
 }

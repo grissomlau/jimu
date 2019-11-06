@@ -7,6 +7,6 @@ namespace Jimu
     /// </summary>
     public class JimuPayload
     {
-        public IDictionary<string, object> Items { get; set; }
+        public IDictionary<string, object> Items { get; set; } = new Dictionary<string, object>();
     }
 }

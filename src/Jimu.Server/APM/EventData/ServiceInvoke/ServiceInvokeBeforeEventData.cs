@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Jimu.Server.Diagnostics
+namespace Jimu.Server.APM
 {
     public class ServiceInvokeBeforeEventData : ServiceInvokeEventData
     {

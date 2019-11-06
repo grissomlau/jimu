@@ -1,4 +1,5 @@
-﻿using Jimu.Client.Diagnostics;
+﻿using Jimu.APM;
+using Jimu.Client.APM;
 using Jimu.Logger;
 using System;
 using System.Collections.Concurrent;
@@ -18,12 +19,14 @@ namespace Jimu.Client
         private readonly IServiceTokenGetter _serviceTokenGetter;
         private readonly ClientSenderFactory _clientSenderFactory;
         private readonly Stack<Func<ClientRequestDel, ClientRequestDel>> _middlewares;
-        private static DiagnosticListener _diagnosticListener = JimuClientDiagnosticListenerExtensions.Listener;
+        private readonly IJimuApm _jimuApm;
+
 
         public RemoteServiceCaller(IClientServiceDiscovery serviceDiscovery,
             IAddressSelector addressSelector,
             ClientSenderFactory clientSenderFactory,
             IServiceTokenGetter serviceTokenGetter,
+            IJimuApm jimuApm,
             ILogger logger)
         {
             _serviceDiscovery = serviceDiscovery;
@@ -32,6 +35,7 @@ namespace Jimu.Client
             _serviceTokenGetter = serviceTokenGetter;
             _logger = logger;
             _middlewares = new Stack<Func<ClientRequestDel, ClientRequestDel>>();
+            _jimuApm = jimuApm;
         }
 
         public async Task<T> InvokeAsync<T>(string serviceIdOrPath, IDictionary<string, object> paras, JimuPayload payload)
@@ -122,7 +126,7 @@ namespace Jimu.Client
         public async Task<JimuRemoteCallResultData> InvokeAsync(JimuServiceRoute service, IDictionary<string, object> paras, JimuPayload payload, string token)
         {
             var context = new RemoteCallerContext(service, paras, payload, token, service.Address.First());
-            var operationId = _diagnosticListener.WriteRPCExecuteBefore(context);
+            var operationId = _jimuApm.WriteRPCExecuteBefore(context);
             try
             {
                 var lastInvoke = GetLastInvoke();
@@ -132,12 +136,12 @@ namespace Jimu.Client
                     lastInvoke = mid(lastInvoke);
                 }
                 var result = await lastInvoke(context);
-                _diagnosticListener.WriteRPCExecuteAfter(operationId, context, result);
+                _jimuApm.WriteRPCExecuteAfter(operationId, context, result);
                 return result;
             }
             catch (Exception ex)
             {
-                _diagnosticListener.WriteRPCExecuteError(operationId, context, ex);
+                _jimuApm.WriteRPCExecuteError(operationId, context, ex);
                 throw ex;
             }
         }
