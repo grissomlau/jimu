@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Jimu.Client.APM
+namespace Jimu.Client.APM.EventData
 {
     public class RPCExecuteAfterEventData : RPCExecuteEventData
     {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 
-namespace Jimu.Client.ApiGateway
+namespace Jimu.Client.ApiGateway.Core
 {
     public class JimuHttpStatusCodeExceptionMiddleware
     {

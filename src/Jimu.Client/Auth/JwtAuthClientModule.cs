@@ -1,5 +1,10 @@
 ﻿using Autofac;
+using Jimu.Client.Auth.Middlewares;
+using Jimu.Client.Discovery;
+using Jimu.Client.RemoteCaller;
+using Jimu.Common;
 using Jimu.Logger;
+using Jimu.Module;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;

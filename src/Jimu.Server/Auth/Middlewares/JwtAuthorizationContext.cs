@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Jimu.Server.Auth
+namespace Jimu.Server.Auth.Middlewares
 {
     public class JwtAuthorizationContext
     {

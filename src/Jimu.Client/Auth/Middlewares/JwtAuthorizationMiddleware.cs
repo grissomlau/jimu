@@ -1,4 +1,5 @@
-﻿using Jimu.Extension;
+﻿using Jimu.Client.RemoteCaller;
+using Jimu.Common;
 using Jose;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Jimu.Client.Auth
+namespace Jimu.Client.Auth.Middlewares
 {
     /// <summary>
     /// support jwt middleware

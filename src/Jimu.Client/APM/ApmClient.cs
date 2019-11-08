@@ -1,9 +1,5 @@
 ﻿using Jimu.APM;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Jimu.Client.APM
 {
@@ -17,7 +13,7 @@ namespace Jimu.Client.APM
             _options = options;
         }
 
-        public string ListenerName => "JimuClientDiagnosticListener";
+        public string ListenerName => ApmClientEventType.ListenerName;
 
         public bool IsEnabled(string name)
         {

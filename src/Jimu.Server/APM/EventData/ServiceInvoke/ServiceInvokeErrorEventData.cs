@@ -1,9 +1,7 @@
-﻿using Jimu.Diagnostic;
+﻿using Jimu.APM;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Jimu.Server.APM
+namespace Jimu.Server.APM.EventData.ServiceInvoke
 {
     public class ServiceInvokeErrorEventData : ServiceInvokeEventData, IErrorEventData
     {

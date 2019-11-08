@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Jimu.Client
+namespace Jimu.Client.RemoteCaller
 {
 
     /// <summary>

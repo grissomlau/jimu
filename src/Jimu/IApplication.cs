@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Microsoft.Extensions.Hosting;
 using System;
 
 namespace Jimu

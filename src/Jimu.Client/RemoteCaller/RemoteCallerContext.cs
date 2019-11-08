@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 
-namespace Jimu.Client
+namespace Jimu.Client.RemoteCaller
 {
     public class RemoteCallerContext
     {

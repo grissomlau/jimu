@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Jimu.Client
+namespace Jimu.Client.Discovery.Implement
 {
     public class ClientServiceDiscovery : IClientServiceDiscovery
     {

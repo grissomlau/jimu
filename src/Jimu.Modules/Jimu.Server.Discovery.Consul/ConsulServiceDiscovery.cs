@@ -1,4 +1,5 @@
 ﻿using Consul;
+using Jimu.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;

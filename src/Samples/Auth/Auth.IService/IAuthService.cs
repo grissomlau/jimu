@@ -1,5 +1,6 @@
 ﻿using Jimu;
 using Jimu.Server.Auth;
+using Jimu.Server.Auth.Middlewares;
 
 namespace Auth.IService
 {

@@ -1,12 +1,9 @@
-﻿using Autofac;
-using Jimu.Logger;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Jimu.Client.ApiGateway
+namespace Jimu.Client.ApiGateway.Core
 {
     public class JimuModelBinder : IModelBinder
     {

@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Jimu.Server.APM
+namespace Jimu.Server.APM.EventData.LocalMethod
 {
     public class LocalMethodInvokeAfterEventData : LocalMethodInvokeEventData
     {

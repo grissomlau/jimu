@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Version>1.0.0-beta.6</Version>
+    <PackageProjectUrl>https://github.com/grissomlau/Jimu</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/grissomlau/Jimu</RepositoryUrl>
+    <Description>netcore micorservice framework</Description>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <PackageLicenseUrl>https://github.com/grissomlau/Jimu/blob/master/LICENSE</PackageLicenseUrl>
+    <Copyright>Jimu</Copyright>
+    <Authors>grissomlau@qq.com</Authors>
+    <Company>grissomlau@qq.com</Company>
+    <PackageTags>netcore,microservice</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.9.4" />
+    <PackageReference Include="log4net" Version="2.0.8" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="NLog" Version="4.6.8" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.0.0" />
+  </ItemGroup>
+
+</Project>

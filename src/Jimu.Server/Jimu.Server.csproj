@@ -30,16 +30,18 @@
   <ItemGroup>
     <PackageReference Include="DotNetty.Codecs" Version="0.6.0" />
     <PackageReference Include="jose-jwt" Version="2.4.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="3.0.0" />
     <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.6.0" />
     <PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Jimu\Jimu.csproj" />
+    <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Properties\PublishProfiles\" />
+    <ProjectReference Include="..\Jimu.Core\Jimu.Core.csproj" />
   </ItemGroup>
 
 </Project>

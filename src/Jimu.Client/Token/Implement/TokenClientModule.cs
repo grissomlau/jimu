@@ -1,6 +1,7 @@
 ﻿using Autofac;
-using Jimu.Client.ApiGateway;
+using Jimu.Client.ApiGateway.Core;
 using Jimu.Logger;
+using Jimu.Module;
 using Microsoft.Extensions.Configuration;
 using System.Linq;
 

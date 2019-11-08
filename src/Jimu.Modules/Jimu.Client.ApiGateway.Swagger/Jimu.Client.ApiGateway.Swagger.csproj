@@ -21,7 +21,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Jimu.Client\Jimu.Client.csproj" />
-    <ProjectReference Include="..\..\Jimu\Jimu.csproj" />
   </ItemGroup>
 
 </Project>

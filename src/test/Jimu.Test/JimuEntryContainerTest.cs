@@ -1,5 +1,6 @@
 using Autofac;
 using Jimu.Server;
+using Jimu.Server.ServiceContainer.Implement;
 using System;
 using System.Reflection;
 using Xunit;

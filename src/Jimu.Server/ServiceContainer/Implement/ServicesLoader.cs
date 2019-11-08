@@ -1,5 +1,4 @@
 ﻿using Jimu.Logger;
-using Jimu.Server.ServiceContainer.Implement;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,7 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
 
-namespace Jimu.Server
+namespace Jimu.Server.ServiceContainer.Implement
 {
     public class ServicesLoader : IDisposable
     {

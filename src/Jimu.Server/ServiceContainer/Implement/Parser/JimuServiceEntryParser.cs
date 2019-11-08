@@ -1,11 +1,12 @@
 ﻿using Autofac;
 using Autofac.Core;
+using Jimu.Common;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Jimu.Server.Implement.Parser
+namespace Jimu.Server.ServiceContainer.Implement.Parser
 {
     class JimuServiceEntryParser
     {

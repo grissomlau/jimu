@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Jimu.Server
+namespace Jimu.Server.Transport
 {
     /// <summary>
     ///     server response

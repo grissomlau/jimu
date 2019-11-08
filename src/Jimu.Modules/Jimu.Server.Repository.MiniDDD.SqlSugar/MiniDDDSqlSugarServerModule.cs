@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Jimu.Module;
 using Microsoft.Extensions.Configuration;
 using MiniDDD;
 using MiniDDD.UnitOfWork;

@@ -1,11 +1,8 @@
-﻿using Jimu.Diagnostic;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 
-namespace Jimu.Server.APM
+namespace Jimu.Server.APM.EventData.LocalMethod
 {
-    public class LocalMethodInvokeEventData : EventData
+    public class LocalMethodInvokeEventData : Jimu.APM.EventData
     {
         public LocalMethodInvokeEventData(Guid operationId, string operation) : base(operationId, operation)
         {

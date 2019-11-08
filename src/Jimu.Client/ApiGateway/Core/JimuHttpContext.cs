@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace Jimu.Client.ApiGateway
+namespace Jimu.Client.ApiGateway.Core
 {
     public static class JimuHttpContext
     {

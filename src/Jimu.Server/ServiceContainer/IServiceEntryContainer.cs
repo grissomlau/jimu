@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Jimu.Server
+namespace Jimu.Server.ServiceContainer
 {
     public interface IServiceEntryContainer
     {

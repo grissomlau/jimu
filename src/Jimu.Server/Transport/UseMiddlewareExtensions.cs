@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Jimu.Server
+namespace Jimu.Server.Transport
 {
 
     /// <summary>

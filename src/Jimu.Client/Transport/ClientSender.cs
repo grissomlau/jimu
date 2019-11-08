@@ -3,7 +3,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 
-namespace Jimu.Client
+namespace Jimu.Client.Transport
 {
     public abstract class ClientSender : IClientSender, IDisposable
     {

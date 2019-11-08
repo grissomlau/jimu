@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Concurrent;
 
-namespace Jimu.Client
+namespace Jimu.Client.Transport
 {
     public class ClientSenderFactory
     {

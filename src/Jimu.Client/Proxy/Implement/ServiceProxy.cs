@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Jimu.Client.RemoteCaller;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Jimu.Client
+namespace Jimu.Client.Proxy.Implement
 {
     public class ServiceProxy : IServiceProxy
     {

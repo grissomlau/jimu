@@ -1,11 +1,9 @@
-﻿using Jimu.Diagnostic;
+﻿using Jimu.Server.Transport;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Jimu.Server.APM
+namespace Jimu.Server.APM.EventData.ServiceInvoke
 {
-    public class ServiceInvokeEventData : EventData
+    public class ServiceInvokeEventData : Jimu.APM.EventData
     {
         public ServiceInvokeEventData(Guid operationId, string operation) : base(operationId, operation)
         {

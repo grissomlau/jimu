@@ -1,9 +1,8 @@
 ﻿using Jimu.APM;
+using Jimu.Client.APM.EventData;
+using Jimu.Client.RemoteCaller;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace Jimu.Client.APM
 {
@@ -18,10 +17,10 @@ namespace Jimu.Client.APM
             , [CallerMemberName] string operation = ""
             )
         {
-            if (!@this.IsEnabled(ApmClientType.RpcExecuteBefore)) return Guid.Empty;
+            if (!@this.IsEnabled(ApmClientEventType.RpcExecuteBefore)) return Guid.Empty;
             var operationId = Guid.NewGuid();
 
-            @this.Write(ApmClientType.RpcExecuteBefore, new RPCExecuteBeforeEventData(operationId, operation) { Data = remoteCallerContext });
+            @this.Write(ApmClientEventType.RpcExecuteBefore, new RPCExecuteBeforeEventData(operationId, operation) { Data = remoteCallerContext });
 
             return operationId;
         }
@@ -30,9 +29,9 @@ namespace Jimu.Client.APM
             , [CallerMemberName] string operation = ""
             )
         {
-            if (@this.IsEnabled(ApmClientType.RpcExecuteAfter))
+            if (@this.IsEnabled(ApmClientEventType.RpcExecuteAfter))
             {
-                @this.Write(ApmClientType.RpcExecuteAfter, new RPCExecuteAfterEventData(operationId, operation)
+                @this.Write(ApmClientEventType.RpcExecuteAfter, new RPCExecuteAfterEventData(operationId, operation)
                 {
                     Data = context,
                     ResultData = resultData
@@ -45,9 +44,9 @@ namespace Jimu.Client.APM
             , [CallerMemberName] string operation = ""
             )
         {
-            if (@this.IsEnabled(ApmClientType.RpcExecuteError))
+            if (@this.IsEnabled(ApmClientEventType.RpcExecuteError))
             {
-                @this.Write(ApmClientType.RpcExecuteError, new RPCExecuteErrorEventData(operationId, operation)
+                @this.Write(ApmClientEventType.RpcExecuteError, new RPCExecuteErrorEventData(operationId, operation)
                 {
                     Data = remoteCallerContext,
                     Ex = exception

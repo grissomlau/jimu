@@ -1,4 +1,14 @@
 ﻿using Autofac;
+using Jimu.Client.Discovery;
+using Jimu.Client.Discovery.Implement;
+using Jimu.Client.Proxy;
+using Jimu.Client.Proxy.Implement;
+using Jimu.Client.RemoteCaller;
+using Jimu.Client.RemoteCaller.Implement;
+using Jimu.Client.Token;
+using Jimu.Client.Token.Implement;
+using Jimu.Client.Transport;
+using Jimu.Module;
 using Microsoft.Extensions.DependencyModel;
 using System;
 using System.IO;

@@ -2,7 +2,7 @@
 using Jimu.Logger;
 using System;
 
-namespace Jimu.Client
+namespace Jimu.Client.Token.Implement
 {
     public static partial class ServiceHostBuilderExtension
     {

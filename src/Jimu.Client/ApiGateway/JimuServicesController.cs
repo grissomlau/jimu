@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using Jimu.Client.ApiGateway.Core;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Jimu.Client.ApiGateway.Controllers
+namespace Jimu.Client.ApiGateway
 {
     //[Produces("application/json")]
     //[Route("api/[controller]")]

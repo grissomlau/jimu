@@ -1,15 +1,19 @@
 ﻿using Jimu.APM;
 using Jimu.Client.APM;
+using Jimu.Client.Discovery;
+using Jimu.Client.LoadBalance;
+using Jimu.Client.Token;
+using Jimu.Client.Transport;
+using Jimu.Common;
 using Jimu.Logger;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Jimu.Client
+namespace Jimu.Client.RemoteCaller.Implement
 {
     public class RemoteServiceCaller : IRemoteServiceCaller
     {

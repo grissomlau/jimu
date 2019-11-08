@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Autofac;
+﻿using Autofac;
 using Jimu.APM;
+using Jimu.Module;
 using Microsoft.Extensions.Configuration;
 
 namespace Jimu.Server.APM

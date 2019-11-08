@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Jimu.Database;
+using Jimu.Module;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 using Npgsql;

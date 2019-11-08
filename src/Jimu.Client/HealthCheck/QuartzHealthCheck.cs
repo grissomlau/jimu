@@ -1,4 +1,5 @@
-﻿using Jimu.Logger;
+﻿using Jimu.Client.Discovery;
+using Jimu.Logger;
 using Quartz;
 using Quartz.Impl;
 using Quartz.Impl.Triggers;

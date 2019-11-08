@@ -1,8 +1,8 @@
-﻿using Jimu.Extension;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Jimu.Common;
 
-namespace Jimu.Server.Auth
+namespace Jimu.Server.Auth.Middlewares
 {
     public class JwtAuthorizationOptions
     {

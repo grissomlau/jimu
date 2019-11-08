@@ -4,7 +4,10 @@ using DotNetty.Common.Utilities;
 using DotNetty.Transport.Bootstrapping;
 using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Sockets;
+using Jimu.Client.Transport.DotNetty;
+using Jimu.Client.Transport.DotNetty.Adapter;
 using Jimu.Logger;
+using Jimu.Module;
 using Microsoft.Extensions.Configuration;
 
 namespace Jimu.Client.Transport

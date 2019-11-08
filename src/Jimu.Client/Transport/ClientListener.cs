@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Jimu.Client
+namespace Jimu.Client.Transport
 {
     /// <summary>
     ///     listener for client recieve server response

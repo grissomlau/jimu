@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Jimu.Common;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Xml.XPath;
 
-namespace Jimu.Server.Implement.Parser
+namespace Jimu.Server.ServiceContainer.Implement.Parser
 {
     class JimuServiceDescParser
     {

@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Reflection.Emit;
 
-namespace Jimu.Server.Implement.Parser
+namespace Jimu.Server.ServiceContainer.Implement.Parser
 {
     class FastInvoke
     {

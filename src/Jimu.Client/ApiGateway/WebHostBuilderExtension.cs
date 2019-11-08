@@ -1,21 +1,21 @@
 ﻿using Autofac;
+using Jimu.Client.ApiGateway.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Jimu.Client.ApiGateway
 {
     public static class WebHostBuilderExtension
     {
-        public static IWebHostBuilder UseJimu(this IWebHostBuilder @this, string settingName = "JimuAppClientSettings")
+        public static IWebHostBuilder UseJimu(this IWebHostBuilder @this, string settingName = "JimuAppClientSettings", IApplication host = null)
         {
-            var host = new ApplicationClientBuilder(new ContainerBuilder(), settingName).Build();
+            if (host == null)
+                host = new ApplicationClientBuilder(new ContainerBuilder(), settingName).Build();
 
             var type = typeof(IJimuClientApiGatewayStartup);
             var startups = AppDomain.CurrentDomain.GetAssemblies()

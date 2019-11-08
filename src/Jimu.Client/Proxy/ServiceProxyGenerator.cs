@@ -1,4 +1,6 @@
-﻿using Jimu.Logger;
+﻿using Jimu.Client.RemoteCaller;
+using Jimu.Common;
+using Jimu.Logger;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -10,7 +12,7 @@ using System.Reflection;
 using System.Runtime.Loader;
 using System.Threading.Tasks;
 
-namespace Jimu.Client.Proxy.CodeAnalysisIntegration
+namespace Jimu.Client.Proxy
 {
     class ServiceProxyGenerator : IServiceProxyGenerator, IDisposable
     {

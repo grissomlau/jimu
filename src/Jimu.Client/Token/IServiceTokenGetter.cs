@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Jimu.Client
+namespace Jimu.Client.Token
 {
 
     public interface IServiceTokenGetter

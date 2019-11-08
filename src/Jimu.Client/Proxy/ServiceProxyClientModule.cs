@@ -1,6 +1,7 @@
 ﻿using Autofac;
-using Jimu.Client.Proxy.CodeAnalysisIntegration;
+using Jimu.Client.Proxy.Implement;
 using Jimu.Logger;
+using Jimu.Module;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Linq;

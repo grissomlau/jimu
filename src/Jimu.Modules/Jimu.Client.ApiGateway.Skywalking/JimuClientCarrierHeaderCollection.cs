@@ -18,7 +18,8 @@ namespace Jimu.Client.ApiGateway.Skywalking
         }
         public void Add(string key, string value)
         {
-            _payload.Items.Add(key, value);
+            if (!_payload.Items.ContainsKey(key))
+                _payload.Items.Add(key, value);
         }
 
         public IEnumerator<KeyValuePair<string, string>> GetEnumerator()

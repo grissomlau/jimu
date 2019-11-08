@@ -1,8 +1,10 @@
 ﻿using Autofac;
+using Jimu.Client.RemoteCaller;
+using Jimu.Common;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Jimu.Client.ApiGateway
+namespace Jimu.Client.ApiGateway.Core
 {
     public class JimuClient
     {

@@ -14,15 +14,10 @@ namespace ApiGateway
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            Jimu.Client.ApplicationClient.RunWebHost(build => build.ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>();
+            }));
         }
-
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                    webBuilder.UseJimu();
-                });
     }
 }

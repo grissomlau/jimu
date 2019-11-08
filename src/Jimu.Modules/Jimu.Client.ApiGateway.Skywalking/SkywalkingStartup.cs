@@ -23,7 +23,7 @@ namespace Jimu.Client.ApiGateway.Skywalking
 
         public override void ConfigureWebHost(IWebHostBuilder webBuilder)
         {
-            webBuilder.UseSetting(WebHostDefaults.HostingStartupAssembliesKey, "SkyAPM.Agent.AspNetCore");
+            //webBuilder.UseSetting(WebHostDefaults.HostingStartupAssembliesKey, "SkyAPM.Agent.AspNetCore");
         }
     }
 }

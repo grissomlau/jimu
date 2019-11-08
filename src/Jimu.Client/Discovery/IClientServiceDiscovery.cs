@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Jimu.Client
+namespace Jimu.Client.Discovery
 {
     public interface IClientServiceDiscovery
     {

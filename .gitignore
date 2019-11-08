@@ -285,3 +285,6 @@
 /src/Jimu.Modules/Jimu.Client.ApiGateway.Skywalking/obj
 /src/Jimu.Modules/Jimu.Client.ApiGateway.Skywalking/bin/Debug/netcoreapp3.0
 /src/Samples/ApiGateway/logs
+/src/Jimu.Extensions
+/src/Jimu.Modules/Jimu.Server.Apm.Skywalking/bin/Debug/netcoreapp3.0
+/src/Jimu.Modules/Jimu.Server.Apm.Skywalking/obj

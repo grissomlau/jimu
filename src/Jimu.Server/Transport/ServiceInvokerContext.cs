@@ -1,8 +1,9 @@
 ﻿using Jimu.Logger;
+using Jimu.Server.ServiceContainer;
 using System;
 using System.Linq;
 
-namespace Jimu.Server
+namespace Jimu.Server.Transport
 {
     /// <summary>
     ///     context of service invoker

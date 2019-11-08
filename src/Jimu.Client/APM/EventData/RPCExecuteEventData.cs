@@ -1,11 +1,9 @@
-﻿using Jimu.Diagnostic;
+﻿using Jimu.Client.RemoteCaller;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Jimu.Client.APM
+namespace Jimu.Client.APM.EventData
 {
-    public class RPCExecuteEventData : EventData
+    public class RPCExecuteEventData : Jimu.APM.EventData
     {
         public RPCExecuteEventData(Guid operationId, string operation) : base(operationId, operation)
         {

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 
-namespace Jimu.Client.ApiGateway
+namespace Jimu.Client.ApiGateway.Swagger
 {
     internal class SwaggerStartup : JimuClientApiGatewayStartup
     {

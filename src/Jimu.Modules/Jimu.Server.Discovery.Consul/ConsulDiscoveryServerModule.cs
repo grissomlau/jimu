@@ -1,5 +1,8 @@
 ﻿using Autofac;
 using Jimu.Logger;
+using Jimu.Module;
+using Jimu.Server.ServiceContainer;
+using Jimu.Server.Transport;
 using Microsoft.Extensions.Configuration;
 using System;
 

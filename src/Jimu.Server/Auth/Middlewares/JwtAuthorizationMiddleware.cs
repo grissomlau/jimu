@@ -1,5 +1,7 @@
 ﻿using Autofac;
-using Jimu.Extension;
+using Jimu.Common;
+using Jimu.Server.ServiceContainer;
+using Jimu.Server.Transport;
 using Jose;
 using System;
 using System.Collections.Generic;
@@ -8,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Jimu.Server.Auth
+namespace Jimu.Server.Auth.Middlewares
 {
     /// <summary>
     /// support jwt middleware

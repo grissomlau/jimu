@@ -1,5 +1,9 @@
 ﻿using Autofac;
+using Jimu.Client.LoadBalance;
+using Jimu.Client.RemoteCaller;
+using Jimu.Client.RemoteCaller.Implement;
 using Jimu.Logger;
+using Jimu.Module;
 using Microsoft.Extensions.Configuration;
 
 namespace Jimu.Client.FaultTolerant

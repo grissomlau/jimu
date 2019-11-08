@@ -7,12 +7,13 @@ using System.Collections.Generic;
 using SkyApm.Tracing.Segments;
 using System.Linq;
 using SkyWalking.NetworkProtocol;
+using Jimu.Client.APM.EventData;
 
 namespace Jimu.Client.ApiGateway.Skywalking
 {
     public class JimuClientDiagnosticProcessor : ITracingDiagnosticProcessor
     {
-        public string ListenerName => ApmClientType.ListenerName;
+        public string ListenerName => ApmClientEventType.ListenerName;
 
         private readonly ITracingContext _tracingContext;
         private readonly IExitSegmentContextAccessor _exitSegmentContextAccessor;
@@ -25,7 +26,7 @@ namespace Jimu.Client.ApiGateway.Skywalking
             _exitSegmentContextAccessor = exitSegmentContextAccessor;
         }
 
-        [DiagnosticName(ApmClientType.RpcExecuteBefore)]
+        [DiagnosticName(ApmClientEventType.RpcExecuteBefore)]
         public void BeforeRPCExecute([Object] RPCExecuteBeforeEventData eventData)
         {
             if (eventData.Data.PayLoad == null)
@@ -42,11 +43,12 @@ namespace Jimu.Client.ApiGateway.Skywalking
 
         }
 
-        [DiagnosticName(ApmClientType.RpcExecuteAfter)]
+        [DiagnosticName(ApmClientEventType.RpcExecuteAfter)]
         public void AfterRPCExecute([Object] RPCExecuteAfterEventData eventData)
         {
             //_tracingContext.Release(_entrySegmentContextAccessor.Context);
             var context = _exitSegmentContextAccessor.Context;
+            if (context == null) return;
             context.Span.AddTag("HasError", eventData.ResultData.HasError);
             var logEvent = $"Invoke finished";
             var logMsg = $"HasError: {eventData.ResultData.HasError}";
@@ -60,7 +62,7 @@ namespace Jimu.Client.ApiGateway.Skywalking
             _tracingContext.Release(_exitSegmentContextAccessor.Context);
         }
 
-        [DiagnosticName(ApmClientType.RpcExecuteError)]
+        [DiagnosticName(ApmClientEventType.RpcExecuteError)]
         public void ErrorRPCExecute([Object] RPCExecuteErrorEventData eventData)
         {
             var context = _exitSegmentContextAccessor.Context;

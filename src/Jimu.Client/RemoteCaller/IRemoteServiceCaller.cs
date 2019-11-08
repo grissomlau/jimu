@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Jimu.Client
+namespace Jimu.Client.RemoteCaller
 {
     public delegate Task<JimuRemoteCallResultData> ClientRequestDel(RemoteCallerContext context);
     public interface IRemoteServiceCaller

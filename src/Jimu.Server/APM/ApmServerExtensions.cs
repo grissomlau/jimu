@@ -1,9 +1,9 @@
 ﻿using Jimu.APM;
+using Jimu.Server.APM.EventData.LocalMethod;
+using Jimu.Server.APM.EventData.ServiceInvoke;
+using Jimu.Server.Transport;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace Jimu.Server.APM
 {
@@ -14,12 +14,12 @@ namespace Jimu.Server.APM
 
         public static Guid WriteServiceInvokeBefore(this IJimuApm @this, ServiceInvokerContext context)
         {
-            if (!@this.IsEnabled(ApmServerType.ServiceInvokeBefore)) return Guid.Empty;
+            if (!@this.IsEnabled(ApmServerEventType.ServiceInvokeBefore)) return Guid.Empty;
 
             var operationId = Guid.NewGuid();
             var operation = $"Invoke: {context.RemoteInvokeMessage.ServiceId}";
 
-            @this.Write(ApmServerType.ServiceInvokeBefore, new ServiceInvokeBeforeEventData(operationId, operation)
+            @this.Write(ApmServerEventType.ServiceInvokeBefore, new ServiceInvokeBeforeEventData(operationId, operation)
             {
                 Data = context
             });
@@ -28,10 +28,10 @@ namespace Jimu.Server.APM
 
         public static void WriteServiceInvokeAfter(this IJimuApm @this, Guid operationId, ServiceInvokerContext context, JimuRemoteCallResultData resultData)
         {
-            if (@this.IsEnabled(ApmServerType.ServiceInvokeAfter.ToString()))
+            if (@this.IsEnabled(ApmServerEventType.ServiceInvokeAfter.ToString()))
             {
                 var operation = $"Invoke: {context.RemoteInvokeMessage.ServiceId}";
-                @this.Write(ApmServerType.ServiceInvokeAfter, new ServiceInvokeAfterEventData(operationId, operation)
+                @this.Write(ApmServerEventType.ServiceInvokeAfter, new ServiceInvokeAfterEventData(operationId, operation)
                 {
                     Data = context,
                     ResultData = resultData
@@ -41,10 +41,10 @@ namespace Jimu.Server.APM
 
         public static void WriteServiceInvokeError(this IJimuApm @this, Guid operationId, ServiceInvokerContext context, Exception ex)
         {
-            if (@this.IsEnabled(ApmServerType.ServiceInvokeError))
+            if (@this.IsEnabled(ApmServerEventType.ServiceInvokeError))
             {
                 var operation = $"Invoke: {context.RemoteInvokeMessage.ServiceId}";
-                @this.Write(ApmServerType.ServiceInvokeError, new ServiceInvokeErrorEventData(operationId, operation)
+                @this.Write(ApmServerEventType.ServiceInvokeError, new ServiceInvokeErrorEventData(operationId, operation)
                 {
                     Ex = ex,
                     Data = context
@@ -57,11 +57,11 @@ namespace Jimu.Server.APM
         #region local method
         public static Guid WriteLocalMethodInvokeBefore(this IJimuApm @this, string invokerData, [CallerMemberName] string operation = "")
         {
-            if (!@this.IsEnabled(ApmServerType.LocalMethodInvokeBefore)) return Guid.Empty;
+            if (!@this.IsEnabled(ApmServerEventType.LocalMethodInvokeBefore)) return Guid.Empty;
 
             var operationId = Guid.NewGuid();
 
-            @this.Write(ApmServerType.LocalMethodInvokeBefore, new LocalMethodInvokeBeforeEventData(operationId, operation)
+            @this.Write(ApmServerEventType.LocalMethodInvokeBefore, new LocalMethodInvokeBeforeEventData(operationId, operation)
             {
                 Data = invokerData
             });
@@ -70,9 +70,9 @@ namespace Jimu.Server.APM
 
         public static void WriteLocalMethodInvokeAfter(this IJimuApm @this, Guid operationId, string invokerData, string resultData, [CallerMemberName] string operation = "")
         {
-            if (@this.IsEnabled(ApmServerType.LocalMethodInvokeAfter))
+            if (@this.IsEnabled(ApmServerEventType.LocalMethodInvokeAfter))
             {
-                @this.Write(ApmServerType.LocalMethodInvokeAfter, new LocalMethodInvokeAfterEventData(operationId, operation)
+                @this.Write(ApmServerEventType.LocalMethodInvokeAfter, new LocalMethodInvokeAfterEventData(operationId, operation)
                 {
                     Data = invokerData,
                     ResultData = resultData
@@ -82,9 +82,9 @@ namespace Jimu.Server.APM
 
         public static void WriteLocalMethodInvokeError(this IJimuApm @this, Guid operationId, string invokeData, Exception ex, [CallerMemberName] string operation = "")
         {
-            if (@this.IsEnabled(ApmServerType.LocalMethodInvokeError))
+            if (@this.IsEnabled(ApmServerEventType.LocalMethodInvokeError))
             {
-                @this.Write(ApmServerType.LocalMethodInvokeError, new LocalMethodInvokeErrorEventData(operationId, operation)
+                @this.Write(ApmServerEventType.LocalMethodInvokeError, new LocalMethodInvokeErrorEventData(operationId, operation)
                 {
                     Ex = ex,
                     Data = invokeData
