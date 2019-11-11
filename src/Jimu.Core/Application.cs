@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,8 @@ namespace Jimu
         }
 
         public IContainer Container { get; set; }
+
+        public IConfigurationRoot JimuAppSettings { get; set; }
 
         public void Dispose()
         {
@@ -45,6 +48,7 @@ namespace Jimu
                 _beforeRunActions.ForEach(x => x(Container));
             if (_runActions.Any())
                 _runActions.ForEach(x => { x(Container); });
+
         }
 
         public IApplication BeforeRunAction(Action<IContainer> action)

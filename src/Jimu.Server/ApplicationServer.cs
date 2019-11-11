@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Autofac;
+using Microsoft.Extensions.Hosting;
 using System;
 
 namespace Jimu.Server
@@ -10,7 +11,7 @@ namespace Jimu.Server
             new ApplicationServerBuilder(new Autofac.ContainerBuilder(), settingName).Build().Run();
         }
 
-        public static void RunGeneralHost(Action<IHostBuilder> build = null, string settingName = "JimuAppServerSettings")
+        public static void RunGeneralHost(Action<IHostBuilder, IContainer> build = null, string settingName = "JimuAppServerSettings")
         {
             var app = new ApplicationServerBuilder(new Autofac.ContainerBuilder(), settingName).Build();
             app.RunGeneralHost(build);

@@ -14,7 +14,7 @@ using System.Linq;
 
 namespace Jimu.Client.ApiGateway.Swagger
 {
-    public class JimuSwaggerDocumentFilter : IDocumentFilter
+    public class SwaggerDocumentFilter : IDocumentFilter
     {
 
         static ISchemaFactory _schemaFactory = new SchemaFactory();

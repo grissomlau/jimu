@@ -1,4 +1,8 @@
-﻿using Jimu.Client.ApiGateway;
+﻿using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using Jimu.Client.ApiGateway;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using System;
 
@@ -11,15 +15,20 @@ namespace Jimu.Client
         /// </summary>
         /// <param name="this"></param>
         /// <param name="build"></param>
-        public static void RunWebHost(this IApplication @this, Action<IHostBuilder> build = null, string settingName = "JimuAppClientSettings")
+        public static void RunWebHost(this IApplication @this, string settingName = "JimuAppClientSettings")
         {
             var hostBuilder = Host.CreateDefaultBuilder();
-            build?.Invoke(hostBuilder);
-            hostBuilder.ConfigureWebHostDefaults(webBuilder =>
-            {
-                webBuilder.UseJimu(settingName, @this);
-            });
+            //hostBuilder.ConfigureWebHostDefaults(webBuilder =>
+            //{
+            //    @this.BeforeRunAction(null);
+            //    webBuilder.UseJimu(settingName, @this);
+            //});
             hostBuilder.Build().Run();
+        }
+
+        public static void WebHostConfigure(this IHostBuilder @this, Action<IApplicationBuilder> action)
+        {
+
         }
 
     }

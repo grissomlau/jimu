@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -63,6 +64,47 @@ namespace Jimu.Common
             }
             return null;
             //throw new Exception("No network adapters with an IPv4 address in the system!");
+        }
+
+        public static IConfigurationRoot ReadSetting(string settingFileName)
+        {
+            var jimuAppSettings = $"{settingFileName}.json";
+            var env = ReadJimuEvn();
+            if (!string.IsNullOrEmpty(env))
+            {
+                jimuAppSettings = $"{settingFileName}.{env}.json";
+            }
+            if (!File.Exists(jimuAppSettings))
+            {
+                throw new FileNotFoundException($"{jimuAppSettings} not found!");
+            }
+            return GetConfig(jimuAppSettings);
+        }
+
+        public static string ReadJimuEvn()
+        {
+            var jimuSettings = "JimuSettings.json";
+            var jimuEnv = "JIMU_ENV";
+            string activeProfile = "";
+
+            if (File.Exists(jimuSettings))
+            {
+                var config = JimuHelper.GetConfig(jimuSettings);
+                if (config != null && config["ActiveProfile"] != null)
+                {
+                    activeProfile = config["ActiveProfile"];
+                }
+            }
+            if (string.IsNullOrEmpty(activeProfile?.Trim()))
+            {
+                var builder = new ConfigurationBuilder();
+                var config = builder.AddEnvironmentVariables().Build();
+                if (config != null && config[jimuEnv] != null)
+                {
+                    activeProfile = config[jimuEnv];
+                }
+            }
+            return activeProfile?.Trim();
         }
     }
 }

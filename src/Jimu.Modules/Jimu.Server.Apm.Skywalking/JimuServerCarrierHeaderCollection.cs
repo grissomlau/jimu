@@ -8,19 +8,34 @@ namespace Jimu.Server.Apm.Skywalking
 {
     public class JimuServerCarrierHeaderCollection : ICarrierHeaderCollection
     {
+
+        readonly JimuPayload _payload;
+        public JimuServerCarrierHeaderCollection(JimuPayload payload)
+        {
+            _payload = payload;
+        }
         public void Add(string key, string value)
         {
-            throw new NotImplementedException();
+            if (!_payload.Items.ContainsKey(key))
+            {
+                _payload.Items.Add(key, value);
+            }
         }
 
         public IEnumerator<KeyValuePair<string, string>> GetEnumerator()
         {
-            throw new NotImplementedException();
+            foreach (var item in _payload.Items)
+            {
+                yield return new KeyValuePair<string, string>(item.Key, item.Value + "");
+            }
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            throw new NotImplementedException();
+            foreach (var item in _payload.Items)
+            {
+                yield return new KeyValuePair<string, string>(item.Key, item.Value + "");
+            }
         }
     }
 }

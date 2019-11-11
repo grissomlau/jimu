@@ -10,6 +10,7 @@ using Jimu.Client.Token.Implement;
 using Jimu.Client.Transport;
 using Jimu.Module;
 using Microsoft.Extensions.DependencyModel;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.IO;
 using System.Linq;
@@ -103,6 +104,7 @@ namespace Jimu.Client
                 this.AddInitializer(x.DoInit);
                 this.AddRunner(x.DoRun);
                 this.AddModule(x.DoRegister);
+                this.AddBeforeRunner(x.DoBeforeRun);
             });
 
         }

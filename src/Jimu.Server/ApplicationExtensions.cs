@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Autofac;
+using Microsoft.Extensions.Hosting;
 using System;
 
 namespace Jimu.Server
@@ -10,10 +11,10 @@ namespace Jimu.Server
         /// </summary>
         /// <param name="this"></param>
         /// <param name="build"></param>
-        public static void RunGeneralHost(this IApplication @this, Action<IHostBuilder> build = null)
+        public static void RunGeneralHost(this IApplication @this, Action<IHostBuilder, IContainer> build = null)
         {
             var hostBuilder = new HostBuilder();
-            build?.Invoke(hostBuilder);
+            build?.Invoke(hostBuilder, @this.Container);
             @this.Run();
             hostBuilder.Build().Run();
         }

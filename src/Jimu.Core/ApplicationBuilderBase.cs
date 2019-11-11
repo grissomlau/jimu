@@ -45,7 +45,7 @@ namespace Jimu
         protected ApplicationBuilderBase(ContainerBuilder containerBuilder, string settingName)
         {
             SettingName = settingName;
-            JimuAppSettings = ReadSetting();
+            JimuAppSettings = JimuHelper.ReadSetting(settingName);
             ContainerBuilder = containerBuilder;
             ModuleRegisters = new List<Action<ContainerBuilder>>();
             Initializers = new List<Action<IContainer>>();
@@ -57,7 +57,7 @@ namespace Jimu
         public virtual IApplication Build()
         {
             IContainer container = null;
-            var host = new Application(BeforeRunners, Runners);
+            var host = new Application(BeforeRunners, Runners, null);
             ContainerBuilder.Register(x => host).As<IApplication>().SingleInstance();
             ContainerBuilder.Register(x => container).As<IContainer>().SingleInstance();
             ContainerBuilder.RegisterType<ConsoleLogger>().As<ILogger>().SingleInstance();
@@ -66,6 +66,7 @@ namespace Jimu
             container = ContainerBuilder.Build();
             Initializers.ForEach(x => { x(container); });
             host.Container = container;
+            host.JimuAppSettings = JimuAppSettings;
 
             return host;
         }
@@ -88,48 +89,7 @@ namespace Jimu
             return this as T;
         }
 
-
-        private IConfigurationRoot ReadSetting()
-        {
-            var jimuAppSettings = $"{SettingName}.json";
-            var env = ReadJimuEvn();
-            if (!string.IsNullOrEmpty(env))
-            {
-                jimuAppSettings = $"{SettingName}.{env}.json";
-            }
-            if (!File.Exists(jimuAppSettings))
-            {
-                throw new FileNotFoundException($"{jimuAppSettings} not found!");
-            }
-            return JimuHelper.GetConfig(jimuAppSettings);
-        }
-
-        private string ReadJimuEvn()
-        {
-            var jimuSettings = "JimuSettings.json";
-            var jimuEnv = "JIMU_ENV";
-            string activeProfile = "";
-
-            if (File.Exists(jimuSettings))
-            {
-                var config = JimuHelper.GetConfig(jimuSettings);
-                if (config != null && config["ActiveProfile"] != null)
-                {
-                    activeProfile = config["ActiveProfile"];
-                }
-            }
-            if (string.IsNullOrEmpty(activeProfile?.Trim()))
-            {
-                var builder = new ConfigurationBuilder();
-                var config = builder.AddEnvironmentVariables().Build();
-                if (config != null && config[jimuEnv] != null)
-                {
-                    activeProfile = config[jimuEnv];
-                }
-            }
-            return activeProfile?.Trim();
-        }
-
+       
         public T AddBeforeRunner(Action<IContainer> beforeRunner)
         {
             BeforeRunners.Add(beforeRunner);

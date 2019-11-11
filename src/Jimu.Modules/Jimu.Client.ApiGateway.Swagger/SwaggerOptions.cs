@@ -1,28 +1,33 @@
 ﻿namespace Jimu.Client.ApiGateway.Swagger
 {
-    public class JimuSwaggerOptions
+    public class SwaggerOptions
     {
-
         /// <summary>
-        /// 描述 api title
+        ///  api title
         /// </summary>
         public string Title { get; set; }
         /// <summary>
-        /// 描述 api 版本
+        ///  api version
         /// </summary>
         public string Version { get; set; }
 
-        public JimuSwaggerOptions(string title, string version = "v1")
+        /// <summary>
+        /// wether enable swagger
+        /// </summary>
+        public bool Enable { get; set; } = true;
+
+        public SwaggerOptions(string title, string version = "v1")
         {
             this.Title = title;
             this.Version = version;
 
         }
 
-        public JimuSwaggerOptions()
+        public SwaggerOptions()
         {
             this.Title = "Jimu";
             this.Version = "v1";
         }
+
     }
 }
