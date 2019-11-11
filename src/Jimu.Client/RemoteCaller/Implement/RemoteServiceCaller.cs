@@ -1,5 +1,5 @@
-﻿using Jimu.APM;
-using Jimu.Client.APM;
+﻿using Jimu.Diagnostic;
+using Jimu.Client.Diagnostic;
 using Jimu.Client.Discovery;
 using Jimu.Client.LoadBalance;
 using Jimu.Client.Token;
@@ -23,14 +23,14 @@ namespace Jimu.Client.RemoteCaller.Implement
         private readonly IServiceTokenGetter _serviceTokenGetter;
         private readonly ClientSenderFactory _clientSenderFactory;
         private readonly Stack<Func<ClientRequestDel, ClientRequestDel>> _middlewares;
-        private readonly IJimuApm _jimuApm;
+        private readonly IJimuDiagnostic _jimuApm;
 
 
         public RemoteServiceCaller(IClientServiceDiscovery serviceDiscovery,
             IAddressSelector addressSelector,
             ClientSenderFactory clientSenderFactory,
             IServiceTokenGetter serviceTokenGetter,
-            IJimuApm jimuApm,
+            IJimuDiagnostic jimuApm,
             ILogger logger)
         {
             _serviceDiscovery = serviceDiscovery;

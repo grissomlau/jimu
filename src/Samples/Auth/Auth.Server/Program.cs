@@ -15,7 +15,7 @@ namespace Auth.Server
             //    hostJimu.Run();
             //}
 
-            ApplicationServer.Run();
+            ApplicationServer.Instance.Run();
             Console.ReadLine();
         }
     }

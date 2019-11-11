@@ -11,7 +11,7 @@ namespace Jimu.Server.Transport
     public class ServiceInvokerContext
     {
         public ServiceInvokerContext(JimuTransportMsg transportMessage, IServiceEntryContainer serviceEntryContainer,
-            IResponse response, ILogger logger)
+            IResponse response, ILogger logger, JimuAddress address)
         {
             Response = response;
             TransportMessage = transportMessage;
@@ -31,6 +31,7 @@ namespace Jimu.Server.Transport
             {
                 logger.Error($"not found service: {RemoteInvokeMessage.ServiceId}", new EntryPointNotFoundException($"{RemoteInvokeMessage.ServiceId}"));
             }
+            Address = address;
         }
 
         public JimuServiceEntry ServiceEntry { get; }
@@ -39,5 +40,7 @@ namespace Jimu.Server.Transport
         public JimuTransportMsg TransportMessage { get; }
 
         public JimuRemoteCallData RemoteInvokeMessage { get; }
+
+        public JimuAddress Address { get; }
     }
 }

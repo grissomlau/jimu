@@ -3,10 +3,10 @@ using DotNetty.Codecs;
 using DotNetty.Transport.Bootstrapping;
 using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Sockets;
-using Jimu.APM;
+using Jimu.Diagnostic;
 using Jimu.Common;
 using Jimu.Logger;
-using Jimu.Server.APM;
+using Jimu.Server.Diagnostic;
 using Jimu.Server.ServiceContainer;
 using Jimu.Server.Transport.DotNetty.Adapter;
 using System;
@@ -30,11 +30,11 @@ namespace Jimu.Server.Transport.DotNetty
 
         private readonly Stack<Func<RequestDel, RequestDel>> _middlewares;
 
-        private readonly IJimuApm _jimuApm;
+        private readonly IJimuDiagnostic _jimuApm;
 
 
 
-        public DotNettyServer(string serverIp, int serverPort, JimuAddress serviceInvokeAddress, IServiceEntryContainer serviceEntryContainer, IJimuApm jimuApm, ILogger logger)
+        public DotNettyServer(string serverIp, int serverPort, JimuAddress serviceInvokeAddress, IServiceEntryContainer serviceEntryContainer, IJimuDiagnostic jimuApm, ILogger logger)
         {
             _serviceEntryContainer = serviceEntryContainer;
             _serviceInvokeAddress = serviceInvokeAddress;
@@ -70,7 +70,7 @@ namespace Jimu.Server.Transport.DotNetty
             if (message.ContentType == typeof(JimuRemoteCallData).FullName)
             {
                 IResponse response = new DotNettyResponse(channel, _logger);
-                var thisContext = new ServiceInvokerContext(message, _serviceEntryContainer, response, _logger);
+                var thisContext = new ServiceInvokerContext(message, _serviceEntryContainer, response, _logger, _serviceInvokeAddress);
                 Guid operationId = Guid.Empty;
 
                 var lastInvoke = new RequestDel(async context =>

@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <Version>1.0.0-beta.10</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <Authors>grissomlau@qq.com</Authors>
+    <PackageLicenseUrl></PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/grissomlau/Jimu</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/grissomlau/Jimu</RepositoryUrl>
+    <Copyright>Jimu</Copyright>
+    <Description>Jimu client skywalking module</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SkyAPM.Agent.AspNetCore" Version="0.9.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Jimu.Client\Jimu.Client.csproj" />
+  </ItemGroup>
+
+</Project>

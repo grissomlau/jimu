@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Jimu.APM
+namespace Jimu.Diagnostic
 {
     public interface IJimuApm
     {

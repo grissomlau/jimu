@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Autofac;
 using Jimu.Client;
 using Jimu.Client.ApiGateway;
-using Jimu.Client.ApiGateway.Skywalking;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;

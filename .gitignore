@@ -288,3 +288,7 @@
 /src/Jimu.Extensions
 /src/Jimu.Modules/Jimu.Server.Apm.Skywalking/bin/Debug/netcoreapp3.0
 /src/Jimu.Modules/Jimu.Server.Apm.Skywalking/obj
+/src/Jimu.Modules/Jimu.Client.Diagnostic.Skywalking/bin/Debug/netcoreapp3.0
+/src/Jimu.Modules/Jimu.Client.Diagnostic.Skywalking/obj
+/src/Jimu.Modules/Jimu.Server.Diagnostic.Skywalking/bin/Debug/netcoreapp3.0
+/src/Jimu.Modules/Jimu.Server.Diagnostic.Skywalking/obj

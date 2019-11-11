@@ -25,7 +25,7 @@ namespace ApiGateway
             //hostBuilder.UseJimu();
             //hostBuilder.Build().Run();
 
-            Jimu.Client.ApplicationWebClient.Instance.RunWebHost();
+            Jimu.Client.ApplicationWebClient.Instance.Run();
         }
     }
 }

@@ -76,13 +76,13 @@ namespace Jimu.Client.ApiGateway
             ;
 
             var type = typeof(ClientWebModuleBase);
-            var configures = AppDomain.CurrentDomain.GetAssemblies()
+            var webModules = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(x => x.GetTypes())
                 .Where(x => x.IsClass && type.IsAssignableFrom(x) && !x.IsAbstract)
                 .Select(x => Activator.CreateInstance(x, host.JimuAppSettings) as ClientWebModuleBase)
                 .OrderBy(x => x.Priority);
 
-            foreach (var configure in configures)
+            foreach (var configure in webModules)
             {
                 configure.DoWebConfigureServices(services, host.Container);
             }
@@ -92,7 +92,7 @@ namespace Jimu.Client.ApiGateway
         public static IApplicationBuilder UseJimu(this IApplicationBuilder app, IApplication host)
         {
             var type = typeof(ClientWebModuleBase);
-            var configures = AppDomain.CurrentDomain.GetAssemblies()
+            var webModules = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(x => x.GetTypes())
                 .Where(x => x.IsClass && type.IsAssignableFrom(x) && !x.IsAbstract)
                 .Select(x => Activator.CreateInstance(x, host.JimuAppSettings) as ClientWebModuleBase)
@@ -105,7 +105,7 @@ namespace Jimu.Client.ApiGateway
             //});
 
 
-            foreach (var configure in configures)
+            foreach (var configure in webModules)
             {
                 configure.DoWebConfigure(app, host.Container);
             }

@@ -5,8 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Jimu.Modules\Jimu.Client.ApiGateway.Skywalking\Jimu.Client.ApiGateway.Skywalking.csproj" />
+    <Compile Remove="Startup.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\Jimu.Modules\Jimu.Client.ApiGateway.Swagger\Jimu.Client.ApiGateway.Swagger.csproj" />
+    <ProjectReference Include="..\..\Jimu.Modules\Jimu.Client.Diagnostic.Skywalking\Jimu.Client.Diagnostic.Skywalking.csproj" />
     <ProjectReference Include="..\..\Jimu.Modules\Jimu.Client.Discovery.Consul\Jimu.Client.Discovery.Consul.csproj" />
   </ItemGroup>
 

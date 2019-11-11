@@ -8,10 +8,10 @@ using System;
 
 namespace Jimu.Client
 {
-    public class ApplicationGeneralClient
+    public class ApplicationClient
     {
-        public static ApplicationGeneralClient Instance = new ApplicationGeneralClient();
-        private ApplicationGeneralClient()
+        public static ApplicationClient Instance = new ApplicationClient();
+        private ApplicationClient()
         {
         }
         public void Run(string settingName = "JimuAppClientSettings")
@@ -28,17 +28,12 @@ namespace Jimu.Client
         private ApplicationWebClient()
         {
         }
-        public void Run(string settingName = "JimuAppClientSettings")
-        {
-            new ApplicationClientBuilder(new Autofac.ContainerBuilder(), settingName).Build().Run();
-        }
-
         public ApplicationWebClient BuildWebHost(Action<IHostBuilder> action)
         {
             _hostBuilderAction = action;
             return this;
         }
-        public void RunWebHost(Action<IServiceCollection> configureServicesAction = null, Action<WebHostBuilderContext, IApplicationBuilder> configureAction = null, string settingName = "JimuAppClientSettings")
+        public void Run(Action<IServiceCollection> configureServicesAction = null, Action<WebHostBuilderContext, IApplicationBuilder> configureAction = null, string settingName = "JimuAppClientSettings")
         {
             var hostBuilder = Host.CreateDefaultBuilder();
             _hostBuilderAction?.Invoke(hostBuilder);
