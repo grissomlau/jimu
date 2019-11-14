@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Jimu.Client.Proxy
 {
-    abstract class ServiceProxyBase
+    public abstract class ServiceProxyBase
     {
         private readonly IRemoteServiceCaller _remoteServiceCaller;
         private readonly JimuPayload _payload;

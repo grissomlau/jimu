@@ -43,9 +43,9 @@ namespace User.Service
             }
         }
 
-        public Task<UserModel[]> GetAllUserArray()
+        public Task<List<UserModel>> GetAllUserArray()
         {
-            return Task.FromResult(new UserModel[] { });
+            return Task.FromResult(new List<UserModel>());
         }
 
         public UserModel GetUser(int id)
@@ -56,5 +56,5 @@ namespace User.Service
             }
         }
 
-         }
+    }
 }

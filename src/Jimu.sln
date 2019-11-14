@@ -73,11 +73,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Auth.Server", "Samples\Auth
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Auth.IService", "Samples\Auth\Auth.IService\Auth.IService.csproj", "{D5D8DEEB-CF4A-4047-BC3D-A90AEA927AC0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jimu.Core", "Jimu.Core\Jimu.Core.csproj", "{5B630F86-362F-4F47-A553-83B7A34AAE44}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Core", "Jimu.Core\Jimu.Core.csproj", "{5B630F86-362F-4F47-A553-83B7A34AAE44}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jimu.Client.Diagnostic.Skywalking", "Jimu.Modules\Jimu.Client.Diagnostic.Skywalking\Jimu.Client.Diagnostic.Skywalking.csproj", "{DC628A17-0364-488F-A32F-BC68654A09F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Client.Diagnostic.Skywalking", "Jimu.Modules\Jimu.Client.Diagnostic.Skywalking\Jimu.Client.Diagnostic.Skywalking.csproj", "{DC628A17-0364-488F-A32F-BC68654A09F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jimu.Server.Diagnostic.Skywalking", "Jimu.Modules\Jimu.Server.Diagnostic.Skywalking\Jimu.Server.Diagnostic.Skywalking.csproj", "{EF955C3F-5104-4CE8-BF7F-E9BF80EA0EB8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Server.Diagnostic.Skywalking", "Jimu.Modules\Jimu.Server.Diagnostic.Skywalking\Jimu.Server.Diagnostic.Skywalking.csproj", "{EF955C3F-5104-4CE8-BF7F-E9BF80EA0EB8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Order", "Order", "{D35012AF-C669-4527-BE0F-6B6667825BB5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Order.IService", "Samples\Order\Order.IService\Order.IService.csproj", "{70F389F7-7CE9-48ED-9033-9B5CE92B8081}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Order.Service", "Samples\Order\Order.Service\Order.Service.csproj", "{661D3012-2E30-4316-A66E-4BF192552556}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Order.Server", "Samples\Order\Order.Server\Order.Server.csproj", "{348A4C2C-E16D-4C6E-BA1E-C077B4C7C6DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -205,6 +213,18 @@ Global
 		{EF955C3F-5104-4CE8-BF7F-E9BF80EA0EB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF955C3F-5104-4CE8-BF7F-E9BF80EA0EB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF955C3F-5104-4CE8-BF7F-E9BF80EA0EB8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70F389F7-7CE9-48ED-9033-9B5CE92B8081}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70F389F7-7CE9-48ED-9033-9B5CE92B8081}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70F389F7-7CE9-48ED-9033-9B5CE92B8081}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70F389F7-7CE9-48ED-9033-9B5CE92B8081}.Release|Any CPU.Build.0 = Release|Any CPU
+		{661D3012-2E30-4316-A66E-4BF192552556}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{661D3012-2E30-4316-A66E-4BF192552556}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{661D3012-2E30-4316-A66E-4BF192552556}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{661D3012-2E30-4316-A66E-4BF192552556}.Release|Any CPU.Build.0 = Release|Any CPU
+		{348A4C2C-E16D-4C6E-BA1E-C077B4C7C6DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{348A4C2C-E16D-4C6E-BA1E-C077B4C7C6DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{348A4C2C-E16D-4C6E-BA1E-C077B4C7C6DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{348A4C2C-E16D-4C6E-BA1E-C077B4C7C6DF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -241,6 +261,10 @@ Global
 		{D5D8DEEB-CF4A-4047-BC3D-A90AEA927AC0} = {FC71E1F8-C9DF-4C5D-9F38-0B6CDF24CA0C}
 		{DC628A17-0364-488F-A32F-BC68654A09F8} = {238A367F-90BC-4E5A-B11B-4D04519621B7}
 		{EF955C3F-5104-4CE8-BF7F-E9BF80EA0EB8} = {238A367F-90BC-4E5A-B11B-4D04519621B7}
+		{D35012AF-C669-4527-BE0F-6B6667825BB5} = {584AF45A-3FFB-4B9F-8A12-99E9626AA9EF}
+		{70F389F7-7CE9-48ED-9033-9B5CE92B8081} = {D35012AF-C669-4527-BE0F-6B6667825BB5}
+		{661D3012-2E30-4316-A66E-4BF192552556} = {D35012AF-C669-4527-BE0F-6B6667825BB5}
+		{348A4C2C-E16D-4C6E-BA1E-C077B4C7C6DF} = {D35012AF-C669-4527-BE0F-6B6667825BB5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B2F7F17C-34DB-4FBF-8BCD-49BC2FA3A10F}

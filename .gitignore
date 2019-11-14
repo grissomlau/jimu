@@ -292,3 +292,9 @@
 /src/Jimu.Modules/Jimu.Client.Diagnostic.Skywalking/obj
 /src/Jimu.Modules/Jimu.Server.Diagnostic.Skywalking/bin/Debug/netcoreapp3.0
 /src/Jimu.Modules/Jimu.Server.Diagnostic.Skywalking/obj
+/src/Samples/Order/Order.IService/bin/Debug/netcoreapp3.0
+/src/Samples/Order/Order.IService/obj
+/src/Samples/Order/Order.Server/bin/Debug/netcoreapp3.0
+/src/Samples/Order/Order.Server/obj
+/src/Samples/Order/Order.Service/bin/Debug/netcoreapp3.0
+/src/Samples/Order/Order.Service/obj

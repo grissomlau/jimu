@@ -11,7 +11,7 @@ using System.Text;
 
 namespace Jimu.Client
 {
-    public class ClientWebModuleBase : ClientModuleBase
+    public class ClientWebModuleBase : ClientGeneralModuleBase
     {
         public ClientWebModuleBase(IConfigurationRoot jimuAppSettings) : base(jimuAppSettings)
         {

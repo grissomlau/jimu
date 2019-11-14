@@ -50,7 +50,8 @@ Id int PRIMARY KEY auto_increment,
         List<UserModel> GetAllUser();
 
         [JimuGet(true)]
-        Task<UserModel[]> GetAllUserArray();
+        //Task<UserModel []> GetAllUserArray(); not support custom array in Proxy
+        Task<List<UserModel>> GetAllUserArray();
 
         /// <summary>
         ///  get user by id

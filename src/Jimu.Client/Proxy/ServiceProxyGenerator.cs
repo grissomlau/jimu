@@ -30,12 +30,8 @@ namespace Jimu.Client.Proxy
         }
         public IEnumerable<Type> GenerateProxy(IEnumerable<Type> interfaceTypes)
         {
-#if NET
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
-#else
 
             var assemblies = DependencyContext.Default.RuntimeLibraries.SelectMany(i => i.GetDefaultAssemblyNames(DependencyContext.Default).Select(z => Assembly.Load(new AssemblyName(z.Name)))).ToList();
-#endif
             //IList<Assembly> assemblies = new List<Assembly>();
             foreach (var t in interfaceTypes)
             {
@@ -52,11 +48,7 @@ namespace Jimu.Client.Proxy
                 );
             using (stream)
             {
-#if NET
-                var assembly = Assembly.Load(stream.ToArray());
-#else
                 var assembly = AssemblyLoadContext.Default.LoadFromStream(stream);
-#endif
                 _generatedServiceProxyTypes = assembly.GetExportedTypes();
                 return _generatedServiceProxyTypes;
 

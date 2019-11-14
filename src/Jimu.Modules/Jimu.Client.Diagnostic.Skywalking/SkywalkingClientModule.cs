@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using SkyApm;
+using SkyApm.Agent.GeneralHost;
 
 namespace Jimu.Client.Diagnostic.Skywalking
 {
@@ -21,9 +23,16 @@ namespace Jimu.Client.Diagnostic.Skywalking
                 _options = new SkywalkingOptions();
         }
 
-        public override void DoRegister(ContainerBuilder componentContainerBuilder)
+        public override void DoHostBuild(IHostBuilder hostBuilder, IContainer container)
         {
-            base.DoRegister(componentContainerBuilder);
+            if (_options.Enable)
+            {
+                hostBuilder
+                    .ConfigureServices(services => services.AddSingleton<ITracingDiagnosticProcessor, JimuClientDiagnosticProcessor>())
+                    .AddSkyAPM();
+
+            }
+            base.DoHostBuild(hostBuilder, container);
         }
 
         public override void DoWebConfigureServices(IServiceCollection services, IContainer container)

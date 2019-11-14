@@ -1,0 +1,32 @@
+﻿{
+  "JimuLog4netOptions": {
+    "EnableConsoleLog": true,
+    "EnableFileLog": true,
+    "FileLogPath": "log",
+    "FileLogLevel": "Debug,Info,Warn,Error",
+    "ConsoleLogLevel": "Debug,Info,Warn,Error",
+    "UseInService": true
+  },
+  "ConsulOptions": {
+    "Ip": "127.0.0.1", //consul ip
+    "Port": "8500", // consul port
+    "ServiceGroups": "jimu.samples", //服务注册所属的组别
+    "ServiceInvokeIp": "127.0.0.1", //服务宿主的地址
+    "ServiceInvokePort": "8003"
+  },
+  "DapperOptions": {
+    "ConnectionString": "server=127.0.0.1;database=jimu_sample;user=root;pwd=root;Allow User Variables=True;",
+    "DbType": "MySql"
+  },
+  "TransportOptions": {
+    "Ip": "127.0.0.1", //服务宿主ip
+    "Port": 8003, //服务宿主端口
+    "Protocol": "Netty", //传输协议： Netty
+    "ServiceInvokeIp": "127.0.0.1", //服务宿主的地址
+    "ServiceInvokePort": "8003"
+  },
+  "ServiceOptions": {
+    "Path": "", //服务dll所在路径，默认当前目录
+    "LoadFilePattern": "Order.IService.dll,Order.Service.dll", //需要加载的服务dll，支持统配符:*.dll,*.txt
+  }
+}

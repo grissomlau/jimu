@@ -16,10 +16,10 @@ namespace Jimu.Server.Diagnostic.Skywalking
         }
         public void Add(string key, string value)
         {
-            if (!_payload.Items.ContainsKey(key))
-            {
+            if (_payload.Items.ContainsKey(key))
+                _payload.Items[key] = value;
+            else
                 _payload.Items.Add(key, value);
-            }
         }
 
         public IEnumerator<KeyValuePair<string, string>> GetEnumerator()
