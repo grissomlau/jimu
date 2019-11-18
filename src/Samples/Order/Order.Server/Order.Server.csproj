@@ -26,10 +26,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Jimu.Modules\Jimu.Client.Diagnostic.Skywalking\Jimu.Client.Diagnostic.Skywalking.csproj" />
-    <ProjectReference Include="..\..\..\Jimu.Modules\Jimu.Client.Discovery.Consul\Jimu.Client.Discovery.Consul.csproj" />
-    <ProjectReference Include="..\..\..\Jimu.Modules\Jimu.Server.Diagnostic.Skywalking\Jimu.Server.Diagnostic.Skywalking.csproj" />
-    <ProjectReference Include="..\..\..\Jimu.Modules\Jimu.Server.Discovery.Consul\Jimu.Server.Discovery.Consul.csproj" />
+    <PackageReference Include="Z.EntityFramework.Extensions" Version="4.0.13" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Order.Service\Order.Service.csproj" />
   </ItemGroup>
 

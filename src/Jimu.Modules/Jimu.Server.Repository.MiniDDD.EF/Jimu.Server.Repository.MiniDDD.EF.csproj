@@ -14,7 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MiniDDD.UnitOfWork.EF" Version="1.0.0" />
+    <PackageReference Include="MiniDDD.UnitOfWork.EF" Version="1.0.2" />
   </ItemGroup>
 
   <ItemGroup>

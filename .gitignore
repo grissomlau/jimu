@@ -298,3 +298,5 @@
 /src/Samples/Order/Order.Server/obj
 /src/Samples/Order/Order.Service/bin/Debug/netcoreapp3.0
 /src/Samples/Order/Order.Service/obj
+/src/Jimu.All/bin/Debug/netcoreapp3.0
+/src/Jimu.All/obj

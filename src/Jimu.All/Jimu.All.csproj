@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Jimu.Modules\Jimu.Client.ApiGateway.Swagger\Jimu.Client.ApiGateway.Swagger.csproj" />
+    <ProjectReference Include="..\Jimu.Modules\Jimu.Client.Diagnostic.Skywalking\Jimu.Client.Diagnostic.Skywalking.csproj" />
+    <ProjectReference Include="..\Jimu.Modules\Jimu.Client.Discovery.Consul\Jimu.Client.Discovery.Consul.csproj" />
+    <ProjectReference Include="..\Jimu.Modules\Jimu.Server.Diagnostic.Skywalking\Jimu.Server.Diagnostic.Skywalking.csproj" />
+    <ProjectReference Include="..\Jimu.Modules\Jimu.Server.Discovery.Consul\Jimu.Server.Discovery.Consul.csproj" />
+    <ProjectReference Include="..\Jimu.Modules\Jimu.Server.ORM.Dapper\Jimu.Server.ORM.Dapper.csproj" />
+    <ProjectReference Include="..\Jimu.Modules\Jimu.Server.Repository.MiniDDD.Dapper\Jimu.Server.Repository.MiniDDD.Dapper.csproj" />
+    <ProjectReference Include="..\Jimu.Modules\Jimu.Server.Repository.MiniDDD.EF\Jimu.Server.Repository.MiniDDD.EF.csproj" />
+    <ProjectReference Include="..\Jimu.Modules\Jimu.Server.Repository.MiniDDD.SqlSugar\Jimu.Server.Repository.MiniDDD.SqlSugar.csproj" />
+    <ProjectReference Include="..\Jimu\Jimu.csproj" />
+  </ItemGroup>
+
+</Project>

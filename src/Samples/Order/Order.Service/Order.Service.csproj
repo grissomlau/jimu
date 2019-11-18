@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Jimu.Client\Jimu.Client.csproj" />
     <ProjectReference Include="..\..\User\User.IService\User.IService.csproj" />
     <ProjectReference Include="..\Order.IService\Order.IService.csproj" />
   </ItemGroup>
