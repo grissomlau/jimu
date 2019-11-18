@@ -26,10 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Z.EntityFramework.Extensions" Version="4.0.13" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Order.Service\Order.Service.csproj" />
   </ItemGroup>
 

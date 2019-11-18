@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <Version>1.0.0-beta.10</Version>
+    <Version>1.0.0-rc1</Version>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <Authors>grissomlau@qq.com</Authors>
     <Description>swagger support for jimu</Description>
