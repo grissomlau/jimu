@@ -30,7 +30,7 @@ namespace Jimu
             return this;
         }
 
-        public ApplicationServerClient BuildJimu(Action<ApplicationServerBuilder> action)
+        public ApplicationServerClient BuildServer(Action<ApplicationServerBuilder> action)
         {
             if (action != null)
             {
