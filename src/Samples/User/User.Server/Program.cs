@@ -19,42 +19,5 @@ namespace User.Server
             Console.WriteLine("User Server starting ...");
             ApplicationHostServer.Instance.Run();
         }
-
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-          new HostBuilder()
-              .ConfigureServices(services => { services.AddSingleton<ITracingDiagnosticProcessor, Processor>(); })
-              .AddSkyAPM();
     }
-
-    public class Processor : ITracingDiagnosticProcessor
-    {
-        public string ListenerName => DiagnosticServerEventType.ListenerName;
-
-
-        private readonly ITracingContext _tracingContext;
-        private readonly IEntrySegmentContextAccessor _entrySegmentContextAccessor;
-
-        public Processor(ITracingContext tracingContext
-            , IEntrySegmentContextAccessor exitSegmentContextAccessor
-            )
-        {
-            _tracingContext = tracingContext;
-            _entrySegmentContextAccessor = exitSegmentContextAccessor;
-        }
-
-        [DiagnosticName(DiagnosticServerEventType.ServiceInvokeBefore)]
-        public void BeforeServiceInvoke([Object] ServiceInvokeBeforeEventData eventData)
-        {
-            var context = _tracingContext.CreateEntrySegmentContext(eventData.Operation, default);
-            context.Span.AddTag("name", "fuck");
-        }
-
-        [DiagnosticName(DiagnosticServerEventType.ServiceInvokeAfter)]
-        public void AfterServiceInvoke([Object] ServiceInvokeBeforeEventData eventData)
-        {
-            _tracingContext.Release(_entrySegmentContextAccessor.Context);
-        }
-
-    }
-
 }

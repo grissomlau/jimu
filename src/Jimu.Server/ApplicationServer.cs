@@ -21,17 +21,17 @@ namespace Jimu.Server
     {
         public static ApplicationHostServer Instance = new ApplicationHostServer();
         private Action<IHostBuilder, IContainer> _hostBuilderAction = null;
-        private Action<ApplicationServerBuilder> _jimuBuilderAction = null;
+        private Action<ApplicationServerBuilder> _serverBuilderAction = null;
         private ApplicationHostServer()
         {
 
         }
 
-        public ApplicationHostServer BuildJimu(Action<ApplicationServerBuilder> action)
+        public ApplicationHostServer BuildServer(Action<ApplicationServerBuilder> action)
         {
             if (action != null)
             {
-                _jimuBuilderAction = action;
+                _serverBuilderAction = action;
             }
 
             return this;
@@ -46,11 +46,11 @@ namespace Jimu.Server
 
         public void Run(string settingName = "JimuAppServerSettings")
         {
-            var jimuBuilder = new ApplicationServerBuilder(new Autofac.ContainerBuilder(), settingName);
+            var serverBuilder = new ApplicationServerBuilder(new Autofac.ContainerBuilder(), settingName);
 
-            _jimuBuilderAction?.Invoke(jimuBuilder);
+            _serverBuilderAction?.Invoke(serverBuilder);
 
-            var app = jimuBuilder.Build();
+            var app = serverBuilder.Build();
 
             var hostBuilder = new HostBuilder();
 

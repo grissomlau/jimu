@@ -2,18 +2,19 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <Version>1.0.0-rc2</Version>
+    <Version>1.0.0-rc3</Version>
     <PackageProjectUrl>https://github.com/grissomlau/Jimu</PackageProjectUrl>
     <RepositoryUrl>https://github.com/grissomlau/Jimu</RepositoryUrl>
     <Description>netcore micorservice framework</Description>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
-    <PackageLicenseUrl>https://github.com/grissomlau/Jimu/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression></PackageLicenseExpression>
     <Copyright>Jimu</Copyright>
     <Authors>grissomlau@qq.com</Authors>
     <Company>grissomlau@qq.com</Company>
     <PackageTags>netcore,microservice</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,6 +28,13 @@
   <ItemGroup>
     <ProjectReference Include="..\Jimu.Client\Jimu.Client.csproj" />
     <ProjectReference Include="..\Jimu.Server\Jimu.Server.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

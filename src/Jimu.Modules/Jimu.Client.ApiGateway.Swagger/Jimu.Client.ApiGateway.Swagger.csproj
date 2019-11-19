@@ -2,17 +2,18 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <Version>1.0.0-rc1</Version>
+    <Version>1.0.0-rc3</Version>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <Authors>grissomlau@qq.com</Authors>
     <Description>swagger support for jimu</Description>
-    <PackageLicenseUrl>https://github.com/grissomlau/Jimu/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression></PackageLicenseExpression>
     <Copyright>Jimu</Copyright>
     <PackageProjectUrl>https://github.com/grissomlau/Jimu</PackageProjectUrl>
     <RepositoryUrl>https://github.com/grissomlau/Jimu</RepositoryUrl>
     <PackageTags>netcore, micorservice, swagger</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <FileVersion>1.0.0.0</FileVersion>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,6 +22,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Jimu.Client\Jimu.Client.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

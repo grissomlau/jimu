@@ -3,11 +3,12 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <Authors>grissomlau@qq.com</Authors>
-    <Version>1.0.0-rc1</Version>
+    <Version>1.0.0-rc3</Version>
     <Description>MiniDDD Repository for jimu with dapper</Description>
-    <PackageProjectUrl>https://github.com/grissomlau/Jimu</PackageProjectUrl>
+    <PackageLicenseExpression></PackageLicenseExpression>
     <RepositoryUrl>https://github.com/grissomlau/Jimu</RepositoryUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,6 +17,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Jimu.Server\Jimu.Server.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

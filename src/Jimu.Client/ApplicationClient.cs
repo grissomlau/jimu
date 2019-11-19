@@ -25,8 +25,19 @@ namespace Jimu.Client
     {
         public static ApplicationWebClient Instance = new ApplicationWebClient();
         private Action<IHostBuilder> _hostBuilderAction = null;
+        Action<ApplicationClientBuilder> _clientBuilderAction;
         private ApplicationWebClient()
         {
+        }
+
+        public ApplicationWebClient BuildClient(Action<ApplicationClientBuilder> action)
+        {
+            if (action != null)
+            {
+                _clientBuilderAction = action;
+            }
+
+            return this;
         }
         public ApplicationWebClient BuildWebHost(Action<IHostBuilder> action)
         {
@@ -38,7 +49,10 @@ namespace Jimu.Client
             var hostBuilder = Host.CreateDefaultBuilder();
             _hostBuilderAction?.Invoke(hostBuilder);
 
-            hostBuilder.UseWebHostJimu(settingName, configureServicesAction, configureAction);
+            var clientBuilder = new ApplicationClientBuilder(new ContainerBuilder(), settingName);
+            _clientBuilderAction?.Invoke(clientBuilder);
+
+            hostBuilder.UseWebHostJimu(settingName, configureServicesAction, configureAction, clientBuilder.Build());
             hostBuilder.Build().Run();
         }
     }

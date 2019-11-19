@@ -15,7 +15,7 @@ namespace User.Service
         }
         public string Get()
         {
-            return $"username {_payload.Items["username"]},success!";
+            return $"username {_payload?.Items?["username"]},success!";
         }
     }
 }

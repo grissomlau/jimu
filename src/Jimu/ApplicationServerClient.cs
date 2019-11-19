@@ -45,7 +45,7 @@ namespace Jimu
             ApplicationHostServer.Instance.BuildHost((hostBuilder, container) =>
             {
                 thisHostBuilder = hostBuilder;
-            }).BuildJimu(builder =>
+            }).BuildServer(builder =>
             {
                 _serverBuilderAction?.Invoke(builder);
                 IApplication hostClient = null;
