@@ -167,7 +167,7 @@ namespace Jimu.Client.RemoteCaller.Implement
                  {
                      Parameters = context.Paras,
                      ServiceId = context.Service.ServiceDescriptor.Id,
-                     Payload = context.PayLoad,
+                     Payload = context.Payload,
                      Token = context.Token,
                      Descriptor = context.Service.ServiceDescriptor
                  });

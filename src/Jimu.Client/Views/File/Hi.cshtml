@@ -1,0 +1,32 @@
+﻿
+@{
+    ViewData["Title"] = "Hi";
+}
+
+<h1>Index</h1>
+<h2>
+    <a href="/swagger">Swagger</a>
+</h2>
+
+<h2>
+    文件上存（file upload）
+</h2>
+<div>
+
+    <input style="visibility:visible" id="inputFile" type="file" />
+    <script>
+        document.getElementById('inputFile').addEventListener('change', (e) => {
+            let files = e.target.files;
+            let formData = new FormData();
+            formData.append("file", files[0]);
+            let http = new XMLHttpRequest();
+            http.open('POST', '/file/upload', true);
+            http.send(formData);
+        }, false);
+    </script>
+</div>
+<h2>文件下载（file download）</h2>
+<div>
+    <a href="/file/download?fileName=test">test.txt</a>
+</div>
+

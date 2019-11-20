@@ -15,21 +15,18 @@ namespace Jimu.Client.ApiGateway
 {
     public static class WebHostBuilderExtension
     {
-        internal static IHostBuilder UseWebHostJimu(this IHostBuilder hostBuilder, string settingName = "JimuAppClientSettings", Action<IServiceCollection> servicesAction = null, Action<WebHostBuilderContext, IApplicationBuilder> appAction = null, IApplication host = null)
+        internal static IHostBuilder UseWebHostJimu(this IHostBuilder hostBuilder, IApplication jimuApp, Action<IServiceCollection> servicesAction = null, Action<WebHostBuilderContext, IApplicationBuilder> appAction = null, Action<IMvcBuilder> mvcAction = null)
         {
-            if (host == null)
-                host = new ApplicationClientBuilder(new ContainerBuilder(), settingName).Build();
 
             hostBuilder.ConfigureWebHostDefaults(web =>
             {
                 web
-                .UseKestrel()
-                .UseIIS()
                 .ConfigureServices(services =>
                 {
-                    services.AddControllers();
+                    services.AddControllersWithViews();
                     servicesAction?.Invoke(services);
-                    services.AddJimu(host);
+                    var mvcBuilder = services.AddJimu(jimuApp);
+                    mvcAction?.Invoke(mvcBuilder);
                 })
                 .Configure((context, app) =>
                 {
@@ -41,33 +38,34 @@ namespace Jimu.Client.ApiGateway
                     app.UseAuthorization();
                     app.UseEndpoints(endpoints =>
                     {
+                        endpoints.MapRazorPages();
                         endpoints.MapControllers();
                     });
 
                     appAction?.Invoke(context, app);
-                    app.UseJimu(host);
+                    app.UseJimu(jimuApp);
                 });
             });
 
-            host.Run();
-            JimuClient.Host = host;
+            jimuApp.Run();
+            JimuClient.Host = jimuApp;
             return hostBuilder;
         }
 
-        public static IServiceCollection AddJimu(this IServiceCollection services, IApplication host)
+        public static IMvcBuilder AddJimu(this IServiceCollection services, IApplication host)
         {
             //services.AddCors();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddMvc(o =>
-            {
-                o.EnableEndpointRouting = false;
-                o.ModelBinderProviders.Insert(0, new JimuQueryStringModelBinderProvider());
-                o.ModelBinderProviders.Insert(1, new JimuModelBinderProvider());
-                o.RespectBrowserAcceptHeader = true;
-            }).AddNewtonsoftJson(options =>
-            {
-                options.SerializerSettings.ContractResolver = new DefaultContractResolver();
-            })
+            IMvcBuilder mvcBuilder = services.AddMvc(o =>
+           {
+               o.EnableEndpointRouting = false;
+               o.ModelBinderProviders.Insert(0, new JimuQueryStringModelBinderProvider());
+               o.ModelBinderProviders.Insert(1, new JimuModelBinderProvider());
+               o.RespectBrowserAcceptHeader = true;
+           }).AddNewtonsoftJson(options =>
+           {
+               options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+           })
             //.AddJsonOptions(options =>
             //{
             //    options.SerializerSettings.ContractResolver = new DefaultContractResolver();
@@ -86,7 +84,7 @@ namespace Jimu.Client.ApiGateway
             {
                 configure.DoWebConfigureServices(services, host.Container);
             }
-            return services;
+            return mvcBuilder;
         }
 
         public static IApplicationBuilder UseJimu(this IApplicationBuilder app, IApplication host)

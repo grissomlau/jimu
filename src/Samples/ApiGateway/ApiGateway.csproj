@@ -2,16 +2,21 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
+    <GenerateEmbeddedFilesManifest>True</GenerateEmbeddedFilesManifest>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="Startup.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Jimu.Modules\Jimu.Client.ApiGateway.Swagger\Jimu.Client.ApiGateway.Swagger.csproj" />
     <ProjectReference Include="..\..\Jimu.Modules\Jimu.Client.Diagnostic.Skywalking\Jimu.Client.Diagnostic.Skywalking.csproj" />
     <ProjectReference Include="..\..\Jimu.Modules\Jimu.Client.Discovery.Consul\Jimu.Client.Discovery.Consul.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Views\**\*.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Startup.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +28,10 @@
     </Content>
   </ItemGroup>
 
-  <ProjectExtensions><VisualStudio><UserProperties skyapm_1json__JsonSchema="j" /></VisualStudio></ProjectExtensions>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties skyapm_1json__JsonSchema="j" />
+    </VisualStudio>
+  </ProjectExtensions>
 
 </Project>

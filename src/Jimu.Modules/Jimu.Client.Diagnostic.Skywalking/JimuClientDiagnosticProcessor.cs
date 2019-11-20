@@ -8,6 +8,8 @@ using SkyApm.Tracing.Segments;
 using System.Linq;
 using SkyWalking.NetworkProtocol;
 using Jimu.Client.Diagnostic.EventData;
+using System.Text;
+using SkyApm.Common;
 
 namespace Jimu.Client.Diagnostic.Skywalking
 {
@@ -29,17 +31,52 @@ namespace Jimu.Client.Diagnostic.Skywalking
         [DiagnosticName(DiagnosticClientEventType.RpcExecuteBefore)]
         public void BeforeRPCExecute([Object] RPCExecuteBeforeEventData eventData)
         {
-            if (eventData.Data.PayLoad == null)
-                eventData.Data.PayLoad = new JimuPayload();
+            if (eventData.Data.Payload == null)
+                eventData.Data.Payload = new JimuPayload();
             var operation = $"RPC: {eventData.Data.Service.ServiceDescriptor.RoutePath}";
-            var context = _tracingContext.CreateExitSegmentContext(operation, eventData.Data.ServiceAddress.ToString(), new JimuClientCarrierHeaderCollection(eventData.Data.PayLoad));
+            var context = _tracingContext.CreateExitSegmentContext(operation, eventData.Data.ServiceAddress.ToString(), new JimuClientCarrierHeaderCollection(eventData.Data.Payload));
 
             if (eventData.Data.Service != null)
             {
                 context.Span.AddTag("Service", eventData.Data.Service.ServiceDescriptor.Id);
                 context.Span.AddTag("AllowAnonymous", eventData.Data.Service.ServiceDescriptor.AllowAnonymous);
             }
-            context.Span.AddLog(LogEvent.Event("Call start"));
+            StringBuilder sbLog = new StringBuilder();
+
+            if (eventData.Data?.Paras != null)
+            {
+                sbLog.AppendLine($"Parameters =>");
+                foreach (var para in eventData.Data.Paras)
+                {
+                    if (para.Value is List<JimuFile>)
+                    {
+                        foreach (var file in para.Value as List<JimuFile>)
+                        {
+                            sbLog.AppendLine($"{para.Key}: {file.FileName}");
+                        }
+                    }
+                    else
+                    {
+                        sbLog.AppendLine($"{para.Key}: {para.Value}");
+                    }
+                }
+            }
+
+            sbLog.AppendLine($"Token =>");
+            sbLog.AppendLine($"{eventData.Data?.Token}");
+            if (eventData.Data.Payload?.Items != null)
+            {
+                sbLog.AppendLine($"PayLoad =>");
+                foreach (var item in eventData.Data.Payload.Items)
+                {
+                    sbLog.AppendLine($"{item.Key}: {item.Value}");
+                }
+            }
+            else
+            {
+                sbLog.AppendLine($"PayLoad is null");
+            }
+            context.Span.AddLog(LogEvent.Event("Call start"), LogEvent.Message(sbLog.ToString()));
 
         }
 
@@ -51,14 +88,15 @@ namespace Jimu.Client.Diagnostic.Skywalking
             if (context == null) return;
             context.Span.AddTag("HasError", eventData.ResultData.HasError);
             var logEvent = $"Call finished";
-            var logMsg = $"HasError: {eventData.ResultData.HasError}";
+            StringBuilder sbLog = new StringBuilder();
+            sbLog.AppendLine($"HasError: {eventData.ResultData.HasError}");
             if (eventData.ResultData.HasError)
             {
-                logMsg += $",ErrorCode: {eventData.ResultData.ErrorCode}";
-                logMsg += $",ErrorMsg: {eventData.ResultData.ErrorMsg}";
-                logMsg += $",Exception: {eventData.ResultData.ExceptionMessage}";
+                sbLog.AppendLine($"ErrorCode: {eventData.ResultData.ErrorCode}");
+                sbLog.AppendLine($"ErrorMsg: {eventData.ResultData.ErrorMsg}");
+                sbLog.AppendLine($"Exception: {eventData.ResultData.ExceptionMessage}");
             }
-            context.Span.AddLog(LogEvent.Event(logEvent), LogEvent.Message(logMsg));
+            context.Span.AddLog(LogEvent.Event(logEvent), LogEvent.Message(sbLog.ToString()));
             _tracingContext.Release(_exitSegmentContextAccessor.Context);
         }
 

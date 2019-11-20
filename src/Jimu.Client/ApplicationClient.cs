@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.IO;
+using System.Reflection;
 
 namespace Jimu.Client
 {
@@ -52,7 +54,22 @@ namespace Jimu.Client
             var clientBuilder = new ApplicationClientBuilder(new ContainerBuilder(), settingName);
             _clientBuilderAction?.Invoke(clientBuilder);
 
-            hostBuilder.UseWebHostJimu(settingName, configureServicesAction, configureAction, clientBuilder.Build());
+            var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var executeAss = Assembly.GetCallingAssembly();
+
+            hostBuilder.UseWebHostJimu(clientBuilder.Build()
+                , configureServicesAction
+                , configureAction
+                 , mvcBuilder =>
+                 {
+                     mvcBuilder.AddApplicationPart(executeAss);
+                     var viewDll = Path.Combine(path, executeAss.GetName().Name + ".Views.dll");
+                     if (File.Exists(viewDll))
+                     {
+                         mvcBuilder.AddApplicationPart(Assembly.LoadFrom(viewDll));
+                     }
+                 }
+              );
             hostBuilder.Build().Run();
         }
     }

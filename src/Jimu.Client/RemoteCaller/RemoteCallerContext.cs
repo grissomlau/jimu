@@ -9,7 +9,7 @@ namespace Jimu.Client.RemoteCaller
         public IDictionary<string, object> Paras { get; }
 
         public string Token { get; }
-        public JimuPayload PayLoad { get; set; }
+        public JimuPayload Payload { get; set; }
 
         public JimuAddress ServiceAddress { get; set; }
 
@@ -21,7 +21,7 @@ namespace Jimu.Client.RemoteCaller
             this.Paras = paras;
             this.Token = token;
             this.ServiceAddress = jimuAddress;
-            this.PayLoad = payload;
+            this.Payload = payload;
         }
     }
 }

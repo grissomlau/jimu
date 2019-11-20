@@ -19,7 +19,7 @@ namespace Order.Service
         {
             IHelloWorldService service = _serviceProxy.GetService<IHelloWorldService>(_payload);
             var ret = service.Get();
-            return $"get order sucess, hello world return: {ret}";
+            return $"get order sucess, User service return: {ret}";
         }
 
         public string PostOrder(int id)

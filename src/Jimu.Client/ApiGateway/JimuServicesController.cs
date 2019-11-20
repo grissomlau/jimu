@@ -1,4 +1,5 @@
 ﻿using Jimu.Client.ApiGateway.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace Jimu.Client.ApiGateway
     //[Route("api/[controller]")]
     public class JimuServicesController : Controller
     {
-        [HttpGet, HttpPost, HttpDelete, HttpPut]
+        [HttpGet, HttpPost, HttpDelete, HttpPut, AllowAnonymous]
         //public async Task<object> Path(string path, [FromQuery] MyQueryString query, [FromBody] Dictionary<string, object> model)
         public async Task<IActionResult> JimuPath(string path, [FromQuery] JimuQueryString query, [ModelBinder]JimuModel model)
         {

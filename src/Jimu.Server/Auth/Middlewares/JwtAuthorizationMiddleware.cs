@@ -146,7 +146,26 @@ namespace Jimu.Server.Auth.Middlewares
                         return context.Response.WriteAsync(context.TransportMessage.Id, result);
                     }
                 }
-                context.RemoteInvokeMessage.Payload = new JimuPayload { Items = payloadObj };
+
+                if (context.RemoteInvokeMessage.Payload == null)
+                {
+                    context.RemoteInvokeMessage.Payload = new JimuPayload { Items = payloadObj };
+                }
+                else
+                {
+                    foreach (var item in payloadObj)
+                    {
+                        if (context.RemoteInvokeMessage.Payload.Items.ContainsKey(item.Key))
+                        {
+                            context.RemoteInvokeMessage.Payload.Items[item.Key] = item.Value;
+                        }
+                        else
+                        {
+                            context.RemoteInvokeMessage.Payload.Items.Add(item);
+                        }
+                    }
+
+                }
             }
             catch (Exception ex)
             {

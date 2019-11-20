@@ -102,7 +102,25 @@ namespace Jimu.Client.Auth.Middlewares
                             return Task.FromResult(result);
                         }
                     }
-                    context.PayLoad = new JimuPayload { Items = payloadObj };
+                    if (context.Payload == null)
+                    {
+                        context.Payload = new JimuPayload { Items = payloadObj };
+                    }
+                    else
+                    {
+                        foreach (var item in payloadObj)
+                        {
+                            if (context.Payload.Items.ContainsKey(item.Key))
+                            {
+                                context.Payload.Items[item.Key] = item.Value;
+                            }
+                            else
+                            {
+                                context.Payload.Items.Add(item);
+                            }
+                        }
+
+                    }
                 }
                 catch (Exception ex)
                 {
