@@ -1,4 +1,5 @@
 ﻿using System;
+using Jimu.Common;
 
 namespace Jimu
 {
@@ -6,13 +7,31 @@ namespace Jimu
     ///     set the service route path
     /// </summary>
     [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Class)]
-    public class JimuServiceRouteAttribute : Attribute
+    public class JimuAttribute : Attribute
     {
-        public JimuServiceRouteAttribute(string routeTemplate)
+        private string _routeTemplate;
+        public JimuAttribute(string routeTemplate = null)
         {
-            RouteTemplate = routeTemplate;
+            _routeTemplate = routeTemplate;
+        }
+        public string GetTemplate(Type type)
+        {
+            if (string.IsNullOrEmpty(_routeTemplate))
+            {
+                var arr = type.FullName.Split(".");
+                if (arr.Length > 1)
+                {
+                    foreach (var name in arr)
+                    {
+                        if (name.StartsWith("IService") || name.StartsWith("Service"))
+                            continue;
+                        _routeTemplate += $"/{name}";
+                    }
+                    _routeTemplate += "{Service}";
+                }
+            }
+            return _routeTemplate;
         }
 
-        public string RouteTemplate { get; }
     }
 }

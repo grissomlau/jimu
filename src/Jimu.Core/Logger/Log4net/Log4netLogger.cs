@@ -1,6 +1,7 @@
 ﻿using Jimu.Common;
 using log4net;
 using log4net.Appender;
+using log4net.Config;
 using log4net.Core;
 using log4net.Filter;
 using log4net.Layout;
@@ -20,10 +21,17 @@ namespace Jimu.Logger.Log4net
             _options = options ?? new JimuLog4netOptions { EnableConsoleLog = true };
             string repositoryName = $"jimuLogger-{Guid.NewGuid()}";
             var repLogger = LogManager.CreateRepository(repositoryName);
-            UseCodeConfig((Hierarchy)repLogger, LogLevel.Debug);
-            UseCodeConfig((Hierarchy)repLogger, LogLevel.Info);
-            UseCodeConfig((Hierarchy)repLogger, LogLevel.Warn);
-            UseCodeConfig((Hierarchy)repLogger, LogLevel.Error);
+            if (!string.IsNullOrEmpty(options.Configuration))
+            {
+                XmlConfigurator.Configure(repLogger, new System.IO.FileInfo(options.Configuration));
+            }
+            else
+            {
+                UseCodeConfig((Hierarchy)repLogger, LogLevel.Debug);
+                UseCodeConfig((Hierarchy)repLogger, LogLevel.Info);
+                UseCodeConfig((Hierarchy)repLogger, LogLevel.Warn);
+                UseCodeConfig((Hierarchy)repLogger, LogLevel.Error);
+            }
             _logger = LogManager.GetLogger(repositoryName, MethodBase.GetCurrentMethod().DeclaringType);
         }
         void UseCodeConfig(Hierarchy repository, LogLevel logLevel)

@@ -63,7 +63,7 @@ namespace Jimu.Test
     /// <summary>
     /// user
     /// </summary>
-    [JimuServiceRoute("api/user")]
+    [Jimu("api/user")]
     public interface IUser : IJimuService
     {
         /// <summary>

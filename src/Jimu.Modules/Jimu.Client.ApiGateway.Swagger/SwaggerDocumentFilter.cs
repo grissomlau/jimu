@@ -100,7 +100,7 @@ namespace Jimu.Client.ApiGateway.Swagger
             string tag = desc.Service;
             if (!string.IsNullOrEmpty(desc.ServiceComment))
             {
-                tag += $"({desc.ServiceComment})";
+                tag += $":{desc.ServiceComment}";
             }
             if (!string.IsNullOrEmpty(tag))
             {

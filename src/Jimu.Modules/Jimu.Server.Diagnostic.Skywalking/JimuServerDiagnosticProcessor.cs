@@ -1,4 +1,5 @@
 ﻿using Jimu.Server.Diagnostic;
+using Jimu.Server.Diagnostic.EventData.LocalMethod;
 using Jimu.Server.Diagnostic.EventData.ServiceInvoke;
 using SkyApm;
 using SkyApm.Common;
@@ -18,31 +19,35 @@ namespace Jimu.Server.Diagnostic.Skywalking
 
         private readonly ITracingContext _tracingContext;
         private readonly IEntrySegmentContextAccessor _entrySegmentContextAccessor;
+        private readonly ILocalSegmentContextAccessor _localSegmentContextAccessor;
 
         public JimuServerDiagnosticProcessor(ITracingContext tracingContext
             , IEntrySegmentContextAccessor entrySegmentContextAccessor
+            , ILocalSegmentContextAccessor localSegmentContextAccessor
             )
         {
             _tracingContext = tracingContext;
             _entrySegmentContextAccessor = entrySegmentContextAccessor;
+            _localSegmentContextAccessor = localSegmentContextAccessor;
         }
 
         [DiagnosticName(DiagnosticServerEventType.ServiceInvokeBefore)]
         public void BeforeServiceInvoke([Object] ServiceInvokeBeforeEventData eventData)
         {
-            var context = _tracingContext.CreateEntrySegmentContext(eventData.Operation, new JimuServerCarrierHeaderCollection(eventData.Data.RemoteInvokeMessage.Payload));
+            var operation = $"server-invoke: {eventData.Operation}";
+            var context = _tracingContext.CreateEntrySegmentContext(operation, new JimuServerCarrierHeaderCollection(eventData.Data.RemoteInvokeMessage.Payload));
             context.Span.Peer = eventData.Data.Address.ToString();
 
             if (eventData.Data.ServiceEntry != null)
             {
-                context.Span.AddTag("Service", eventData.Data.ServiceEntry.Descriptor.Id);
-                context.Span.AddTag("AllowAnonymous", eventData.Data.ServiceEntry.Descriptor.AllowAnonymous);
+                context.Span.AddTag("service", eventData.Data.ServiceEntry.Descriptor.Id);
+                context.Span.AddTag("allowAnonymous", eventData.Data.ServiceEntry.Descriptor.AllowAnonymous);
             }
 
             StringBuilder sbLog = new StringBuilder();
             if (eventData.Data.RemoteInvokeMessage?.Parameters != null)
             {
-                sbLog.AppendLine($"Parameters =>");
+                sbLog.AppendLine($"parameters =>");
                 foreach (var para in eventData.Data.RemoteInvokeMessage.Parameters)
                 {
                     if (para.Value is List<JimuFile>)
@@ -59,11 +64,11 @@ namespace Jimu.Server.Diagnostic.Skywalking
                 }
             }
 
-            sbLog.AppendLine($"Token =>");
+            sbLog.AppendLine($"token =>");
             sbLog.AppendLine($"{eventData.Data.RemoteInvokeMessage?.Token}");
             if (eventData.Data.RemoteInvokeMessage?.Payload?.Items != null)
             {
-                sbLog.AppendLine($"PayLoad =>");
+                sbLog.AppendLine($"payLoad =>");
                 foreach (var item in eventData.Data.RemoteInvokeMessage.Payload.Items)
                 {
                     sbLog.AppendLine($"{item.Key}: {item.Value}");
@@ -71,10 +76,10 @@ namespace Jimu.Server.Diagnostic.Skywalking
             }
             else
             {
-                sbLog.AppendLine($"PayLoad is null");
+                sbLog.AppendLine($"payload is null");
             }
 
-            context.Span.AddLog(LogEvent.Event("Invoke start"), LogEvent.Message(sbLog.ToString()));
+            context.Span.AddLog(LogEvent.Event("start"), LogEvent.Message(sbLog.ToString()));
         }
 
         [DiagnosticName(DiagnosticServerEventType.ServiceInvokeAfter)]
@@ -82,9 +87,9 @@ namespace Jimu.Server.Diagnostic.Skywalking
         {
             var context = _entrySegmentContextAccessor.Context;
             if (context == null) return;
-            context.Span.AddTag("HasError", eventData.ResultData.HasError);
+            context.Span.AddTag("hasError", eventData.ResultData.HasError);
 
-            var logEvent = $"Invoke finished";
+            var logEvent = $"end";
             StringBuilder sbLog = new StringBuilder();
             sbLog.AppendLine($"HasError: {eventData.ResultData.HasError}");
             if (eventData.ResultData.HasError)
@@ -97,9 +102,38 @@ namespace Jimu.Server.Diagnostic.Skywalking
             _tracingContext.Release(context);
         }
 
+        [DiagnosticName(DiagnosticServerEventType.ServiceInvokeError)]
         public void ErrorServiceInvoke([Object] ServiceInvokeErrorEventData eventData)
         {
             var context = _entrySegmentContextAccessor.Context;
+            if (context != null)
+            {
+                context.Span.ErrorOccurred(eventData.Ex);
+                _tracingContext.Release(context);
+            }
+        }
+
+        [DiagnosticName(DiagnosticServerEventType.LocalMethodInvokeBefore)]
+        public void BeforeLocalMethodInvoke([Object] LocalMethodInvokeBeforeEventData eventData)
+        {
+            var operation = $"server-local: {eventData.Operation}";
+            var context = _tracingContext.CreateLocalSegmentContext(operation);
+            context.Span.AddLog(LogEvent.Event("start"), LogEvent.Message(eventData.Data));
+        }
+
+        [DiagnosticName(DiagnosticServerEventType.LocalMethodInvokeAfter)]
+        public void AfterLocalMethodInvoke([Object] LocalMethodInvokeAfterEventData eventData)
+        {
+            var context = _localSegmentContextAccessor.Context;
+            if (context == null) return;
+            context.Span.AddLog(LogEvent.Event("end"), LogEvent.Message(eventData.Data));
+            _tracingContext.Release(context);
+        }
+
+        [DiagnosticName(DiagnosticServerEventType.LocalMethodInvokeError)]
+        public void ErrorLocalMethodInvoke([Object] LocalMethodInvokeErrorEventData eventData)
+        {
+            var context = _localSegmentContextAccessor.Context;
             if (context != null)
             {
                 context.Span.ErrorOccurred(eventData.Ex);

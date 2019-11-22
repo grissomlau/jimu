@@ -33,19 +33,19 @@ namespace Jimu.Client.Diagnostic.Skywalking
         {
             if (eventData.Data.Payload == null)
                 eventData.Data.Payload = new JimuPayload();
-            var operation = $"RPC: {eventData.Data.Service.ServiceDescriptor.RoutePath}";
+            var operation = $"client-rpc: {eventData.Data.Service.ServiceDescriptor.RoutePath}";
             var context = _tracingContext.CreateExitSegmentContext(operation, eventData.Data.ServiceAddress.ToString(), new JimuClientCarrierHeaderCollection(eventData.Data.Payload));
 
             if (eventData.Data.Service != null)
             {
-                context.Span.AddTag("Service", eventData.Data.Service.ServiceDescriptor.Id);
-                context.Span.AddTag("AllowAnonymous", eventData.Data.Service.ServiceDescriptor.AllowAnonymous);
+                context.Span.AddTag("service", eventData.Data.Service.ServiceDescriptor.Id);
+                context.Span.AddTag("allowAnonymous", eventData.Data.Service.ServiceDescriptor.AllowAnonymous);
             }
             StringBuilder sbLog = new StringBuilder();
 
             if (eventData.Data?.Paras != null)
             {
-                sbLog.AppendLine($"Parameters =>");
+                sbLog.AppendLine($"parameters =>");
                 foreach (var para in eventData.Data.Paras)
                 {
                     if (para.Value is List<JimuFile>)
@@ -62,11 +62,11 @@ namespace Jimu.Client.Diagnostic.Skywalking
                 }
             }
 
-            sbLog.AppendLine($"Token =>");
+            sbLog.AppendLine($"token =>");
             sbLog.AppendLine($"{eventData.Data?.Token}");
             if (eventData.Data.Payload?.Items != null)
             {
-                sbLog.AppendLine($"PayLoad =>");
+                sbLog.AppendLine($"payload =>");
                 foreach (var item in eventData.Data.Payload.Items)
                 {
                     sbLog.AppendLine($"{item.Key}: {item.Value}");
@@ -74,9 +74,9 @@ namespace Jimu.Client.Diagnostic.Skywalking
             }
             else
             {
-                sbLog.AppendLine($"PayLoad is null");
+                sbLog.AppendLine($"payload is null");
             }
-            context.Span.AddLog(LogEvent.Event("Call start"), LogEvent.Message(sbLog.ToString()));
+            context.Span.AddLog(LogEvent.Event("start"), LogEvent.Message(sbLog.ToString()));
 
         }
 
@@ -86,8 +86,8 @@ namespace Jimu.Client.Diagnostic.Skywalking
             //_tracingContext.Release(_entrySegmentContextAccessor.Context);
             var context = _exitSegmentContextAccessor.Context;
             if (context == null) return;
-            context.Span.AddTag("HasError", eventData.ResultData.HasError);
-            var logEvent = $"Call finished";
+            context.Span.AddTag("hasError", eventData.ResultData.HasError);
+            var logEvent = $"end";
             StringBuilder sbLog = new StringBuilder();
             sbLog.AppendLine($"HasError: {eventData.ResultData.HasError}");
             if (eventData.ResultData.HasError)

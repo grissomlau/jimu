@@ -33,7 +33,7 @@ namespace Jimu.Logger.Log4net
 
         public override void DoServiceRegister(ContainerBuilder serviceContainerBuilder)
         {
-            if (_options != null & _options.UseInService)
+            if (_options != null && _options.UseInService)
             {
 
                 serviceContainerBuilder.RegisterType<Log4netLogger>().WithParameter("options", _options).As<ILogger>().SingleInstance();

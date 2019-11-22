@@ -17,7 +17,7 @@ namespace Jimu.Server.Diagnostic
             if (!@this.IsEnabled(DiagnosticServerEventType.ServiceInvokeBefore)) return Guid.Empty;
 
             var operationId = Guid.NewGuid();
-            var operation = $"Invoke: {context.RemoteInvokeMessage.ServiceId}";
+            var operation = context.RemoteInvokeMessage.ServiceId;
 
             @this.Write(DiagnosticServerEventType.ServiceInvokeBefore, new ServiceInvokeBeforeEventData(operationId, operation)
             {
@@ -30,7 +30,7 @@ namespace Jimu.Server.Diagnostic
         {
             if (@this.IsEnabled(DiagnosticServerEventType.ServiceInvokeAfter.ToString()))
             {
-                var operation = $"Invoke: {context.RemoteInvokeMessage.ServiceId}";
+                var operation = context.RemoteInvokeMessage.ServiceId;
                 @this.Write(DiagnosticServerEventType.ServiceInvokeAfter, new ServiceInvokeAfterEventData(operationId, operation)
                 {
                     Data = context,
@@ -43,7 +43,7 @@ namespace Jimu.Server.Diagnostic
         {
             if (@this.IsEnabled(DiagnosticServerEventType.ServiceInvokeError))
             {
-                var operation = $"Invoke: {context.RemoteInvokeMessage.ServiceId}";
+                var operation =context.RemoteInvokeMessage.ServiceId;
                 @this.Write(DiagnosticServerEventType.ServiceInvokeError, new ServiceInvokeErrorEventData(operationId, operation)
                 {
                     Ex = ex,
@@ -55,15 +55,16 @@ namespace Jimu.Server.Diagnostic
 
 
         #region local method
-        public static Guid WriteLocalMethodInvokeBefore(this IJimuDiagnostic @this, string invokerData, [CallerMemberName] string operation = "")
+        public static Guid WriteLocalMethodInvokeBefore(this IJimuDiagnostic @this, JimuPayload payload, string invokerData, [CallerMemberName] string operation = "")
         {
             if (!@this.IsEnabled(DiagnosticServerEventType.LocalMethodInvokeBefore)) return Guid.Empty;
 
             var operationId = Guid.NewGuid();
 
-            @this.Write(DiagnosticServerEventType.LocalMethodInvokeBefore, new LocalMethodInvokeBeforeEventData(operationId, operation)
+            @this.Write(DiagnosticServerEventType.LocalMethodInvokeBefore, new LocalMethodInvokeBeforeEventData(operationId,operation)
             {
-                Data = invokerData
+                Data = invokerData,
+                Payload = payload
             });
             return operationId;
         }

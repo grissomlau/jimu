@@ -51,14 +51,14 @@ namespace Jimu.Server.ServiceContainer.Implement.Parser
             }
 
             var type = methodInfo.DeclaringType;
-            var routeTemplate = type.GetCustomAttribute<JimuServiceRouteAttribute>();
+            var routeTemplate = type.GetCustomAttribute<JimuAttribute>();
             if (routeTemplate != null)
             {
 
                 if (string.IsNullOrEmpty(desc.RoutePath))
                 {
                     var setPath = string.IsNullOrEmpty(desc.Rest) ? methodInfo.Name : desc.Rest;
-                    desc.RoutePath = JimuServiceRoute.ParseRoutePath(desc.HttpMethod, routeTemplate.RouteTemplate, type.Name, setPath, methodInfo.GetParameters().Select(x => x.Name).ToArray(), type.IsInterface);
+                    desc.RoutePath = JimuServiceRoute.ParseRoutePath(desc.HttpMethod, routeTemplate.GetTemplate(type), type.Name, setPath, methodInfo.GetParameters().Select(x => x.Name).ToArray(), type.IsInterface);
                 }
             }
 

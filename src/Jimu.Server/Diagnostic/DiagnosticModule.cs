@@ -22,5 +22,11 @@ namespace Jimu.Server.Diagnostic
             componentContainerBuilder.RegisterInstance(new DiagnosticServer(_options)).As<IJimuDiagnostic>().SingleInstance();
             base.DoRegister(componentContainerBuilder);
         }
+
+        public override void DoServiceRegister(ContainerBuilder serviceContainerBuilder)
+        {
+            serviceContainerBuilder.RegisterInstance(new DiagnosticServer(_options)).As<IJimuDiagnostic>().SingleInstance();
+            base.DoServiceRegister(serviceContainerBuilder);
+        }
     }
 }

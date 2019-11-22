@@ -10,5 +10,9 @@
 
         public bool UseInService { get; set; }
 
+        /// <summary>
+        /// specify custom configuration file, e.g.: nlog.config
+        /// </summary>
+        public string Configuration { get; set; }
     }
 }

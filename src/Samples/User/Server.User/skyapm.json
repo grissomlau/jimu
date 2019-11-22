@@ -1,6 +1,6 @@
 {
   "SkyWalking": {
-    "ServiceName": "jimu_apigateway",
+    "ServiceName": "jimu_user",
     "Namespace": "",
     "HeaderVersions": [
       "sw6"

@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="JimuAppServerSettings.json" />
+    <None Remove="nlog.config" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="JimuAppServerSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="nlog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\jimu\src\Jimu.Server\Jimu.Server.csproj" />
+    <ProjectReference Include="..\..\..\Jimu.Modules\Jimu.Server.Discovery.Consul\Jimu.Server.Discovery.Consul.csproj" />
+    <ProjectReference Include="..\..\..\Jimu.Modules\Jimu.Server.ORM.Dapper\Jimu.Server.ORM.Dapper.csproj" />
+    <ProjectReference Include="..\Service.Auth\Service.Auth.csproj" />
+  </ItemGroup>
+
+</Project>

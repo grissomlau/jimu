@@ -25,7 +25,7 @@ namespace Jimu.Common
                 {
                     var builder = new ConfigurationBuilder();
                     var config = builder.AddEnvironmentVariables().Build();
-                    var reg = new Regex("([$]{[\\w-.]+})");
+                    var reg = new Regex("([$]{[\\w\\d-_.]+})");
                     var envVars = reg.Matches(jsonStr);
                     foreach (Match match in envVars)
                     {

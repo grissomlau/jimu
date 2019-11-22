@@ -35,19 +35,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "User", "User", "{0CF3A967-A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Auth", "Auth", "{FC71E1F8-C9DF-4C5D-9F38-0B6CDF24CA0C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "User.Server", "Samples\User\User.Server\User.Server.csproj", "{271E0E08-1FAD-4F7B-8071-3376AB733552}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server.User", "Samples\User\Server.User\Server.User.csproj", "{271E0E08-1FAD-4F7B-8071-3376AB733552}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "User.IService", "Samples\User\User.IService\User.IService.csproj", "{1D49CE22-A937-489B-A43F-2DBD0EF44D6C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IService.User", "Samples\User\IService.User\IService.User.csproj", "{1D49CE22-A937-489B-A43F-2DBD0EF44D6C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "User.Service", "Samples\User\User.Service\User.Service.csproj", "{3A28EE4E-AFCF-45D6-8E2E-E95FD8812A55}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service.User", "Samples\User\Service.User\Service.User.csproj", "{3A28EE4E-AFCF-45D6-8E2E-E95FD8812A55}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiGateway", "Samples\ApiGateway\ApiGateway.csproj", "{7D6571C6-7B78-4971-9B6B-8C41F9BF91D9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Auth.Service", "Samples\Auth\Auth.Service\Auth.Service.csproj", "{3694B020-4FF5-4B4E-9D43-8C94AB21B1F7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service.Auth", "Samples\Auth\Service.Auth\Service.Auth.csproj", "{3694B020-4FF5-4B4E-9D43-8C94AB21B1F7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Auth.Server", "Samples\Auth\Auth.Server\Auth.Server.csproj", "{2EBA0E05-C852-4A30-8314-D2199B53328D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server.Auth", "Samples\Auth\Server.Auth\Server.Auth.csproj", "{2EBA0E05-C852-4A30-8314-D2199B53328D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Auth.IService", "Samples\Auth\Auth.IService\Auth.IService.csproj", "{D5D8DEEB-CF4A-4047-BC3D-A90AEA927AC0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IService.Auth", "Samples\Auth\IService.Auth\IService.Auth.csproj", "{D5D8DEEB-CF4A-4047-BC3D-A90AEA927AC0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Core", "Jimu.Core\Jimu.Core.csproj", "{5B630F86-362F-4F47-A553-83B7A34AAE44}"
 EndProject
@@ -57,11 +57,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Server.Diagnostic.Skyw
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Order", "Order", "{D35012AF-C669-4527-BE0F-6B6667825BB5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Order.IService", "Samples\Order\Order.IService\Order.IService.csproj", "{70F389F7-7CE9-48ED-9033-9B5CE92B8081}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IService.Order", "Samples\Order\IService.Order\IService.Order.csproj", "{70F389F7-7CE9-48ED-9033-9B5CE92B8081}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Order.Service", "Samples\Order\Order.Service\Order.Service.csproj", "{661D3012-2E30-4316-A66E-4BF192552556}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service.Order", "Samples\Order\Service.Order\Service.Order.csproj", "{661D3012-2E30-4316-A66E-4BF192552556}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Order.Server", "Samples\Order\Order.Server\Order.Server.csproj", "{348A4C2C-E16D-4C6E-BA1E-C077B4C7C6DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server.Order", "Samples\Order\Server.Order\Server.Order.csproj", "{348A4C2C-E16D-4C6E-BA1E-C077B4C7C6DF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.All", "Jimu.All\Jimu.All.csproj", "{16E0A604-D613-40EF-AAFC-92EE17213B86}"
 EndProject
