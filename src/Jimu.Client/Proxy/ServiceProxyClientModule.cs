@@ -1,13 +1,12 @@
-﻿using System;
+﻿using Autofac;
+using Jimu.Client.Proxy.Implement;
+using Jimu.Logger;
+using Jimu.Module;
+using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
-using System.Text;
-using Autofac;
-using Jimu.Client.Proxy.CodeAnalysisIntegration;
-using Jimu.Logger;
-using Microsoft.Extensions.Configuration;
 
 namespace Jimu.Client.Proxy
 {

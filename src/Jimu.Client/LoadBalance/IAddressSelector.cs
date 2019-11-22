@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Jimu.Client
+namespace Jimu.Client.LoadBalance
 {
     /// <summary>
     ///     server selector

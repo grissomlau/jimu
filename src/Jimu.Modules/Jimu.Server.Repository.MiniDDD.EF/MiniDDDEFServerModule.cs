@@ -1,10 +1,11 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
+using Jimu.Module;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MiniDDD;
 using MiniDDD.UnitOfWork;
 using MiniDDD.UnitOfWork.EF;
+using System;
 using System.Linq;
 
 namespace Jimu.Server.Repository.MiniDDD.EF

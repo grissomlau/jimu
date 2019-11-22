@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Linq;
-using System.Threading;
+﻿using Jimu.Logger;
 using Quartz;
 using Quartz.Impl;
 using Quartz.Impl.Triggers;
 using Quartz.Spi;
-using Jimu.Logger;
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace Jimu.Client
+namespace Jimu.Client.Discovery.Implement
 {
     public class ClientServiceDiscovery : IClientServiceDiscovery
     {
@@ -48,7 +47,7 @@ namespace Jimu.Client
             {
                 cron = $"0 0 0/1 * * ?";
             }
-          
+
             var scheduler = await StdSchedulerFactory.GetDefaultScheduler();
             IJobDetail jobDetail = JobBuilder.Create<MonitorJob>().WithIdentity("MonitorJob", "Jimu.Client.UpdateServiceJob").Build();
             jobDetail.JobDataMap.Put("serviceDiscovery", this);

@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <Version>1.0.0-rc5</Version>
+    <PackageProjectUrl>https://github.com/grissomlau/Jimu</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/grissomlau/Jimu</RepositoryUrl>
+    <Description>netcore micorservice framework</Description>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <Copyright>Jimu</Copyright>
+    <Authors>grissomlau@qq.com</Authors>
+    <Company>grissomlau@qq.com</Company>
+    <PackageTags>netcore,microservice</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageLicenseExpression></PackageLicenseExpression>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\Jimu.Modules\Jimu.Client.ApiGateway.Swagger\Jimu.Client.ApiGateway.Swagger.csproj" />
+    <ProjectReference Include="..\Jimu.Modules\Jimu.Client.Diagnostic.Skywalking\Jimu.Client.Diagnostic.Skywalking.csproj" />
+    <ProjectReference Include="..\Jimu.Modules\Jimu.Client.Discovery.Consul\Jimu.Client.Discovery.Consul.csproj" />
+    <ProjectReference Include="..\Jimu.Modules\Jimu.Server.Diagnostic.Skywalking\Jimu.Server.Diagnostic.Skywalking.csproj" />
+    <ProjectReference Include="..\Jimu.Modules\Jimu.Server.Discovery.Consul\Jimu.Server.Discovery.Consul.csproj" />
+    <ProjectReference Include="..\Jimu.Modules\Jimu.Server.ORM.Dapper\Jimu.Server.ORM.Dapper.csproj" />
+    <ProjectReference Include="..\Jimu.Modules\Jimu.Server.Repository.MiniDDD.Dapper\Jimu.Server.Repository.MiniDDD.Dapper.csproj" />
+    <ProjectReference Include="..\Jimu.Modules\Jimu.Server.Repository.MiniDDD.EF\Jimu.Server.Repository.MiniDDD.EF.csproj" />
+    <ProjectReference Include="..\Jimu.Modules\Jimu.Server.Repository.MiniDDD.SqlSugar\Jimu.Server.Repository.MiniDDD.SqlSugar.csproj" />
+    <ProjectReference Include="..\Jimu\Jimu.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>

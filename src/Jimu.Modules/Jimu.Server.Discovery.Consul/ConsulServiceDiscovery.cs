@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Consul;
+using Jimu.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Consul;
-using Jimu.Server;
 
 namespace Jimu.Server.Discovery.Consul
 {

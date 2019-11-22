@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Jimu.Server
+namespace Jimu.Server.Discovery
 {
     /// <summary>
     ///     how to discovery service

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Jimu.Server
+namespace Jimu.Server.Transport
 {
-    public delegate Task RequestDel(RemoteCallerContext context);
+    public delegate Task RequestDel(ServiceInvokerContext context);
     /// <summary>
     ///     transport server
     /// </summary>

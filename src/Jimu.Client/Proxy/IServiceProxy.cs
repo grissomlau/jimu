@@ -1,4 +1,4 @@
-﻿namespace Jimu.Client
+﻿namespace Jimu.Client.Proxy
 {
     /// <summary>
     ///     serice proxy

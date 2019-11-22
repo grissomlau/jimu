@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Autofac;
+using Consul;
+using Jimu.Common;
+using Jimu.Logger;
+using Jimu.Module;
+using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Autofac;
-using Consul;
-using Jimu.Logger;
-using Microsoft.Extensions.Configuration;
 
 namespace Jimu.Client.Discovery.Consul
 {

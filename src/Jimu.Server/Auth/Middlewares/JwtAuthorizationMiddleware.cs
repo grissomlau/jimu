@@ -1,14 +1,16 @@
-﻿using System;
+﻿using Autofac;
+using Jimu.Common;
+using Jimu.Server.ServiceContainer;
+using Jimu.Server.Transport;
+using Jose;
+using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Autofac;
-using Jimu.Extension;
-using Jose;
 
-namespace Jimu.Server.Auth
+namespace Jimu.Server.Auth.Middlewares
 {
     /// <summary>
     /// support jwt middleware
@@ -25,7 +27,7 @@ namespace Jimu.Server.Auth
             _container = container;
         }
 
-        public Task Invoke(RemoteCallerContext context)
+        public Task Invoke(ServiceInvokerContext context)
         {
             // get jwt token 
             if (!string.IsNullOrEmpty(_options.TokenEndpointPath)
@@ -63,7 +65,7 @@ namespace Jimu.Server.Auth
             throw new EntryPointNotFoundException($"{serviceId} not found, cannot check token generate credential");
         }
 
-        Task CreateToken(RemoteCallerContext context)
+        Task CreateToken(ServiceInvokerContext context)
         {
             if (string.IsNullOrEmpty(_options.CheckCredentialServiceId))
             {
@@ -102,7 +104,7 @@ namespace Jimu.Server.Auth
             });
         }
 
-        Task InvokeService(RemoteCallerContext context)
+        Task InvokeService(ServiceInvokerContext context)
         {
 
             try
@@ -144,7 +146,26 @@ namespace Jimu.Server.Auth
                         return context.Response.WriteAsync(context.TransportMessage.Id, result);
                     }
                 }
-                context.RemoteInvokeMessage.Payload = new JimuPayload { Items = payloadObj };
+
+                if (context.RemoteInvokeMessage.Payload == null)
+                {
+                    context.RemoteInvokeMessage.Payload = new JimuPayload { Items = payloadObj };
+                }
+                else
+                {
+                    foreach (var item in payloadObj)
+                    {
+                        if (context.RemoteInvokeMessage.Payload.Items.ContainsKey(item.Key))
+                        {
+                            context.RemoteInvokeMessage.Payload.Items[item.Key] = item.Value;
+                        }
+                        else
+                        {
+                            context.RemoteInvokeMessage.Payload.Items.Add(item);
+                        }
+                    }
+
+                }
             }
             catch (Exception ex)
             {

@@ -1,0 +1,35 @@
+{
+  "JimuLog4netOptions": {
+    "EnableConsoleLog": true,
+    "EnableFileLog": true,
+    "FileLogPath": "log",
+    "FileLogLevel": "Debug,Info,Warn,Error",
+    "ConsoleLogLevel": "Debug,Info,Warn,Error"
+  },
+  "ConsulOptions": {
+    "Ip": "127.0.0.1", //consul ip
+    "Port": 8500, // consul port
+    "ServiceGroups": "jimu.samples" //服务注册所属的组别
+  },
+  "DiscoveryOptions": {
+    "UpdateJobIntervalMinute": 1 //单位分钟，1分钟刷新一次
+  },
+  "FaultTolerantOptions": {
+    "RetryTimes": 0 //服务调用失败重试次数
+  },
+  "HealthCheckOptions": {
+    "IntervalMinute": 1 //心跳监测时间间隔，单位分钟
+  },
+  "LoadBalanceOptions": {
+    "LoadBalance": "Polling" //负载均衡算法: Polling - 轮询
+  },
+  "ServiceProxyOptions": {
+    "AssemblyNames": [ "IService.User" ] //代理接口dll配置
+  },
+  "TokenGetterOptions": {
+    "GetType": "" //从http header 获取， Request.Headers["Authorization"]
+  },
+  "TransportOptions": {
+    "Protocol": "Netty" //传输协议： Netty, Http
+  }
+}

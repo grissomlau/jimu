@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Jimu.Client.ApiGateway
+namespace Jimu.Client.ApiGateway.Core
 {
     public class JimuHttpStatusCodeException : Exception
     {

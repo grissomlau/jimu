@@ -1,14 +1,21 @@
-﻿using System;
-using Autofac;
-using Jimu.Logger;
-using System.Linq;
+﻿using Autofac;
+using Jimu.Client.Discovery;
+using Jimu.Client.Discovery.Implement;
+using Jimu.Client.Proxy;
+using Jimu.Client.Proxy.Implement;
+using Jimu.Client.RemoteCaller;
+using Jimu.Client.RemoteCaller.Implement;
+using Jimu.Client.Token;
+using Jimu.Client.Token.Implement;
+using Jimu.Client.Transport;
+using Jimu.Module;
+using Microsoft.Extensions.DependencyModel;
+using Microsoft.Extensions.Hosting;
+using System;
 using System.IO;
-using Microsoft.Extensions.Configuration;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
-using Microsoft.Extensions.DependencyModel;
-using Microsoft.Extensions.DependencyModel.Resolution;
-using System.Collections.Generic;
 
 namespace Jimu.Client
 {
@@ -97,6 +104,7 @@ namespace Jimu.Client
                 this.AddInitializer(x.DoInit);
                 this.AddRunner(x.DoRun);
                 this.AddModule(x.DoRegister);
+                this.AddBeforeRunner(x.DoBeforeRun);
             });
 
         }

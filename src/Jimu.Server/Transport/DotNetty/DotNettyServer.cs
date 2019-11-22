@@ -1,17 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
-using DotNetty.Buffers;
+﻿using DotNetty.Buffers;
 using DotNetty.Codecs;
 using DotNetty.Transport.Bootstrapping;
 using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Sockets;
-using Jimu.Extension;
+using Jimu.Diagnostic;
+using Jimu.Common;
 using Jimu.Logger;
+using Jimu.Server.Diagnostic;
+using Jimu.Server.ServiceContainer;
+using Jimu.Server.Transport.DotNetty.Adapter;
+using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Jimu.Server.Transport.DotNetty
 {
@@ -27,8 +30,11 @@ namespace Jimu.Server.Transport.DotNetty
 
         private readonly Stack<Func<RequestDel, RequestDel>> _middlewares;
 
+        private readonly IJimuDiagnostic _jimuApm;
 
-        public DotNettyServer(string serverIp, int serverPort, JimuAddress serviceInvokeAddress, IServiceEntryContainer serviceEntryContainer, ILogger logger)
+
+
+        public DotNettyServer(string serverIp, int serverPort, JimuAddress serviceInvokeAddress, IServiceEntryContainer serviceEntryContainer, IJimuDiagnostic jimuApm, ILogger logger)
         {
             _serviceEntryContainer = serviceEntryContainer;
             _serviceInvokeAddress = serviceInvokeAddress;
@@ -36,12 +42,11 @@ namespace Jimu.Server.Transport.DotNetty
             _middlewares = new Stack<Func<RequestDel, RequestDel>>();
             _serverIp = serverIp;
             _serverPort = serverPort;
+            _jimuApm = jimuApm;
         }
         public List<JimuServiceRoute> GetServiceRoutes()
         {
             List<JimuServiceRoute> routes = new List<JimuServiceRoute>();
-            //if (!_serviceRoutes.Any())
-            //{
             var serviceEntries = _serviceEntryContainer.GetServiceEntry();
             serviceEntries.ForEach(entry =>
             {
@@ -54,7 +59,6 @@ namespace Jimu.Server.Transport.DotNetty
                 };
                 routes.Add(serviceRoute);
             });
-            //}
 
             return routes;
         }
@@ -66,7 +70,8 @@ namespace Jimu.Server.Transport.DotNetty
             if (message.ContentType == typeof(JimuRemoteCallData).FullName)
             {
                 IResponse response = new DotNettyResponse(channel, _logger);
-                var thisContext = new RemoteCallerContext(message, _serviceEntryContainer, response, _logger);
+                var thisContext = new ServiceInvokerContext(message, _serviceEntryContainer, response, _logger, _serviceInvokeAddress);
+                Guid operationId = Guid.Empty;
 
                 var lastInvoke = new RequestDel(async context =>
                 {
@@ -74,11 +79,13 @@ namespace Jimu.Server.Transport.DotNetty
                     if (context.ServiceEntry == null)
                     {
                         resultMessage.ExceptionMessage = $"can not find service {context.RemoteInvokeMessage.ServiceId}";
+                        _jimuApm.WriteServiceInvokeAfter(operationId, thisContext, resultMessage);
                         await response.WriteAsync(message.Id, resultMessage);
                     }
                     else if (context.ServiceEntry.Descriptor.WaitExecution)
                     {
                         await LocalServiceExecuteAsync(context.ServiceEntry, context.RemoteInvokeMessage, resultMessage);
+                        _jimuApm.WriteServiceInvokeAfter(operationId, thisContext, resultMessage);
                         await response.WriteAsync(message.Id, resultMessage);
                     }
                     else
@@ -87,6 +94,7 @@ namespace Jimu.Server.Transport.DotNetty
                         await Task.Factory.StartNew(async () =>
                         {
                             await LocalServiceExecuteAsync(context.ServiceEntry, context.RemoteInvokeMessage, resultMessage);
+                            _jimuApm.WriteServiceInvokeAfter(operationId, thisContext, resultMessage);
                         });
                     }
                 });
@@ -97,6 +105,7 @@ namespace Jimu.Server.Transport.DotNetty
                 }
                 try
                 {
+                    _jimuApm.WriteServiceInvokeBefore(thisContext);
                     await lastInvoke(thisContext);
                 }
                 catch (Exception ex)
@@ -191,7 +200,7 @@ namespace Jimu.Server.Transport.DotNetty
 
         }
 
-        private async Task InvokeMiddleware(RequestDel next, RemoteCallerContext context)
+        private async Task InvokeMiddleware(RequestDel next, ServiceInvokerContext context)
         {
             await next.Invoke(context);
         }

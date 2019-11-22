@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using Jimu.Client.RemoteCaller;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Jimu.Client.Proxy.CodeAnalysisIntegration
+namespace Jimu.Client.Proxy
 {
     public abstract class ServiceProxyBase
     {

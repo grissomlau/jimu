@@ -1,8 +1,7 @@
 using Autofac;
 using Jimu.Server;
-using NSubstitute;
+using Jimu.Server.ServiceContainer.Implement;
 using System;
-using System.Linq;
 using System.Reflection;
 using Xunit;
 using Xunit.Abstractions;
@@ -29,7 +28,7 @@ namespace Jimu.Test
 
             var services = serviceEntry.GetServiceEntry();
             this.output.WriteLine(services[0].Descriptor.ReturnDesc);
-            Assert.Equal("{\"ReturnType\":\"System.String\",\"ReturnFormat\":\"System.String\",\"Comment\":\"name\"}", services[0].Descriptor.ReturnDesc);
+            Assert.Equal("{\"ReturnType\":\"System.String\",\"ReturnFormat\":null,\"Comment\":\"name\",\"Properties\":[{\"Name\":\"String\",\"Type\":\"System.String\",\"Comment\":null,\"Default\":null,\"Properties\":null}]}", services[0].Descriptor.ReturnDesc);
 
         }
         [Fact]
@@ -38,7 +37,7 @@ namespace Jimu.Test
 
             var services = serviceEntry.GetServiceEntry();
             this.output.WriteLine(services[1].Descriptor.ReturnDesc);
-            Assert.Equal(@"{""ReturnType"":""Jimu.Test.User"",""ReturnFormat"":""{\""Id\"":\""System.Int32 | 用户 id\"",\""Name\"":\""System.String | 用户 name\"",}"",""Comment"":""user""}", services[1].Descriptor.ReturnDesc);
+            Assert.Equal("{\"ReturnType\":\"Jimu.Test.User\",\"ReturnFormat\":null,\"Comment\":\"user\",\"Properties\":[{\"Name\":\"Id\",\"Type\":\"System.Int32\",\"Comment\":\"用户 id\",\"Default\":null,\"Properties\":null},{\"Name\":\"Name\",\"Type\":\"System.String\",\"Comment\":\"用户 name\",\"Default\":null,\"Properties\":null}]}", services[1].Descriptor.ReturnDesc);
 
         }
 
@@ -49,7 +48,7 @@ namespace Jimu.Test
         {
             var services = serviceEntry.GetServiceEntry();
             this.output.WriteLine(services[0].Descriptor.Parameters);
-            Assert.Equal("[{\"Name\":\"id\",\"Type\":\"System.String\",\"Comment\":\"userid\",\"Format\":\"System.String\"}]", services[0].Descriptor.Parameters);
+            Assert.Equal("[{\"Name\":\"id\",\"Type\":\"System.String\",\"Comment\":\"userid\",\"Default\":null,\"Properties\":null}]", services[0].Descriptor.Parameters);
         }
 
         [Fact]
@@ -64,7 +63,7 @@ namespace Jimu.Test
     /// <summary>
     /// user
     /// </summary>
-    [JimuServiceRoute("api/user")]
+    [Jimu("api/user")]
     public interface IUser : IJimuService
     {
         /// <summary>

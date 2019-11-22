@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Autofac;
+﻿using Autofac;
 using DotNetty.Codecs;
 using DotNetty.Common.Utilities;
 using DotNetty.Transport.Bootstrapping;
 using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Sockets;
+using Jimu.Client.Transport.DotNetty;
+using Jimu.Client.Transport.DotNetty.Adapter;
 using Jimu.Logger;
+using Jimu.Module;
 using Microsoft.Extensions.Configuration;
-using Jimu.Extension;
 
 namespace Jimu.Client.Transport
 {
@@ -39,33 +38,12 @@ namespace Jimu.Client.Transport
                         case "Netty":
                             InitNetty(container);
                             break;
-                        case "Http":
-                            InitHttp(container);
-                            break;
                         default: break;
                     }
                 }
 
             }
             base.DoInit(container);
-        }
-
-        private void InitHttp(IContainer container)
-        {
-            var factory = container.Resolve<ClientSenderFactory>();
-            var logger = container.Resolve<ILogger>();
-            logger.Info($"[config]use http for transfer");
-
-            factory.ClientSenderCreator += (global::Jimu.JimuAddress address, ref IClientSender client) =>
-            {
-                //if (client == null && address.GetType() == typeof(HttpAddress))
-                if (client == null && address.Protocol == "Http")
-                {
-                    var listener = new ClientListener();
-                    //var sender = new HttpClientSender(address, listener);
-                    client = new HttpClientSender(listener, logger, address);
-                }
-            };
         }
 
         private void InitNetty(IContainer container)

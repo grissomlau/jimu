@@ -1,6 +1,6 @@
-﻿using System.Threading.Tasks;
-using Jimu.Logger;
+﻿using Jimu.Logger;
 using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
 
 namespace Jimu.Server.Transport.Http
 {
@@ -8,7 +8,7 @@ namespace Jimu.Server.Transport.Http
     {
         readonly Microsoft.AspNetCore.Http.HttpResponse _httpResponse;
         private readonly ILogger _logger;
-        public HttpResponse(Microsoft.AspNetCore.Http.HttpResponse httpResponse,  ILogger logger)
+        public HttpResponse(Microsoft.AspNetCore.Http.HttpResponse httpResponse, ILogger logger)
         {
             _httpResponse = httpResponse;
             _logger = logger;

@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <GenerateEmbeddedFilesManifest>True</GenerateEmbeddedFilesManifest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Jimu.Modules\Jimu.Client.ApiGateway.Swagger\Jimu.Client.ApiGateway.Swagger.csproj" />
+    <ProjectReference Include="..\..\Jimu.Modules\Jimu.Client.Diagnostic.Skywalking\Jimu.Client.Diagnostic.Skywalking.csproj" />
+    <ProjectReference Include="..\..\Jimu.Modules\Jimu.Client.Discovery.Consul\Jimu.Client.Discovery.Consul.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Views\**\*.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Startup.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="JimuAppClientSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="JimuAppClientSettings.local.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties skyapm_1json__JsonSchema="j" />
+    </VisualStudio>
+  </ProjectExtensions>
+
+</Project>

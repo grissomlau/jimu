@@ -1,8 +1,8 @@
-﻿using System.Net.Http;
-using System.Threading.Tasks;
-using Flurl;
+﻿using Flurl;
 using Flurl.Http;
 using Jimu.Logger;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace Jimu.Client
 {

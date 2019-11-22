@@ -1,16 +1,17 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
+﻿using Jimu.Client.RemoteCaller;
 using Jimu.Logger;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 
-namespace Jimu.Client.Proxy.CodeAnalysisIntegration
+namespace Jimu.Client.Proxy
 {
-    public static class CompilationUtilitys
+    static class CompilationUtilitys
     {
         #region Public Method
 
@@ -232,7 +233,7 @@ namespace Jimu.Client.Proxy.CodeAnalysisIntegration
             public string FileVersion { get; set; }
             public bool ComVisible { get; set; }
 
-            public static AssemblyInfo Create(string name, string copyright = "Copyright ©  Jimu", string version = "0.0.0.1")
+            public static AssemblyInfo Create(string name, string copyright = "Copyright ©  Jimu", string version = "1.0.0.0")
             {
                 return new AssemblyInfo
                 {

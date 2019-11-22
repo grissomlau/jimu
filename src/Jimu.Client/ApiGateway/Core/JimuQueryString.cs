@@ -1,8 +1,8 @@
-﻿using System.Collections.Specialized;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections.Specialized;
 using System.Web;
-using Microsoft.AspNetCore.Mvc;
 
-namespace Jimu.Client.ApiGateway
+namespace Jimu.Client.ApiGateway.Core
 {
     [ModelBinder(BinderType = typeof(JimuQueryStringModelBinder))]
     public class JimuQueryString

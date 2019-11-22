@@ -1,16 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.Loader;
-using System.Threading.Tasks;
+﻿using Jimu.Client.RemoteCaller;
+using Jimu.Common;
 using Jimu.Logger;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.DependencyModel;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Loader;
+using System.Threading.Tasks;
 
-namespace Jimu.Client.Proxy.CodeAnalysisIntegration
+namespace Jimu.Client.Proxy
 {
     class ServiceProxyGenerator : IServiceProxyGenerator, IDisposable
     {
@@ -28,12 +30,8 @@ namespace Jimu.Client.Proxy.CodeAnalysisIntegration
         }
         public IEnumerable<Type> GenerateProxy(IEnumerable<Type> interfaceTypes)
         {
-#if NET
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
-#else
 
             var assemblies = DependencyContext.Default.RuntimeLibraries.SelectMany(i => i.GetDefaultAssemblyNames(DependencyContext.Default).Select(z => Assembly.Load(new AssemblyName(z.Name)))).ToList();
-#endif
             //IList<Assembly> assemblies = new List<Assembly>();
             foreach (var t in interfaceTypes)
             {
@@ -50,11 +48,7 @@ namespace Jimu.Client.Proxy.CodeAnalysisIntegration
                 );
             using (stream)
             {
-#if NET
-                var assembly = Assembly.Load(stream.ToArray());
-#else
                 var assembly = AssemblyLoadContext.Default.LoadFromStream(stream);
-#endif
                 _generatedServiceProxyTypes = assembly.GetExportedTypes();
                 return _generatedServiceProxyTypes;
 

@@ -1,5 +1,4 @@
 ﻿using MiniDDD.UnitOfWork;
-using System;
 
 namespace Jimu.Server.Repository.MiniDDD.Dapper
 {

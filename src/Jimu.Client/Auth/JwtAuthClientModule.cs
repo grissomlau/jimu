@@ -1,11 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Autofac;
+﻿using Autofac;
+using Jimu.Client.Auth.Middlewares;
+using Jimu.Client.Discovery;
+using Jimu.Client.RemoteCaller;
+using Jimu.Common;
 using Jimu.Logger;
+using Jimu.Module;
 using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Jimu.Client.Auth
 {
@@ -52,30 +55,40 @@ namespace Jimu.Client.Auth
                                  new JimuServiceParameterDesc
                                  {
                                       Comment = "username",
-                                       Format = "System.String",
                                         Name = "username",
-                                         Type = "object"
+                                         Type = "System.String"
                                  },
                                  new JimuServiceParameterDesc
                                  {
                                       Comment = "password",
-                                       Format = "System.String",
                                         Name = "password",
-                                         Type = "object"
+                                         Type = "System.String"
                                  },
                                  new JimuServiceParameterDesc
                                  {
                                       Comment = "grant_type",
-                                       Format = "System.String",
+                                       Default = "password",
                                         Name = "grant_type",
-                                         Type = "object"
+                                         Type = "System.String"
                                  },
 
                              }),
                             ReturnDesc = JimuHelper.Serialize<string>( new JimuServiceReturnDesc{
                                  Comment = "Token",
                                   ReturnType = "object",
-                                   ReturnFormat = "{\"access_token\":\"System.String | token\", \"expired_in\":\"System.Int32 | expired timestamp which is the number of seconds between 1970-01-01 and expired datetime\"}"
+                                   Properties = new List<JimuServiceParameterDesc>
+                                 {
+                                     new JimuServiceParameterDesc{
+                                          Comment = "token",
+                                           Name = "access_token",
+                                            Type = "System.String"
+                                     },
+                                     new JimuServiceParameterDesc{
+                                          Comment = "expired timestamp which is the number of seconds between 1970-01-01 and expired datetime",
+                                           Name = "expired_in",
+                                            Type = "System.Int32"
+                                     }
+                                }
                             })
                         }
                     }

@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Jimu.Client.RemoteCaller;
+using System.Collections.Generic;
 
-namespace Jimu.Client.Auth
+namespace Jimu.Client.Auth.Middlewares
 {
     public class JwtAuthorizationContext
     {

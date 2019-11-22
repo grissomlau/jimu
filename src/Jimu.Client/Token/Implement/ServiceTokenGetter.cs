@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Jimu.Client
+namespace Jimu.Client.Token.Implement
 {
     /// <summary>
     ///     how to get the token

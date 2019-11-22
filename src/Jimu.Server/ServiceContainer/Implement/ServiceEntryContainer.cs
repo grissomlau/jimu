@@ -1,12 +1,11 @@
 ﻿using Autofac;
-using Autofac.Core;
-using Jimu.Server.Implement.Parser;
+using Jimu.Server.ServiceContainer.Implement.Parser;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Jimu.Server
+namespace Jimu.Server.ServiceContainer.Implement
 {
     public class ServiceEntryContainer : IServiceEntryContainer
     {

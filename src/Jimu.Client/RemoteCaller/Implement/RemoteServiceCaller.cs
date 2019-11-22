@@ -1,13 +1,19 @@
-﻿using System;
+﻿using Jimu.Diagnostic;
+using Jimu.Client.Diagnostic;
+using Jimu.Client.Discovery;
+using Jimu.Client.LoadBalance;
+using Jimu.Client.Token;
+using Jimu.Client.Transport;
+using Jimu.Common;
+using Jimu.Logger;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Jimu.Logger;
-using Polly;
 
-namespace Jimu.Client
+namespace Jimu.Client.RemoteCaller.Implement
 {
     public class RemoteServiceCaller : IRemoteServiceCaller
     {
@@ -17,11 +23,14 @@ namespace Jimu.Client
         private readonly IServiceTokenGetter _serviceTokenGetter;
         private readonly ClientSenderFactory _clientSenderFactory;
         private readonly Stack<Func<ClientRequestDel, ClientRequestDel>> _middlewares;
+        private readonly IJimuDiagnostic _jimuApm;
+
 
         public RemoteServiceCaller(IClientServiceDiscovery serviceDiscovery,
             IAddressSelector addressSelector,
             ClientSenderFactory clientSenderFactory,
             IServiceTokenGetter serviceTokenGetter,
+            IJimuDiagnostic jimuApm,
             ILogger logger)
         {
             _serviceDiscovery = serviceDiscovery;
@@ -30,6 +39,7 @@ namespace Jimu.Client
             _serviceTokenGetter = serviceTokenGetter;
             _logger = logger;
             _middlewares = new Stack<Func<ClientRequestDel, ClientRequestDel>>();
+            _jimuApm = jimuApm;
         }
 
         public async Task<T> InvokeAsync<T>(string serviceIdOrPath, IDictionary<string, object> paras, JimuPayload payload)
@@ -86,20 +96,25 @@ namespace Jimu.Client
                 service = await GetServiceByIdAsync(serviceIdOrPath);
             }
             if (service == null)
+            {
+                _logger.Debug($"{serviceIdOrPath} 404, service is null");
                 return new JimuRemoteCallResultData
                 {
                     ErrorCode = "404",
                     ErrorMsg = $"{serviceIdOrPath}, not found!"
                 };
+            }
 
             if (token == null && _serviceTokenGetter?.GetToken != null) token = _serviceTokenGetter.GetToken();
             var result = await InvokeAsync(service, paras, payload, token);
             if (!string.IsNullOrEmpty(result.ExceptionMessage))
+            {
                 return new JimuRemoteCallResultData
                 {
                     ErrorCode = "500",
                     ErrorMsg = $"{serviceIdOrPath}, {result.ToErrorString()}"
                 };
+            }
 
             if (string.IsNullOrEmpty(result.ErrorCode) && string.IsNullOrEmpty(result.ErrorMsg)) return result;
             if (int.TryParse(result.ErrorCode, out var erroCode) && erroCode > 200 && erroCode < 600)
@@ -114,14 +129,25 @@ namespace Jimu.Client
 
         public async Task<JimuRemoteCallResultData> InvokeAsync(JimuServiceRoute service, IDictionary<string, object> paras, JimuPayload payload, string token)
         {
-            var lastInvoke = GetLastInvoke();
-
-            foreach (var mid in _middlewares)
+            var context = new RemoteCallerContext(service, paras, payload, token, service.Address.First());
+            var operationId = _jimuApm.WriteRPCExecuteBefore(context);
+            try
             {
-                lastInvoke = mid(lastInvoke);
-            }
+                var lastInvoke = GetLastInvoke();
 
-            return await lastInvoke(new RemoteCallerContext(service, paras, payload, token, service.Address.First()));
+                foreach (var mid in _middlewares)
+                {
+                    lastInvoke = mid(lastInvoke);
+                }
+                var result = await lastInvoke(context);
+                _jimuApm.WriteRPCExecuteAfter(operationId, context, result);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _jimuApm.WriteRPCExecuteError(operationId, context, ex);
+                throw ex;
+            }
         }
 
         private ClientRequestDel GetLastInvoke()
@@ -141,7 +167,7 @@ namespace Jimu.Client
                  {
                      Parameters = context.Paras,
                      ServiceId = context.Service.ServiceDescriptor.Id,
-                     Payload = context.PayLoad,
+                     Payload = context.Payload,
                      Token = context.Token,
                      Descriptor = context.Service.ServiceDescriptor
                  });

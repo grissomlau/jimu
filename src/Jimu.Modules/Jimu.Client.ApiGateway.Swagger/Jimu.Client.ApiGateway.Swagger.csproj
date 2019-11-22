@@ -1,27 +1,34 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
-    <Version>0.6.0</Version>
-    <AssemblyVersion>0.6.0.0</AssemblyVersion>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <Version>1.0.0-rc5</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <Authors>grissomlau@qq.com</Authors>
     <Description>swagger support for jimu</Description>
-    <PackageLicenseUrl>https://github.com/grissomlau/Jimu/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression></PackageLicenseExpression>
     <Copyright>Jimu</Copyright>
     <PackageProjectUrl>https://github.com/grissomlau/Jimu</PackageProjectUrl>
     <RepositoryUrl>https://github.com/grissomlau/Jimu</RepositoryUrl>
     <PackageTags>netcore, micorservice, swagger</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <FileVersion>0.6.0.0</FileVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0-rc4" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Jimu.Client\Jimu.Client.csproj" />
-    <ProjectReference Include="..\..\Jimu\Jimu.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

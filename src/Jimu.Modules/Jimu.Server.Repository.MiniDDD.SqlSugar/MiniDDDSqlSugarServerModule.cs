@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Autofac;
+﻿using Autofac;
+using Jimu.Module;
 using Microsoft.Extensions.Configuration;
 using MiniDDD;
 using MiniDDD.UnitOfWork;
 using MiniDDD.UnitOfWork.SqlSugar;
+using System;
+using System.Linq;
 
 namespace Jimu.Server.Repository.MiniDDD.SqlSugar
 {

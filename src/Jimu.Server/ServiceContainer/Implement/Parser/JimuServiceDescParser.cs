@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Jimu.Common;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Xml.XPath;
 
-namespace Jimu.Server.Implement.Parser
+namespace Jimu.Server.ServiceContainer.Implement.Parser
 {
     class JimuServiceDescParser
     {
@@ -50,14 +51,14 @@ namespace Jimu.Server.Implement.Parser
             }
 
             var type = methodInfo.DeclaringType;
-            var routeTemplate = type.GetCustomAttribute<JimuServiceRouteAttribute>();
+            var routeTemplate = type.GetCustomAttribute<JimuAttribute>();
             if (routeTemplate != null)
             {
 
                 if (string.IsNullOrEmpty(desc.RoutePath))
                 {
                     var setPath = string.IsNullOrEmpty(desc.Rest) ? methodInfo.Name : desc.Rest;
-                    desc.RoutePath = JimuServiceRoute.ParseRoutePath(desc.HttpMethod, routeTemplate.RouteTemplate, type.Name, setPath, methodInfo.GetParameters().Select(x => x.Name).ToArray(), type.IsInterface);
+                    desc.RoutePath = JimuServiceRoute.ParseRoutePath(desc.HttpMethod, routeTemplate.GetTemplate(type), type.Name, setPath, methodInfo.GetParameters().Select(x => x.Name).ToArray(), type.IsInterface);
                 }
             }
 
@@ -86,7 +87,7 @@ namespace Jimu.Server.Implement.Parser
             if (jimuReturnComment != null)
             {
                 desc.Comment = jimuReturnComment.Comment;
-                desc.ReturnFormat = jimuReturnComment.Format;
+                desc.ReturnFormat = jimuReturnComment.Default;
             }
             if (string.IsNullOrEmpty(desc.Comment))
             {
@@ -100,62 +101,36 @@ namespace Jimu.Server.Implement.Parser
 
             }
 
-            List<Type> customTypes = new List<Type>();
-            if (methodInfo.ReturnType.ToString().IndexOf("System.Threading.Tasks.Task", StringComparison.Ordinal) == 0 &&
-                      methodInfo.ReturnType.IsGenericType)
+            Type returnType = methodInfo.ReturnType;
+
+            if (methodInfo.ReturnType.ToString().IndexOf("System.Threading.Tasks.Task", StringComparison.Ordinal) == 0)
             {
-                //desc.ReturnType = methodInfo.ReturnType.ToString();
-                desc.ReturnType = string.Join(",", methodInfo.ReturnType.GenericTypeArguments.Select(x => x.FullName));
-                customTypes = (from type in methodInfo.ReturnType.GenericTypeArguments
-                               from childType in type.GenericTypeArguments
-                               select childType).ToList();
-            }
-            else if (methodInfo.ReturnType.IsGenericType)
-            //if (methodInfo.ReturnType.IsGenericType)
-            {
-                //desc.ReturnType = string.Join(",", methodInfo.ReturnType.GenericTypeArguments.Select(x => x.FullName));
-                desc.ReturnType = methodInfo.ReturnType.ToString();
-                if (desc.ReturnType.StartsWith("System."))
-                    customTypes = methodInfo.ReturnType.GenericTypeArguments.ToList();
+                if (methodInfo.ReturnType.GenericTypeArguments.Any())
+                {
+                    returnType = methodInfo.ReturnType.GenericTypeArguments[0];
+                }
                 else
-                    customTypes = new List<Type> { methodInfo.ReturnType };
+                {
+                    returnType = typeof(void);
+                }
             }
-            else
+            desc.ReturnType = returnType.ToString();
+            if (returnType.IsGenericType && returnType.ToString().StartsWith("System."))
             {
-                desc.ReturnType = methodInfo.ReturnType.ToString();
-                customTypes = new List<Type> { methodInfo.ReturnType };
+                returnType = returnType.GenericTypeArguments[0];
+            }
+            else if (returnType.IsArray)
+            {
+                var arrayBaseType = returnType.Assembly.ExportedTypes.FirstOrDefault(x => x.FullName == returnType.FullName.TrimEnd('[', ']'));
+                returnType = arrayBaseType;
             }
 
-            // if not specify the return format in method attribute, we auto generate it.
-            if (string.IsNullOrEmpty(desc.ReturnFormat))
+            if (returnType != null)
             {
-                desc.ReturnFormat = GetReturnFormat(customTypes);
+                desc.Properties = GetProperties(returnType);
+
             }
             return JimuHelper.Serialize<string>(desc);
-        }
-
-        private string GetReturnFormat(List<Type> types)
-        {
-            StringBuilder sb = new StringBuilder();
-
-            foreach (var customType in types)
-            {
-                if (customType.IsClass
-                 && !customType.FullName.StartsWith("System."))
-                {
-                    sb.Append($"{{{ GetCustomTypeMembers(customType)}}},");
-                }
-                //else if (customType.FullName.StartsWith("System.Collections.Generic"))
-                //{
-                //    var childTypes = customType.GenericTypeArguments.ToList();
-                //    sb.Append($"[{GetReturnFormat(childTypes)}]");
-                //}
-                else
-                {
-                    sb.Append($"{customType.ToString()},");
-                }
-            }
-            return sb.ToString().TrimEnd(',');
         }
 
         private List<JimuServiceParameterDesc> GetParameters(MethodInfo method)
@@ -172,11 +147,13 @@ namespace Jimu.Server.Implement.Parser
 
             foreach (var para in method.GetParameters())
             {
+                var paraComment = paraComments.FirstOrDefault(x => x.FieldName == para.Name);
                 var paraDesc = new JimuServiceParameterDesc
                 {
                     Name = para.Name,
                     Type = para.ParameterType.ToString(),
-                    Comment = paraComments.FirstOrDefault(x => x.FieldName == para.Name)?.Comment,
+                    Comment = paraComment?.Comment,
+                    Default = paraComment?.Default
                 };
                 if (string.IsNullOrEmpty(paraDesc.Comment) && hasNode)
                 {
@@ -187,20 +164,126 @@ namespace Jimu.Server.Implement.Parser
                 if (para.ParameterType.IsClass
                 && !para.ParameterType.FullName.StartsWith("System."))
                 {
-                    //var t = Activator.CreateInstance(para.ParameterType);
-                    //sb.Append($"\"{para.Name}\":{_serializer.Serialize<string>(t)},");
-                    //sb.Append($"\"{para.Name}\":{{{GetCustomTypeMembers(para.ParameterType)}}},");
-                    paraDesc.Format = $"{{{ GetCustomTypeMembers(para.ParameterType)}}}";
-                }
-                else
-                {
-                    paraDesc.Format = $"{para.ParameterType.ToString()}";
-                    //sb.Append($"\"{para.Name}\":\"{para.ParameterType.ToString()}\",");
+                    paraDesc.Properties = GetProperties(para.ParameterType);
                 }
                 paras.Add(paraDesc);
             }
-            //return "{" + sb.ToString().TrimEnd(',') + "}";
             return paras;
+        }
+
+        private List<JimuServiceParameterDesc> GetProperties(Type customType, int level = 0, string specifyName = null)
+        {
+            if (level > 3 || customType == null)
+                return null;
+            level++;
+            StringBuilder sb = new StringBuilder(); ;
+            var xmlNode = GetXmlComment(customType);
+
+            List<JimuServiceParameterDesc> list = new List<JimuServiceParameterDesc>();
+            if (customType.IsArray)
+            {
+                var arrayBaseType = customType.Assembly.ExportedTypes.FirstOrDefault(x => x.FullName == customType.FullName.TrimEnd('[', ']'));
+                return new List<JimuServiceParameterDesc> {
+                            new JimuServiceParameterDesc
+                            {
+                                Name = specifyName?? customType.Name,
+                                //Type = customType.ToString().TrimEnd('[',']')
+                                Type = customType.ToString(),
+                                Properties = GetProperties(arrayBaseType)
+                            }
+                        };
+            }
+            else if (customType.IsEnum)
+            {
+
+                return new List<JimuServiceParameterDesc>{new JimuServiceParameterDesc
+                    {
+                        Name = specifyName?? customType.Name,
+                        Type = "System.Int",
+
+                    } };
+            }
+            else if (!customType.GetProperties().Any() || (customType.FullName.StartsWith("System.") && !customType.FullName.StartsWith("System.Collections")))
+            {
+                if (customType.FullName.StartsWith("System."))
+                {
+
+                    return new List<JimuServiceParameterDesc>{new JimuServiceParameterDesc
+                    {
+                        Name = specifyName?? customType.Name,
+                        Type = customType.ToString(),
+
+                    } };
+                }
+                return null;
+            }
+
+            foreach (var prop in customType.GetProperties())
+            {
+                var comment = prop.GetCustomAttribute<JimuFieldCommentAttribute>();
+                //var proComment = comment == null ? "" : (" | " + comment?.Comment);
+                var proComment = comment == null ? "" : ("" + comment?.Comment);
+                var key = XmlCommentsMemberNameHelper.GetMemberNameForMember(prop);
+                if (comment == null && xmlNode != null && xmlNode.TryGetValue(key, out var node))
+                {
+                    //proComment = $" | " + node.Value.Trim();
+                    proComment = node.Value.Trim();
+                }
+                proComment = FilterJson(proComment);
+
+                var paraDesc = new JimuServiceParameterDesc
+                {
+                    Comment = proComment,
+                    Name = prop.Name,
+                    Type = prop.PropertyType.ToString(),
+
+                };
+                if (prop.PropertyType.IsArray)
+                {
+                    paraDesc.Properties =
+                        new List<JimuServiceParameterDesc> {
+                            new JimuServiceParameterDesc
+                            {
+                                Type = prop.PropertyType.ToString().TrimEnd('[',']')
+                            }
+                        };
+                }
+
+                if (prop.PropertyType.IsClass
+              && !prop.PropertyType.FullName.StartsWith("System."))
+                {
+                    paraDesc.Properties = GetProperties(prop.PropertyType, level);
+                }
+                else if (prop.PropertyType.IsClass
+                    && prop.PropertyType.FullName.StartsWith("System.Collections.Generic.List")
+                    && prop.PropertyType.GenericTypeArguments.Length == 1
+                    )
+                {
+                    paraDesc.Properties = GetProperties(prop.PropertyType.GenericTypeArguments[0], level);
+                }
+                else if (prop.PropertyType.IsClass
+                   && prop.PropertyType.FullName.StartsWith("System.Collections.Generic.Dictionary"))
+                {
+                    var keyPros = GetProperties(prop.PropertyType.GenericTypeArguments[0], level, "key");
+                    var valPros = GetProperties(prop.PropertyType.GenericTypeArguments[1], level, "value");
+                    if (valPros.Count > 1)
+                    {
+                        keyPros.Add(new JimuServiceParameterDesc
+                        {
+                            Name = "value",
+                            Properties = valPros
+                        });
+                    }
+                    else
+                    {
+                        keyPros.AddRange(valPros);
+                    }
+                    paraDesc.Properties = keyPros;
+                }
+                list.Add(paraDesc);
+            }
+            return list;
+
         }
 
         private string GetCustomTypeMembers(Type customType, int level = 0)
@@ -213,6 +296,15 @@ namespace Jimu.Server.Implement.Parser
             var xmlNode = GetXmlComment(customType);
             foreach (var prop in customType.GetProperties())
             {
+                var comment = prop.GetCustomAttribute<JimuFieldCommentAttribute>();
+                var proComment = comment == null ? "" : (" | " + comment?.Comment);
+                var key = XmlCommentsMemberNameHelper.GetMemberNameForMember(prop);
+                if (comment == null && xmlNode != null && xmlNode.TryGetValue(key, out var node))
+                {
+                    proComment = $" | " + node.Value.Trim();
+                }
+                proComment = FilterJson(proComment);
+
                 if (prop.PropertyType.IsClass
               && !prop.PropertyType.FullName.StartsWith("System."))
                 {
@@ -226,7 +318,7 @@ namespace Jimu.Server.Implement.Parser
                 {
                     if (prop.PropertyType.GenericTypeArguments[0].FullName.StartsWith("System."))
                     {
-                        sb.Append($"\"{prop.Name}\":[{{}}],");
+                        sb.Append($"\"{prop.Name}\":\"[{prop.PropertyType.GenericTypeArguments[0].FullName}]\",");
                     }
                     else
                     {
@@ -234,16 +326,15 @@ namespace Jimu.Server.Implement.Parser
                         sb.Append($"\"{prop.Name}\":[{{{GetCustomTypeMembers(prop.PropertyType.GenericTypeArguments[0], level)}}}],");
                     }
                 }
+                else if (prop.PropertyType.IsClass
+                   && prop.PropertyType.FullName.StartsWith("System.Collections.Generic.Dictionary"))
+                {
+
+                    sb.Append($"\"{prop.Name}\":\"{prop.PropertyType.ToString().Replace("System.Collections.Generic.Dictionary`2", "")}{proComment}\",");
+                }
                 else
                 {
-                    var comment = prop.GetCustomAttribute<JimuFieldCommentAttribute>();
-                    var proComment = comment == null ? "" : (" | " + comment?.Comment);
-                    var key = XmlCommentsMemberNameHelper.GetMemberNameForMember(prop);
-                    if (comment == null && xmlNode != null && xmlNode.TryGetValue(key, out var node))
-                    {
-                        proComment = $" | " + node.Value.Trim();
-                    }
-                    proComment = FilterJson(proComment);
+
                     sb.Append($"\"{prop.Name}\":\"{prop.PropertyType.ToString()}{proComment}\",");
                 }
             }
@@ -271,6 +362,9 @@ namespace Jimu.Server.Implement.Parser
 
         private Dictionary<string, XPathNavigator> GetXmlComment(Type type)
         {
+            if (type == null)
+                return new Dictionary<string, XPathNavigator>();
+
             var key = type.Assembly.GetName().Name;
             //Dictionary<string, XPathNavigator> xmlComments = null;
             var fileFullName = $"{key}.xml";

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Jimu.Client.ApiGateway.Swagger
 {
@@ -21,10 +19,17 @@ namespace Jimu.Client.ApiGateway.Swagger
             }
             return type;
         }
+        public static bool CheckIsList(string type)
+        {
+            return type.IndexOf("System.Collections") >= 0;
+        }
+
         public static bool CheckIsArray(string type)
         {
+            if (string.IsNullOrEmpty(type)) return false;
             return type.IndexOf("System.Collections") >= 0 || type.IndexOf("[]") >= 0;
         }
+
         public static bool CheckIsObject(string type)
         {
             var systemTypeDic = GetSystemTypeDic();

@@ -1,14 +1,10 @@
-﻿using System;
+﻿using Autofac;
+using Jimu.Client.RemoteCaller;
+using Jimu.Common;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Autofac;
-using Jimu.Client;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace Jimu.Client.ApiGateway
+namespace Jimu.Client.ApiGateway.Core
 {
     public class JimuClient
     {
@@ -33,7 +29,12 @@ namespace Jimu.Client.ApiGateway
                 return new JimuRemoteCallResultData { ErrorCode = result.ErrorCode, ErrorMsg = result.ErrorMsg };
             }
             //if (result.ResultType == typeof(JimuFile).ToString())
-            if (result?.ResultType != null && result.ResultType.StartsWith("{\"ReturnType\":\"Jimu.JimuFile\""))
+            if (result?.ResultType != null && result.ResultType.StartsWith("{\"ReturnType\":\"Jimu.JimuRedirect\""))
+            {
+                var redirect = JimuHelper.Deserialize(result.Result, typeof(JimuRedirect));
+                result.Result = redirect;
+            }
+            else if (result?.ResultType != null && result.ResultType.StartsWith("{\"ReturnType\":\"Jimu.JimuFile\""))
             {
                 var file = JimuHelper.Deserialize(result.Result, typeof(JimuFile));
                 result.Result = file;

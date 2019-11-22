@@ -1,8 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using MiniDDD.UnitOfWork;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Jimu.Server.Repository.MiniDDD.EF
 {

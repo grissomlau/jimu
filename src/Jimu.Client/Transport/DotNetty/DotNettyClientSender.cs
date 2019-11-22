@@ -1,10 +1,11 @@
-﻿using System;
-using System.Threading.Tasks;
-using DotNetty.Buffers;
+﻿using DotNetty.Buffers;
 using DotNetty.Transport.Channels;
+using Jimu.Common;
 using Jimu.Logger;
+using System;
+using System.Threading.Tasks;
 
-namespace Jimu.Client
+namespace Jimu.Client.Transport.DotNetty
 {
     public class DotNettyClientSender : ClientSender, IDisposable
     {

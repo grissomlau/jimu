@@ -1,15 +1,16 @@
-﻿using System;
+﻿using Jimu.Client.ApiGateway.Core;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 
-namespace Jimu.Client.ApiGateway.Controllers
+namespace Jimu.Client.ApiGateway
 {
     //[Produces("application/json")]
     //[Route("api/[controller]")]
     public class JimuServicesController : Controller
     {
-        [HttpGet, HttpPost, HttpDelete, HttpPut]
+        [HttpGet, HttpPost, HttpDelete, HttpPut, AllowAnonymous]
         //public async Task<object> Path(string path, [FromQuery] MyQueryString query, [FromBody] Dictionary<string, object> model)
         public async Task<IActionResult> JimuPath(string path, [FromQuery] JimuQueryString query, [ModelBinder]JimuModel model)
         {
@@ -31,6 +32,11 @@ namespace Jimu.Client.ApiGateway.Controllers
             }
             var result = await JimuClient.Invoke($"{path}{(query.Query ?? "")}", paras, Request.Method);
 
+            if (result?.ResultType != null && result.ResultType.StartsWith("{\"ReturnType\":\"Jimu.JimuRedirect\""))
+            {
+                var redirect = result.Result as JimuRedirect;
+                return Redirect(redirect.RedirectUrl);
+            }
             //if (result.ResultType != typeof(JimuFile).ToString())
             if (result?.ResultType != null && result.ResultType.StartsWith("{\"ReturnType\":\"Jimu.JimuFile\""))
             {

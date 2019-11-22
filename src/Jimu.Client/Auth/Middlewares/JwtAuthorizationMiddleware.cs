@@ -1,13 +1,14 @@
-﻿using System;
+﻿using Jimu.Client.RemoteCaller;
+using Jimu.Common;
+using Jose;
+using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Jimu.Extension;
-using Jose;
 
-namespace Jimu.Client.Auth
+namespace Jimu.Client.Auth.Middlewares
 {
     /// <summary>
     /// support jwt middleware
@@ -101,7 +102,25 @@ namespace Jimu.Client.Auth
                             return Task.FromResult(result);
                         }
                     }
-                    context.PayLoad = new JimuPayload { Items = payloadObj };
+                    if (context.Payload == null)
+                    {
+                        context.Payload = new JimuPayload { Items = payloadObj };
+                    }
+                    else
+                    {
+                        foreach (var item in payloadObj)
+                        {
+                            if (context.Payload.Items.ContainsKey(item.Key))
+                            {
+                                context.Payload.Items[item.Key] = item.Value;
+                            }
+                            else
+                            {
+                                context.Payload.Items.Add(item);
+                            }
+                        }
+
+                    }
                 }
                 catch (Exception ex)
                 {

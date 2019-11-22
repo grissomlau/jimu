@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Jimu.Server.Implement.Parser
+namespace Jimu.Server.ServiceContainer.Implement.Parser
 {
     class XmlCommentsMemberNameHelper
     {

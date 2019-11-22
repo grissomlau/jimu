@@ -1,13 +1,12 @@
 ﻿using Autofac;
 using Autofac.Core;
+using Jimu.Common;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace Jimu.Server.Implement.Parser
+namespace Jimu.Server.ServiceContainer.Implement.Parser
 {
     class JimuServiceEntryParser
     {
@@ -43,21 +42,9 @@ namespace Jimu.Server.Implement.Parser
             return service;
         }
 
-        //private FastInvoke.FastInvokeHandler GetInvokeHandler(string key, MethodInfo method)
-        //{
-        //_handler.TryGetValue(Tuple.Create(method.DeclaringType, key), out var handler);
-        //if (handler == null)
-        //{
-        //    handler = FastInvoke.GetMethodInvoker(method);
-        //    _handler.GetOrAdd(Tuple.Create(method.DeclaringType, key), handler);
-        //}
-        //return handler;
-
-        //}
-
         private object GetInstance(string key, Type type, JimuPayload payload)
         {
-            // all service are instancePerDependency, to avoid resolve the same isntance , so we add using scop here
+            // all service are instancePerDependency, to avoid resolve the same isntance , so we use scop here
             using (var scope = _container.BeginLifetimeScope())
             {
                 if (string.IsNullOrEmpty(key))

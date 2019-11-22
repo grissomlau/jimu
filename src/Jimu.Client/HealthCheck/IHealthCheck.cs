@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Jimu.Client
+namespace Jimu.Client.HealthCheck
 {
     /// <summary>
     ///     server health check monitor

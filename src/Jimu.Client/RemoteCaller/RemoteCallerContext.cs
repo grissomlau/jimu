@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Text;
 
-namespace Jimu.Client
+namespace Jimu.Client.RemoteCaller
 {
     public class RemoteCallerContext
     {
@@ -11,7 +9,7 @@ namespace Jimu.Client
         public IDictionary<string, object> Paras { get; }
 
         public string Token { get; }
-        public JimuPayload PayLoad { get; set; }
+        public JimuPayload Payload { get; set; }
 
         public JimuAddress ServiceAddress { get; set; }
 
@@ -23,7 +21,7 @@ namespace Jimu.Client
             this.Paras = paras;
             this.Token = token;
             this.ServiceAddress = jimuAddress;
-            this.PayLoad = payload;
+            this.Payload = payload;
         }
     }
 }
