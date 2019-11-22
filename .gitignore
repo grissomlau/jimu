@@ -303,3 +303,14 @@
 /src/Samples/Order/Server.Order/obj
 /src/Samples/Order/Service.Order/bin/Debug/netcoreapp3.0
 /src/Samples/Order/Service.Order/obj
+/src/Jimu/bin/Release/netcoreapp3.0
+/src/Jimu.All/bin/Release/netcoreapp3.0
+/src/Jimu.Core/bin/Release/netstandard2.1
+/src/Jimu.Modules/Jimu.Client.Diagnostic.Skywalking/bin/Release/netcoreapp3.0
+/src/Jimu.Modules/Jimu.Server.Diagnostic.Skywalking/bin/Release/netcoreapp3.0
+/src/Samples/Auth/IService.Auth/bin/Release/netcoreapp3.0
+/src/Samples/Auth/Server.Auth/bin/Release/netcoreapp3.0
+/src/Samples/Auth/Service.Auth/bin/Release/netcoreapp3.0
+/src/Samples/Order/IService.Order/bin/Release/netcoreapp3.0
+/src/Samples/Order/Server.Order/bin/Release/netcoreapp3.0
+/src/Samples/Order/Service.Order/bin/Release/netcoreapp3.0
