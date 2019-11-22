@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Builder;
 
 namespace ApiGateway
 {
@@ -14,7 +15,7 @@ namespace ApiGateway
     {
         public static void Main(string[] args)
         {
-            Jimu.Client.ApplicationWebClient.Instance.Run();
+            Jimu.Client.ApplicationWebClient.Instance.Run(null, (env, app) => app.UseStaticFiles());
         }
     }
 }

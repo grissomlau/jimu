@@ -20,6 +20,47 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Views\Home\Index.cshtml" />
+    <None Include="Views\ServicesManager\Service.cshtml" />
+    <None Include="Views\Shared\_Layout.cshtml" />
+    <None Include="wwwroot\assets\libs\Bootstrap-Table\bootstrap-table.min.js" />
+    <None Include="wwwroot\assets\libs\Flat-UI\css\flat-ui.css.map" />
+    <None Include="wwwroot\assets\libs\Flat-UI\css\vendor\bootstrap\fonts\glyphicons-halflings-regular.svg" />
+    <None Include="wwwroot\assets\libs\Flat-UI\css\vendor\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
+    <None Include="wwwroot\assets\libs\Flat-UI\fonts\glyphicons\flat-ui-icons-regular.svg" />
+    <None Include="wwwroot\assets\libs\Flat-UI\fonts\lato\lato-black.svg" />
+    <None Include="wwwroot\assets\libs\Flat-UI\fonts\lato\lato-bold.svg" />
+    <None Include="wwwroot\assets\libs\Flat-UI\fonts\lato\lato-bolditalic.svg" />
+    <None Include="wwwroot\assets\libs\Flat-UI\fonts\lato\lato-italic.svg" />
+    <None Include="wwwroot\assets\libs\Flat-UI\fonts\lato\lato-light.svg" />
+    <None Include="wwwroot\assets\libs\Flat-UI\fonts\lato\lato-regular.svg" />
+    <None Include="wwwroot\assets\libs\Flat-UI\img\icons\svg\book.svg" />
+    <None Include="wwwroot\assets\libs\Flat-UI\img\icons\svg\calendar.svg" />
+    <None Include="wwwroot\assets\libs\Flat-UI\img\icons\svg\chat.svg" />
+    <None Include="wwwroot\assets\libs\Flat-UI\img\icons\svg\clipboard.svg" />
+    <None Include="wwwroot\assets\libs\Flat-UI\img\icons\svg\clocks.svg" />
+    <None Include="wwwroot\assets\libs\Flat-UI\img\icons\svg\compas.svg" />
+    <None Include="wwwroot\assets\libs\Flat-UI\img\icons\svg\gift-box.svg" />
+    <None Include="wwwroot\assets\libs\Flat-UI\img\icons\svg\loop.svg" />
+    <None Include="wwwroot\assets\libs\Flat-UI\img\icons\svg\mail.svg" />
+    <None Include="wwwroot\assets\libs\Flat-UI\img\icons\svg\map.svg" />
+    <None Include="wwwroot\assets\libs\Flat-UI\img\icons\svg\paper-bag.svg" />
+    <None Include="wwwroot\assets\libs\Flat-UI\img\icons\svg\pencils.svg" />
+    <None Include="wwwroot\assets\libs\Flat-UI\img\icons\svg\retina.svg" />
+    <None Include="wwwroot\assets\libs\Flat-UI\img\icons\svg\ribbon.svg" />
+    <None Include="wwwroot\assets\libs\Flat-UI\img\icons\svg\toilet-paper.svg" />
+    <None Include="wwwroot\assets\libs\Flat-UI\js\flat-ui.js" />
+    <None Include="wwwroot\assets\libs\Flat-UI\js\flat-ui.min.js" />
+    <None Include="wwwroot\assets\libs\Flat-UI\js\vendor\html5shiv.js" />
+    <None Include="wwwroot\assets\libs\Flat-UI\js\vendor\jquery.min.js" />
+    <None Include="wwwroot\assets\libs\Flat-UI\js\vendor\jquery.min.map" />
+    <None Include="wwwroot\assets\libs\Flat-UI\js\vendor\respond.min.js" />
+    <None Include="wwwroot\assets\libs\Flat-UI\js\vendor\video-js.swf" />
+    <None Include="wwwroot\assets\libs\Flat-UI\js\vendor\video.js" />
+    <None Include="wwwroot\assets\libs\VueJS\vue.min.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Update="JimuAppClientSettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
