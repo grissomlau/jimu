@@ -1,6 +1,6 @@
 
 ## Description
-jimu 是一个基于.Net Core 2.0 简单易用的微服务框架，使用了大量的开源库（如 DotNetty, consul.net, Flurl.Http, Json.net, Log4net, Quartz.net ... ）, 支持分布式、高并发和负载均衡， 实现了服务治理（如服务注册、发现、健康检测 ...）和 RPC 调用。  
+jimu 是一个基于.Net Core 3.0 简单易用的微服务框架，使用了大量的开源库（如 DotNetty, consul.net, Flurl.Http, Json.net, Log4net, Quartz.net ... ）, 支持分布式、高并发和负载均衡， 实现了服务治理（如服务注册、发现、健康检测 ...）和 RPC 调用。  
 
 jimu(积木)，正如其中文名，希望用她来开发项目像搭积木一样简单快速可控，使项目安全可靠稳定，整体架构可拓展、高并发、分布式。
 
@@ -70,12 +70,10 @@ jimu 最核心的思想是 IOC 和 DI, 通过配置文件使用了 autofac 将�
    ```
 
    
+#### 服务发现
+1. ConsulOptions： 使用 Consul 作为服务发现组件
 
-   #### 服务发现
-
-   1. ConsulOptions： 使用 Consul 作为服务发现组件
-
-      ```json
+```json
       {
           "ConsulOptions":{
        		 "Ip": "127.0.0.1", //consul ip
@@ -86,10 +84,6 @@ jimu 最核心的思想是 IOC 和 DI, 通过配置文件使用了 autofac 将�
           }
       }
 ```
-      
-   
-   
-   
 
 #### 服务调用协议
 
@@ -110,8 +104,7 @@ jimu 最核心的思想是 IOC 和 DI, 通过配置文件使用了 autofac 将�
 #### 服务
 
 1. ServiceOptions： 服务配置
-
-   ```json
+```json
    {
        "ServiceOptions":{
            "Path": "",//服务dll所在路径，默认当前目录
@@ -120,7 +113,8 @@ jimu 最核心的思想是 IOC 和 DI, 通过配置文件使用了 autofac 将�
            "EnableWatch": false//是否启动热加载
        }
    }
-   ```
+```
+   
 
 ##### ORM
 
