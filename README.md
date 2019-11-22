@@ -9,10 +9,12 @@ jimu(积木)，正如其中文名，希望用她来开发项目像搭积木一�
 ## Quick Start
 请下载 jimu 源码, 或者下载项目  [jimu.demo](https://github.com/grissomlau/jimu.demo)
 
-## About Me 
-项目暂时由我独自开发和管理，问题请提交 [issues](https://github.com/grissomlau/jimu/issues)  
-项目的更多资料正在断断续续地整理， 可关注我的 [博客园](http://www.cnblogs.com/grissom007/)  
-联系我请发邮件： grissomlau@qq.com
+## Install
+1. 启动 consul；
+2. 设置 Samples/ApiGateway, Samples/Server.Auth, Samples/Server.Order, Samples/Server.User 为启动项；
+3. 打开 http://localhost:54762/swagger/index.html
+
+
 
 ## 核心
 
@@ -109,8 +111,6 @@ jimu 最核心的思想是 IOC 和 DI, 通过配置文件使用了 autofac 将�
        "ServiceOptions":{
            "Path": "",//服务dll所在路径，默认当前目录
            "LoadFilePattern": "IService.dll,Service.dll",//需要加载的服务dll，支持统配符:*.dll,*.txt
-           "WatchFilePattern": "",//监视文件修改，实现热加载,e.g.:IService.dll,Service.dll,支持通配符：*.dll,*.json
-           "EnableWatch": false//是否启动热加载
        }
    }
 ```
@@ -323,8 +323,10 @@ MiniDDD 是一个轻量级的 DDD 框架， MiniDDD Repository 就是基于该�
    ```json
    {
        "TransportOptions":{
-           "Protocol":"Netty,Http" //传输协议： Netty, Http
+           "Protocol":"Netty" //传输协议： Netty
        }
    }
    ```
-
+## About Me 
+问题请提交 [issues](https://github.com/grissomlau/jimu/issues)  和 PR
+项目的更多资料正在断断续续地整理， 可关注我的 [博客园](http://www.cnblogs.com/grissom007/)  
