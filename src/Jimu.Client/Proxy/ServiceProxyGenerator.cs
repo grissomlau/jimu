@@ -72,9 +72,10 @@ namespace Jimu.Client.Proxy
                       SyntaxFactory.SingletonList<MemberDeclarationSyntax>(
                           SyntaxFactory.NamespaceDeclaration(
                               SyntaxFactory.QualifiedName(
-                                  SyntaxFactory.QualifiedName(
-                                      SyntaxFactory.IdentifierName("Jimu"),
-                                      SyntaxFactory.IdentifierName("Proxy")),
+                                  //SyntaxFactory.QualifiedName(
+                                      SyntaxFactory.IdentifierName("JimuProxy"),
+                                      //,SyntaxFactory.IdentifierName("Proxy")
+                                      //),
                                   SyntaxFactory.IdentifierName("ClientProxy")))
                   .WithMembers(
                       SyntaxFactory.SingletonList<MemberDeclarationSyntax>(
@@ -101,6 +102,7 @@ namespace Jimu.Client.Proxy
                     SyntaxFactory.UsingDirective(GetQualifiedNameSyntax("System.Threading.Tasks")),
                     SyntaxFactory.UsingDirective(GetQualifiedNameSyntax("System.Collections.Generic")),
                     SyntaxFactory.UsingDirective(GetQualifiedNameSyntax(typeof(IRemoteServiceCaller).Namespace)),
+                    SyntaxFactory.UsingDirective(SyntaxFactory.IdentifierName("Jimu")),
                     //SyntaxFactory.UsingDirective(GetQualifiedNameSyntax(typeof(JimuPayload).Namespace)),
                     SyntaxFactory.UsingDirective(GetQualifiedNameSyntax(typeof(ServiceProxyBase).Namespace))
                 });

@@ -35,7 +35,7 @@ namespace Jimu.Client.Proxy
                 MetadataReference.CreateFromFile(typeof(JimuPayload).GetTypeInfo().Assembly.Location),
                 MetadataReference.CreateFromFile(typeof(ServiceProxyGenerator).GetTypeInfo().Assembly.Location)
             }.Concat(references).Distinct();
-            return Compile(AssemblyInfo.Create("Jimu.Proxy.ClientProxy"), trees, references, logger);
+            return Compile(AssemblyInfo.Create("JimuProxy.ClientProxy"), trees, references, logger);
         }
 
         public static MemoryStream Compile(AssemblyInfo assemblyInfo, IEnumerable<SyntaxTree> trees, IEnumerable<MetadataReference> references, ILogger logger = null)
