@@ -15,7 +15,7 @@ namespace Jimu.Client.ApiGateway
 {
     public static class WebHostBuilderExtension
     {
-        internal static IHostBuilder UseWebHostJimu(this IHostBuilder hostBuilder, IApplication jimuApp, Action<IServiceCollection> servicesAction = null, Action<WebHostBuilderContext, IApplicationBuilder> appAction = null, Action<IMvcBuilder> mvcAction = null)
+        internal static IHostBuilder UseWebHostJimu(this IHostBuilder hostBuilder, IApplication jimuApp, Action<IServiceCollection> servicesAction = null, Action<WebHostBuilderContext, IApplicationBuilder> appAction = null, Action<IMvcBuilder> mvcAction = null, Action<IWebHostBuilder> webBuilderAction = null)
         {
 
             hostBuilder.ConfigureWebHostDefaults(web =>
@@ -45,6 +45,20 @@ namespace Jimu.Client.ApiGateway
                     appAction?.Invoke(context, app);
                     app.UseJimu(jimuApp);
                 });
+
+                var type = typeof(ClientWebModuleBase);
+                var webModules = AppDomain.CurrentDomain.GetAssemblies()
+                    .SelectMany(x => x.GetTypes())
+                    .Where(x => x.IsClass && type.IsAssignableFrom(x) && !x.IsAbstract)
+                    .Select(x => Activator.CreateInstance(x, jimuApp.JimuAppSettings) as ClientWebModuleBase)
+                    .OrderBy(x => x.Priority);
+
+                foreach (var configure in webModules)
+                {
+                    configure.DoWebHostBuilder(web, jimuApp.Container);
+                }
+
+                webBuilderAction?.Invoke(web);
             });
 
             jimuApp.Run();

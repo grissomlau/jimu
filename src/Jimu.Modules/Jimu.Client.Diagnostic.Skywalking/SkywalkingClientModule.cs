@@ -44,6 +44,15 @@ namespace Jimu.Client.Diagnostic.Skywalking
 
             base.DoWebConfigureServices(services, container);
         }
+
+        public override void DoWebHostBuilder(IWebHostBuilder webHostBuilder, IContainer container)
+        {
+            if (_options.Enable)
+            {
+                webHostBuilder.UseSetting(WebHostDefaults.HostingStartupAssembliesKey, "SkyAPM.Agent.AspNetCore");
+            }
+            base.DoWebHostBuilder(webHostBuilder, container);
+        }
     }
 
 

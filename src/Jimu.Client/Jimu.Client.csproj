@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <Version>1.0.2</Version>
+    <Version>1.0.3</Version>
     <Authors>grissomlau@qq.com</Authors>
     <Company>grissomlau@qq.com</Company>
     <Description>Jimu Client</Description>
@@ -12,8 +12,8 @@
     <PackageIconUrl></PackageIconUrl>
     <RepositoryUrl>https://github.com/grissomlau/Jimu</RepositoryUrl>
     <PackageTags>netcore,microservice</PackageTags>
-    <AssemblyVersion>1.0.2.0</AssemblyVersion>
-    <FileVersion>1.0.2.0</FileVersion>
+    <AssemblyVersion>1.0.3.0</AssemblyVersion>
+    <FileVersion>1.0.3.0</FileVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
   </PropertyGroup>

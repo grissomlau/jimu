@@ -32,5 +32,15 @@ namespace Jimu.Client
         public virtual void DoWebConfigureServices(IServiceCollection services, IContainer container)
         {
         }
+
+        /// <summary>
+        /// when webhostbuilder build
+        /// </summary>
+        /// <param name="webHostBuilder"></param>
+        /// <param name="container"></param>
+        public virtual void DoWebHostBuilder(IWebHostBuilder webHostBuilder, IContainer container)
+        {
+
+        }
     }
 }

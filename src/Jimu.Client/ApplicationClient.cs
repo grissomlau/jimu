@@ -28,6 +28,7 @@ namespace Jimu.Client
         public static ApplicationWebClient Instance = new ApplicationWebClient();
         private Action<IHostBuilder> _hostBuilderAction = null;
         Action<ApplicationClientBuilder> _clientBuilderAction;
+        Action<IWebHostBuilder> _webHostBuilderAction;
         private ApplicationWebClient()
         {
         }
@@ -39,6 +40,12 @@ namespace Jimu.Client
                 _clientBuilderAction = action;
             }
 
+            return this;
+        }
+
+        public ApplicationWebClient BuildWebHostBuilder(Action<IWebHostBuilder> action)
+        {
+            _webHostBuilderAction = action;
             return this;
         }
         public ApplicationWebClient BuildWebHost(Action<IHostBuilder> action)
@@ -68,7 +75,8 @@ namespace Jimu.Client
                      {
                          mvcBuilder.AddApplicationPart(Assembly.LoadFrom(viewDll));
                      }
-                 }
+                 },
+                 _webHostBuilderAction
               );
             hostBuilder.Build().Run();
         }
