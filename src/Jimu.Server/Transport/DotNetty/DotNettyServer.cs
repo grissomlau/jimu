@@ -190,12 +190,12 @@ namespace Jimu.Server.Transport.DotNetty
             {
                 var endpoint = new IPEndPoint(IPAddress.Parse(this._serverIp), this._serverPort);
                 _channel = await bootstrap.BindAsync(endpoint); // bind with ip not support in docker, will not connected
-                _logger.Info($"server start successfuly, address is： {_serverIp}:{_serverPort}");
+                _logger.Info($"server start successfully, address is： {_serverIp}:{_serverPort}");
             }
             else
             {
                 _channel = await bootstrap.BindAsync(_serverPort);
-                _logger.Info($"server start successfuly, address is： {JimuHelper.GetLocalIPAddress()}:{_serverPort}");
+                _logger.Info($"server start successfully, address is： {JimuHelper.GetLocalIPAddress()}:{_serverPort}");
             }
 
         }

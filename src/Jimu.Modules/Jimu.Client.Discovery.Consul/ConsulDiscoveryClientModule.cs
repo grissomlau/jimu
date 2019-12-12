@@ -23,7 +23,7 @@ namespace Jimu.Client.Discovery.Consul
             if (_options != null)
             {
                 var logger = container.Resolve<ILogger>();
-                logger.Info($"[config]use consul for services discovery, consul ip: {_options.Ip}:{_options.Port}, service cateogry: {_options.ServiceGroups}");
+                logger.Info($"[config]use consul for services discovery, consul ip: {_options.Ip}:{_options.Port}, service category: {_options.ServiceGroups}");
 
                 var clientDiscovery = container.Resolve<IClientServiceDiscovery>();
                 clientDiscovery.AddRoutesGetter(async () =>

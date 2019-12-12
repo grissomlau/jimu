@@ -69,7 +69,11 @@ namespace Jimu
                     result.Append($"{parameter}/");
                 else if (service.EndsWith(param))
                 {
-                    var curService = isInterface ? service.TrimStart('I') : service;
+                    var curService = service;
+                    if (isInterface && service.StartsWith('I') && service.Length > 1)
+                    {
+                        curService = service.Substring(1);
+                    }
                     curService = curService.Substring(0, curService.Length - param.Length);
                     result.Append($"{curService}/");
                 }
