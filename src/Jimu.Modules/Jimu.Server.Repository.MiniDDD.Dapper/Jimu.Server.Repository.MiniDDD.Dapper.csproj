@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <Authors>grissomlau@qq.com</Authors>
-    <Version>1.0.2</Version>
+    <Version>1.0.3</Version>
     <Description>MiniDDD Repository for jimu with dapper</Description>
     <PackageLicenseExpression></PackageLicenseExpression>
     <RepositoryUrl>https://github.com/grissomlau/Jimu</RepositoryUrl>
@@ -12,7 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MiniDDD.UnitOfWork.Dapper" Version="1.0.1" />
+    <PackageReference Include="MiniDDD.UnitOfWork.Dapper" Version="1.0.3" />
   </ItemGroup>
 
   <ItemGroup>
