@@ -160,13 +160,26 @@ namespace Jimu.Client.ApiGateway.Swagger
 
             if ((isObject || isArray) && returnDesc.Properties != null && returnDesc.Properties.Any())
             {
-                schema = new OpenApiSchema
+                if (isArray)
                 {
-                    Type = isArray ? "array" : "object",
-                    Title = returnDesc.Comment,
-                    Description = returnDesc.Comment,
-                    Properties = _schemaFactory.GetProperties(returnDesc.Properties)
-                };
+                    schema = new OpenApiSchema
+                    {
+                        Type = "array",
+                        Title = returnDesc.Comment,
+                        Description = returnDesc.Comment,
+                        Items = new OpenApiSchema { Properties = _schemaFactory.GetProperties(returnDesc.Properties) }
+                    };
+                }
+                else
+                {
+                    schema = new OpenApiSchema
+                    {
+                        Type = "object",
+                        Title = returnDesc.Comment,
+                        Description = returnDesc.Comment,
+                        Properties = _schemaFactory.GetProperties(returnDesc.Properties)
+                    };
+                }
             }
             response.Content.Add("application/json", new OpenApiMediaType
             {
