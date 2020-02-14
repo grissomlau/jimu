@@ -23,7 +23,7 @@ namespace Jimu.Client.Diagnostic.Skywalking
                 _options = new SkywalkingOptions();
         }
 
-        public override void DoHostBuild(IHostBuilder hostBuilder, IContainer container)
+        public override void DoHostBuild(IHostBuilder hostBuilder)
         {
             if (_options.Enable)
             {
@@ -32,26 +32,26 @@ namespace Jimu.Client.Diagnostic.Skywalking
                     .AddSkyAPM();
 
             }
-            base.DoHostBuild(hostBuilder, container);
+            base.DoHostBuild(hostBuilder);
         }
 
-        public override void DoWebConfigureServices(IServiceCollection services, IContainer container)
+        public override void DoWebConfigureServices(IServiceCollection services)
         {
             if (_options.Enable)
             {
                 services.AddSingleton<ITracingDiagnosticProcessor, JimuClientDiagnosticProcessor>();
             }
 
-            base.DoWebConfigureServices(services, container);
+            base.DoWebConfigureServices(services);
         }
 
-        public override void DoWebHostBuilder(IWebHostBuilder webHostBuilder, IContainer container)
+        public override void DoWebHostBuilder(IWebHostBuilder webHostBuilder)
         {
             if (_options.Enable)
             {
                 webHostBuilder.UseSetting(WebHostDefaults.HostingStartupAssembliesKey, "SkyAPM.Agent.AspNetCore");
             }
-            base.DoWebHostBuilder(webHostBuilder, container);
+            base.DoWebHostBuilder(webHostBuilder);
         }
     }
 

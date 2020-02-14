@@ -13,7 +13,7 @@ namespace Server.Order
         static void Main(string[] args)
         {
             Console.WriteLine("Order Server start...");
-            ApplicationServerClient.Instance.Run();
+            ApplicationMix.Instance.Run();
 
         }
     }

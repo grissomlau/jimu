@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Jimu.Module;
 using Jimu.Server.ServiceContainer;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,6 +15,7 @@ namespace Jimu.Server
 
         public List<Action<ContainerBuilder>> ServiceRegisters = new List<Action<ContainerBuilder>>();
         public List<Action<IContainer>> ServiceInitializers = new List<Action<IContainer>>();
+        protected List<Action<ContainerBuilder>> AfterLoadModules { get; }
 
         public ApplicationServerBuilder(ContainerBuilder containerBuilder, string settingName = "JimuAppServerSettings") : base(containerBuilder, settingName)
         {
@@ -45,10 +47,14 @@ namespace Jimu.Server
             return this;
         }
 
+        public override ApplicationServerBuilder AddBeforeBuilder(Action<ContainerBuilder> beforeBuilder)
+        {
+            return base.AddBeforeBuilder(beforeBuilder);
+        }
+
 
         public override IApplication Build()
         {
-            LoadModule();
             this.AddInitializer(container =>
             {
                 var serviceEntry = container.Resolve<IServiceEntryContainer>();
@@ -58,7 +64,7 @@ namespace Jimu.Server
 
             return base.Build();
         }
-        private void LoadModule()
+        protected override void LoadModule()
         {
 
             var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();

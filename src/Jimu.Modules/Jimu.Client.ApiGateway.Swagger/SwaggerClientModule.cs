@@ -21,7 +21,7 @@ namespace Jimu.Client.ApiGateway.Swagger
             if (_options == null)
                 _options = new SwaggerOptions();
         }
-        public override void DoWebConfigureServices(IServiceCollection services, IContainer container)
+        public override void DoWebConfigureServices(IServiceCollection services)
         {
             if (_options.Enable)
             {
@@ -32,9 +32,9 @@ namespace Jimu.Client.ApiGateway.Swagger
                 });
 
             }
-                base.DoWebConfigureServices(services, container);
+                base.DoWebConfigureServices(services);
         }
-        public override void DoWebConfigure(IApplicationBuilder app, IContainer container)
+        public override void DoWebConfigure(IApplicationBuilder app)
         {
             if (_options.Enable)
             {
@@ -44,7 +44,7 @@ namespace Jimu.Client.ApiGateway.Swagger
                 });
                 app.UseSwagger();
             }
-            base.DoWebConfigure(app, container);
+            base.DoWebConfigure(app);
         }
     }
 }

@@ -9,18 +9,18 @@ using System.Text;
 
 namespace Jimu
 {
-    public class ApplicationServerClient
+    public class ApplicationMix
     {
-        public static ApplicationServerClient Instance = new ApplicationServerClient();
+        public static ApplicationMix Instance = new ApplicationMix();
 
         Action<ApplicationServerBuilder> _serverBuilderAction;
         Action<ApplicationClientBuilder> _clientBuilderAction;
 
-        private ApplicationServerClient()
+        private ApplicationMix()
         {
         }
 
-        public ApplicationServerClient BuildClient(Action<ApplicationClientBuilder> action)
+        public ApplicationMix BuildClient(Action<ApplicationClientBuilder> action)
         {
             if (action != null)
             {
@@ -30,7 +30,7 @@ namespace Jimu
             return this;
         }
 
-        public ApplicationServerClient BuildServer(Action<ApplicationServerBuilder> action)
+        public ApplicationMix BuildServer(Action<ApplicationServerBuilder> action)
         {
             if (action != null)
             {
@@ -42,7 +42,7 @@ namespace Jimu
         public void Run(string clientSettingName = "JimuAppClientSettings", string serverSettingName = "JimuAppServerSettings")
         {
             IHostBuilder thisHostBuilder = null;
-            ApplicationHostServer.Instance.BuildHost((hostBuilder, container) =>
+            ApplicationHostServer.Instance.BuildHost((hostBuilder, containerBuilder) =>
             {
                 thisHostBuilder = hostBuilder;
             }).BuildServer(builder =>
@@ -56,8 +56,9 @@ namespace Jimu
                 {
                     var clientBuilder = new ApplicationClientBuilder(new ContainerBuilder(), clientSettingName);
                     _clientBuilderAction?.Invoke(clientBuilder);
+                    clientBuilder.BuildHostModule(thisHostBuilder);
                     hostClient = clientBuilder.Build();
-                    hostClient.RunInServer(thisHostBuilder);
+                    hostClient.Run();
                 });
             }).Run(serverSettingName);
         }

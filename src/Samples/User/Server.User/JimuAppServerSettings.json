@@ -27,6 +27,12 @@
   },
   "ServiceOptions": {
     "Path": "", //服务dll所在路径，默认当前目录
-    "LoadFilePattern": "IService.User.dll,Service.User.dll", //需要加载的服务dll，支持统配符:*.dll,*.txt
+    "LoadFilePattern": "IService.User.dll,Service.User.dll" //需要加载的服务dll，支持统配符:*.dll,*.txt
+  },
+  "MemcachedOptions": {
+    "Servers": [ {
+      "Address": "192.168.11.24",
+      "Port": 11211
+                 } ]
   }
 }

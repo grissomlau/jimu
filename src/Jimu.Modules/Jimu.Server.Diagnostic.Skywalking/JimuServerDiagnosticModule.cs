@@ -21,7 +21,7 @@ namespace Jimu.Server.Diagnostic.Skywalking
                 _options = new SkywalkingOptions();
         }
 
-        public override void DoHostBuild(IHostBuilder hostBuilder, IContainer container)
+        public override void DoHostBuild(IHostBuilder hostBuilder)
         {
             if (_options.Enable)
             {
@@ -30,7 +30,7 @@ namespace Jimu.Server.Diagnostic.Skywalking
                     .AddSkyAPM();
 
             }
-            base.DoHostBuild(hostBuilder, container);
+            base.DoHostBuild(hostBuilder);
         }
     }
 }

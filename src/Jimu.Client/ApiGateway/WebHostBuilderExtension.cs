@@ -5,6 +5,7 @@ using Jimu.Common;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Serialization;
@@ -15,58 +16,70 @@ namespace Jimu.Client.ApiGateway
 {
     public static class WebHostBuilderExtension
     {
-        internal static IHostBuilder UseWebHostJimu(this IHostBuilder hostBuilder, IApplication jimuApp, Action<IServiceCollection> servicesAction = null, Action<WebHostBuilderContext, IApplicationBuilder> appAction = null, Action<IMvcBuilder> mvcAction = null, Action<IWebHostBuilder> webBuilderAction = null)
+        internal static IHostBuilder UseWebHostJimu(this IHostBuilder hostBuilder, ApplicationClientBuilder jimuAppBuilder, Action<IServiceCollection> servicesAction = null, Action<WebHostBuilderContext, IApplicationBuilder> appAction = null, Action<IMvcBuilder> mvcAction = null, Action<IWebHostBuilder> webBuilderAction = null)
         {
-
-            hostBuilder.ConfigureWebHostDefaults(web =>
+            IApplication jimuApp = null;
+            jimuAppBuilder.AddBeforeBuilder(cb =>
             {
-                web
-                .ConfigureServices(services =>
+                hostBuilder.ConfigureWebHostDefaults(web =>
                 {
-                    services.AddControllersWithViews();
-                    servicesAction?.Invoke(services);
-                    var mvcBuilder = services.AddJimu(jimuApp);
-                    mvcAction?.Invoke(mvcBuilder);
-                })
-                .Configure((context, app) =>
-                {
-                    if (context.HostingEnvironment.IsDevelopment())
+
+                    var type = typeof(ClientWebModuleBase);
+                    var webModules = AppDomain.CurrentDomain.GetAssemblies()
+                        .SelectMany(x => x.GetTypes())
+                        .Where(x => x.IsClass && type.IsAssignableFrom(x) && !x.IsAbstract)
+                        .Select(x => Activator.CreateInstance(x, jimuAppBuilder.JimuAppSettings) as ClientWebModuleBase)
+                        .OrderBy(x => x.Priority);
+
+                    foreach (var configure in webModules)
                     {
-                        app.UseDeveloperExceptionPage();
+                        configure.DoWebHostBuilder(web);
                     }
-                    app.UseRouting();
-                    app.UseAuthorization();
-                    app.UseEndpoints(endpoints =>
+
+                    webBuilderAction?.Invoke(web);
+
+
+                    web
+                    .ConfigureServices(services =>
                     {
-                        endpoints.MapRazorPages();
-                        endpoints.MapControllers();
+                        services.AddControllersWithViews();
+                        servicesAction?.Invoke(services);
+                        var mvcBuilder = services.AddJimu(jimuAppBuilder.JimuAppSettings);
+                        mvcAction?.Invoke(mvcBuilder);
+                        cb.Populate(services);
+                    })
+                    .Configure((context, app) =>
+                    {
+                        if (context.HostingEnvironment.IsDevelopment())
+                        {
+                            app.UseDeveloperExceptionPage();
+                        }
+                        app.UseRouting();
+                        app.UseAuthorization();
+                        app.UseEndpoints(endpoints =>
+                        {
+                            endpoints.MapRazorPages();
+                            endpoints.MapControllers();
+                        });
+
+                        appAction?.Invoke(context, app);
+                        app.UseJimu(jimuApp);
+
+                        jimuApp.Run();
+                        JimuClient.Host = jimuApp;
+
                     });
 
-                    appAction?.Invoke(context, app);
-                    app.UseJimu(jimuApp);
                 });
 
-                var type = typeof(ClientWebModuleBase);
-                var webModules = AppDomain.CurrentDomain.GetAssemblies()
-                    .SelectMany(x => x.GetTypes())
-                    .Where(x => x.IsClass && type.IsAssignableFrom(x) && !x.IsAbstract)
-                    .Select(x => Activator.CreateInstance(x, jimuApp.JimuAppSettings) as ClientWebModuleBase)
-                    .OrderBy(x => x.Priority);
-
-                foreach (var configure in webModules)
-                {
-                    configure.DoWebHostBuilder(web, jimuApp.Container);
-                }
-
-                webBuilderAction?.Invoke(web);
             });
 
-            jimuApp.Run();
-            JimuClient.Host = jimuApp;
+            jimuApp = jimuAppBuilder.Build();
+
             return hostBuilder;
         }
 
-        public static IMvcBuilder AddJimu(this IServiceCollection services, IApplication host)
+        public static IMvcBuilder AddJimu(this IServiceCollection services, IConfigurationRoot config)
         {
             //services.AddCors();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -91,12 +104,12 @@ namespace Jimu.Client.ApiGateway
             var webModules = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(x => x.GetTypes())
                 .Where(x => x.IsClass && type.IsAssignableFrom(x) && !x.IsAbstract)
-                .Select(x => Activator.CreateInstance(x, host.JimuAppSettings) as ClientWebModuleBase)
+                .Select(x => Activator.CreateInstance(x, config) as ClientWebModuleBase)
                 .OrderBy(x => x.Priority);
 
             foreach (var configure in webModules)
             {
-                configure.DoWebConfigureServices(services, host.Container);
+                configure.DoWebConfigureServices(services);
             }
             return mvcBuilder;
         }
@@ -119,7 +132,7 @@ namespace Jimu.Client.ApiGateway
 
             foreach (var configure in webModules)
             {
-                configure.DoWebConfigure(app, host.Container);
+                configure.DoWebConfigure(app);
             }
 
             var httpContextAccessor = app.ApplicationServices.GetRequiredService<IHttpContextAccessor>();

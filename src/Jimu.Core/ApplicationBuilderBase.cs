@@ -35,12 +35,16 @@ namespace Jimu
         /// <summary>
         /// settings for jimu app
         /// </summary>
-        protected IConfigurationRoot JimuAppSettings { get; }
+        public IConfigurationRoot JimuAppSettings { get; }
 
         /// <summary>
         /// jimu setting without subfix of '.json', e.g.: JimuSetting
         /// </summary>
         protected string SettingName { get; }
+
+
+        protected List<Action<ContainerBuilder>> BeforeBuilders { get; }
+        protected List<Action<ContainerBuilder>> AfterLoadModules { get; }
 
         protected ApplicationBuilderBase(ContainerBuilder containerBuilder, string settingName)
         {
@@ -51,20 +55,29 @@ namespace Jimu
             Initializers = new List<Action<IContainer>>();
             Runners = new List<Action<IContainer>>();
             BeforeRunners = new List<Action<IContainer>>();
+            BeforeBuilders = new List<Action<ContainerBuilder>>();
+            AfterLoadModules = new List<Action<ContainerBuilder>>();
         }
 
 
         public virtual IApplication Build()
         {
+            LoadModule();
+
+            AfterLoadModules.ForEach(x => x(ContainerBuilder));
+
             IContainer container = null;
             var host = new Application(BeforeRunners, Runners, null);
             ContainerBuilder.Register(x => host).As<IApplication>().SingleInstance();
             ContainerBuilder.Register(x => container).As<IContainer>().SingleInstance();
             ContainerBuilder.RegisterType<ConsoleLogger>().As<ILogger>().SingleInstance();
+            ModuleRegisters.ForEach(x => x(ContainerBuilder));
+            BeforeBuilders.ForEach(x => x(ContainerBuilder));
 
-            ModuleRegisters.ForEach(x => { x(ContainerBuilder); });
             container = ContainerBuilder.Build();
-            Initializers.ForEach(x => { x(container); });
+
+
+            Initializers.ForEach(x => x(container));
             host.Container = container;
             host.JimuAppSettings = JimuAppSettings;
 
@@ -89,11 +102,25 @@ namespace Jimu
             return this as T;
         }
 
-       
-        public T AddBeforeRunner(Action<IContainer> beforeRunner)
+
+        public virtual T AddBeforeRunner(Action<IContainer> beforeRunner)
         {
             BeforeRunners.Add(beforeRunner);
             return this as T;
         }
+
+        public virtual T AddBeforeBuilder(Action<ContainerBuilder> beforeBuilder)
+        {
+            BeforeBuilders.Add(beforeBuilder);
+            return this as T;
+        }
+
+        public virtual T AddAfterLoadModule(Action<ContainerBuilder> afterLoadModule)
+        {
+            AfterLoadModules.Add(afterLoadModule);
+            return this as T;
+        }
+
+        protected abstract void LoadModule();
     }
 }

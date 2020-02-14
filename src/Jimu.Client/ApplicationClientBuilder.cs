@@ -40,18 +40,13 @@ namespace Jimu.Client
         }
 
 
-        public override IApplication Build()
-        {
-            LoadModule();
-            return base.Build();
-        }
         private static bool IsCandidateLibrary(RuntimeLibrary library, AssemblyName assemblyName)
         {
             return (library.Name == (assemblyName.Name))
                     || (library.Dependencies.Any(d => d.Name.StartsWith(assemblyName.Name)));
         }
 
-        private void LoadModule()
+        protected override void LoadModule()
         {
 
             AssemblyLoadContext.Default.Resolving += (context, name) =>

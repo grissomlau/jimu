@@ -16,7 +16,7 @@ namespace Jimu.Client
         public ClientGeneralModuleBase(IConfigurationRoot jimuAppSettings) : base(jimuAppSettings)
         {
         }
-        public virtual void DoHostBuild(IHostBuilder hostBuilder, IContainer container)
+        public virtual void DoHostBuild(IHostBuilder hostBuilder)
         {
         }
     }

@@ -21,15 +21,14 @@ namespace Jimu.Client
         /// when web host configure
         /// </summary>
         /// <param name="app"></param>
-        /// <param name="container"></param>
-        public virtual void DoWebConfigure(IApplicationBuilder app, IContainer container)
+        public virtual void DoWebConfigure(IApplicationBuilder app)
         {
         }
 
         /// <summary>
         /// when web host configureservices
         /// </summary>
-        public virtual void DoWebConfigureServices(IServiceCollection services, IContainer container)
+        public virtual void DoWebConfigureServices(IServiceCollection services)
         {
         }
 
@@ -37,8 +36,7 @@ namespace Jimu.Client
         /// when webhostbuilder build
         /// </summary>
         /// <param name="webHostBuilder"></param>
-        /// <param name="container"></param>
-        public virtual void DoWebHostBuilder(IWebHostBuilder webHostBuilder, IContainer container)
+        public virtual void DoWebHostBuilder(IWebHostBuilder webHostBuilder)
         {
 
         }

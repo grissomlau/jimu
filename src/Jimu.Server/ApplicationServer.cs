@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Linq;
@@ -20,7 +21,7 @@ namespace Jimu.Server
     public class ApplicationHostServer
     {
         public static ApplicationHostServer Instance = new ApplicationHostServer();
-        private Action<IHostBuilder, IContainer> _hostBuilderAction = null;
+        private Action<IHostBuilder, ContainerBuilder> _hostBuilderAction = null;
         private Action<ApplicationServerBuilder> _serverBuilderAction = null;
         private ApplicationHostServer()
         {
@@ -37,7 +38,7 @@ namespace Jimu.Server
             return this;
         }
 
-        public ApplicationHostServer BuildHost(Action<IHostBuilder, IContainer> action)
+        public ApplicationHostServer BuildHost(Action<IHostBuilder, ContainerBuilder> action)
         {
             _hostBuilderAction = action;
             return this;
@@ -46,28 +47,44 @@ namespace Jimu.Server
 
         public void Run(string settingName = "JimuAppServerSettings")
         {
-            var serverBuilder = new ApplicationServerBuilder(new Autofac.ContainerBuilder(), settingName);
+            var containerBuilder = new Autofac.ContainerBuilder();
+            var serverBuilder = new ApplicationServerBuilder(containerBuilder, settingName);
+            var hostBuilder = new HostBuilder();
+            IHost host = null;
+
+            serverBuilder.AddAfterLoadModule(cb =>
+            {
+                var type = typeof(ServerGeneralModuleBase);
+                var hostModules = AppDomain.CurrentDomain.GetAssemblies()
+                    .SelectMany(x => x.GetTypes())
+                    .Where(x => x.IsClass && type.IsAssignableFrom(x) && !x.IsAbstract)
+                    .Select(x => Activator.CreateInstance(x, serverBuilder.JimuAppSettings) as ServerGeneralModuleBase)
+                    .OrderBy(x => x.Priority);
+                foreach (var module in hostModules)
+                {
+                    module.DoHostBuild(hostBuilder);
+                }
+
+                hostBuilder.ConfigureServices(sc =>
+                {
+                    serverBuilder.AddBeforeBuilder(cb =>
+                    {
+                        cb.Populate(sc);
+                    });
+                });
+
+                host = hostBuilder.Build();
+            });
+
+
 
             _serverBuilderAction?.Invoke(serverBuilder);
+            _hostBuilderAction?.Invoke(hostBuilder, containerBuilder);
 
             var app = serverBuilder.Build();
 
-            var hostBuilder = new HostBuilder();
-
-            var type = typeof(ServerGeneralModuleBase);
-            var hostModules = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(x => x.GetTypes())
-                .Where(x => x.IsClass && type.IsAssignableFrom(x) && !x.IsAbstract)
-                .Select(x => Activator.CreateInstance(x, app.JimuAppSettings) as ServerGeneralModuleBase)
-                .OrderBy(x => x.Priority);
-            foreach (var module in hostModules)
-            {
-                module.DoHostBuild(hostBuilder, app.Container);
-            }
-
-            _hostBuilderAction?.Invoke(hostBuilder, app.Container);
             app.Run();
-            hostBuilder.Build().Run();
+            host?.Run();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Microsoft.Extensions.Configuration;
 using System;
 
 namespace Jimu
@@ -22,6 +23,8 @@ namespace Jimu
 
         T AddBeforeRunner(Action<IContainer> beforeRunner);
         T AddRunner(Action<IContainer> runner);
+
+        T AddBeforeBuilder(Action<ContainerBuilder> beforeBuilder);
 
         /// <summary>
         ///     build serviceHost

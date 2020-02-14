@@ -314,3 +314,5 @@
 /src/Samples/Order/IService.Order/bin/Release/netcoreapp3.0
 /src/Samples/Order/Server.Order/bin/Release/netcoreapp3.0
 /src/Samples/Order/Service.Order/bin/Release/netcoreapp3.0
+/src/Jimu.Modules/Jimu.Server.Memcached.EnyimMemcachedCore/obj
+/src/Jimu.Modules/Jimu.Server.Memcached.EnyimMemcachedCore/bin

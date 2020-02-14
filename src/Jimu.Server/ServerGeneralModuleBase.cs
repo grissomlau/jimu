@@ -14,7 +14,7 @@ namespace Jimu.Server
         {
         }
 
-        public virtual void DoHostBuild(IHostBuilder hostBuilder, IContainer container)
+        public virtual void DoHostBuild(IHostBuilder hostBuilder)
         {
 
         }

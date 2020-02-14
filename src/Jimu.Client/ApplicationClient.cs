@@ -64,8 +64,7 @@ namespace Jimu.Client
             var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var executeAss = Assembly.GetCallingAssembly();
 
-            hostBuilder.UseWebHostJimu(clientBuilder.Build()
-                , configureServicesAction
+            hostBuilder.UseWebHostJimu(clientBuilder, configureServicesAction
                 , configureAction
                  , mvcBuilder =>
                  {
