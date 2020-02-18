@@ -18,7 +18,7 @@ namespace Jimu.Server.Discovery.Consul
 
         public override void DoRegister(ContainerBuilder componentContainerBuilder)
         {
-            if (_options != null)
+            if (_options != null && _options.Enable)
             {
                 componentContainerBuilder.RegisterType<ConsulServiceDiscovery>().As<IServiceDiscovery>()
                                         .WithParameter("ip", _options.Ip)
@@ -33,14 +33,8 @@ namespace Jimu.Server.Discovery.Consul
 
         public override void DoInit(IContainer container)
         {
-            if (_options != null)
+            if (_options != null && _options.Enable)
             {
-                //while (!container.IsRegistered<IServer>())
-                //{
-                //    //default(SpinWait).SpinOnce();
-                //    Thread.Sleep(100);
-                //}
-
                 var logger = container.Resolve<ILogger>();
                 logger.Info($"[config]use consul for services discovery, consul ip: {_options.Ip}:{_options.Port}, service group: {_options.ServiceGroups}, server address: {_options.ServiceInvokeIp}:{_options.ServiceInvokePort} ");
 
@@ -50,10 +44,6 @@ namespace Jimu.Server.Discovery.Consul
                   {
                       try
                       {
-                          //if (!string.IsNullOrEmpty(serverAddress))
-                          //{
-                          //    await discovery.ClearAsync(serverAddress);
-                          //}
                           var discovery = container.Resolve<IServiceDiscovery>();
                           var server = container.Resolve<IServer>();
                           var routes = server.GetServiceRoutes();

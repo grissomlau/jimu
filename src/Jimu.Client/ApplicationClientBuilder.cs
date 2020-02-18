@@ -23,7 +23,7 @@ namespace Jimu.Client
     {
         public ApplicationClientBuilder(ContainerBuilder containerBuilder, string settingName = "JimuAppClientSettings") : base(containerBuilder, settingName)
         {
-            this.AddModule(cb =>
+            this.AddRegister(cb =>
             {
                 cb.RegisterType<RemoteServiceCaller>().As<IRemoteServiceCaller>().SingleInstance();
                 cb.RegisterType<ClientServiceDiscovery>().As<IClientServiceDiscovery>().SingleInstance();
@@ -98,8 +98,7 @@ namespace Jimu.Client
             {
                 this.AddInitializer(x.DoInit);
                 this.AddRunner(x.DoRun);
-                this.AddModule(x.DoRegister);
-                this.AddBeforeRunner(x.DoBeforeRun);
+                this.AddRegister(x.DoRegister);
             });
 
         }

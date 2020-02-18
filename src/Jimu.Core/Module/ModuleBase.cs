@@ -61,18 +61,5 @@ namespace Jimu.Module
         {
 
         }
-
-
-        /// <summary>
-        /// when on jimu run before
-        /// </summary>
-        /// <param name="container"></param>
-        /// <param name="jimuAppSettings"></param>
-        public virtual void DoBeforeRun(IContainer container)
-        {
-
-        }
-
-
     }
 }

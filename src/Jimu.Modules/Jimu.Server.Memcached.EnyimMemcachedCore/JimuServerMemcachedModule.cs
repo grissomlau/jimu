@@ -18,9 +18,11 @@ namespace Jimu.Server.Memcached.EnyimMemcachedCore
     public class JimuServerMemcachedModule : ServerGeneralModuleBase
     {
         private IConfigurationSection _configurationSection;
+        private MemcachedOptions _options; 
         public JimuServerMemcachedModule(IConfigurationRoot jimuAppSettings) : base(jimuAppSettings)
         {
             _configurationSection = jimuAppSettings.GetSection(typeof(MemcachedOptions).Name);
+            _options = jimuAppSettings.GetSection(typeof(MemcachedOptions).Name).Get<MemcachedOptions>();
         }
         public override void DoHostBuild(IHostBuilder hostBuilder)
         {
@@ -43,7 +45,7 @@ namespace Jimu.Server.Memcached.EnyimMemcachedCore
 
         public override void DoServiceRegister(ContainerBuilder serviceContainerBuilder)
         {
-            if (_configurationSection != null)
+            if (_configurationSection != null && _options.Enable)
             {
                 var client = _jimuContainer.Resolve<IMemcachedClient>();
                 serviceContainerBuilder.Register(x => client).As<IMemcachedClient>().SingleInstance();

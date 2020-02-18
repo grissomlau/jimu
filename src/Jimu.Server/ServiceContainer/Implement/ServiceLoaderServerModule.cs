@@ -7,6 +7,7 @@ namespace Jimu.Server.ServiceContainer.Implement
 {
     public class ServiceLoaderServerModule : ServerModuleBase
     {
+        public override ModuleExecPriority Priority => ModuleExecPriority.Critical;
         public ServiceOptions _options;
         public ServiceLoaderServerModule(IConfigurationRoot jimuAppSettings) : base(jimuAppSettings)
         {
@@ -23,7 +24,7 @@ namespace Jimu.Server.ServiceContainer.Implement
             base.DoRegister(componentContainerBuilder);
         }
 
-        public override void DoBeforeRun(IContainer container)
+        public override void DoRun(IContainer container)
         {
             if (_options != null)
             {

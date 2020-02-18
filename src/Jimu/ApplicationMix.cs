@@ -49,7 +49,7 @@ namespace Jimu
             {
                 _serverBuilderAction?.Invoke(builder);
                 IApplication hostClient = null;
-                builder.AddServiceModule(x =>
+                builder.AddServiceRegister(x =>
                 {
                     x.Register(c => hostClient.Container.Resolve<IServiceProxy>()).As<IServiceProxy>();
                 }).AddRunner(x =>

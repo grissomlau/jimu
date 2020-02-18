@@ -4,6 +4,7 @@ namespace Jimu.Server.Repository.MiniDDD.Dapper
 {
     public class MiniDDDDapperOptions
     {
+        public bool Enable { get; set; } = true;
         public string ConnectionString { get; set; }
         public DbType DbType { get; set; }
 

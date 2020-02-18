@@ -15,15 +15,14 @@ namespace Jimu.Server
 
         public List<Action<ContainerBuilder>> ServiceRegisters = new List<Action<ContainerBuilder>>();
         public List<Action<IContainer>> ServiceInitializers = new List<Action<IContainer>>();
-        protected List<Action<ContainerBuilder>> AfterLoadModules { get; }
 
         public ApplicationServerBuilder(ContainerBuilder containerBuilder, string settingName = "JimuAppServerSettings") : base(containerBuilder, settingName)
         {
         }
 
-        public override ApplicationServerBuilder AddModule(Action<ContainerBuilder> moduleRegister)
+        public override ApplicationServerBuilder AddRegister(Action<ContainerBuilder> moduleRegister)
         {
-            return base.AddModule(moduleRegister);
+            return base.AddRegister(moduleRegister);
         }
 
         public override ApplicationServerBuilder AddInitializer(Action<IContainer> initializer)
@@ -36,7 +35,7 @@ namespace Jimu.Server
             return base.AddRunner(runner);
         }
 
-        public virtual ApplicationServerBuilder AddServiceModule(Action<ContainerBuilder> moduleRegister)
+        public virtual ApplicationServerBuilder AddServiceRegister(Action<ContainerBuilder> moduleRegister)
         {
             ServiceRegisters.Add(moduleRegister);
             return this;
@@ -83,12 +82,15 @@ namespace Jimu.Server
                 .OrderBy(x => x.Priority); ;
             components.ToList().ForEach(x =>
                 {
+                    // jimu module
+                    this.AddRegister(x.DoRegister);
                     this.AddInitializer(x.DoInit);
                     this.AddRunner(x.DoRun);
-                    this.AddModule(x.DoRegister);
-                    this.AddServiceModule(x.DoServiceRegister);
+                    //this.AddBeforeRunner(x.DoBeforeRun);
+
+                    // service module
+                    this.AddServiceRegister(x.DoServiceRegister);
                     this.AddServiceInitializer(x.DoServiceInit);
-                    this.AddBeforeRunner(x.DoBeforeRun);
 
                 });
 

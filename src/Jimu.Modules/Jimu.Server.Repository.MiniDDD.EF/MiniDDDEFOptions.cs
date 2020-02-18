@@ -5,6 +5,7 @@ namespace Jimu.Server.Repository.MiniDDD.EF
 {
     public class MiniDDDEFOptions
     {
+        public bool Enable { get; set; } = true;
         public string ConnectionString { get; set; }
         public DbType DbType { get; set; }
 

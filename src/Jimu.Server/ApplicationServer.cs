@@ -52,7 +52,7 @@ namespace Jimu.Server
             var hostBuilder = new HostBuilder();
             IHost host = null;
 
-            serverBuilder.AddAfterLoadModule(cb =>
+            serverBuilder.AddRegister(cb =>
             {
                 var type = typeof(ServerGeneralModuleBase);
                 var hostModules = AppDomain.CurrentDomain.GetAssemblies()
@@ -64,6 +64,9 @@ namespace Jimu.Server
                 {
                     module.DoHostBuild(hostBuilder);
                 }
+
+                _hostBuilderAction?.Invoke(hostBuilder, containerBuilder);
+                _serverBuilderAction?.Invoke(serverBuilder);
 
                 hostBuilder.ConfigureServices(sc =>
                 {
@@ -77,9 +80,6 @@ namespace Jimu.Server
             });
 
 
-
-            _serverBuilderAction?.Invoke(serverBuilder);
-            _hostBuilderAction?.Invoke(hostBuilder, containerBuilder);
 
             var app = serverBuilder.Build();
 

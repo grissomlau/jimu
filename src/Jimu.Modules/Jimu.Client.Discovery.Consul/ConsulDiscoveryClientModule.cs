@@ -20,7 +20,7 @@ namespace Jimu.Client.Discovery.Consul
 
         public override void DoInit(IContainer container)
         {
-            if (_options != null)
+            if (_options != null && _options.Enable)
             {
                 var logger = container.Resolve<ILogger>();
                 logger.Info($"[config]use consul for services discovery, consul ip: {_options.Ip}:{_options.Port}, service category: {_options.ServiceGroups}");

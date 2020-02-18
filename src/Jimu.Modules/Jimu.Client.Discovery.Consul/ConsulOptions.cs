@@ -2,6 +2,7 @@
 {
     public class ConsulOptions
     {
+        public bool Enable { get; set; } = true;
         /// <summary>
         /// consul ip
         /// </summary>

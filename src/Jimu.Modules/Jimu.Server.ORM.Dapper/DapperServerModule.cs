@@ -22,7 +22,7 @@ namespace Jimu.Server.ORM.Dapper
 
         public override void DoServiceRegister(ContainerBuilder serviceContainerBuilder)
         {
-            if (_options != null)
+            if (_options != null && _options.Enable)
             {
                 // register dbfactory
                 DbFactory dbFactory = new DbFactory(_options);

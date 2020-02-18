@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <Version>1.0.3</Version>
+    <Version>1.1.0</Version>
     <Authors>grissomlau@qq.com</Authors>
     <PackageLicenseExpression></PackageLicenseExpression>
     <Copyright>Jimu</Copyright>
@@ -11,6 +11,7 @@
     <Description>MiniDDD Repository for jimu with SqlSugar</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>

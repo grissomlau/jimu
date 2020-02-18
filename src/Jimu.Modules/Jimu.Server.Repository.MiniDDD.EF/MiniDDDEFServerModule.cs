@@ -21,7 +21,7 @@ namespace Jimu.Server.Repository.MiniDDD.EF
 
         public override void DoServiceRegister(ContainerBuilder serviceContainerBuilder)
         {
-            if (_options != null)
+            if (_options != null && _options.Enable)
             {
                 DbContextOptions dbContextOptions = new DbContextOptions
                 {

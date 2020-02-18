@@ -56,7 +56,6 @@ namespace Jimu
             Runners = new List<Action<IContainer>>();
             BeforeRunners = new List<Action<IContainer>>();
             BeforeBuilders = new List<Action<ContainerBuilder>>();
-            AfterLoadModules = new List<Action<ContainerBuilder>>();
         }
 
 
@@ -64,13 +63,12 @@ namespace Jimu
         {
             LoadModule();
 
-            AfterLoadModules.ForEach(x => x(ContainerBuilder));
-
             IContainer container = null;
             var host = new Application(BeforeRunners, Runners, null);
             ContainerBuilder.Register(x => host).As<IApplication>().SingleInstance();
             ContainerBuilder.Register(x => container).As<IContainer>().SingleInstance();
             ContainerBuilder.RegisterType<ConsoleLogger>().As<ILogger>().SingleInstance();
+
             ModuleRegisters.ForEach(x => x(ContainerBuilder));
             BeforeBuilders.ForEach(x => x(ContainerBuilder));
 
@@ -96,7 +94,7 @@ namespace Jimu
             return this as T;
         }
 
-        public virtual T AddModule(Action<ContainerBuilder> moduleRegister)
+        public virtual T AddRegister(Action<ContainerBuilder> moduleRegister)
         {
             ModuleRegisters.Add(moduleRegister);
             return this as T;
@@ -112,12 +110,6 @@ namespace Jimu
         public virtual T AddBeforeBuilder(Action<ContainerBuilder> beforeBuilder)
         {
             BeforeBuilders.Add(beforeBuilder);
-            return this as T;
-        }
-
-        public virtual T AddAfterLoadModule(Action<ContainerBuilder> afterLoadModule)
-        {
-            AfterLoadModules.Add(afterLoadModule);
             return this as T;
         }
 
