@@ -18,7 +18,7 @@ namespace Jimu.Server.Memcached.EnyimMemcachedCore
     public class JimuServerMemcachedModule : ServerGeneralModuleBase
     {
         private IConfigurationSection _configurationSection;
-        private MemcachedOptions _options; 
+        private MemcachedOptions _options;
         public JimuServerMemcachedModule(IConfigurationRoot jimuAppSettings) : base(jimuAppSettings)
         {
             _configurationSection = jimuAppSettings.GetSection(typeof(MemcachedOptions).Name);
@@ -26,7 +26,7 @@ namespace Jimu.Server.Memcached.EnyimMemcachedCore
         }
         public override void DoHostBuild(IHostBuilder hostBuilder)
         {
-            if (_configurationSection != null)
+            if (_options != null && _options.Enable)
             {
                 hostBuilder.ConfigureServices(services =>
                 {
@@ -45,7 +45,7 @@ namespace Jimu.Server.Memcached.EnyimMemcachedCore
 
         public override void DoServiceRegister(ContainerBuilder serviceContainerBuilder)
         {
-            if (_configurationSection != null && _options.Enable)
+            if (_options != null && _options.Enable)
             {
                 var client = _jimuContainer.Resolve<IMemcachedClient>();
                 serviceContainerBuilder.Register(x => client).As<IMemcachedClient>().SingleInstance();
@@ -57,16 +57,18 @@ namespace Jimu.Server.Memcached.EnyimMemcachedCore
         public override void DoServiceInit(IContainer container)
         {
             var logger = container.Resolve<ILogger>();
-
-            try
+            if (_options != null && _options.Enable)
             {
-                var client = container.Resolve<IMemcachedClient>();
-                client.GetValueAsync<string>("EnyimMemcached").Wait();
-                logger.Info("EnyimMemcached Register successfully.");
-            }
-            catch (Exception ex)
-            {
-                logger.Error("Failed to UseEnyimMemcached,", ex);
+                try
+                {
+                    var client = container.Resolve<IMemcachedClient>();
+                    client.GetValueAsync<string>("EnyimMemcached").Wait();
+                    logger.Info("EnyimMemcached Register successfully.");
+                }
+                catch (Exception ex)
+                {
+                    logger.Error("Failed to UseEnyimMemcached,", ex);
+                }
             }
             base.DoServiceInit(container);
         }
