@@ -4,6 +4,6 @@ namespace Jimu.Database
 {
     public interface IDbFactory
     {
-        DbConnection Create();
+        DbConnection Create(string name = null);
     }
 }
