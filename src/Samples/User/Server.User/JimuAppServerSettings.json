@@ -14,10 +14,13 @@
     "ServiceInvokeIp": "127.0.0.1", //服务宿主的地址
     "ServiceInvokePort": "8002"
   },
-  "DapperOptions": {
-    "ConnectionString": "server=127.0.0.1;database=jimu_sample;user=root;pwd=root;Allow User Variables=True;",
-    "DbType": "MySql"
-  },
+  "MultipleDapperOptions": [
+    {
+      "ConnectionString": "server=127.0.0.1;database=jimu_sample;user=root;pwd=root;Allow User Variables=True;",
+      "DbType": "MySql",
+      "OptionName": "RWDB"
+    }
+  ],
   "TransportOptions": {
     "Ip": "127.0.0.1", //服务宿主ip
     "Port": 8002, //服务宿主端口
@@ -30,9 +33,11 @@
     "LoadFilePattern": "IService.User.dll,Service.User.dll" //需要加载的服务dll，支持统配符:*.dll,*.txt
   },
   "MemcachedOptions": {
-    "Servers": [ {
-      "Address": "192.168.11.24",
-      "Port": 11211
-                 } ]
+    "Servers": [
+      {
+        "Address": "192.168.11.24",
+        "Port": 11211
+      }
+    ]
   }
 }

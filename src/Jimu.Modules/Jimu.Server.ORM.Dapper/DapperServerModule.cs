@@ -37,7 +37,7 @@ namespace Jimu.Server.ORM.Dapper
             else if (_mulOptions != null && _mulOptions.Enable)
             {
                 // register dbfactory
-                DbFactory dbFactory = new DbFactory(_options);
+                DbFactory dbFactory = new DbFactory(_mulOptions);
                 serviceContainerBuilder.Register((context) =>
                 {
                     return dbFactory;

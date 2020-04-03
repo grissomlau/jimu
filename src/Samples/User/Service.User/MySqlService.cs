@@ -37,7 +37,7 @@ namespace Service.User
 
         public List<UserModel> GetAllUser()
         {
-            using (var db = _dbFactory.Create())
+            using (var db = _dbFactory.Create("RWDB"))
             {
                 return db.Query<UserModel>("Select * From user").AsList();
             }
