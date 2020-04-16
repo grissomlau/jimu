@@ -2,6 +2,7 @@
 using Jimu.Client.RemoteCaller;
 using Jimu.Logger;
 using Polly;
+using System;
 using System.Threading.Tasks;
 
 namespace Jimu.Client.FaultTolerant
@@ -27,7 +28,7 @@ namespace Jimu.Client.FaultTolerant
                 _retryTimes = context.Service.Address.Count;
             }
             var retryPolicy = Policy.Handle<TransportException>()
-                .RetryAsync(_retryTimes,
+                .WaitAndRetryAsync(_retryTimes, retryCurrent => TimeSpan.FromSeconds(Math.Pow(2, retryCurrent)),
                     async (ex, count) =>
                     {
                         context.ServiceAddress = await _addressSelector.GetAddressAsyn(context.Service);
