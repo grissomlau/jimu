@@ -86,6 +86,7 @@ namespace Jimu.Server
                     this.AddRegister(x.DoRegister);
                     this.AddInitializer(x.DoInit);
                     this.AddRunner(x.DoRun);
+                    this.AddDisposer(x.DoDispose);
                     //this.AddBeforeRunner(x.DoBeforeRun);
 
                     // service module

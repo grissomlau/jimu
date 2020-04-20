@@ -65,7 +65,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server.Order", "Samples\Ord
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.All", "Jimu.All\Jimu.All.csproj", "{16E0A604-D613-40EF-AAFC-92EE17213B86}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jimu.Server.Memcached.EnyimMemcachedCore", "Jimu.Modules\Jimu.Server.Memcached.EnyimMemcachedCore\Jimu.Server.Memcached.EnyimMemcachedCore.csproj", "{8878AB09-E66F-4CD8-8F16-3B1F2E4FC1B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Server.Memcached.EnyimMemcachedCore", "Jimu.Modules\Jimu.Server.Memcached.EnyimMemcachedCore\Jimu.Server.Memcached.EnyimMemcachedCore.csproj", "{8878AB09-E66F-4CD8-8F16-3B1F2E4FC1B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jimu.Server.Bus.MassTransit.RabbitMq", "Jimu.Modules\Jimu.Server.Bus.MassTransit.RabbitMq\Jimu.Server.Bus.MassTransit.RabbitMq.csproj", "{56208DEF-4756-4D41-977D-E39D24D7E10F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -177,6 +179,10 @@ Global
 		{8878AB09-E66F-4CD8-8F16-3B1F2E4FC1B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8878AB09-E66F-4CD8-8F16-3B1F2E4FC1B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8878AB09-E66F-4CD8-8F16-3B1F2E4FC1B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56208DEF-4756-4D41-977D-E39D24D7E10F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56208DEF-4756-4D41-977D-E39D24D7E10F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56208DEF-4756-4D41-977D-E39D24D7E10F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56208DEF-4756-4D41-977D-E39D24D7E10F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -206,6 +212,7 @@ Global
 		{661D3012-2E30-4316-A66E-4BF192552556} = {D35012AF-C669-4527-BE0F-6B6667825BB5}
 		{348A4C2C-E16D-4C6E-BA1E-C077B4C7C6DF} = {D35012AF-C669-4527-BE0F-6B6667825BB5}
 		{8878AB09-E66F-4CD8-8F16-3B1F2E4FC1B1} = {238A367F-90BC-4E5A-B11B-4D04519621B7}
+		{56208DEF-4756-4D41-977D-E39D24D7E10F} = {238A367F-90BC-4E5A-B11B-4D04519621B7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B2F7F17C-34DB-4FBF-8BCD-49BC2FA3A10F}

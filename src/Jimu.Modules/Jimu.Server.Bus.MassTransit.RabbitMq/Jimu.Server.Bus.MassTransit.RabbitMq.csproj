@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Version>1.2.0</Version>
+    <Authors>grissomlau@qq.com</Authors>
+    <Product>Jimu.Server.Bus.MassTransit.RabbitMq</Product>
+    <Description>jimu server message queue</Description>
+    <Copyright>Jimu</Copyright>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/grissomlau/Jimu</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/grissomlau/Jimu</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\LICENSE.txt" Link="LICENSE.txt">
+      <PackagePath></PackagePath>
+      <Pack>True</Pack>
+    </None>
+    <None Include="..\..\..\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MassTransit.RabbitMQ" Version="6.2.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Jimu.Server\Jimu.Server.csproj" />
+  </ItemGroup>
+
+</Project>

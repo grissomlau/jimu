@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Jimu.Server.Transport
@@ -28,5 +29,7 @@ namespace Jimu.Server.Transport
         /// <param name="middleware"></param>
         /// <returns></returns>
         IServer Use(Func<RequestDel, RequestDel> middleware);
+
+        IPEndPoint GetServerAddress();
     }
 }

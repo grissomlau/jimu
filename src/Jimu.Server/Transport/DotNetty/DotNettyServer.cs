@@ -210,5 +210,14 @@ namespace Jimu.Server.Transport.DotNetty
             _middlewares.Push(middleware);
             return this;
         }
+
+        public IPEndPoint GetServerAddress()
+        {
+            if (_serverIp == "0.0.0.0")
+            {
+                return new IPEndPoint(IPAddress.Parse(JimuHelper.GetLocalIPAddress()), _serverPort);
+            }
+            return new IPEndPoint(IPAddress.Parse(_serverIp), _serverPort);
+        }
     }
 }

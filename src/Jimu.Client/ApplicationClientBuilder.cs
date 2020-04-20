@@ -98,6 +98,7 @@ namespace Jimu.Client
             {
                 this.AddInitializer(x.DoInit);
                 this.AddRunner(x.DoRun);
+                this.AddDisposer(x.DoDispose);
                 this.AddRegister(x.DoRegister);
             });
 

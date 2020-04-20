@@ -26,6 +26,8 @@ namespace Jimu
 
         protected List<Action<IContainer>> BeforeRunners { get; }
 
+        protected List<Action<IContainer>> Disposer { get; }
+
         /// <summary>
         ///     action will be execute in registering: before autofac container build
         /// </summary>
@@ -56,6 +58,7 @@ namespace Jimu
             Runners = new List<Action<IContainer>>();
             BeforeRunners = new List<Action<IContainer>>();
             BeforeBuilders = new List<Action<ContainerBuilder>>();
+            Disposer = new List<Action<IContainer>>();
         }
 
 
@@ -64,7 +67,7 @@ namespace Jimu
             LoadModule();
 
             IContainer container = null;
-            var host = new Application(BeforeRunners, Runners, null);
+            var host = new Application(BeforeRunners, Runners, Disposer);
             ContainerBuilder.Register(x => host).As<IApplication>().SingleInstance();
             ContainerBuilder.Register(x => container).As<IContainer>().SingleInstance();
             ContainerBuilder.RegisterType<ConsoleLogger>().As<ILogger>().SingleInstance();
@@ -91,6 +94,12 @@ namespace Jimu
         public virtual T AddRunner(Action<IContainer> runner)
         {
             Runners.Add(runner);
+            return this as T;
+        }
+
+        public virtual T AddDisposer(Action<IContainer> disposer)
+        {
+            Disposer.Add(disposer);
             return this as T;
         }
 

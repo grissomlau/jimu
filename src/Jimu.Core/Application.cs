@@ -8,9 +8,9 @@ namespace Jimu
 {
     public class Application : IApplication
     {
-        private readonly List<Action<IContainer>> _disposeActions;
-        private readonly List<Action<IContainer>> _runActions;
-        private readonly List<Action<IContainer>> _beforeRunActions;
+        private List<Action<IContainer>> _disposeActions;
+        private List<Action<IContainer>> _runActions;
+        private List<Action<IContainer>> _beforeRunActions;
 
         public Application(List<Action<IContainer>> beforeRunActions = null, List<Action<IContainer>> runActions = null, List<Action<IContainer>> disposeActions = null)
         {
@@ -25,9 +25,8 @@ namespace Jimu
 
         public void Dispose()
         {
-            if (_disposeActions.Any())
-                _disposeActions.ForEach(x => { x(Container); });
-            Container.Dispose();
+            // dispose all resource: management and not management
+            Dispose(true);
         }
 
         public IApplication DisposeAction(Action<IContainer> action)
@@ -55,6 +54,31 @@ namespace Jimu
         {
             _beforeRunActions.Add(action);
             return this;
+        }
+        ~Application()
+        {
+            // dispose not management resource
+            Dispose(false);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposeActions.Any())
+            {
+                _disposeActions.ForEach(x =>
+                {
+                    x(Container);
+                });
+            }
+
+            if (disposing)
+            {
+                _disposeActions = null;
+                _runActions = null;
+                _beforeRunActions = null;
+            }
+
+            Container.Dispose();
         }
     }
 }

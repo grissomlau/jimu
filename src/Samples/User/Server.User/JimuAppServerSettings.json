@@ -39,5 +39,11 @@
         "Port": 11211
       }
     ]
+  },
+  "MassTransitOptions": {
+    "HostAddress": "192.168.11.24",
+    "UserName": "admin",
+    "Password": "123",
+    "EventQueueName": "jimu-event-queue"
   }
 }

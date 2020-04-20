@@ -61,5 +61,13 @@ namespace Jimu.Module
         {
 
         }
+
+        /// <summary>
+        /// when on jimu dispose
+        /// </summary>
+        /// <param name="container"></param>
+        public virtual void DoDispose(IContainer container)
+        {
+        }
     }
 }
