@@ -75,12 +75,14 @@ namespace Jimu.Server.ServiceContainer.Implement
         {
             //var serviceTypes = types.Where(x => x.GetMethods().Any(y => y.GetCustomAttribute<JimuServiceAttribute>() != null)).Distinct();
             var containerBuilder = new ContainerBuilder();
+            IContainer serviceContainer = null;
             this._serviceRegisters.ForEach(x => x(containerBuilder));
             containerBuilder.RegisterTypes(types.ToArray()).AsSelf().AsImplementedInterfaces().InstancePerDependency();
             containerBuilder.RegisterAssemblyModules(assemblies.ToArray());
-            var container = containerBuilder.Build();
-            this._serviceInitializers.ForEach(x => x(container));
-            return container;
+            containerBuilder.Register(x => serviceContainer).As<IContainer>();
+            serviceContainer = containerBuilder.Build();
+            this._serviceInitializers.ForEach(x => x(serviceContainer));
+            return serviceContainer;
         }
         public List<JimuServiceEntry> GetServiceEntry()
         {

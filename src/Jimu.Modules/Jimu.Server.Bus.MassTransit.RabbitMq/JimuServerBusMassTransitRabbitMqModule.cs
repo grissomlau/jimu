@@ -50,7 +50,7 @@ namespace Jimu.Server.Bus.MassTransit.RabbitMq
                 .ToList();
                 if (_consumers.Any())
                 {
-                    serviceContainerBuilder.RegisterTypes(_consumers.ToArray()).AsSelf().InstancePerDependency();
+                    serviceContainerBuilder.RegisterTypes(_consumers.ToArray()).AsSelf().AsImplementedInterfaces().InstancePerDependency();
                 }
 
                 // register subscriber
@@ -63,7 +63,7 @@ namespace Jimu.Server.Bus.MassTransit.RabbitMq
 
                 if (_subscribers.Any())
                 {
-                    serviceContainerBuilder.RegisterTypes(_subscribers.ToArray()).AsSelf().InstancePerDependency();
+                    serviceContainerBuilder.RegisterTypes(_subscribers.ToArray()).AsSelf().AsImplementedInterfaces().InstancePerDependency();
                 }
 
                 serviceContainerBuilder.Register(x => _bus);
