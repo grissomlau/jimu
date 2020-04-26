@@ -1,10 +1,36 @@
 
 ## Description
-jimu 是一个基于.Net Core 3.0 简单易用的微服务框架，使用了大量的开源库（如 DotNetty, consul.net, Flurl.Http, Json.net, Log4net, Quartz.net ... ）, 支持分布式、高并发和负载均衡， 实现了服务治理（如服务注册、发现、健康检测 ...）和 RPC 调用。  
+jimu 是一个基于.Net Core 3.1 简单易用的微服务框架，参考了很多开源库以及想法，使用了大量的开源库（如 DotNetty, consul.net, Flurl.Http, Json.net, Log4net, Quartz.net ... ）, 支持分布式、高并发和负载均衡， 实现了服务治理（如服务注册、发现、健康检测 ...）和 RPC 调用。  
 
 jimu(积木)，正如其中文名，希望用她来开发项目像搭积木一样简单快速可控，使项目安全可靠稳定，整体架构可拓展、高并发、分布式。
 
 更多详情，[查看 Wiki](https://github.com/grissomlau/jimu/wiki)
+
+这里感谢 RabbitTeam 开源的 [RabbitCloud (2018)](https://github.com/RabbitTeam/RabbitCloud)，因为Jimu的动态代理和远程调用都参考了该项目
+
+## 特点
+1. 使用 Apache License 2.0 开源协议
+2. jimu 最核心的思想是 IOC 和 DI, 通过配置文件使用了 autofac 将组件注入到框架中，用组件来驱动框架，使框架更具弹性。
+3. 服务注册与发现: consul
+4. 动态网关
+5. 基于 DotNetty 的 RPC
+6. JWT 鉴权
+7. 负载均衡：轮询
+8. 容错策略: 重试
+9. 容器发布 docker
+10. 路由配置： Attribute 注解
+11. 日志记录： log4net, nlog
+12. Api 文档: swagger
+13. 链路跟踪: skywalking
+14. RESTful: Attribute 注解
+15. 健康监测
+16. 文件上存下载：多文件和单文件
+17. uri跳转: 服务端跳转指定的 url
+18. ORM： Dapper
+19. DDD: MiniDDD
+20. 缓存： Memcached
+21. 消息队列：RabbitMq
+
 
 ## Quick Start
 请下载 jimu 源码, 或者下载项目  [jimu.demo](https://github.com/grissomlau/jimu.demo)
@@ -13,13 +39,6 @@ jimu(积木)，正如其中文名，希望用她来开发项目像搭积木一�
 1. 启动 consul；
 2. 设置 Samples/ApiGateway, Samples/Server.Auth, Samples/Server.Order, Samples/Server.User 为启动项；
 3. 打开 http://localhost:54762/swagger/index.html
-
-
-
-## 核心
-
-jimu 最核心的思想是 IOC 和 DI, 通过配置文件使用了 autofac 将组件注入到框架中，用组件来驱动框架，使框架更具弹性。
-
 
 
 ## 配置
@@ -38,13 +57,10 @@ jimu 最核心的思想是 IOC 和 DI, 通过配置文件使用了 autofac 将�
            "FileLogPath":"log",
            "FileLogLevel":"Debug,Info,Warn,Error",
            "ConsoleLogLevel":"Debug,Info,Warn,Error",
-           "UseInService": true // ILogger 是否注入到 service 
-           
+           "UseInService": true // ILogger 是否注入到 service
        }
    }
    ```
-
-   
 
 2. JimuNLogOptions: NLog 组件
 
@@ -66,12 +82,10 @@ jimu 最核心的思想是 IOC 和 DI, 通过配置文件使用了 autofac 将�
            "ValidateAudience": false,
            "ValidAudience": "",
            "TokenEndpointPath": "/v2/token", //获取 token 的路径
-           "CheckCredentialServiceId": "Auth.IServices.IAuthService.Check(context)" //验证用户名密码是否正确的 service id, context 是 JwtAuthorizationContext，包含 UserName，Password等调用上下文信息         
+           "CheckCredentialServiceId": "Auth.IServices.IAuthService.Check(context)" //验证用户名密码是否正确的 service id, context 是 JwtAuthorizationContext，包含 UserName，Password等调用上下文信息
        }
    }
    ```
-
-   
 #### 服务发现
 1. ConsulOptions： 使用 Consul 作为服务发现组件
 
@@ -114,7 +128,6 @@ jimu 最核心的思想是 IOC 和 DI, 通过配置文件使用了 autofac 将�
        }
    }
 ```
-   
 
 ##### ORM
 
@@ -130,8 +143,6 @@ jimu 最核心的思想是 IOC 和 DI, 通过配置文件使用了 autofac 将�
      }
    }
    ```
-
-   
 
 ##### MiniDDD Repository
 
@@ -149,7 +160,6 @@ MiniDDD 是一个轻量级的 DDD 框架， MiniDDD Repository 就是基于该�
    }
    ```
 
-   
 
 2. EF
 
@@ -165,7 +175,6 @@ MiniDDD 是一个轻量级的 DDD 框架， MiniDDD Repository 就是基于该�
    }
    ```
 
-   
 
 3. SqlSugar
 
@@ -178,9 +187,6 @@ MiniDDD 是一个轻量级的 DDD 框架， MiniDDD Repository 就是基于该�
       }
    }
    ```
-
-   
-
 
 
 ### 客户端
@@ -201,7 +207,6 @@ MiniDDD 是一个轻量级的 DDD 框架， MiniDDD Repository 就是基于该�
    }
    ```
 
-   
 
 2. JimuNLogOptions: NLog 组件
 
@@ -262,7 +267,6 @@ MiniDDD 是一个轻量级的 DDD 框架， MiniDDD Repository 就是基于该�
    }
    ```
 
-   
 
 #### 服务健康监测
 
@@ -276,7 +280,6 @@ MiniDDD 是一个轻量级的 DDD 框架， MiniDDD Repository 就是基于该�
    }
    ```
 
-   
 
 #### 负载均衡
 
@@ -290,7 +293,6 @@ MiniDDD 是一个轻量级的 DDD 框架， MiniDDD Repository 就是基于该�
    }
    ```
 
-   
 
 #### 远程代理
 
@@ -327,6 +329,7 @@ MiniDDD 是一个轻量级的 DDD 框架， MiniDDD Repository 就是基于该�
        }
    }
    ```
-## About Me 
+
+## About Me
 问题请提交 [issues](https://github.com/grissomlau/jimu/issues)  和 PR
 项目的更多资料正在断断续续地整理， 可关注我的 [博客园](http://www.cnblogs.com/grissom007/)  
