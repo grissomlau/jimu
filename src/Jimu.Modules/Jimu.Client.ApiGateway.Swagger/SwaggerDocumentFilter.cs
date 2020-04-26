@@ -22,7 +22,14 @@ namespace Jimu.Client.ApiGateway.Swagger
         {
             var serviceDiscovery = JimuClient.Host.Container.Resolve<IClientServiceDiscovery>();
             var routes = serviceDiscovery.GetRoutesAsync().GetAwaiter().GetResult();
-            var groupRoutes = routes.GroupBy(x => x.ServiceDescriptor.RoutePath);
+            var groupRoutes = routes.GroupBy(x =>
+            {
+                if (x.ServiceDescriptor.RoutePath.Contains('?'))
+                {
+                    return x.ServiceDescriptor.RoutePath.Split('?')[0];
+                }
+                return x.ServiceDescriptor.RoutePath;
+            });
 
             swaggerDoc.Components.SecuritySchemes = new Dictionary<string, OpenApiSecurityScheme> {
                 { "bearerAuth",new OpenApiSecurityScheme
@@ -44,8 +51,13 @@ namespace Jimu.Client.ApiGateway.Swagger
 
             foreach (var gr in groupRoutes)
             {
-                var route = gr.Key;
+                var pureRoute = gr.Key;
+                if (gr.Key.Contains('?'))
+                {
+                    pureRoute = gr.Key.Split('?')[0];
+                }
                 var pathItem = new OpenApiPathItem();
+
                 foreach (var r in gr)
                 {
                     var x = r.ServiceDescriptor;
@@ -54,7 +66,7 @@ namespace Jimu.Client.ApiGateway.Swagger
                     if (!string.IsNullOrEmpty(x.Parameters))
                     {
                         jimuParas = JimuHelper.Deserialize(TypeHelper.ReplaceTypeToJsType(x.Parameters), typeof(List<JimuServiceParameterDesc>)) as List<JimuServiceParameterDesc>;
-                        paras = GetParameters(route, jimuParas, x.HttpMethod);
+                        paras = GetParameters(r.ServiceDescriptor.RoutePath, jimuParas, x.HttpMethod);
                     }
                     var responses = new OpenApiResponses();
                     responses.Add("200", GetResponse(x.ReturnDesc));
@@ -68,7 +80,7 @@ namespace Jimu.Client.ApiGateway.Swagger
                         Description = x.Comment,
                         Summary = x.Comment,
                         Tags = GetTags(x),
-                        RequestBody = GetRequestBody(route, jimuParas, x.HttpMethod)
+                        RequestBody = GetRequestBody(r.ServiceDescriptor.RoutePath, jimuParas, x.HttpMethod)
                     };
                     if (Enum.TryParse(typeof(OperationType), CultureInfo.CurrentCulture.TextInfo.ToTitleCase(x.HttpMethod.ToLower()), out var opType))
                     {
@@ -91,7 +103,8 @@ namespace Jimu.Client.ApiGateway.Swagger
                         };
                     }
                 }
-                swaggerDoc.Paths.Add(route, pathItem);
+
+                swaggerDoc.Paths.Add(pureRoute, pathItem);
             }
         }
 
@@ -215,11 +228,19 @@ namespace Jimu.Client.ApiGateway.Swagger
         private static List<OpenApiParameter> GetParameters(string route, List<JimuServiceParameterDesc> paras, string httpMethod)
         {
             List<OpenApiParameter> parameters = new List<OpenApiParameter>();
+            var pureRoute = route;
+            var query = "";
+            if (route.Contains("?"))
+            {
+                var arr = route.Split('?');
+                pureRoute = arr[0];
+                query = arr[1];
+            }
 
             foreach (var p in paras)
             {
                 OpenApiParameter param = null;
-                if (route.IndexOf($"{{{p.Name}}}") > 0)
+                if (pureRoute.IndexOf($"{{{p.Name}}}") > 0)
                 {
                     param = new OpenApiParameter
                     {
@@ -234,7 +255,7 @@ namespace Jimu.Client.ApiGateway.Swagger
                     };
 
                 }
-                else if (httpMethod.Equals("GET", StringComparison.OrdinalIgnoreCase))
+                else if (query.IndexOf($"{{{p.Name}}}") > 0 && httpMethod.Equals("GET", StringComparison.OrdinalIgnoreCase))
                 {
                     param = new OpenApiParameter
                     {
@@ -257,10 +278,16 @@ namespace Jimu.Client.ApiGateway.Swagger
                         {
                             Properties = param.Schema.Properties
                         };
+                        if (param.In == ParameterLocation.Query)
+                        {
+                            param.Explode = true;
+                        }
                     }
                     else if (TypeHelper.CheckIsObject(p.Type))
                     {
                         param.Schema.Type = "object";
+                        param.Style = ParameterStyle.Form;
+                        param.Explode = false;
                     }
                     parameters.Add(param);
                 }

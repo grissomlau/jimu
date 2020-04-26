@@ -7,7 +7,7 @@ using IService.User.dto;
 namespace IService.User
 {
     /// <summary>
-    /// 试试 Restful Api
+    /// try Restful Api
     /// </summary>
     [Jimu("/{Service}")]
     public interface IRestService : IJimuService

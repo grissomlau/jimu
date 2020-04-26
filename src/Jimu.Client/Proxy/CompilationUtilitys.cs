@@ -17,7 +17,6 @@ namespace Jimu.Client.Proxy
 
         public static MemoryStream CompileClientProxy(IEnumerable<SyntaxTree> trees, IEnumerable<MetadataReference> references, ILogger logger = null)
         {
-#if !NET
             var assemblys = new[]
             {
                 "System.Runtime",
@@ -26,7 +25,6 @@ namespace Jimu.Client.Proxy
                  "System.Collections"
             };
             references = assemblys.Select(i => MetadataReference.CreateFromFile(Assembly.Load(new AssemblyName(i)).Location)).Concat(references).Distinct();
-#endif
             references = new[]
             {
                 MetadataReference.CreateFromFile(typeof(Task).GetTypeInfo().Assembly.Location),
@@ -104,12 +102,12 @@ namespace Jimu.Client.Proxy
                                 SyntaxFactory.AttributeArgument(
                                     SyntaxFactory.LiteralExpression(
                                         SyntaxKind.StringLiteralExpression,
-                                        SyntaxFactory.Literal(".NETFramework,Version=v4.5"))),
+                                        SyntaxFactory.Literal("netcoreapp3.1"))),
                                 SyntaxFactory.Token(SyntaxKind.CommaToken),
                                 SyntaxFactory.AttributeArgument(
                                     SyntaxFactory.LiteralExpression(
                                         SyntaxKind.StringLiteralExpression,
-                                        SyntaxFactory.Literal(".NET Framework 4.5")))
+                                        SyntaxFactory.Literal("netcoreapp3.1")))
                                 .WithNameEquals(
                                     SyntaxFactory.NameEquals(
                                         SyntaxFactory.IdentifierName("FrameworkDisplayName")))})))))

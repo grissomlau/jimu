@@ -21,10 +21,11 @@ namespace Jimu.Client.ApiGateway
             }
             if (query.Collection.Count > 0)
             {
-                foreach (var key in query.Collection.AllKeys)
+                foreach (var key in query.Collection.Keys)
                 {
                     paras[key] = query.Collection[key];
                 }
+
             }
             if (!path.StartsWith("/"))
             {

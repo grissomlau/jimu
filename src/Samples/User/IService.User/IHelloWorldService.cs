@@ -1,5 +1,7 @@
-﻿using Jimu;
+﻿using IService.User.dto;
+using Jimu;
 using System;
+using System.Collections.Generic;
 
 namespace IService.User
 {
@@ -15,5 +17,9 @@ namespace IService.User
         /// <returns></returns>
         [JimuGet(true)]
         string Get();
+        [JimuGet(true)]
+        UserModel GetUserByObj(UserReq req);
+        [JimuGet(true)]
+        List<string> GetUserByArray(List<string> req);
     }
 }

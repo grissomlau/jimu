@@ -6,7 +6,7 @@ using System.Text;
 namespace IService.User
 {
     /// <summary>
-    /// 文件上存下载（file upload download）, 打开 /file/index 页面演示
+    /// file upload and download, open /file/index to demo
     /// </summary>
     [Jimu("/{Service}")]
     public interface IFileService : IJimuService

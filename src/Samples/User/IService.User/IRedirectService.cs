@@ -5,6 +5,9 @@ using System.Text;
 
 namespace IService.User
 {
+    /// <summary>
+    /// try redirect to sepcify url
+    /// </summary>
     [Jimu("/{Service}")]
     public interface IRedirectService : IJimuService
     {
