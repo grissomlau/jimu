@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Jimu.Core.Bus
@@ -20,5 +21,15 @@ namespace Jimu.Core.Bus
         /// <typeparam name="T"></typeparam>
         /// <param name="event">event</param>
         Task PublishAsync<T>(T @event) where T : IJimuEvent;
+
+        /// <summary>
+        /// send an request and expect response
+        /// </summary>
+        /// <typeparam name="Req">request</typeparam>
+        /// <typeparam name="Resp">response</typeparam>
+        /// <param name="request"></param>
+        /// <param name="timeout">timeout before receive the response</param>
+        /// <returns></returns>
+        Task<Resp> RequestAsync<Req, Resp>(Req request, TimeSpan timeout = default, CancellationToken cancellationToken = default) where Req : class, IJimuRequest where Resp : class;
     }
 }

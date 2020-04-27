@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Jimu.Core.Bus;
 using Jimu.Logger;
+using Jimu.Server.Bus.MassTransit.RabbitMq.Pattern;
 using Jimu.Server.ServiceContainer.Implement.Parser;
 using Jimu.Server.Transport;
 using MassTransit;
@@ -19,51 +20,23 @@ namespace Jimu.Server.Bus.MassTransit.RabbitMq
     public class JimuServerBusMassTransitRabbitMqModule : ServerGeneralModuleBase
     {
         readonly MassTransitOptions _options;
-        List<Type> _consumers = new List<Type>();
-        List<Type> _subscribers = new List<Type>();
+        readonly PatternProvider _patternProvider;
+
         IJimuBus _bus = null;
         IBusControl _massTransitBus = null;
         public JimuServerBusMassTransitRabbitMqModule(IConfigurationRoot jimuAppSettings) : base(jimuAppSettings)
         {
             _options = jimuAppSettings.GetSection(typeof(MassTransitOptions).Name).Get<MassTransitOptions>();
+            _patternProvider = new PatternProvider();
         }
 
         public override void DoServiceRegister(ContainerBuilder serviceContainerBuilder)
         {
             if (_options != null && _options.Enable)
             {
-
-                //register command, because we need get the QueueName from it's instance when send and consume it
-                var commands = AppDomain.CurrentDomain.GetAssemblies()
-                    .SelectMany(x => x.GetTypes())
-                    .Where(x => x.IsClass && !x.IsAbstract && x.GetInterface("IJimuCommand") != null)
-                    .ToList();
-                if (commands.Any())
+                foreach (var pattern in _patternProvider.GetPatterns())
                 {
-                    serviceContainerBuilder.RegisterTypes(commands.ToArray()).AsSelf().InstancePerDependency();
-                }
-                // register consumer
-                _consumers = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(x => x.GetTypes())
-                .Where(x => x.IsClass && !x.IsAbstract && x.GetInterface("IJimuConsumer`1") != null
-                && x.GetInterface("IJimuConsumer`1").GetGenericTypeDefinition() == typeof(IJimuConsumer<>))
-                .ToList();
-                if (_consumers.Any())
-                {
-                    serviceContainerBuilder.RegisterTypes(_consumers.ToArray()).AsSelf().AsImplementedInterfaces().InstancePerDependency();
-                }
-
-                // register subscriber
-                var subscriberType = typeof(IJimuSubscriber<>);
-                _subscribers = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(x => x.GetTypes())
-                .Where(x => x.IsClass && !x.IsAbstract && x.GetInterface("IJimuSubscriber`1") != null
-                && x.GetInterface("IJimuSubscriber`1").GetGenericTypeDefinition() == typeof(IJimuSubscriber<>))
-                .ToList();
-
-                if (_subscribers.Any())
-                {
-                    serviceContainerBuilder.RegisterTypes(_subscribers.ToArray()).AsSelf().AsImplementedInterfaces().InstancePerDependency();
+                    pattern.Register(serviceContainerBuilder);
                 }
 
                 serviceContainerBuilder.Register(x => _bus);
@@ -87,67 +60,17 @@ namespace Jimu.Server.Bus.MassTransit.RabbitMq
                            h.Username(_options.UserName);
                            h.Password(_options.Password);
                        }
-                   });
 
-                   if (_subscribers.Any())
-                   {
-                       //-- event subscriber, generate default event queue, if not specify in options
-
-                       var eventQueueName = string.IsNullOrEmpty(_options.EventQueueName) ? $"{AppDomain.CurrentDomain.FriendlyName}-{Guid.NewGuid()}" : _options.EventQueueName;
-
-
-                       sbc.ReceiveEndpoint(eventQueueName, ep =>
+                       foreach (var pattern in _patternProvider.GetPatterns())
                        {
-                           _subscribers.ForEach(subscriber =>
-                           {
-                               var subscriberType = subscriber.GetTypeInfo().ImplementedInterfaces.First().GenericTypeArguments.First();
-                               var handlerMethod = typeof(HandlerExtensions).GetMethod("Handler").MakeGenericMethod(subscriberType);
-                               var subscriberInstance = container.Resolve(subscriber);
-                               var myHandlerObj = Activator.CreateInstance(typeof(EventHandler<>).MakeGenericType(subscriberType), new object[] { subscriberInstance, _bus });
-                               var eventHandler = myHandlerObj.GetType().InvokeMember("Handler", BindingFlags.GetProperty, null, myHandlerObj, null);
-                               var fastInvoker = FastInvoke.GetMethodInvoker(handlerMethod);
-                               fastInvoker.Invoke(null, new object[] { ep, eventHandler, null });
-                           });
-                       });
-                       logger.Debug($"MassTransitRabbitMq: EventQueueName: { eventQueueName}, subscribers count: {_subscribers.Count()}");
-                   }
-
-
-                   //-- command consumer, extract queue name from command
-                   var groupConsumers = _consumers.GroupBy(x =>
-                   {
-                       var commandType = x.GetTypeInfo().ImplementedInterfaces.First().GenericTypeArguments.First();
-                       var commandInstance = container.Resolve(commandType);
-                       if (commandInstance == null) throw new Exception($"JimuCommand: {commandType.FullName} resolve failure");
-                       var commandQueueName = commandInstance.GetType().InvokeMember("QueueName", BindingFlags.GetProperty, null, commandInstance, null) + "";
-                       if (string.IsNullOrEmpty(commandQueueName))
-                       {
-                           throw new Exception($"JimuCommand: {commandType.FullName} must specify QueueName property");
+                           pattern.MasstransitConfig(sbc, container, logger, _bus, _options);
                        }
-                       return commandQueueName;
-                   });
-                   groupConsumers.ToList().ForEach(x =>
-                   {
-                       sbc.ReceiveEndpoint(x.Key, ep =>
-                       {
-                           logger.Debug($"MassTransitRabbitMq: CommandQueueName: { x.Key}, consumers count: {x.Count()}");
-                           x.ToList().ForEach(consumer =>
-                           {
-                               var commandType = consumer.GetTypeInfo().ImplementedInterfaces.First().GenericTypeArguments.First();
-                               var handlerMethod = typeof(HandlerExtensions).GetMethod("Handler").MakeGenericMethod(commandType);
-                               var consumerInstance = container.Resolve(consumer);
-                               var myHandlerObj = Activator.CreateInstance(typeof(CommandHandler<>).MakeGenericType(commandType), new object[] { consumerInstance, _bus });
-                               var consumerHandler = myHandlerObj.GetType().InvokeMember("Handler", BindingFlags.GetProperty, null, myHandlerObj, null);
-                               var fastInvoker = FastInvoke.GetMethodInvoker(handlerMethod);
-                               fastInvoker.Invoke(null, new object[] { ep, consumerHandler, null });
-                           });
-                       });
+
                    });
 
                });
 
-                _bus = new MassTransitRabbitMqBus(_massTransitBus);
-
+                _bus = new MassTransitRabbitMqBus(_massTransitBus, _options);
 
                 try
                 {
@@ -181,29 +104,8 @@ namespace Jimu.Server.Bus.MassTransit.RabbitMq
         }
 
 
-        public class CommandHandler<T> where T : class, IJimuCommand
-        {
-            IJimuConsumer<T> _consumer;
-            IJimuBus _bus;
-            public CommandHandler(IJimuConsumer<T> consumer, IJimuBus bus)
-            {
-                _consumer = consumer;
-                _bus = bus;
-            }
-            public MessageHandler<T> Handler => context => _consumer.ConsumeAsync(new MassTransitRabbitMqConsumeContext<T>(_bus, context.Message));
-        }
 
-        public class EventHandler<T> where T : class, IJimuEvent
-        {
-            IJimuSubscriber<T> _subscriber;
-            IJimuBus _bus;
-            public EventHandler(IJimuSubscriber<T> consumer, IJimuBus bus)
-            {
-                _subscriber = consumer;
-                _bus = bus;
-            }
-            public MessageHandler<T> Handler => context => _subscriber.HandleAsync(new MassTransitRabbitMqSubscribeContext<T>(_bus, context.Message));
-        }
+
 
     }
 }

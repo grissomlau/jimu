@@ -24,9 +24,14 @@ namespace Jimu.Server.Bus.MassTransit.RabbitMq
         public string EventQueueName { get; set; }
 
         /// <summary>
-        /// 是否启用
+        /// whether enable 
         /// </summary>
         public bool Enable { get; set; } = true;
+
+        /// <summary>
+        /// timeout for request method(seconds),default 30 seconds
+        /// </summary>
+        public int RequestTimeoutSeconds { get; set; } = 30;
     }
 
 }

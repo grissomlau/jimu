@@ -3,6 +3,7 @@ using MassTransit;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Jimu.Server.Bus.MassTransit.RabbitMq
@@ -10,13 +11,25 @@ namespace Jimu.Server.Bus.MassTransit.RabbitMq
     public class MassTransitRabbitMqBus : IJimuBus
     {
         readonly IBus _bus;
-        public MassTransitRabbitMqBus(IBus bus)
+        readonly MassTransitOptions _options;
+        public MassTransitRabbitMqBus(IBus bus, MassTransitOptions options)
         {
             _bus = bus;
+            _options = options;
         }
         public async Task PublishAsync<T>(T @event) where T : IJimuEvent
         {
             await _bus.Publish(@event);
+        }
+
+        public Task<Resp> RequestAsync<Req, Resp>(Req request, TimeSpan timeout = default, CancellationToken cancellationToken = default)
+            where Req : class, IJimuRequest
+            where Resp : class
+        {
+            if (timeout == default)
+                timeout = TimeSpan.FromSeconds(_options.RequestTimeoutSeconds);
+            var client = _bus.CreateRequestClient<Req, Resp>(new Uri($"queue:{request.QueueName}"), timeout);
+            return client.Request(request, cancellationToken);
         }
 
         public async Task SendAsync<T>(T command) where T : IJimuCommand
