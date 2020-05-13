@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ApiGateway.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class FileController : Controller
     {
 

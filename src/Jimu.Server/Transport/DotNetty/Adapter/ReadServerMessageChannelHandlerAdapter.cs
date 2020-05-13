@@ -2,6 +2,7 @@
 using DotNetty.Transport.Channels;
 using Jimu.Common;
 using Jimu.Logger;
+using System;
 using System.Text;
 
 namespace Jimu.Server.Transport.DotNetty.Adapter
@@ -21,16 +22,15 @@ namespace Jimu.Server.Transport.DotNetty.Adapter
                 byte[] data = new byte[buffer.ReadableBytes];
                 buffer.GetBytes(buffer.ReaderIndex, data);
 
-                _logger.Debug($"recevied msg is: {Encoding.UTF8.GetString(data)}");
+                if (data.Length < 102400)
+                {
+                    _logger.Debug($"recevied msg is: {Encoding.UTF8.GetString(data)}");
+                }
+                else
+                {
+                    _logger.Debug($"recevied msg is (bigger than 100k, we don't show it)");
+                }
                 var convertedMsg = JimuHelper.Deserialize<byte[], JimuTransportMsg>(data);
-                if (convertedMsg.ContentType == typeof(JimuRemoteCallData).FullName)
-                {
-                    convertedMsg.Content = JimuHelper.Deserialize<string, JimuRemoteCallData>(convertedMsg.Content.ToString());
-                }
-                else if (convertedMsg.ContentType == typeof(JimuRemoteCallResultData).FullName)
-                {
-                    convertedMsg.Content = JimuHelper.Deserialize<string, JimuRemoteCallResultData>(convertedMsg.Content.ToString());
-                }
                 context.FireChannelRead(convertedMsg);
                 //context.FireChannelRead(data);
             }

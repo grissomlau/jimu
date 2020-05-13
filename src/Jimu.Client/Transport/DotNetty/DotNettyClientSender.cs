@@ -20,15 +20,10 @@ namespace Jimu.Client.Transport.DotNetty
             return _channel.Active;
         }
 
-        public override void Dispose()
+        public override async void Dispose()
         {
-            Task.Run(async () =>
-            {
-                await _channel.DisconnectAsync();
-            }).Wait();
-
+            await _channel.DisconnectAsync();
             base.Dispose();
-
         }
 
         protected override async Task DoSendAsync(JimuTransportMsg message)

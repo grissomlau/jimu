@@ -21,5 +21,9 @@ namespace IService.User
         UserModel GetUserByObj(UserReq req);
         [JimuGet(true)]
         List<string> GetUserByArray(List<string> req);
+        [JimuGet(true)]
+        void LongTask(int count);
+        [JimuGet(true)]
+        void FastTask();
     }
 }
