@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Jimu.Core.Bus
+﻿namespace Jimu.Core.Bus
 {
     /// <summary>
     /// command for Consumer, which will be publish by Ibus

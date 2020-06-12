@@ -31,13 +31,13 @@ namespace Jimu.Client.RemoteCaller.Implement
             ClientSenderFactory clientSenderFactory,
             IServiceTokenGetter serviceTokenGetter,
             IJimuDiagnostic jimuApm,
-            ILogger logger)
+            ILoggerFactory loggerFactory)
         {
             _serviceDiscovery = serviceDiscovery;
             _addressSelector = addressSelector;
             _clientSenderFactory = clientSenderFactory;
             _serviceTokenGetter = serviceTokenGetter;
-            _logger = logger;
+            _logger = loggerFactory.Create(this.GetType());
             _middlewares = new Stack<Func<ClientRequestDel, ClientRequestDel>>();
             _jimuApm = jimuApm;
         }

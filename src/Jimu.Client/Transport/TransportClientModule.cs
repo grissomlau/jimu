@@ -6,7 +6,6 @@ using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Sockets;
 using Jimu.Client.Transport.DotNetty;
 using Jimu.Client.Transport.DotNetty.Adapter;
-using Jimu.Logger;
 using Jimu.Module;
 using Microsoft.Extensions.Configuration;
 
@@ -49,7 +48,9 @@ namespace Jimu.Client.Transport
         private void InitNetty(IContainer container)
         {
             var factory = container.Resolve<ClientSenderFactory>();
-            var logger = container.Resolve<ILogger>();
+            
+            var loggerFactory = container.Resolve<ILoggerFactory>();
+            var logger = loggerFactory.Create(this.GetType());
             var bootstrap = new Bootstrap();
 
             logger.Info($"[config]use dotnetty for transfer");

@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Jimu.Module;
 using Jimu.Server.ServiceContainer;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;

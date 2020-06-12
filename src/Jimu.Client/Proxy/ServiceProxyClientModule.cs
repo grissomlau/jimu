@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using Jimu.Client.Proxy.Implement;
-using Jimu.Logger;
 using Jimu.Module;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
@@ -45,7 +44,8 @@ namespace Jimu.Client.Proxy
                 var serviceProxyGenerator = container.Resolve<IServiceProxyGenerator>();
                 var serviceProxyTypes = serviceProxyGenerator.GenerateProxy(serviceTypes);
                 var serviceProxy = container.Resolve<IServiceProxy>();
-                var logger = container.Resolve<ILogger>();
+                var loggerFactory = container.Resolve<ILoggerFactory>();
+                var logger = loggerFactory.Create(this.GetType());
                 logger.Info($"[config]use service proxy");
             }
             base.DoInit(container);

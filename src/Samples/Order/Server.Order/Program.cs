@@ -1,9 +1,4 @@
-﻿using Autofac;
-using Jimu;
-using Jimu.Client;
-using Jimu.Client.Proxy;
-using Jimu.Server;
-using Microsoft.Extensions.Hosting;
+﻿using Jimu;
 using System;
 
 namespace Server.Order

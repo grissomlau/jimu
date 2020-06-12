@@ -2,9 +2,6 @@
 using Jimu.Core.Bus;
 using Jimu.Logger;
 using MassTransit.RabbitMqTransport;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Jimu.Server.Bus.MassTransit.RabbitMq.Pattern
 {

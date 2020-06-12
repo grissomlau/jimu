@@ -1,5 +1,5 @@
 ﻿{
-  "JimuLog4netOptions": {
+  "JimuNLogOptions": {
     "EnableConsoleLog": true,
     "EnableFileLog": true,
     "FileLogPath": "log",

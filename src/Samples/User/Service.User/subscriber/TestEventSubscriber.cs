@@ -1,9 +1,7 @@
 ﻿using IService.User.dto;
+using Jimu;
 using Jimu.Core.Bus;
 using Jimu.Logger;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Service.User.subscriber
@@ -11,9 +9,9 @@ namespace Service.User.subscriber
     public class TestEventSubscriber : IJimuSubscriber<UserAdded>
     {
         ILogger _logger;
-        public TestEventSubscriber(ILogger logger)
+        public TestEventSubscriber(ILoggerFactory loggerFactory)
         {
-            _logger = logger;
+            _logger = loggerFactory.Create(this.GetType());
         }
         public Task HandleAsync(IJimuSubscribeContext<UserAdded> context)
         {

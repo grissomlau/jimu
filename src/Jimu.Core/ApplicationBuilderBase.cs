@@ -1,11 +1,11 @@
 ﻿using Autofac;
 using Jimu.Common;
+using Jimu.Core.Logger.Console;
 using Jimu.Logger;
 using Jimu.Logger.Console;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace Jimu
 {
@@ -70,7 +70,7 @@ namespace Jimu
             var host = new Application(BeforeRunners, Runners, Disposer);
             ContainerBuilder.Register(x => host).As<IApplication>().SingleInstance();
             ContainerBuilder.Register(x => container).As<IContainer>().SingleInstance();
-            ContainerBuilder.RegisterType<ConsoleLogger>().As<ILogger>().SingleInstance();
+            ContainerBuilder.RegisterType<ConsoleLoggerFactory>().As<ILoggerFactory>().SingleInstance();
 
             ModuleRegisters.ForEach(x => x(ContainerBuilder));
             BeforeBuilders.ForEach(x => x(ContainerBuilder));

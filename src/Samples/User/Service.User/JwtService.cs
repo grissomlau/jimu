@@ -1,8 +1,5 @@
 ﻿using IService.User;
 using Jimu;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Service.User
 {

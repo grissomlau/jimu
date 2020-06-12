@@ -3,8 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
 using Jimu;
-using Jimu.Client;
-using Jimu.Client.ApiGateway;
 using Jimu.Client.ApiGateway.Core;
 using Jimu.Client.Discovery;
 using Microsoft.AspNetCore.Mvc;

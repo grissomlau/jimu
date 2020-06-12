@@ -1,13 +1,8 @@
-﻿using Autofac;
-using Jimu.Module;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SkyApm;
 using SkyApm.Agent.GeneralHost;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Jimu.Server.Diagnostic.Skywalking
 {

@@ -26,11 +26,11 @@ namespace Jimu.Client.Transport
         /// </summary>
         public event ClientSenderCreatorDelegate ClientSenderCreator;
 
-        public ClientSenderFactory(ILogger logger)
+        public ClientSenderFactory(ILoggerFactory loggerFactory)
         {
             //Clients = new ConcurrentDictionary<EndPoint, Lazy<ITransportClient>>();
             ClientSenders = new ConcurrentDictionary<string, Lazy<IClientSender>>();
-            _logger = logger;
+            _logger = loggerFactory.Create();
         }
 
         public IClientSender CreateClientSender<T>(T address)

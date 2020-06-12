@@ -2,7 +2,6 @@
 using DotNetty.Transport.Channels;
 using Jimu.Common;
 using Jimu.Logger;
-using System;
 using System.Text;
 
 namespace Jimu.Server.Transport.DotNetty.Adapter

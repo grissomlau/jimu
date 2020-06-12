@@ -16,7 +16,8 @@ namespace Jimu.Logger.NLog
         {
             if (_options != null)
             {
-                componentContainerBuilder.RegisterType<NLogger>().WithParameter("options", _options).As<ILogger>().SingleInstance();
+                //componentContainerBuilder.RegisterType<NLogger>().WithParameter("options", _options).As<ILogger>().SingleInstance();
+                componentContainerBuilder.RegisterType<NLoggerFactory>().WithParameter("options", _options).As<ILoggerFactory>().SingleInstance();
             }
             base.DoRegister(componentContainerBuilder);
         }
@@ -25,7 +26,8 @@ namespace Jimu.Logger.NLog
         {
             if (_options != null)
             {
-                var logger = container.Resolve<ILogger>();
+                var loggerFactory = container.Resolve<ILoggerFactory>();
+                var logger = loggerFactory.Create(this.GetType());
                 logger.Info($"[config]use NLog logger");
             }
             base.DoInit(container);

@@ -34,11 +34,11 @@ namespace Jimu.Server.Transport.DotNetty
 
 
 
-        public DotNettyServer(string serverIp, int serverPort, JimuAddress serviceInvokeAddress, IServiceEntryContainer serviceEntryContainer, IJimuDiagnostic jimuApm, ILogger logger)
+        public DotNettyServer(string serverIp, int serverPort, JimuAddress serviceInvokeAddress, IServiceEntryContainer serviceEntryContainer, IJimuDiagnostic jimuApm, ILoggerFactory loggerFactory)
         {
             _serviceEntryContainer = serviceEntryContainer;
             _serviceInvokeAddress = serviceInvokeAddress;
-            _logger = logger;
+            _logger = loggerFactory.Create(this.GetType());
             _middlewares = new Stack<Func<RequestDel, RequestDel>>();
             _serverIp = serverIp;
             _serverPort = serverPort;

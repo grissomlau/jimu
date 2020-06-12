@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Jimu.Server.Bus.MassTransit.RabbitMq
+﻿namespace Jimu.Server.Bus.MassTransit.RabbitMq
 {
     public class MassTransitOptions
     {

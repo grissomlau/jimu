@@ -13,12 +13,12 @@ namespace Jimu.Client.FaultTolerant
         private int _retryTimes;
         private readonly IAddressSelector _addressSelector;
         private readonly ILogger _logger;
-        public RetryCallMiddleware(ClientRequestDel next, IAddressSelector addressSelector, ILogger logger, int retryTimes)
+        public RetryCallMiddleware(ClientRequestDel next, IAddressSelector addressSelector, ILoggerFactory loggerFactory, int retryTimes)
         {
             _next = next;
             _retryTimes = retryTimes;
             _addressSelector = addressSelector;
-            _logger = logger;
+            _logger = loggerFactory.Create(this.GetType());
         }
 
         public Task<JimuRemoteCallResultData> InvokeAsync(RemoteCallerContext context)

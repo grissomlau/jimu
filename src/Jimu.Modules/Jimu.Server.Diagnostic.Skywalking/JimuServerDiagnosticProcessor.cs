@@ -1,8 +1,6 @@
-﻿using Jimu.Server.Diagnostic;
-using Jimu.Server.Diagnostic.EventData.LocalMethod;
+﻿using Jimu.Server.Diagnostic.EventData.LocalMethod;
 using Jimu.Server.Diagnostic.EventData.ServiceInvoke;
 using SkyApm;
-using SkyApm.Common;
 using SkyApm.Diagnostics;
 using SkyApm.Tracing;
 using SkyApm.Tracing.Segments;

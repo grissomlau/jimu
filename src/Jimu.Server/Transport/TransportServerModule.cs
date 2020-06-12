@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Jimu.Logger;
 using Jimu.Module;
 using Jimu.Server.Transport.DotNetty;
 using Microsoft.Extensions.Configuration;
@@ -47,7 +46,8 @@ namespace Jimu.Server.Transport
         {
             if (_options != null)
             {
-                var logger = container.Resolve<ILogger>();
+                var loggerFactory = container.Resolve<ILoggerFactory>();
+                var logger = loggerFactory.Create(this.GetType());
                 switch (_options.Protocol)
                 {
                     case "Netty":

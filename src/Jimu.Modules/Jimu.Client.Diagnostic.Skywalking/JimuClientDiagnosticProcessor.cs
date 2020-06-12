@@ -1,15 +1,11 @@
 ﻿using SkyApm;
 using System;
-using Jimu.Client.Diagnostic;
 using SkyApm.Tracing;
 using SkyApm.Diagnostics;
 using System.Collections.Generic;
 using SkyApm.Tracing.Segments;
-using System.Linq;
-using SkyWalking.NetworkProtocol;
 using Jimu.Client.Diagnostic.EventData;
 using System.Text;
-using SkyApm.Common;
 
 namespace Jimu.Client.Diagnostic.Skywalking
 {

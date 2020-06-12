@@ -21,7 +21,7 @@ namespace Jimu.Client.Discovery.Implement
 
         private readonly int _updateJobIntervalMinute;
         private readonly ILogger _logger;
-        public ClientServiceDiscovery(ILogger logger, int updateJobIntervalMinute = 1)
+        public ClientServiceDiscovery(ILoggerFactory loggerFactory, int updateJobIntervalMinute = 1)
         {
             if (updateJobIntervalMinute <= 0 || updateJobIntervalMinute > 60)
             {
@@ -31,7 +31,7 @@ namespace Jimu.Client.Discovery.Implement
             _routesGetters = new List<Func<Task<List<JimuServiceRoute>>>>();
             _addresses = new ConcurrentQueue<JimuAddress>();
             _routes = new ConcurrentQueue<JimuServiceRoute>();
-            this._logger = logger;
+            this._logger = loggerFactory.Create(this.GetType());
         }
 
         public async Task RunInInit()

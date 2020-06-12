@@ -35,7 +35,8 @@ namespace Jimu.Server.Repository.MiniDDD.SqlSugar
                     {
                         if (_container != null && _container.IsRegistered<Jimu.Logger.ILogger>())
                         {
-                            Jimu.Logger.ILogger logger = _container.Resolve<Jimu.Logger.ILogger>();
+                            var loggerFactory = _container.Resolve<ILoggerFactory>();
+                            var logger = loggerFactory.Create(this.GetType());
                             logger.Info($"【SqlSugar】 - {log}");
                         }
                     };
@@ -48,19 +49,10 @@ namespace Jimu.Server.Repository.MiniDDD.SqlSugar
                     .InstancePerLifetimeScope();
 
                 // register repository
-                var repositoryType = typeof(InlineEventHandler);
                 var assembies = AppDomain.CurrentDomain.GetAssemblies();
                 var repositories = assembies.SelectMany(x => x.GetTypes()).Where(x =>
                 {
-                    if (x.IsClass && !x.IsAbstract && typeof(InlineEventHandler).IsAssignableFrom(x))
-                    {
-                        foreach (var face in x.GetInterfaces())
-                        {
-                            var isRepository = face.IsGenericType && face.GetGenericTypeDefinition() == typeof(IRepository<,>);
-                            if (isRepository) return true;
-                        }
-                    }
-                    return false;
+                    return x.IsClass && !x.IsAbstract && x.GetInterface(typeof(IRepository<,>).FullName) != null;
                 }).ToList();
                 repositories.ForEach(x => serviceContainerBuilder.RegisterType(x).AsImplementedInterfaces().InstancePerLifetimeScope());
             }

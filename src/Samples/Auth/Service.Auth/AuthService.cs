@@ -1,7 +1,6 @@
 ﻿using IService.Auth;
 using Jimu;
 using Jimu.Database;
-using Jimu.Server.Auth;
 using Jimu.Server.Auth.Middlewares;
 using System;
 

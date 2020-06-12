@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Jimu.Server.Diagnostic.Skywalking
+﻿namespace Jimu.Server.Diagnostic.Skywalking
 {
     public class Class1
     {

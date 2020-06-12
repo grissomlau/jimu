@@ -19,9 +19,9 @@ namespace Jimu.Client.Proxy
         private readonly ILogger _logger;
         private IEnumerable<Type> _generatedServiceProxyTypes;
 
-        public ServiceProxyGenerator(ILogger logger)
+        public ServiceProxyGenerator(ILoggerFactory loggerFactory)
         {
-            _logger = logger;
+            _logger = loggerFactory.Create();
         }
 
         public IEnumerable<Type> GetGeneratedServiceProxyTypes()

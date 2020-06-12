@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using IService.User;
+﻿using IService.User;
 using IService.User.dto;
 
 namespace Service.User

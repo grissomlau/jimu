@@ -1,8 +1,5 @@
 ﻿using Enyim.Caching;
 using IService.User;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Service.User
 {

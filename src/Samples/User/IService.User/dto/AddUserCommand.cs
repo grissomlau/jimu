@@ -1,7 +1,4 @@
 ﻿using Jimu.Core.Bus;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace IService.User.dto
 {

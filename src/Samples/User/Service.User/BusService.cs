@@ -1,5 +1,6 @@
 ﻿using IService.User;
 using IService.User.dto;
+using Jimu;
 using Jimu.Core.Bus;
 using Jimu.Logger;
 using System.Threading.Tasks;
@@ -10,10 +11,10 @@ namespace Service.User
     {
         IJimuBus _bus;
         ILogger _logger;
-        public BusService(IJimuBus bus, ILogger logger)
+        public BusService(IJimuBus bus, ILoggerFactory loggerFactory)
         {
             _bus = bus;
-            _logger = logger;
+            _logger = loggerFactory.Create(this.GetType());
         }
 
         public Task<HelloResponse> Request(string greeting)

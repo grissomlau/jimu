@@ -1,7 +1,4 @@
 ﻿using Jimu;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using IService.User.dto;
 
 namespace IService.User

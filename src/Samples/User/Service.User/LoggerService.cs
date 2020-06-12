@@ -1,17 +1,15 @@
 ﻿using IService.User;
+using Jimu;
 using Jimu.Logger;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Service.User
 {
     public class LoggerService : ILoggerService
     {
         readonly ILogger _logger;
-        public LoggerService(ILogger logger)
+        public LoggerService(ILoggerFactory loggerFactory)
         {
-            _logger = logger;
+            _logger = loggerFactory.Create(this.GetType());
         }
         public void Post(string log)
         {

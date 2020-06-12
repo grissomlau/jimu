@@ -1,18 +1,9 @@
 ﻿using Autofac;
 using Jimu.Core.Bus;
-using Jimu.Logger;
 using Jimu.Server.Bus.MassTransit.RabbitMq.Pattern;
-using Jimu.Server.ServiceContainer.Implement.Parser;
-using Jimu.Server.Transport;
 using MassTransit;
 using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using MT = MassTransit;
 
 namespace Jimu.Server.Bus.MassTransit.RabbitMq
@@ -50,7 +41,9 @@ namespace Jimu.Server.Bus.MassTransit.RabbitMq
         {
             if (_options != null && _options.Enable)
             {
-                var logger = container.Resolve<ILogger>();
+                
+                var loggerFactory = container.Resolve<ILoggerFactory>();
+                var logger = loggerFactory.Create(this.GetType());
                 _massTransitBus = MT.Bus.Factory.CreateUsingRabbitMq(sbc =>
                {
                    var host = sbc.Host($"rabbitmq://{_options.HostAddress}", h =>

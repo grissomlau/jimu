@@ -29,7 +29,8 @@ namespace Jimu.Server.ServiceContainer.Implement
             if (_options != null)
             {
                 var serviceEntryContainer = container.Resolve<IServiceEntryContainer>();
-                var logger = container.Resolve<ILogger>();
+                var loggerFactory = container.Resolve<ILoggerFactory>();
+                var logger = loggerFactory.Create(this.GetType());
                 ServicesLoader servicesLoader = new ServicesLoader(serviceEntryContainer, logger, _options);
                 servicesLoader.LoadServices();
             }

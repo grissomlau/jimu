@@ -18,9 +18,9 @@ namespace Jimu.Client.LoadBalance
 
         private readonly ILogger _logger;
 
-        public PollingAddressSelector(ILogger logger)
+        public PollingAddressSelector(ILoggerFactory loggerFactory)
         {
-            _logger = logger;
+            _logger = loggerFactory.Create(this.GetType());
         }
 
         public override Task<JimuAddress> GetAddressAsync(JimuServiceRoute serviceRoute)

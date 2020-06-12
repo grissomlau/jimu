@@ -1,9 +1,7 @@
 ﻿using IService.User.dto;
+using Jimu;
 using Jimu.Core.Bus;
 using Jimu.Logger;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Service.User.consumer
@@ -12,9 +10,9 @@ namespace Service.User.consumer
     {
 
         ILogger _logger;
-        public AddUserConsumer(ILogger logger)
+        public AddUserConsumer(ILoggerFactory loggerFactory)
         {
-            _logger = logger;
+            _logger = loggerFactory.Create(this.GetType());
         }
         public Task ConsumeAsync(IJimuConsumeContext<AddUserCommand> context)
         {

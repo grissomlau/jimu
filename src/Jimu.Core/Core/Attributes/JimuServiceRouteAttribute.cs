@@ -1,5 +1,4 @@
 ﻿using System;
-using Jimu.Common;
 
 namespace Jimu
 {

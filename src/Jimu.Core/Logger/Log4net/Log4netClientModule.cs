@@ -16,7 +16,8 @@ namespace Jimu.Logger.Log4net
         {
             if (_options != null)
             {
-                componentContainerBuilder.RegisterType<Log4netLogger>().WithParameter("options", _options).As<ILogger>().SingleInstance();
+                //componentContainerBuilder.RegisterType<Log4netLogger>().WithParameter("options", _options).As<ILogger>().SingleInstance();
+                componentContainerBuilder.RegisterType<Log4netLoggerFactory>().WithParameter("options", _options).As<ILoggerFactory>().SingleInstance();
             }
             base.DoRegister(componentContainerBuilder);
         }
@@ -25,7 +26,8 @@ namespace Jimu.Logger.Log4net
         {
             if (_options != null)
             {
-                var logger = container.Resolve<ILogger>();
+                var loggerFactory = container.Resolve<ILoggerFactory>();
+                var logger = loggerFactory.Create(this.GetType());
                 logger.Info($"[config]use Log4net logger");
             }
             base.DoInit(container);

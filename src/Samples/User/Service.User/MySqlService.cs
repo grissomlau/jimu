@@ -2,11 +2,11 @@
 using Jimu.Logger;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using IService.User;
 using IService.User.dto;
 using Dapper;
 using System.Threading.Tasks;
+using Jimu;
 
 namespace Service.User
 {
@@ -14,9 +14,9 @@ namespace Service.User
     {
         readonly ILogger _logger;
         readonly IDbFactory _dbFactory;
-        public MySqlService(ILogger logger, IDbFactory dbFactory)
+        public MySqlService(ILoggerFactory loggerFactory, IDbFactory dbFactory)
         {
-            _logger = logger;
+            _logger = loggerFactory.Create(this.GetType());
             _dbFactory = dbFactory;
         }
         public int AddUser(UserModel user)

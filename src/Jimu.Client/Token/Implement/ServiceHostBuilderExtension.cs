@@ -20,7 +20,8 @@ namespace Jimu.Client.Token.Implement
                 tokenGetter.GetToken = getToken;
 
 
-                var logger = componentRegister.Resolve<ILogger>();
+                var loggerFactory = componentRegister.Resolve<ILoggerFactory>();
+                var logger = loggerFactory.Create(typeof(ApplicationClientBuilder));
                 logger.Info($"[config]get token has been set");
             });
 

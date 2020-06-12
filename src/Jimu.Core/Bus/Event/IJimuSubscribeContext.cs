@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Jimu.Core.Bus
+﻿namespace Jimu.Core.Bus
 {
     public interface IJimuSubscribeContext<out T> where T : IJimuEvent
     {

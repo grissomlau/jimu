@@ -19,7 +19,7 @@ namespace Jimu.Client.HealthCheck
         private readonly string _cron;
         private readonly int _timeout = 30000;
 
-        public QuartzHealthCheck(ILogger logger, IClientServiceDiscovery serviceDiscovery, int intervalMinute)
+        public QuartzHealthCheck(ILoggerFactory loggerFactory, IClientServiceDiscovery serviceDiscovery, int intervalMinute)
         {
             if (intervalMinute == 0 || intervalMinute > 60)
             {
@@ -27,7 +27,7 @@ namespace Jimu.Client.HealthCheck
             }
             _cron = $"0 0/{intervalMinute} * * * ?";
 
-            _logger = logger;
+            _logger = loggerFactory.Create(this.GetType());
             _serviceDiscovery = serviceDiscovery;
         }
 
