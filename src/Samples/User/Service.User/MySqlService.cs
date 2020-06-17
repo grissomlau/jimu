@@ -1,20 +1,20 @@
-﻿using Jimu.Database;
-using Jimu.Logger;
+﻿using Jimu.Logger;
 using System;
 using System.Collections.Generic;
 using IService.User;
 using IService.User.dto;
 using Dapper;
 using System.Threading.Tasks;
-using Jimu;
+using System.Data.Common;
+using Jimu.UnitOfWork;
 
 namespace Service.User
 {
     public class MySqlService : IMySqlService
     {
         readonly ILogger _logger;
-        readonly IDbFactory _dbFactory;
-        public MySqlService(ILoggerFactory loggerFactory, IDbFactory dbFactory)
+        readonly IDbFactory<DbConnection> _dbFactory;
+        public MySqlService(ILoggerFactory loggerFactory, IDbFactory<DbConnection> dbFactory)
         {
             _logger = loggerFactory.Create(this.GetType());
             _dbFactory = dbFactory;

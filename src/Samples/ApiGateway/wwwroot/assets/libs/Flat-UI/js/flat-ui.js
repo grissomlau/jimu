@@ -1528,7 +1528,7 @@ $.ui.position = {
  * http://api.jqueryui.com/button/
  *
  * Depends:
- *	jquery.ui.core.js
+ *	jquery.ui.js
  *	jquery.ui.widget.js
  */
 (function( $, undefined ) {
@@ -1924,7 +1924,7 @@ $.widget( "ui.buttonset", {
  * http://api.jqueryui.com/slider/
  *
  * Depends:
- *	jquery.ui.core.js
+ *	jquery.ui.js
  *	jquery.ui.mouse.js
  *	jquery.ui.widget.js
  */

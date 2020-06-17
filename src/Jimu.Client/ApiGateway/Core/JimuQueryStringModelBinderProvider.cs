@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Microsoft.Extensions.Logging.Abstractions;
 
-namespace Jimu.Client.ApiGateway.Core
+namespace Jimu.Client.ApiGateway
 {
     public class JimuQueryStringModelBinderProvider : IModelBinderProvider
     {

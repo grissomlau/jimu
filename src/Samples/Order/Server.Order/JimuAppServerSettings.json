@@ -10,9 +10,9 @@
     "ServiceInvokeIp": "127.0.0.1", //服务宿主的地址
     "ServiceInvokePort": "8003"
   },
-  "DapperOptions": {
+  "DbConOptions": {
     "ConnectionString": "server=127.0.0.1;database=jimu_sample;user=root;pwd=root;Allow User Variables=True;",
-    "DbType": "MySql"
+    "DbProviderName": "mysql"
   },
   "TransportOptions": {
     "Ip": "127.0.0.1", //服务宿主ip

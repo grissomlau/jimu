@@ -2,6 +2,7 @@
 using Jimu.Client.LoadBalance;
 using Jimu.Client.RemoteCaller;
 using Jimu.Client.RemoteCaller.Implement;
+using Jimu.Logger;
 using Jimu.Module;
 using Microsoft.Extensions.Configuration;
 
@@ -33,7 +34,7 @@ namespace Jimu.Client.FaultTolerant
                 var logger = loggerFactory.Create(this.GetType());
                 var caller = container.Resolve<IRemoteServiceCaller>();
                 var addressSelector = container.Resolve<IAddressSelector>();
-                caller.UseMiddleware<RetryCallMiddleware>(addressSelector, logger, _options.RetryTimes);
+                caller.UseMiddleware<RetryCallMiddleware>(addressSelector, loggerFactory, _options.RetryTimes);
                 logger.Info($"[config]remote service call failure retry times: {_options.RetryTimes}");
             }
             base.DoInit(container);

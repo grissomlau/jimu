@@ -1,5 +1,5 @@
 ﻿using Autofac;
-using Jimu.Core.Bus;
+using Jimu.Bus;
 using Jimu.Logger;
 using MassTransit.RabbitMqTransport;
 

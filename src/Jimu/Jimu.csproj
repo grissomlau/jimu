@@ -1,31 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Version>1.3.0</Version>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Version>1.4.0-rc2</Version>
     <PackageProjectUrl>https://github.com/grissomlau/Jimu</PackageProjectUrl>
     <RepositoryUrl>https://github.com/grissomlau/Jimu</RepositoryUrl>
     <Description>netcore micorservice framework</Description>
-    <PackageLicenseExpression></PackageLicenseExpression>
     <Copyright>Jimu</Copyright>
     <Authors>grissomlau@qq.com</Authors>
     <Company>grissomlau@qq.com</Company>
     <PackageTags>netcore,microservice</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageLicenseExpression></PackageLicenseExpression>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="ServiceHostBuilderExtension.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Properties\PublishProfiles\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Jimu.Client\Jimu.Client.csproj" />
-    <ProjectReference Include="..\Jimu.Server\Jimu.Server.csproj" />
+    <PackageReference Include="Autofac" Version="5.2.0" />
+    <PackageReference Include="log4net" Version="2.0.8" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="NLog" Version="4.7.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.1.5" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="3.1.5" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.5" />
   </ItemGroup>
 
   <ItemGroup>

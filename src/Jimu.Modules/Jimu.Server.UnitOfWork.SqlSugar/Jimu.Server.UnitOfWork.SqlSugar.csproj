@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Authors>grissomlau@qq.com</Authors>
+    <Version>1.4.0-rc2</Version>
+    <RepositoryUrl>https://github.com/grissomlau/Jimu</RepositoryUrl>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="sqlSugarCore" Version="5.0.0.15" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Jimu.Server\Jimu.Server.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>

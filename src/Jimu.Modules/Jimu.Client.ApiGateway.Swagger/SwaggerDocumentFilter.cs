@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Jimu.Client.ApiGateway.Core;
 using Jimu.Client.ApiGateway.Swagger.Schema;
 using Jimu.Client.Discovery;
 using Jimu.Common;

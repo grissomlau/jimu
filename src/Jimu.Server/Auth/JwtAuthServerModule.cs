@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Jimu.Common;
+using Jimu.Logger;
 using Jimu.Module;
 using Jimu.Server.Auth.Middlewares;
 using Jimu.Server.Discovery;

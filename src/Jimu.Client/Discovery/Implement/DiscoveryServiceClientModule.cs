@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Jimu.Logger;
 using Jimu.Module;
 using Microsoft.Extensions.Configuration;
 

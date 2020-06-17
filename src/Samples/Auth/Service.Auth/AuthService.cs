@@ -1,16 +1,17 @@
 ﻿using IService.Auth;
 using Jimu;
-using Jimu.Database;
 using Jimu.Server.Auth.Middlewares;
+using Jimu.UnitOfWork;
 using System;
+using System.Data.Common;
 
 namespace Service.Auth
 {
     public class AuthService : IAuthService
     {
-        readonly IDbFactory _dbFactory;
+        readonly IDbFactory<DbConnection> _dbFactory;
         readonly JimuPayload _payload;
-        public AuthService(IDbFactory dbFactory, JimuPayload payload)
+        public AuthService(IDbFactory<DbConnection> dbFactory, JimuPayload payload)
         {
             _dbFactory = dbFactory;
             _payload = payload;

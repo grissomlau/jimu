@@ -1,5 +1,4 @@
 ﻿using IService.User;
-using Jimu;
 using Jimu.Logger;
 
 namespace Service.User

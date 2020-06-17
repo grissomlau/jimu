@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Jimu.Core\Jimu.Core.csproj" />
+    <ProjectReference Include="..\..\..\Jimu\Jimu.csproj" />
   </ItemGroup>
 
 </Project>

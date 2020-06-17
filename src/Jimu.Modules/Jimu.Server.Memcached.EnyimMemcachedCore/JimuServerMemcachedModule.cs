@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Enyim.Caching;
+using Jimu.Logger;
 
 namespace Jimu.Server.Memcached.EnyimMemcachedCore
 {

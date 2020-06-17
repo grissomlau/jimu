@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Version>1.3.2</Version>
+    <Version>1.4.0-rc2</Version>
     <PackageProjectUrl>https://github.com/grissomlau/Jimu</PackageProjectUrl>
     <RepositoryUrl>https://github.com/grissomlau/Jimu</RepositoryUrl>
     <Description>netcore micorservice framework</Description>
@@ -17,6 +17,7 @@
 
 
   <ItemGroup>
+    <ProjectReference Include="..\Jimu.Mix\Jimu.Mix.csproj" />
     <ProjectReference Include="..\Jimu.Modules\Jimu.Client.ApiGateway.Swagger\Jimu.Client.ApiGateway.Swagger.csproj" />
     <ProjectReference Include="..\Jimu.Modules\Jimu.Client.Diagnostic.Skywalking\Jimu.Client.Diagnostic.Skywalking.csproj" />
     <ProjectReference Include="..\Jimu.Modules\Jimu.Client.Discovery.Consul\Jimu.Client.Discovery.Consul.csproj" />
@@ -24,11 +25,8 @@
     <ProjectReference Include="..\Jimu.Modules\Jimu.Server.Diagnostic.Skywalking\Jimu.Server.Diagnostic.Skywalking.csproj" />
     <ProjectReference Include="..\Jimu.Modules\Jimu.Server.Discovery.Consul\Jimu.Server.Discovery.Consul.csproj" />
     <ProjectReference Include="..\Jimu.Modules\Jimu.Server.Memcached.EnyimMemcachedCore\Jimu.Server.Memcached.EnyimMemcachedCore.csproj" />
-    <ProjectReference Include="..\Jimu.Modules\Jimu.Server.ORM.Dapper\Jimu.Server.ORM.Dapper.csproj" />
-    <ProjectReference Include="..\Jimu.Modules\Jimu.Server.Repository.MiniDDD.Dapper\Jimu.Server.Repository.MiniDDD.Dapper.csproj" />
-    <ProjectReference Include="..\Jimu.Modules\Jimu.Server.Repository.MiniDDD.EF\Jimu.Server.Repository.MiniDDD.EF.csproj" />
-    <ProjectReference Include="..\Jimu.Modules\Jimu.Server.Repository.MiniDDD.SqlSugar\Jimu.Server.Repository.MiniDDD.SqlSugar.csproj" />
-    <ProjectReference Include="..\Jimu\Jimu.csproj" />
+    <ProjectReference Include="..\Jimu.Modules\Jimu.Server.UnitOfWork.DbCon\Jimu.Server.UnitOfWork.DbCon.csproj" />
+    <ProjectReference Include="..\Jimu.Modules\Jimu.Server.UnitOfWork.EF\Jimu.Server.UnitOfWork.EF.csproj" />
   </ItemGroup>
 
 

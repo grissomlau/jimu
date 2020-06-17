@@ -4,7 +4,7 @@ using Jimu.Common;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Jimu.Client.ApiGateway.Core
+namespace Jimu.Client.ApiGateway
 {
     public class JimuClient
     {

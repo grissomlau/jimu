@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.28803.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{584AF45A-3FFB-4B9F-8A12-99E9626AA9EF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu", "Jimu\Jimu.csproj", "{7F51F749-6FC5-45F0-930D-BBA7551A40AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Mix", "Jimu.Mix\Jimu.Mix.csproj", "{7F51F749-6FC5-45F0-930D-BBA7551A40AA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{238A367F-90BC-4E5A-B11B-4D04519621B7}"
 EndProject
@@ -22,14 +22,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Client.Discovery.Consul", "Jimu.Modules\Jimu.Client.Discovery.Consul\Jimu.Client.Discovery.Consul.csproj", "{F57EF7C8-AB32-47E3-9D66-142337CE955A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Server.Discovery.Consul", "Jimu.Modules\Jimu.Server.Discovery.Consul\Jimu.Server.Discovery.Consul.csproj", "{00368FA9-E5D9-4DC3-A812-91AAD393EBBB}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Server.Repository.MiniDDD.EF", "Jimu.Modules\Jimu.Server.Repository.MiniDDD.EF\Jimu.Server.Repository.MiniDDD.EF.csproj", "{E4183569-C106-4C6A-990F-EB3689EAE776}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Server.Repository.MiniDDD.SqlSugar", "Jimu.Modules\Jimu.Server.Repository.MiniDDD.SqlSugar\Jimu.Server.Repository.MiniDDD.SqlSugar.csproj", "{7BF7DBDE-C18A-47EF-AC7E-28756BEFE108}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Server.Repository.MiniDDD.Dapper", "Jimu.Modules\Jimu.Server.Repository.MiniDDD.Dapper\Jimu.Server.Repository.MiniDDD.Dapper.csproj", "{F01410C8-BDA7-435F-8FE8-17C3D949723C}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Server.ORM.Dapper", "Jimu.Modules\Jimu.Server.ORM.Dapper\Jimu.Server.ORM.Dapper.csproj", "{B023E57F-2BD2-49A5-A3F5-72610B2CED34}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "User", "User", "{0CF3A967-A0A7-4C5F-B71C-54C8967E0E1C}"
 EndProject
@@ -49,7 +41,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server.Auth", "Samples\Auth
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IService.Auth", "Samples\Auth\IService.Auth\IService.Auth.csproj", "{D5D8DEEB-CF4A-4047-BC3D-A90AEA927AC0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Core", "Jimu.Core\Jimu.Core.csproj", "{5B630F86-362F-4F47-A553-83B7A34AAE44}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu", "Jimu\Jimu.csproj", "{5B630F86-362F-4F47-A553-83B7A34AAE44}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Client.Diagnostic.Skywalking", "Jimu.Modules\Jimu.Client.Diagnostic.Skywalking\Jimu.Client.Diagnostic.Skywalking.csproj", "{DC628A17-0364-488F-A32F-BC68654A09F8}"
 EndProject
@@ -67,7 +59,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.All", "Jimu.All\Jimu.A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Server.Memcached.EnyimMemcachedCore", "Jimu.Modules\Jimu.Server.Memcached.EnyimMemcachedCore\Jimu.Server.Memcached.EnyimMemcachedCore.csproj", "{8878AB09-E66F-4CD8-8F16-3B1F2E4FC1B1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jimu.Server.Bus.MassTransit.RabbitMq", "Jimu.Modules\Jimu.Server.Bus.MassTransit.RabbitMq\Jimu.Server.Bus.MassTransit.RabbitMq.csproj", "{56208DEF-4756-4D41-977D-E39D24D7E10F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Server.Bus.MassTransit.RabbitMq", "Jimu.Modules\Jimu.Server.Bus.MassTransit.RabbitMq\Jimu.Server.Bus.MassTransit.RabbitMq.csproj", "{56208DEF-4756-4D41-977D-E39D24D7E10F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jimu.Server.UnitOfWork.DbCon", "Jimu.Modules\Jimu.Server.UnitOfWork.DbCon\Jimu.Server.UnitOfWork.DbCon.csproj", "{9A974646-E22C-4C66-8A36-BAE79A670511}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jimu.Server.UnitOfWork.EF", "Jimu.Modules\Jimu.Server.UnitOfWork.EF\Jimu.Server.UnitOfWork.EF.csproj", "{043CF228-5051-4A32-9399-5044F4226E7E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jimu.Server.UnitOfWork.SqlSugar", "Jimu.Modules\Jimu.Server.UnitOfWork.SqlSugar\Jimu.Server.UnitOfWork.SqlSugar.csproj", "{8D74A4CE-7223-4474-AA28-AA59764160E6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -103,22 +101,6 @@ Global
 		{00368FA9-E5D9-4DC3-A812-91AAD393EBBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00368FA9-E5D9-4DC3-A812-91AAD393EBBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00368FA9-E5D9-4DC3-A812-91AAD393EBBB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E4183569-C106-4C6A-990F-EB3689EAE776}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E4183569-C106-4C6A-990F-EB3689EAE776}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E4183569-C106-4C6A-990F-EB3689EAE776}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E4183569-C106-4C6A-990F-EB3689EAE776}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7BF7DBDE-C18A-47EF-AC7E-28756BEFE108}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7BF7DBDE-C18A-47EF-AC7E-28756BEFE108}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7BF7DBDE-C18A-47EF-AC7E-28756BEFE108}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7BF7DBDE-C18A-47EF-AC7E-28756BEFE108}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F01410C8-BDA7-435F-8FE8-17C3D949723C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F01410C8-BDA7-435F-8FE8-17C3D949723C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F01410C8-BDA7-435F-8FE8-17C3D949723C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F01410C8-BDA7-435F-8FE8-17C3D949723C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B023E57F-2BD2-49A5-A3F5-72610B2CED34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B023E57F-2BD2-49A5-A3F5-72610B2CED34}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B023E57F-2BD2-49A5-A3F5-72610B2CED34}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B023E57F-2BD2-49A5-A3F5-72610B2CED34}.Release|Any CPU.Build.0 = Release|Any CPU
 		{271E0E08-1FAD-4F7B-8071-3376AB733552}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{271E0E08-1FAD-4F7B-8071-3376AB733552}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{271E0E08-1FAD-4F7B-8071-3376AB733552}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -183,6 +165,18 @@ Global
 		{56208DEF-4756-4D41-977D-E39D24D7E10F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56208DEF-4756-4D41-977D-E39D24D7E10F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{56208DEF-4756-4D41-977D-E39D24D7E10F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A974646-E22C-4C66-8A36-BAE79A670511}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A974646-E22C-4C66-8A36-BAE79A670511}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A974646-E22C-4C66-8A36-BAE79A670511}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A974646-E22C-4C66-8A36-BAE79A670511}.Release|Any CPU.Build.0 = Release|Any CPU
+		{043CF228-5051-4A32-9399-5044F4226E7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{043CF228-5051-4A32-9399-5044F4226E7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{043CF228-5051-4A32-9399-5044F4226E7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{043CF228-5051-4A32-9399-5044F4226E7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D74A4CE-7223-4474-AA28-AA59764160E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D74A4CE-7223-4474-AA28-AA59764160E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D74A4CE-7223-4474-AA28-AA59764160E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D74A4CE-7223-4474-AA28-AA59764160E6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -192,10 +186,6 @@ Global
 		{43DEE7EE-7B94-4861-9287-D4D351D07CE0} = {AF5033F5-BA7F-49D5-98A8-A3786891C322}
 		{F57EF7C8-AB32-47E3-9D66-142337CE955A} = {238A367F-90BC-4E5A-B11B-4D04519621B7}
 		{00368FA9-E5D9-4DC3-A812-91AAD393EBBB} = {238A367F-90BC-4E5A-B11B-4D04519621B7}
-		{E4183569-C106-4C6A-990F-EB3689EAE776} = {238A367F-90BC-4E5A-B11B-4D04519621B7}
-		{7BF7DBDE-C18A-47EF-AC7E-28756BEFE108} = {238A367F-90BC-4E5A-B11B-4D04519621B7}
-		{F01410C8-BDA7-435F-8FE8-17C3D949723C} = {238A367F-90BC-4E5A-B11B-4D04519621B7}
-		{B023E57F-2BD2-49A5-A3F5-72610B2CED34} = {238A367F-90BC-4E5A-B11B-4D04519621B7}
 		{0CF3A967-A0A7-4C5F-B71C-54C8967E0E1C} = {584AF45A-3FFB-4B9F-8A12-99E9626AA9EF}
 		{FC71E1F8-C9DF-4C5D-9F38-0B6CDF24CA0C} = {584AF45A-3FFB-4B9F-8A12-99E9626AA9EF}
 		{271E0E08-1FAD-4F7B-8071-3376AB733552} = {0CF3A967-A0A7-4C5F-B71C-54C8967E0E1C}
@@ -213,6 +203,9 @@ Global
 		{348A4C2C-E16D-4C6E-BA1E-C077B4C7C6DF} = {D35012AF-C669-4527-BE0F-6B6667825BB5}
 		{8878AB09-E66F-4CD8-8F16-3B1F2E4FC1B1} = {238A367F-90BC-4E5A-B11B-4D04519621B7}
 		{56208DEF-4756-4D41-977D-E39D24D7E10F} = {238A367F-90BC-4E5A-B11B-4D04519621B7}
+		{9A974646-E22C-4C66-8A36-BAE79A670511} = {238A367F-90BC-4E5A-B11B-4D04519621B7}
+		{043CF228-5051-4A32-9399-5044F4226E7E} = {238A367F-90BC-4E5A-B11B-4D04519621B7}
+		{8D74A4CE-7223-4474-AA28-AA59764160E6} = {238A367F-90BC-4E5A-B11B-4D04519621B7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B2F7F17C-34DB-4FBF-8BCD-49BC2FA3A10F}

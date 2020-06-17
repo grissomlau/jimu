@@ -29,10 +29,6 @@
     "ServiceInvokeIp": "127.0.0.1", //服务宿主的地址
     "ServiceInvokePort": "8001"
   },
-  "DapperOptions": {
-    "ConnectionString": "",
-    "DbType": "MySql"
-  },
   "TransportOptions": {
     "Ip": "127.0.0.1", //服务宿主ip
     "Port": 8001, //服务宿主端口

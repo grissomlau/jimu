@@ -1,4 +1,4 @@
-﻿using Jimu.Core.Bus;
+﻿using Jimu.Bus;
 using MassTransit;
 using System;
 using System.Threading;

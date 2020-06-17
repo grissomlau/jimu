@@ -1,5 +1,5 @@
 ﻿using IService.User.dto;
-using Jimu.Core.Bus;
+using Jimu.Bus;
 using System.Threading.Tasks;
 
 namespace Service.User.requestHandler

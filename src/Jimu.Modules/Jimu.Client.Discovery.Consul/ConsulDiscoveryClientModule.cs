@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Consul;
 using Jimu.Common;
+using Jimu.Logger;
 using Jimu.Module;
 using Microsoft.Extensions.Configuration;
 using System;

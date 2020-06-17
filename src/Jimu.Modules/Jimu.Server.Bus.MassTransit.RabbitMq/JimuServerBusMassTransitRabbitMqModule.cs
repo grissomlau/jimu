@@ -1,5 +1,6 @@
 ﻿using Autofac;
-using Jimu.Core.Bus;
+using Jimu.Bus;
+using Jimu.Logger;
 using Jimu.Server.Bus.MassTransit.RabbitMq.Pattern;
 using MassTransit;
 using Microsoft.Extensions.Configuration;

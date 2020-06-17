@@ -14,11 +14,11 @@
     "ServiceInvokeIp": "127.0.0.1", //服务宿主的地址
     "ServiceInvokePort": "8002"
   },
-  "MultipleDapperOptions": [
+  "MultipleDbConOptions": [
     {
       "ConnectionString": "server=127.0.0.1;database=jimu_sample;user=root;pwd=root;Allow User Variables=True;",
-      "DbType": "MySql",
-      "OptionName": "RWDB"
+      "OptionName": "RWDB",
+      "DbProviderName": "mysql"
     }
   ],
   "TransportOptions": {

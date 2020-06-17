@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Jimu.Client.ApiGateway.Core
+namespace Jimu.Client.ApiGateway
 {
     [ModelBinder(BinderType = typeof(JimuModelBinder))]
     public class JimuModel

@@ -7,7 +7,7 @@ using System.Web;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace Jimu.Client.ApiGateway.Core
+namespace Jimu.Client.ApiGateway
 {
     [ModelBinder(BinderType = typeof(JimuQueryStringModelBinder))]
     public class JimuQueryString

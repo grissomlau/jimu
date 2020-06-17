@@ -1,6 +1,5 @@
 ﻿using IService.User.dto;
-using Jimu;
-using Jimu.Core.Bus;
+using Jimu.Bus;
 using Jimu.Logger;
 using System.Threading.Tasks;
 

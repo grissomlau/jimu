@@ -1,4 +1,4 @@
-﻿using Jimu.Core.Bus;
+﻿using Jimu.Bus;
 
 namespace Jimu.Server.Bus.MassTransit.RabbitMq
 {
