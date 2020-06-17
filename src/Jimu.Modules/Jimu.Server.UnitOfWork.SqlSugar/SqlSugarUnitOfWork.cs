@@ -9,8 +9,7 @@ namespace Jimu.Server.UnitOfWork.SqlSugar
     {
         SqlSugarClient _worker;
         bool _hasDisposed;
-        IDbFactory<SqlSugarClient> _dbFactory;
-        string _currentOptionsName;
+        DbFactory _dbFactory;
 
 
 
@@ -62,16 +61,15 @@ namespace Jimu.Server.UnitOfWork.SqlSugar
         {
 
             var isCreateNewOne = _worker == null
-                 || (optionName != _currentOptionsName && _worker.Ado.Transaction == null);//after commit, the currentTransaction turn to null
+                 || (optionName != _options?.OptionName && _worker.Ado.Transaction == null);//after commit, the currentTransaction turn to null
 
             if (isCreateNewOne)
             {
-                _worker = _dbFactory.Create(optionName);
-                _currentOptionsName = optionName;
+                _worker = _dbFactory.Create(out _options, optionName);
                 return _worker;
             }
 
-            if (optionName != _currentOptionsName)
+            if (optionName != _options?.OptionName)
             {
                 try
                 {
@@ -79,7 +77,7 @@ namespace Jimu.Server.UnitOfWork.SqlSugar
                     _worker?.Dispose();
                 }
                 catch { }
-                throw new SqlSugarUnitOfWorkException($"existing UowWorker {_options.OptionName} is running, cannot create an new one {_options.OptionName}");
+                throw new SqlSugarUnitOfWorkException($"existing UowWorker {_options.OptionName} is running, cannot create an new one {optionName}");
             }
             return _worker;
         }

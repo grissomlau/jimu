@@ -10,9 +10,7 @@ namespace Jimu.Server.UnitOfWork.EF
     {
         DbContext _worker;
         bool _hasDisposed;
-        IDbFactory<DbContext> _dbFactory;
-        string _currentOptionsName;
-
+        DbFactory _dbFactory;
 
 
         EFOptions _options;
@@ -61,16 +59,15 @@ namespace Jimu.Server.UnitOfWork.EF
         public override DbContext GetUowWorker(string optionName = null)
         {
             var isCreateNewOne = _worker == null
-                 || (optionName != _currentOptionsName && _worker.Database.CurrentTransaction == null);//after commit, the currentTransaction turn to null
+                 || (optionName != _options?.OptionName && _worker.Database.CurrentTransaction == null);//after commit, the currentTransaction turn to null
 
             if (isCreateNewOne)
             {
-                _worker = _dbFactory.Create(optionName);
-                _currentOptionsName = optionName;
+                _worker = _dbFactory.Create(out _options, optionName);
                 return _worker;
             }
 
-            if (optionName != _currentOptionsName)
+            if (optionName != _options?.OptionName)
             {
                 try
                 {
@@ -78,7 +75,7 @@ namespace Jimu.Server.UnitOfWork.EF
                     _worker?.Dispose();
                 }
                 catch { }
-                throw new EFUnitOfWorkException($"existing UowWorker {_options.OptionName} is running, cannot create an new one {_options.OptionName}");
+                throw new EFUnitOfWorkException($"existing UowWorker {_options?.OptionName} is running, cannot create an new one {optionName}");
             }
             return _worker;
         }

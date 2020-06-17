@@ -18,9 +18,9 @@ namespace Jimu.Server.UnitOfWork.DbCon
             _multipleOptions = multipleOptions;
             _options = _multipleOptions.FirstOrDefault(x => x.IsDefaultOption);
         }
-        public DbConnection Create(string optionName = null)
+        public DbConnection Create(out DbConOptions options, string optionName = null)
         {
-            DbConOptions options = null;
+            options = null;
             if (string.IsNullOrEmpty(optionName) || optionName == _options?.OptionName)
             {
                 options = _options;
@@ -45,6 +45,10 @@ namespace Jimu.Server.UnitOfWork.DbCon
             var cnn = factory.CreateConnection();
             cnn.ConnectionString = options.ConnectionString;
             return cnn;
+        }
+        public DbConnection Create(string optionName = null)
+        {
+            return Create(out DbConOptions options, optionName);
         }
     }
 }

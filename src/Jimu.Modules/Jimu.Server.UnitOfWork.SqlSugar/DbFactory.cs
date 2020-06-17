@@ -22,9 +22,14 @@ namespace Jimu.Server.UnitOfWork.SqlSugar
             _options = _multipleOptions.FirstOrDefault(x => x.IsDefaultOption);
             _logAction = logAction;
         }
+
         public SqlSugarClient Create(string optionName = null)
         {
-            SqlSugarOptions options = null;
+            return this.Create(out SqlSugarOptions options, optionName);
+        }
+        public SqlSugarClient Create(out SqlSugarOptions options, string optionName = null)
+        {
+            options = null;
             if (string.IsNullOrEmpty(optionName) || optionName == _options?.OptionName)
             {
                 options = _options;

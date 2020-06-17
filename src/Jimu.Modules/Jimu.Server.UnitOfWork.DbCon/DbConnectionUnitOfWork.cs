@@ -9,9 +9,7 @@ namespace Jimu.Server.UnitOfWork.DbCon
         DbConnection _worker;
         DbTransaction _dbTransaction;
         bool _hasDisposed;
-        IDbFactory<DbConnection> _dbFactory;
-        string _currentOptionsName;
-
+        DbFactory _dbFactory;
 
 
         DbConOptions _options;
@@ -68,16 +66,15 @@ namespace Jimu.Server.UnitOfWork.DbCon
         public override DbConnection GetUowWorker(string optionName = null)
         {
             var isCreateNewOne = _worker == null
-                || (optionName != _currentOptionsName && _dbTransaction == null);//after commit, the currentTransaction turn to null
+                || (optionName != _options?.OptionName && _dbTransaction == null);//after commit, the currentTransaction turn to null
 
             if (isCreateNewOne)
             {
-                _worker = _dbFactory.Create(optionName);
-                _currentOptionsName = optionName;
+                _worker = _dbFactory.Create(out _options, optionName);
                 return _worker;
             }
 
-            if (optionName != _currentOptionsName)
+            if (optionName != _options?.OptionName)
             {
                 try
                 {
@@ -85,7 +82,7 @@ namespace Jimu.Server.UnitOfWork.DbCon
                     _worker?.Dispose();
                 }
                 catch { }
-                throw new DbConnectionUnitOfWorkException($"existing UowWorker {_options.OptionName} is running, cannot create an new one {_options.OptionName}");
+                throw new DbConnectionUnitOfWorkException($"existing UowWorker {_options?.OptionName} is running, cannot create an new one {optionName}");
             }
             return _worker;
         }

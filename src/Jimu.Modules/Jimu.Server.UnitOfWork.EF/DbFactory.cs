@@ -23,9 +23,9 @@ namespace Jimu.Server.UnitOfWork.EF
             _options = _multipleOptions.FirstOrDefault(x => x.IsDefaultOption);
             _logAction = logAction;
         }
-        public DbContext Create(string optionName = null)
+        public DbContext Create(out EFOptions options, string optionName = null)
         {
-            EFOptions options = null;
+            options = null;
             if (string.IsNullOrEmpty(optionName) || optionName == _options?.OptionName)
             {
                 options = _options;
@@ -40,6 +40,11 @@ namespace Jimu.Server.UnitOfWork.EF
             }
             EFUnitOfWorkDbContext context = new EFUnitOfWorkDbContext(options, _logAction);
             return context;
+        }
+
+        public DbContext Create(string optionName = null)
+        {
+            return this.Create(out EFOptions options, optionName);
         }
     }
 }
