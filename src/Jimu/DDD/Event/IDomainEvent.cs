@@ -2,11 +2,9 @@
 
 namespace Jimu.DDD
 {
-    public interface IDomainEvent<TKey>
+    public interface IDomainEvent
     {
         Guid Id { get; }
-        TKey AggregateRootKey { get; set; }
-
         DateTime Timestamp { get; }
     }
 }

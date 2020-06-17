@@ -7,8 +7,8 @@ namespace Jimu.DDD
         IEntity<TKey>
         where TKey : IEquatable<TKey>
     {
-        IEnumerable<IDomainEvent<TKey>> UncommittedEvents { get; }
+        IEnumerable<IDomainEvent> UncommittedEvents { get; }
 
-        void Replay(IEnumerable<IDomainEvent<TKey>> events);
+        void Replay(IEnumerable<IDomainEvent> events);
     }
 }

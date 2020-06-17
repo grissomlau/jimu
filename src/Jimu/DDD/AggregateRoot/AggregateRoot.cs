@@ -5,12 +5,12 @@ using System.Linq;
 namespace Jimu.DDD
 {
     public abstract class AggregateRoot<TKey> :
-        InlineEventHandler<TKey>,
+        InlineEventHandler,
         IAggregateRoot<TKey>
         where TKey : IEquatable<TKey>
     {
-        private readonly Queue<IDomainEvent<TKey>> _uncommittedEvents = new Queue<IDomainEvent<TKey>>();
-        public IEnumerable<IDomainEvent<TKey>> UncommittedEvents => _uncommittedEvents;
+        private readonly Queue<IDomainEvent> _uncommittedEvents = new Queue<IDomainEvent>();
+        public IEnumerable<IDomainEvent> UncommittedEvents => _uncommittedEvents;
 
         public virtual TKey Id { get; set; }
 
@@ -22,7 +22,7 @@ namespace Jimu.DDD
             }
         }
 
-        public virtual void Replay(IEnumerable<IDomainEvent<TKey>> events)
+        public virtual void Replay(IEnumerable<IDomainEvent> events)
         {
             //((IPurgeable)this).Purge();
             this.Purge();

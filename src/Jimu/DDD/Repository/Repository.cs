@@ -4,7 +4,7 @@ using System.Linq;
 namespace Jimu.DDD
 {
     public abstract class Repository<T, TKey> :
-        InlineEventHandler<TKey>,
+        InlineEventHandler,
         IRepository<T, TKey>
         where T : AggregateRoot<TKey>
         where TKey : IEquatable<TKey>

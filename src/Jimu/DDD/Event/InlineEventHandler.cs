@@ -3,10 +3,10 @@ using System.Reflection;
 
 namespace Jimu.DDD
 {
-    public abstract class InlineEventHandler<TKey>
+    public abstract class InlineEventHandler
     {
 
-        protected virtual void ApplyEvent<TEvent>(TEvent e) where TEvent : IDomainEvent<TKey>
+        protected virtual void ApplyEvent<TEvent>(TEvent e) where TEvent : IDomainEvent
         {
             var eventHandlerMethods = from m in GetType().GetMethods(BindingFlags.Instance | BindingFlags.NonPublic)
                                       let parameters = m.GetParameters()
