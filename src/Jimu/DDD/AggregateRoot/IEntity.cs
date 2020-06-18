@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Jimu.DDD
 {
-    public interface IEntity<out TKey>
-        where TKey : IEquatable<TKey>
+    public interface IEntity
     {
-        TKey Id { get; }
     }
 }

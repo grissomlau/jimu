@@ -5,8 +5,10 @@
         public bool EnableConsoleLog { get; set; } = true;
         public bool EnableFileLog { get; set; }
         public string FileLogPath { get; set; } = "log";
-        public LogLevel FileLogLevel { get; set; } = LogLevel.Error;
-        public LogLevel ConsoleLogLevel { get; set; } = LogLevel.Debug;
+        public LogLevel FileLogLevelMax { get; set; } = LogLevel.Debug;
+        public LogLevel FileLogLevelMin { get; set; } = LogLevel.Debug;
+        public LogLevel ConsoleLogLevelMax { get; set; } = LogLevel.Debug;
+        public LogLevel ConsoleLogLevelMin { get; set; } = LogLevel.Debug;
         public bool UseInService { get; set; }
 
         /// <summary>

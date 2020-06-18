@@ -10,9 +10,9 @@ namespace Jimu.DDD
         where TKey : IEquatable<TKey>
     {
         private readonly Queue<IDomainEvent> _uncommittedEvents = new Queue<IDomainEvent>();
-        public IEnumerable<IDomainEvent> UncommittedEvents => _uncommittedEvents;
+        public virtual IEnumerable<IDomainEvent> UncommittedEvents => _uncommittedEvents;
 
-        public virtual TKey Id { get; set; }
+        public virtual TKey Id { get; protected set; }
 
         public virtual void Purge()
         {

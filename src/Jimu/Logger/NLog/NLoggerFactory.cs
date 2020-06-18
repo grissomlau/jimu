@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices.ComTypes;
 using N = NLog;
 
 namespace Jimu.Logger.NLog
@@ -22,31 +23,12 @@ namespace Jimu.Logger.NLog
                 {
                     var fileConf = new N.Targets.FileTarget("jimuLogFile")
                     {
-                        FileName = "./log/${level:lowercase=true}/${shortdate}.log",
                         ArchiveAboveSize = 10000000,
                         Layout = @"${date:format=yyyy-MM-dd HH\:mm\:ss.fff} ${level:uppercase=true} [${threadid}] ${message}"
                     };
-                    if (options.FileLogPath != null)
-                    {
-                        fileConf.FileName = options.FileLogPath + "/${level:lowercase=true}/${shortdate}.log";
-
-                    }
-                    if ((options.FileLogLevel & LogLevel.Debug) == LogLevel.Debug)
-                    {
-                        config.AddRule(N.LogLevel.Debug, N.LogLevel.Error, fileConf);
-                    }
-                    else if ((options.FileLogLevel & LogLevel.Info) == LogLevel.Info)
-                    {
-                        config.AddRule(N.LogLevel.Info, N.LogLevel.Error, fileConf);
-                    }
-                    else if ((options.FileLogLevel & LogLevel.Warn) == LogLevel.Warn)
-                    {
-                        config.AddRule(N.LogLevel.Warn, N.LogLevel.Error, fileConf);
-                    }
-                    else if ((options.FileLogLevel & LogLevel.Error) == LogLevel.Error)
-                    {
-                        config.AddRuleForOneLevel(N.LogLevel.Error, fileConf);
-                    }
+                    string path = string.IsNullOrEmpty(options.FileLogPath) ? "./log" : options.FileLogPath;
+                    fileConf.FileName = path + "/${shortdate}.log";
+                    config.AddRule(ConvertToLevel(options.FileLogLevelMin), ConvertToLevel(options.FileLogLevelMax), fileConf);
                 }
                 if (options.EnableConsoleLog)
                 {
@@ -54,22 +36,7 @@ namespace Jimu.Logger.NLog
                     {
                         Layout = @"${date:format=yyyy-MM-dd HH\:mm\:ss.fff} ${level:uppercase=true} [${threadid}] ${message}"
                     };
-                    if ((options.ConsoleLogLevel & LogLevel.Debug) == LogLevel.Debug)
-                    {
-                        config.AddRule(N.LogLevel.Debug, N.LogLevel.Error, consoleLog);
-                    }
-                    else if ((options.ConsoleLogLevel & LogLevel.Info) == LogLevel.Info)
-                    {
-                        config.AddRule(N.LogLevel.Info, N.LogLevel.Error, consoleLog);
-                    }
-                    else if ((options.ConsoleLogLevel & LogLevel.Warn) == LogLevel.Warn)
-                    {
-                        config.AddRule(N.LogLevel.Warn, N.LogLevel.Error, consoleLog);
-                    }
-                    else if ((options.ConsoleLogLevel & LogLevel.Error) == LogLevel.Error)
-                    {
-                        config.AddRuleForOneLevel(N.LogLevel.Error, consoleLog);
-                    }
+                    config.AddRule(ConvertToLevel(options.ConsoleLogLevelMin), ConvertToLevel(options.ConsoleLogLevelMax), consoleLog);
                 }
                 N.LogManager.Configuration = config;
             }
@@ -86,6 +53,23 @@ namespace Jimu.Logger.NLog
             else
             {
                 return new NLogger(logger, type);
+            }
+        }
+
+        private static N.LogLevel ConvertToLevel(LogLevel logLevel)
+        {
+            switch (logLevel)
+            {
+                case LogLevel.Debug:
+                    return N.LogLevel.Debug;
+                case LogLevel.Info:
+                    return N.LogLevel.Info;
+                case LogLevel.Warn:
+                    return N.LogLevel.Warn;
+                case LogLevel.Error:
+                    return N.LogLevel.Error;
+                default:
+                    throw new LoggerException($"{logLevel} not found int NLog");
             }
         }
     }

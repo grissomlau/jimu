@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Jimu.DDD
 {
     public interface IAggregateRoot<TKey> :
-        IEntity<TKey>
+        IEntity
         where TKey : IEquatable<TKey>
     {
         IEnumerable<IDomainEvent> UncommittedEvents { get; }

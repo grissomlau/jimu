@@ -4,7 +4,7 @@ namespace Jimu.DDD
 {
     public interface IDomainEvent
     {
-        Guid Id { get; }
+        string Id { get; }
         DateTime Timestamp { get; }
     }
 }

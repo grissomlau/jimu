@@ -4,7 +4,7 @@ namespace Jimu.DDD
 {
     public class DomainEvent : IDomainEvent
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
-        public DateTime Timestamp { get; set; } = DateTime.UtcNow;
+        public virtual string Id { get; set; } = Guid.NewGuid().ToString();
+        public virtual DateTime Timestamp { get; set; } = DateTime.UtcNow;
     }
 }
