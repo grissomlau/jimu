@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Authors>grissomlau@qq.com</Authors>
-    <Version>1.4.0-rc7</Version>
+    <Version>1.4.0</Version>
     <RepositoryUrl>https://github.com/grissomlau/Jimu</RepositoryUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>

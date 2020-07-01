@@ -42,12 +42,12 @@ namespace Jimu.Server.Bus.MassTransit.RabbitMq
         {
             if (_options != null && _options.Enable)
             {
-                
+
                 var loggerFactory = container.Resolve<ILoggerFactory>();
                 var logger = loggerFactory.Create(this.GetType());
                 _massTransitBus = MT.Bus.Factory.CreateUsingRabbitMq(sbc =>
                {
-                   var host = sbc.Host($"rabbitmq://{_options.HostAddress}", h =>
+                   sbc.Host($"rabbitmq://{_options.HostAddress}", h =>
                    {
                        if (!string.IsNullOrEmpty(_options.UserName))
                        {

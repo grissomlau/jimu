@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Version>1.4.0-rc7</Version>
+    <Version>1.4.0</Version>
     <Authors>grissomlau@qq.com</Authors>
     <Description>swagger support for jimu</Description>
     <PackageLicenseExpression></PackageLicenseExpression>
@@ -15,7 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.4.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.1" />
   </ItemGroup>
 
   <ItemGroup>

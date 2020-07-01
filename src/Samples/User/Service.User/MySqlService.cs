@@ -37,10 +37,17 @@ namespace Service.User
 
         public List<UserModel> GetAllUser()
         {
+            List<UserModel> users = new List<UserModel>();
             using (var db = _dbFactory.Create("RWDB"))
             {
-                return db.Query<UserModel>("Select * From user").AsList();
+                users = db.Query<UserModel>("Select * From user").AsList();
             }
+            UserModel user = null;
+            using (var db = _dbFactory.Create())
+            {
+                user = db.QuerySingleOrDefault<UserModel>("Select * From user Where Id = @id", new { id = 1 });
+            }
+            return users;
         }
 
         public Task<List<UserModel>> GetAllUserArray()

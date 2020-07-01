@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Version>1.4.0-rc7</Version>
+    <Version>1.4.0</Version>
     <Authors>grissomlau@qq.com</Authors>
     <Product>Jimu.Server.Bus.MassTransit.RabbitMq</Product>
     <Description>jimu server message queue</Description>
@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MassTransit.RabbitMQ" Version="6.3.2" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>

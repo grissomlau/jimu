@@ -20,14 +20,17 @@ namespace Jimu.Server.Bus.MassTransit.RabbitMq
             await _bus.Publish(@event);
         }
 
-        public Task<Resp> RequestAsync<Req, Resp>(Req request, TimeSpan timeout = default, CancellationToken cancellationToken = default)
+        public async Task<Resp> RequestAsync<Req, Resp>(Req request, TimeSpan timeout = default, CancellationToken cancellationToken = default)
             where Req : class, IJimuRequest
             where Resp : class
         {
             if (timeout == default)
                 timeout = TimeSpan.FromSeconds(_options.RequestTimeoutSeconds);
-            var client = _bus.CreateRequestClient<Req, Resp>(new Uri($"queue:{request.QueueName}"), timeout);
-            return client.Request(request, cancellationToken);
+            var client = _bus.CreateRequestClient<Req>(new Uri($"queue:{request.QueueName}"), timeout);
+            //var client = _bus.CreateRequestClient<Req, Resp>(new Uri($"queue:{request.QueueName}"), timeout);
+            //return client.GetResponse<Resp>(request, cancellationToken).GetAwaiter().GetResult().Message;
+            var resp = await client.GetResponse<Resp>(request, cancellationToken);
+            return resp.Message;
         }
 
         public async Task SendAsync<T>(T command) where T : IJimuCommand

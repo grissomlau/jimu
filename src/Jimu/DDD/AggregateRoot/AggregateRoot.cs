@@ -12,7 +12,7 @@ namespace Jimu.DDD
         private readonly Queue<IDomainEvent> _uncommittedEvents = new Queue<IDomainEvent>();
         public virtual IEnumerable<IDomainEvent> UncommittedEvents => _uncommittedEvents;
 
-        public virtual TKey Id { get; protected set; }
+        public virtual TKey Id { get; set; }
 
         public virtual void Purge()
         {
