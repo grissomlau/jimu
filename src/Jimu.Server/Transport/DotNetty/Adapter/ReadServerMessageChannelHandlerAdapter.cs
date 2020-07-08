@@ -2,6 +2,7 @@
 using DotNetty.Transport.Channels;
 using Jimu.Common;
 using Jimu.Logger;
+using System;
 using System.Text;
 
 namespace Jimu.Server.Transport.DotNetty.Adapter
@@ -9,9 +10,9 @@ namespace Jimu.Server.Transport.DotNetty.Adapter
     class ReadServerMessageChannelHandlerAdapter : ChannelHandlerAdapter
     {
         private readonly ILogger _logger;
-        public ReadServerMessageChannelHandlerAdapter(ILogger logger)
+        public ReadServerMessageChannelHandlerAdapter(ILoggerFactory loggerFactory)
         {
-            _logger = logger;
+            _logger = loggerFactory.Create(this.GetType());
         }
         public override void ChannelRead(IChannelHandlerContext context, object message)
         {
@@ -32,6 +33,11 @@ namespace Jimu.Server.Transport.DotNetty.Adapter
                 var convertedMsg = JimuHelper.Deserialize<byte[], JimuTransportMsg>(data);
                 context.FireChannelRead(convertedMsg);
                 //context.FireChannelRead(data);
+            }
+            catch (Exception ex)
+            {
+                _logger.Debug($"Deserialize msg failure");
+                context.WriteAndFlushAsync(Encoding.UTF8.GetBytes($"failure, {ex.ToStackTraceString()}"));
             }
             finally
             {

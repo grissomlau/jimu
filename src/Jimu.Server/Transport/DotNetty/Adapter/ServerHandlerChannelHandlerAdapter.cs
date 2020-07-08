@@ -10,10 +10,10 @@ namespace Jimu.Server.Transport.DotNetty.Adapter
         private readonly Action<IChannelHandlerContext, JimuTransportMsg> _readAction;
         private readonly ILogger _logger;
 
-        public ServerHandlerChannelHandlerAdapter(Action<IChannelHandlerContext, JimuTransportMsg> readAction, ILogger logger)
+        public ServerHandlerChannelHandlerAdapter(Action<IChannelHandlerContext, JimuTransportMsg> readAction, ILoggerFactory loggerFactory)
         {
             _readAction = readAction;
-            _logger = logger;
+            _logger = loggerFactory.Create(this.GetType());
         }
 
         public override void ChannelRead(IChannelHandlerContext context, object message)
@@ -21,7 +21,14 @@ namespace Jimu.Server.Transport.DotNetty.Adapter
             Task.Run(() =>
             {
                 var msg = message as JimuTransportMsg;
-                _readAction(context, msg);
+                try
+                {
+                    _readAction(context, msg);
+                }
+                catch (Exception ex)
+                {
+                    _logger.Info($"handle unexpected msg: {msg}");
+                }
             });
         }
 

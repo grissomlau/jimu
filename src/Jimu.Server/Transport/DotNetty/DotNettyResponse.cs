@@ -12,10 +12,10 @@ namespace Jimu.Server.Transport.DotNetty
     {
         private readonly IChannelHandlerContext _channel;
         private readonly ILogger _logger;
-        public DotNettyResponse(IChannelHandlerContext channel, ILogger logger)
+        public DotNettyResponse(IChannelHandlerContext channel, ILoggerFactory loggerFactory)
         {
             _channel = channel;
-            _logger = logger;
+            _logger = loggerFactory.Create(this.GetType());
         }
         public async Task WriteAsync(string messageId, JimuRemoteCallResultData resultMessage)
         {

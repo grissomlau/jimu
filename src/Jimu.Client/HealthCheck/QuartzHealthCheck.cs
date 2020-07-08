@@ -73,6 +73,7 @@ namespace Jimu.Client.HealthCheck
                     await serviceDiscovery.UpdateServerHealthAsync(servers);
 
                 }
+                logger.Debug("******* end check server health job *******");
             }
 
             private async Task CheckHealth(JimuAddress address, int timeout)
