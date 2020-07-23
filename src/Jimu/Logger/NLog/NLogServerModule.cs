@@ -7,9 +7,14 @@ namespace Jimu.Logger.NLog
     public class NLogServerModule : ServerModuleBase
     {
         private readonly JimuNLogOptions _options;
+        private readonly NLoggerFactory _nLoggerFactory;
         public NLogServerModule(IConfigurationRoot jimuAppSettings) : base(jimuAppSettings)
         {
             _options = this.JimuAppSettings.GetSection(typeof(JimuNLogOptions).Name).Get<JimuNLogOptions>();
+            if (_options != null)
+            {
+                _nLoggerFactory = new NLoggerFactory(_options);
+            }
         }
 
         public override void DoRegister(ContainerBuilder componentContainerBuilder)
@@ -17,7 +22,8 @@ namespace Jimu.Logger.NLog
             if (_options != null)
             {
                 //componentContainerBuilder.RegisterType<NLogger>().WithParameter("options", _options).As<ILogger>().SingleInstance();
-                componentContainerBuilder.RegisterType<NLoggerFactory>().WithParameter("options", _options).As<ILoggerFactory>().SingleInstance();
+                //componentContainerBuilder.RegisterType<NLoggerFactory>().WithParameter("options", _options).As<ILoggerFactory>().SingleInstance();
+                componentContainerBuilder.RegisterInstance(_nLoggerFactory).As<ILoggerFactory>().SingleInstance();
             }
             base.DoRegister(componentContainerBuilder);
         }
@@ -39,7 +45,8 @@ namespace Jimu.Logger.NLog
             {
 
                 //serviceContainerBuilder.RegisterType<NLogger>().WithParameter("options", _options).As<ILogger>().SingleInstance();
-                serviceContainerBuilder.RegisterType<NLoggerFactory>().WithParameter("options", _options).As<ILoggerFactory>().SingleInstance();
+                //serviceContainerBuilder.RegisterType<NLoggerFactory>().WithParameter("options", _options).As<ILoggerFactory>().SingleInstance();
+                serviceContainerBuilder.RegisterInstance(_nLoggerFactory).As<ILoggerFactory>().SingleInstance();
             }
             base.DoServiceRegister(serviceContainerBuilder);
         }

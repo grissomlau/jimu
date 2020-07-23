@@ -7,9 +7,14 @@ namespace Jimu.Logger.Log4net
     public class Log4netClientModule : ClientModuleBase
     {
         private readonly JimuLog4netOptions _options;
+        private readonly Log4netLoggerFactory _log4NetLoggerFactory;
         public Log4netClientModule(IConfigurationRoot jimuAppSettings) : base(jimuAppSettings)
         {
             _options = this.JimuAppSettings.GetSection(typeof(JimuLog4netOptions).Name).Get<JimuLog4netOptions>();
+            if (_options != null)
+            {
+                _log4NetLoggerFactory = new Log4netLoggerFactory(_options);
+            }
         }
 
         public override void DoRegister(ContainerBuilder componentContainerBuilder)
@@ -17,7 +22,8 @@ namespace Jimu.Logger.Log4net
             if (_options != null)
             {
                 //componentContainerBuilder.RegisterType<Log4netLogger>().WithParameter("options", _options).As<ILogger>().SingleInstance();
-                componentContainerBuilder.RegisterType<Log4netLoggerFactory>().WithParameter("options", _options).As<ILoggerFactory>().SingleInstance();
+                //componentContainerBuilder.RegisterType<Log4netLoggerFactory>().WithParameter("options", _options).As<ILoggerFactory>().SingleInstance();
+                componentContainerBuilder.RegisterInstance(_log4NetLoggerFactory).As<ILoggerFactory>().SingleInstance();
             }
             base.DoRegister(componentContainerBuilder);
         }

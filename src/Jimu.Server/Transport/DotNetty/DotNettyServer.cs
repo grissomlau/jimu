@@ -173,45 +173,36 @@ namespace Jimu.Server.Transport.DotNetty
             var bossGroup = new MultithreadEventLoopGroup();
             var workerGroup = new MultithreadEventLoopGroup(4);
             var bootstrap = new ServerBootstrap();
-            try
-            {
-                bootstrap
-                    .Group(bossGroup, workerGroup)
-                    //.Group(bossGroup, workerGroup)
-                    .Channel<TcpServerSocketChannel>()
-                    .Option(ChannelOption.SoBacklog, 100)
-                    .Option(ChannelOption.Allocator, PooledByteBufferAllocator.Default)
-                    .ChildHandler(new ActionChannelInitializer<IChannel>(channel =>
-                    {
-                        var pipeline = channel.Pipeline;
-                        pipeline.AddLast(new LengthFieldPrepender(4));
-                        pipeline.AddLast(new LengthFieldBasedFrameDecoder(int.MaxValue, 0, 4, 0, 4));
-                        pipeline.AddLast(new ReadServerMessageChannelHandlerAdapter(_loggerFactory));
-                        pipeline.AddLast(new ServerHandlerChannelHandlerAdapter(async (context, message) =>
-                        {
-                            await OnReceived(context, message);
-                        }, _loggerFactory));
-                    }));
+            bootstrap
+      .Group(bossGroup, workerGroup)
+      //.Group(bossGroup, workerGroup)
+      .Channel<TcpServerSocketChannel>()
+      .Option(ChannelOption.SoBacklog, 100)
+      .Option(ChannelOption.Allocator, PooledByteBufferAllocator.Default)
+      .ChildHandler(new ActionChannelInitializer<IChannel>(channel =>
+      {
+          var pipeline = channel.Pipeline;
+          pipeline.AddLast(new LengthFieldPrepender(4));
+          pipeline.AddLast(new LengthFieldBasedFrameDecoder(int.MaxValue, 0, 4, 0, 4));
+          pipeline.AddLast(new ReadServerMessageChannelHandlerAdapter(_loggerFactory));
+          pipeline.AddLast(new ServerHandlerChannelHandlerAdapter(async (context, message) =>
+          {
+              await OnReceived(context, message);
+          }, _loggerFactory));
+      }));
 
-                //var endpoint = new IPEndPoint(IPAddress.Parse(this.addre), this._port);
-                //_channel = await bootstrap.BindAsync(_address.CreateEndPoint()); // bind with ip not support in docker, will not connected
-                if (_serverIp != "0.0.0.0")
-                {
-                    var endpoint = new IPEndPoint(IPAddress.Parse(this._serverIp), this._serverPort);
-                    _channel = await bootstrap.BindAsync(endpoint); // bind with ip not support in docker, will not connected
-                    _logger.Info($"server start successfully, address is： {_serverIp}:{_serverPort}");
-                }
-                else
-                {
-                    _channel = await bootstrap.BindAsync(_serverPort);
-                    _logger.Info($"server start successfully, address is： {JimuHelper.GetLocalIPAddress()}:{_serverPort}");
-                }
-            }
-            finally
+            //var endpoint = new IPEndPoint(IPAddress.Parse(this.addre), this._port);
+            //_channel = await bootstrap.BindAsync(_address.CreateEndPoint()); // bind with ip not support in docker, will not connected
+            if (_serverIp != "0.0.0.0")
             {
-                await Task.WhenAll(
-                     bossGroup.ShutdownGracefullyAsync(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(1)),
-                     workerGroup.ShutdownGracefullyAsync(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(1)));
+                var endpoint = new IPEndPoint(IPAddress.Parse(this._serverIp), this._serverPort);
+                _channel = await bootstrap.BindAsync(endpoint); // bind with ip not support in docker, will not connected
+                _logger.Info($"server start successfully, address is： {_serverIp}:{_serverPort}");
+            }
+            else
+            {
+                _channel = await bootstrap.BindAsync(_serverPort);
+                _logger.Info($"server start successfully, address is： {JimuHelper.GetLocalIPAddress()}:{_serverPort}");
             }
         }
 
