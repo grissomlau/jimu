@@ -32,7 +32,14 @@ namespace Jimu.Server.Bus.MassTransit.RabbitMq.Pattern
                         var myHandlerObj = Activator.CreateInstance(typeof(EventHandler<>).MakeGenericType(subscriberType), new object[] { subscriberInstance, bus });
                         var eventHandler = myHandlerObj.GetType().InvokeMember("Handler", BindingFlags.GetProperty, null, myHandlerObj, null);
                         var fastInvoker = FastInvoke.GetMethodInvoker(handlerMethod);
-                        fastInvoker.Invoke(null, new object[] { ep, eventHandler, null });
+                        try
+                        {
+                            fastInvoker.Invoke(null, new object[] { ep, eventHandler, null });
+                        }
+                        catch (Exception ex)
+                        {
+                            logger.Error($"error occure when handling RabbitMq subscriber: {eventQueueName}", ex);
+                        }
                     });
                 });
                 logger.Debug($"MassTransitRabbitMq: EventQueueName: { eventQueueName}, subscribers count: {_subscribers.Count()}");
