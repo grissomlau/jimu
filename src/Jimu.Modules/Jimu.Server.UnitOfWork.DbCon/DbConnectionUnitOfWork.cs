@@ -48,6 +48,7 @@ namespace Jimu.Server.UnitOfWork.DbCon
                 return;
             _dbTransaction.Commit();
             _dbTransaction = null;
+            _worker = null;
         }
 
         public override void Rollback()
@@ -56,6 +57,7 @@ namespace Jimu.Server.UnitOfWork.DbCon
                 return;
             _dbTransaction.Rollback();
             _dbTransaction = null;
+            _worker = null;
         }
 
         public override void Dispose()
@@ -80,6 +82,8 @@ namespace Jimu.Server.UnitOfWork.DbCon
                 {
                     _dbTransaction.Rollback();
                     _worker?.Dispose();
+                    _dbTransaction = null;
+                    _options = null;
                 }
                 catch { }
                 throw new DbConnectionUnitOfWorkException($"existing UowWorker {_options?.OptionName} is running, cannot create an new one {optionName}");
@@ -111,6 +115,7 @@ namespace Jimu.Server.UnitOfWork.DbCon
                 }
                 finally
                 {
+                    _dbTransaction = null;
                     _worker = null;
                 }
             }

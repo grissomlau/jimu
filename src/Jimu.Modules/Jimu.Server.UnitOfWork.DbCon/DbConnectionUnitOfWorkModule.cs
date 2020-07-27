@@ -29,11 +29,13 @@ namespace Jimu.Server.UnitOfWork.DbCon
                 }).As<IDbFactory<DbConnection>>().InstancePerLifetimeScope();
 
 
-                DbConnectionUnitOfWork unitOfWork = new DbConnectionUnitOfWork(_options);
-                serviceContainerBuilder.Register((context) =>
-                {
-                    return unitOfWork;
-                }).As<UnitOfWorkBase<DbConnection>>().As<IUnitOfWork>().InstancePerLifetimeScope();
+                //DbConnectionUnitOfWork unitOfWork = new DbConnectionUnitOfWork(_options);
+                //serviceContainerBuilder.Register((context) =>
+                //{
+                //    return unitOfWork;
+                //}).As<UnitOfWorkBase<DbConnection>>().As<IUnitOfWork>().InstancePerLifetimeScope();
+
+                serviceContainerBuilder.RegisterType<DbConnectionUnitOfWork>().WithParameter(new TypedParameter(typeof(DbConOptions), _options)).As<UnitOfWorkBase<DbConnection>>().As<IUnitOfWork>().InstancePerLifetimeScope();
             }
             else if (_mulOptions != null && _mulOptions.Enable)
             {
@@ -44,11 +46,14 @@ namespace Jimu.Server.UnitOfWork.DbCon
                     return dbFactory;
                 }).As<IDbFactory<DbConnection>>().InstancePerLifetimeScope();
 
-                DbConnectionUnitOfWork unitOfWork = new DbConnectionUnitOfWork(_mulOptions);
-                serviceContainerBuilder.Register((context) =>
-                {
-                    return unitOfWork;
-                }).As<UnitOfWorkBase<DbConnection>>().As<IUnitOfWork>().InstancePerLifetimeScope();
+                //DbConnectionUnitOfWork unitOfWork = new DbConnectionUnitOfWork(_mulOptions);
+                //serviceContainerBuilder.Register((context) =>
+                //{
+                //    return new DbConnectionUnitOfWork(_mulOptions);
+                //    //return unitOfWork;
+                //}).As<UnitOfWorkBase<DbConnection>>().As<IUnitOfWork>().InstancePerLifetimeScope();
+
+                serviceContainerBuilder.RegisterType<DbConnectionUnitOfWork>().WithParameter(new TypedParameter(typeof(MultipleDbConOptions), _mulOptions)).As<UnitOfWorkBase<DbConnection>>().As<IUnitOfWork>().InstancePerLifetimeScope();
             }
 
             base.DoServiceRegister(serviceContainerBuilder);
