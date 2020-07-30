@@ -119,7 +119,7 @@ namespace Jimu.Server.Auth.Middlewares
                 if (_options.ValidateLifetime)
                 {
                     //var exp = payloadObj["exp"];
-                    if (payloadObj == null || ((Int64)payloadObj["exp"]).ToDate() < DateTime.Now)
+                    if (payloadObj == null || ((long)payloadObj["exp"]).ToDate() < DateTime.Now)
                     {
                         var result = new JimuRemoteCallResultData
                         {

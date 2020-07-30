@@ -31,7 +31,7 @@ namespace Jimu.Client.Auth.Middlewares
             var payload = new Dictionary<string, object>();
             if (ValidateLifetime)
             {
-                payload["exp"] = DateTime.Now.AddMinutes(ExpireTimeSpan.TotalMinutes).ToInt();
+                payload["exp"] = DateTime.Now.AddMinutes(ExpireTimeSpan.TotalMinutes).ToLong();
             }
             if (ValidateIssuer)
             {
