@@ -54,7 +54,7 @@ namespace Jimu.Client.ApiGateway
                 if (body != null)
                 {
                     model = new JimuModel();
-                    model.ReadFromContentAsync(body, req.ContentType);
+                    await model.ReadFromContentAsync(body, req.ContentType);
                 }
             }
             bindingContext.ModelState.SetModelValue("model", model, null);

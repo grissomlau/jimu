@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Jimu.Client.ApiGateway
 {
@@ -20,7 +21,7 @@ namespace Jimu.Client.ApiGateway
             _logger = loggerFactory.Create(this.GetType());
 
         }
-        public async void ReadFromContentAsync(Stream content, string contentType = "application/json")
+        public async Task ReadFromContentAsync(Stream content, string contentType = "application/json")
         {
 
             using (var sr = new StreamReader(content))
