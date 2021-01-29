@@ -50,7 +50,8 @@ namespace Jimu.Server.Auth
                             Service = "Token",
                             HttpMethod = "POST",
                             AllowAnonymous = true,
-                            RoutePath = JimuServiceRoute.ParseRoutePath("POST", "", "", _options.TokenEndpointPath, new[] { "username", "password", "grant_type" }, false),
+                            ServiceClassPath = "",
+                            RoutePath = JimuServiceRoute.ParseRoutePath("POST","", _options.TokenEndpointPath, new[] { "username", "password", "grant_type" }, false),
                             Parameters = JimuHelper.Serialize<string>(new List<JimuServiceParameterDesc>{
                                  new JimuServiceParameterDesc
                                  {

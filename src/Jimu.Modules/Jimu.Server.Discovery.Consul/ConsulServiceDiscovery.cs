@@ -39,37 +39,47 @@ namespace Jimu.Server.Discovery.Consul
             {
                 return _routes.ToList();
             }
-            byte[] data = null;
-            foreach (var key in GetKey())
+            foreach (var keyPattern in this.GetKey(""))
             {
-                data = (await _consul.KV.Get(key)).Response?.Value;
-                if (data != null && data.Length > 0) break;
-            }
-
-            if (data == null)
-            {
-                return _routes;
-            }
-
-            var descriptors = JimuHelper.Deserialize<byte[], List<JimuServiceRouteDesc>>(data);
-            if (descriptors != null && descriptors.Any())
-            {
-                foreach (var descriptor in descriptors)
+                var queryResult = await _consul.KV.List(keyPattern);
+                var response = queryResult.Response;
+                if (response == null)
                 {
-                    List<JimuAddress> addresses = new List<JimuAddress>(descriptor.AddressDescriptors.ToArray().Count());
-                    foreach (var addDesc in descriptor.AddressDescriptors)
+                    continue;
+                }
+                foreach (var key in response)
+                {
+                    if (key.Value == null)
                     {
-                        //var addrType = Type.GetType(addDesc.Type);
-                        addresses.Add(JimuHelper.Deserialize(addDesc.Value, typeof(JimuAddress)) as JimuAddress);
+                        continue;
                     }
 
-                    _routes.Add(new JimuServiceRoute
+                    var descriptors = JimuHelper.Deserialize<byte[], List<JimuServiceRouteDesc>>(key.Value);
+                    if (descriptors != null && descriptors.Any())
                     {
-                        Address = addresses,
-                        ServiceDescriptor = descriptor.ServiceDescriptor
-                    });
+                        foreach (var descriptor in descriptors)
+                        {
+                            if (_routes.Any(x => x.ServiceDescriptor.Id == descriptor.ServiceDescriptor.Id))
+                            {
+                                continue;
+                            }
+                            List<JimuAddress> addresses = new List<JimuAddress>(descriptor.AddressDescriptors.ToArray().Count());
+                            foreach (var addDesc in descriptor.AddressDescriptors)
+                            {
+                                //var addrType = Type.GetType(addDesc.Type);
+                                addresses.Add(JimuHelper.Deserialize(addDesc.Value, typeof(JimuAddress)) as JimuAddress);
+                            }
+
+                            _routes.Add(new JimuServiceRoute
+                            {
+                                Address = addresses,
+                                ServiceDescriptor = descriptor.ServiceDescriptor
+                            });
+                        }
+                    }
                 }
             }
+
 
             return _routes;
         }
@@ -87,19 +97,22 @@ namespace Jimu.Server.Discovery.Consul
 
         public async Task ClearAsync()
         {
-            foreach (var key in GetKey())
-            {
-                await _consul.KV.Delete(key);
-            }
-            //var queryResult = await _consul.KV.List(_serviceCategory);
-            //var response = queryResult.Response;
-            //if (response != null)
+            //foreach (var key in GetKey())
             //{
-            //    foreach (var result in response)
-            //    {
-            //        await _consul.KV.DeleteCAS(result);
-            //    }
+            //    await _consul.KV.Delete(key);
             //}
+            foreach (var key in this.GetKey(""))
+            {
+                var queryResult = await _consul.KV.List(key);
+                var response = queryResult.Response;
+                if (response != null)
+                {
+                    foreach (var result in response)
+                    {
+                        await _consul.KV.DeleteCAS(result);
+                    }
+                }
+            }
         }
 
         public async Task SetRoutesAsync(List<JimuServiceRoute> routes)
@@ -122,11 +135,16 @@ namespace Jimu.Server.Discovery.Consul
             }
 
             //await SetRoutesAsync(routeDescriptors);
-            var nodeData = JimuHelper.Serialize<byte[]>(routeDescriptors);
-            foreach (var key in GetKey())
+            var group = routeDescriptors.GroupBy(x => x.ServiceDescriptor.ServiceClassPath);
+            foreach (var classPath in group)
             {
-                var keyValuePair = new KVPair(key) { Value = nodeData };
-                await _consul.KV.Put(keyValuePair);
+                var routeDescList = classPath.ToList();
+                var nodeData = JimuHelper.Serialize<byte[]>(routeDescList);
+                foreach (var key in GetKey(classPath.Key))
+                {
+                    var keyValuePair = new KVPair(key) { Value = nodeData };
+                    await _consul.KV.Put(keyValuePair);
+                }
             }
         }
 
@@ -141,9 +159,9 @@ namespace Jimu.Server.Discovery.Consul
         //    await SetRoutesAsync(curRoutes);
         //}
 
-        private List<string> GetKey()
+        private List<string> GetKey(string key)
         {
-            return _serviceGroups.Select(x => $"{x}-{_serverAddress}").ToList();
+            return _serviceGroups.Select(x => $"{x}-{_serverAddress}-{key}").ToList();
         }
 
         private async Task<JimuServiceRoute> GetRoute(string path)
@@ -198,6 +216,54 @@ namespace Jimu.Server.Discovery.Consul
             var hasRemove = routes.RemoveAll(x => x.ServiceDescriptor.Id == serviceId);
             if (hasRemove > 0)
                 await SetRoutesAsync(routes);
+        }
+
+        public async Task<List<JimuServiceRoute>> RefreshRoutesAsync()
+        {
+            this._routes.Clear();
+            foreach (var keyPattern in this.GetKey(""))
+            {
+                var queryResult = await _consul.KV.List(keyPattern);
+                var response = queryResult.Response;
+                if (response == null)
+                {
+                    continue;
+                }
+                foreach (var key in response)
+                {
+                    if (key.Value == null)
+                    {
+                        continue;
+                    }
+
+                    var descriptors = JimuHelper.Deserialize<byte[], List<JimuServiceRouteDesc>>(key.Value);
+                    if (descriptors != null && descriptors.Any())
+                    {
+                        foreach (var descriptor in descriptors)
+                        {
+                            if (_routes.Any(x => x.ServiceDescriptor.Id == descriptor.ServiceDescriptor.Id))
+                            {
+                                continue;
+                            }
+                            List<JimuAddress> addresses = new List<JimuAddress>(descriptor.AddressDescriptors.ToArray().Count());
+                            foreach (var addDesc in descriptor.AddressDescriptors)
+                            {
+                                //var addrType = Type.GetType(addDesc.Type);
+                                addresses.Add(JimuHelper.Deserialize(addDesc.Value, typeof(JimuAddress)) as JimuAddress);
+                            }
+
+                            _routes.Add(new JimuServiceRoute
+                            {
+                                Address = addresses,
+                                ServiceDescriptor = descriptor.ServiceDescriptor
+                            });
+                        }
+                    }
+                }
+            }
+
+
+            return _routes;
         }
     }
 }

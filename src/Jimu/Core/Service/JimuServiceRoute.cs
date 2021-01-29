@@ -58,7 +58,7 @@ namespace Jimu
         //    return "/" + result.ToString().TrimEnd('&', '/', '\\').TrimStart('/', '\\');
         //}
 
-        public static string ParseRoutePath(string httpMethod, string routeTemplet, string service, string method, string[] paraNames, bool isInterface)
+        public static string ParseClassPath(string routeTemplet, string service, bool isInterface)
         {
             var result = new StringBuilder();
             var parameters = routeTemplet?.Split('/');// "/api/{ServiceName}" or "/api/UserService"
@@ -79,6 +79,16 @@ namespace Jimu
                 }
             }
 
+            return lowerFirstLetter(result.ToString());
+        }
+
+        public static string ParseRoutePath(string httpMethod, string classPath, string method, string[] paraNames, bool isInterface)
+        {
+            if (string.IsNullOrEmpty(classPath) || !classPath.EndsWith('/'))
+            {
+                classPath += "/";
+            }
+            var result = new StringBuilder(classPath);
             result.Append(method.TrimStart('/'));
             //result = new StringBuilder(result.ToString().ToLower());
             result = new StringBuilder(lowerFirstLetter(result.ToString()));

@@ -4,7 +4,12 @@ using Jimu.Module;
 using Jimu.Server.ServiceContainer;
 using Jimu.Server.Transport;
 using Microsoft.Extensions.Configuration;
+using Quartz;
+using Quartz.Impl;
+using Quartz.Impl.Triggers;
+using Quartz.Spi;
 using System;
+using System.Threading.Tasks;
 
 namespace Jimu.Server.Discovery.Consul
 {
@@ -35,7 +40,7 @@ namespace Jimu.Server.Discovery.Consul
         {
             if (_options != null && _options.Enable)
             {
-                
+
                 var loggerFactory = container.Resolve<ILoggerFactory>();
                 var logger = loggerFactory.Create(this.GetType());
                 logger.Info($"[config]use consul for services discovery, consul ip: {_options.Ip}:{_options.Port}, service group: {_options.ServiceGroups}, server address: {_options.ServiceInvokeIp}:{_options.ServiceInvokePort} ");
@@ -52,6 +57,7 @@ namespace Jimu.Server.Discovery.Consul
                           logger.Debug("running consul found routes count: " + routes.Count);
                           discovery.ClearAsync().Wait();
                           discovery.SetRoutesAsync(routes).Wait();
+                          RunUpdateJob(container).Wait();
                       }
                       catch (Exception ex)
                       {
@@ -61,7 +67,45 @@ namespace Jimu.Server.Discovery.Consul
             }
             base.DoInit(container);
         }
+        private async Task RunUpdateJob(IContainer container)
+        {
+            string cron = $"0 0/1 * * * ?";
+
+            var scheduler = await StdSchedulerFactory.GetDefaultScheduler();
+            IJobDetail jobDetail = JobBuilder.Create<MonitorJob>().WithIdentity("MonitorJob", "Jimu.Service.CheckAndRegisterServiceJob").Build();
+            jobDetail.JobDataMap.Put("container", container);
+            IOperableTrigger trigger = new CronTriggerImpl("MonitorJob", "Jimu.Service.CheckAndRegisterServiceJob", cron);
+            await scheduler.ScheduleJob(jobDetail, trigger);
+            await scheduler.Start();
+
+        }
 
 
+    }
+
+    [DisallowConcurrentExecution]
+    public class MonitorJob : IJob
+    {
+        public async Task Execute(IJobExecutionContext context)
+        {
+            var container = context.JobDetail.JobDataMap.Get("container") as IContainer;
+            var loggerFactory = container.Resolve<ILoggerFactory>();
+            var logger = loggerFactory.Create(this.GetType());
+
+            logger.Debug("******* start check and register services job *******");
+            var discovery = container.Resolve<IServiceDiscovery>();
+            var server = container.Resolve<IServer>();
+
+            var routes = server.GetServiceRoutes();
+            await discovery.RefreshRoutesAsync();
+            var discoveryRoutes = await discovery.GetRoutesAsync();
+            if (discoveryRoutes == null || discoveryRoutes.Count < routes.Count)
+            {
+                logger.Debug("register routes count: " + routes.Count);
+                discovery.ClearAsync().Wait();
+                discovery.SetRoutesAsync(routes).Wait();
+            }
+            logger.Debug("******* end check and register services job *******");
+        }
     }
 }

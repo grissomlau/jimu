@@ -49,7 +49,9 @@ namespace Jimu.Common
             var provider = new JsonEnvParamParserFileProvider(settingJson);
             var builder = new ConfigurationBuilder()
                 .SetBasePath(AppContext.BaseDirectory)
-                .AddJsonFile(provider, settingJson, true, false);
+                .AddJsonFile(provider, settingJson, true, false)
+                .AddEnvironmentVariables();
+                
             return builder.Build();
         }
         public static string GetLocalIPAddress()

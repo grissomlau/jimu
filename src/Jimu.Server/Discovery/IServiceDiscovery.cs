@@ -47,6 +47,11 @@ namespace Jimu.Server.Discovery
         /// </summary>
         /// <returns></returns>
         Task<List<JimuServiceRoute>> GetRoutesAsync();
+        /// <summary>
+        /// refresh remote discovery server
+        /// </summary>
+        /// <returns></returns>
+        Task<List<JimuServiceRoute>> RefreshRoutesAsync();
 
         /// <summary>
         ///     get all registered service's server

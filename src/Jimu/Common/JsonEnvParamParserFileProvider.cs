@@ -12,9 +12,11 @@ namespace Jimu.Common
     {
         private class InMemoryFile : IFileInfo
         {
+            private readonly string _path;
             private readonly byte[] _data;
             public InMemoryFile(string json)
             {
+                _path = json;
                 string jsonStr;
                 using (StreamReader sr = new StreamReader(json))
                 {
@@ -42,7 +44,7 @@ namespace Jimu.Common
             public Stream CreateReadStream() => new MemoryStream(_data);
             public bool Exists { get; } = true;
             public long Length => _data.Length;
-            public string PhysicalPath { get; } = string.Empty;
+            public string PhysicalPath => _path;
             public string Name { get; } = string.Empty;
             public DateTimeOffset LastModified { get; } = DateTimeOffset.UtcNow;
             public bool IsDirectory { get; } = false;

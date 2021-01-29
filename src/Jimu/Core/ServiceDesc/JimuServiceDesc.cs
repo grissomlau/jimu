@@ -26,6 +26,14 @@ namespace Jimu
             get => GetMetadata<string>("Service");
             set => Metadatas["Service"] = value;
         }
+
+
+        public string ServiceClassPath
+        {
+            get => GetMetadata<string>("ServiceClassPath");
+            set => Metadatas["ServiceClassPath"] = value;
+        }
+
         /// <summary>
         ///     service comment
         /// </summary>

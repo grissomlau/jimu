@@ -48,8 +48,10 @@ namespace Jimu.Server.Transport.DotNetty
         }
         public List<JimuServiceRoute> GetServiceRoutes()
         {
-            List<JimuServiceRoute> routes = new List<JimuServiceRoute>();
+            //List<JimuServiceRoute> routes = new List<JimuServiceRoute>();
+            var routesMap = new Dictionary<string, JimuServiceRoute>();
             var serviceEntries = _serviceEntryContainer.GetServiceEntry();
+
             serviceEntries.ForEach(entry =>
             {
                 var serviceRoute = new JimuServiceRoute
@@ -59,9 +61,13 @@ namespace Jimu.Server.Transport.DotNetty
                         },
                     ServiceDescriptor = entry.Descriptor
                 };
-                routes.Add(serviceRoute);
+                routesMap[serviceRoute.ServiceDescriptor.Id] = serviceRoute;
             });
-
+            var routes = new List<JimuServiceRoute>();
+            foreach (var route in routesMap.Values)
+            {
+                routes.Add(route);
+            }
             return routes;
         }
 

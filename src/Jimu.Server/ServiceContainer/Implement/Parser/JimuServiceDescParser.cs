@@ -58,7 +58,8 @@ namespace Jimu.Server.ServiceContainer.Implement.Parser
                 if (string.IsNullOrEmpty(desc.RoutePath))
                 {
                     var setPath = string.IsNullOrEmpty(desc.Rest) ? methodInfo.Name : desc.Rest;
-                    desc.RoutePath = JimuServiceRoute.ParseRoutePath(desc.HttpMethod, routeTemplate.GetTemplate(type), type.Name, setPath, methodInfo.GetParameters().Select(x => x.Name).ToArray(), type.IsInterface);
+                    desc.ServiceClassPath = JimuServiceRoute.ParseClassPath(routeTemplate.GetTemplate(type), type.Name, type.IsInterface);
+                    desc.RoutePath = JimuServiceRoute.ParseRoutePath(desc.HttpMethod, desc.ServiceClassPath, setPath, methodInfo.GetParameters().Select(x => x.Name).ToArray(), type.IsInterface);
                 }
             }
 
