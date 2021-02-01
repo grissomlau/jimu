@@ -56,13 +56,13 @@ namespace Jimu.Common
                     ? guid
                     : JsonConvert.DeserializeObject(instance + "", destinationType);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 if (destinationType.IsArray)
                 {
                     return (instance + "").Split(',');
                 }
-                throw ex;
+                throw;
             }
         }
 

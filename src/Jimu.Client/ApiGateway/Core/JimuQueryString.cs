@@ -135,13 +135,13 @@ namespace Jimu.Client.ApiGateway
                     var obj = JToken.Parse(strInput);
                     return true;
                 }
-                catch (JsonReaderException jex)
+                catch (JsonReaderException)
                 {
                     //Exception in parsing json
                     //Console.WriteLine(jex.Message);
                     return false;
                 }
-                catch (Exception ex) //some other exception
+                catch (Exception) //some other exception
                 {
                     //Console.WriteLine(ex.ToString());
                     return false;

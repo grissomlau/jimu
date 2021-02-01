@@ -89,7 +89,7 @@ namespace Jimu.Server.Bus.MassTransit.RabbitMq
                 {
                     _massTransitBus.Stop();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                 }
             }

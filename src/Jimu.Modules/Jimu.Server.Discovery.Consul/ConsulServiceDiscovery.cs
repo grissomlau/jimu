@@ -39,49 +39,7 @@ namespace Jimu.Server.Discovery.Consul
             {
                 return _routes.ToList();
             }
-            foreach (var keyPattern in this.GetKey(""))
-            {
-                var queryResult = await _consul.KV.List(keyPattern);
-                var response = queryResult.Response;
-                if (response == null)
-                {
-                    continue;
-                }
-                foreach (var key in response)
-                {
-                    if (key.Value == null)
-                    {
-                        continue;
-                    }
-
-                    var descriptors = JimuHelper.Deserialize<byte[], List<JimuServiceRouteDesc>>(key.Value);
-                    if (descriptors != null && descriptors.Any())
-                    {
-                        foreach (var descriptor in descriptors)
-                        {
-                            if (_routes.Any(x => x.ServiceDescriptor.Id == descriptor.ServiceDescriptor.Id))
-                            {
-                                continue;
-                            }
-                            List<JimuAddress> addresses = new List<JimuAddress>(descriptor.AddressDescriptors.ToArray().Count());
-                            foreach (var addDesc in descriptor.AddressDescriptors)
-                            {
-                                //var addrType = Type.GetType(addDesc.Type);
-                                addresses.Add(JimuHelper.Deserialize(addDesc.Value, typeof(JimuAddress)) as JimuAddress);
-                            }
-
-                            _routes.Add(new JimuServiceRoute
-                            {
-                                Address = addresses,
-                                ServiceDescriptor = descriptor.ServiceDescriptor
-                            });
-                        }
-                    }
-                }
-            }
-
-
-            return _routes;
+            return await RefreshRoutesAsync();
         }
 
         public async Task<List<JimuAddress>> GetAddressAsync()

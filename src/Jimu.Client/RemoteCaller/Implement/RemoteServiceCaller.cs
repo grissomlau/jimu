@@ -146,7 +146,7 @@ namespace Jimu.Client.RemoteCaller.Implement
             catch (Exception ex)
             {
                 _jimuApm.WriteRPCExecuteError(operationId, context, ex);
-                throw ex;
+                throw;
             }
         }
 

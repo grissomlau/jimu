@@ -25,7 +25,7 @@ namespace Jimu.Server.Transport.DotNetty.Adapter
                 {
                     _readAction(context, msg);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     _logger.Info($"handle unexpected msg: {msg}");
                 }
