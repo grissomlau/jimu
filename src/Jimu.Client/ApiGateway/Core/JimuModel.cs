@@ -26,7 +26,23 @@ namespace Jimu.Client.ApiGateway
 
             using (var sr = new StreamReader(content))
             {
-                var json = await sr.ReadToEndAsync();
+                string json = null;
+                try
+                {
+                    json = await sr.ReadToEndAsync();
+                }
+                catch (Exception ex)
+                {
+                    if (ex is Microsoft.AspNetCore.Server.Kestrel.Core.BadHttpRequestException &&
+    ex.Message == "Unexpected end of request content.")
+                    {
+                        // "Unexpected end of request content."
+                        // Microsoft.AspNetCore.Server.Kestrel.Core.CoreStrings.BadRequest_UnexpectedEndOfRequestContent
+                        // ignore this
+                        _logger.Error($"JimuModel.ReadFromContentAsync,Unexpected end of request content.", ex);
+                    }
+                    return;
+                }
                 try
                 {
                     Data = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
