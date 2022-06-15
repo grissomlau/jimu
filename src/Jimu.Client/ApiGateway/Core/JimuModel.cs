@@ -33,7 +33,7 @@ namespace Jimu.Client.ApiGateway
                 }
                 catch (Exception ex)
                 {
-                    if (ex is Microsoft.AspNetCore.Server.Kestrel.Core.BadHttpRequestException &&
+                    if (ex is BadHttpRequestException &&
     ex.Message == "Unexpected end of request content.")
                     {
                         // "Unexpected end of request content."
