@@ -11,27 +11,27 @@
   "ConsulOptions": {
     "Ip": "127.0.0.1", //consul ip
     "Port": 8500, // consul port
-    "ServiceGroups": "jimu.samples" //·şÎñ×¢²áËùÊôµÄ×é±ğ
+    "ServiceGroups": "jimu.samples" //æœåŠ¡æ³¨å†Œæ‰€å±çš„ç»„åˆ«
   },
   "DiscoveryOptions": {
-    "UpdateJobIntervalMinute": 1 //µ¥Î»·ÖÖÓ£¬1·ÖÖÓË¢ĞÂÒ»´Î
+    "UpdateJobIntervalMinute": 1 //å•ä½åˆ†é’Ÿï¼Œ1åˆ†é’Ÿåˆ·æ–°ä¸€æ¬¡
   },
   "FaultTolerantOptions": {
-    "RetryTimes": 0 //·şÎñµ÷ÓÃÊ§°ÜÖØÊÔ´ÎÊı
+    "RetryTimes": 0 //æœåŠ¡è°ƒç”¨å¤±è´¥é‡è¯•æ¬¡æ•°
   },
   "HealthCheckOptions": {
-    "IntervalMinute": 1 //ĞÄÌø¼à²âÊ±¼ä¼ä¸ô£¬µ¥Î»·ÖÖÓ
+    "IntervalMinute": 1 //å¿ƒè·³ç›‘æµ‹æ—¶é—´é—´éš”ï¼Œå•ä½åˆ†é’Ÿ
   },
   "LoadBalanceOptions": {
-    "LoadBalance": "Polling" //¸ºÔØ¾ùºâËã·¨: Polling - ÂÖÑ¯
+    "LoadBalance": "Polling" //è´Ÿè½½å‡è¡¡ç®—æ³•: Polling - è½®è¯¢
   },
   "ServiceProxyOptions": {
-    "AssemblyNames": [ "IService.User" ] //´úÀí½Ó¿ÚdllÅäÖÃ
+    "AssemblyNames": [ "IService.User" ] //ä»£ç†æ¥å£dllé…ç½®
   },
   "TokenGetterOptions": {
-    "GetType": "" //´Óhttp header »ñÈ¡£¬ Request.Headers["Authorization"]
+    "GetType": "" //ä»http header è·å–ï¼Œ Request.Headers["Authorization"]
   },
   "TransportOptions": {
-    "Protocol": "Netty" //´«ÊäĞ­Òé£º Netty, Http
+    "Protocol": "Netty" //ä¼ è¾“åè®®ï¼š Netty, Http
   }
 }

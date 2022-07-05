@@ -10,10 +10,32 @@ namespace Jimu.Client.ApiGateway
     {
         public static IApplication Host { get; set; }
 
+        static IRemoteServiceCaller _caller;
+        public static IRemoteServiceCaller Caller
+        {
+            get
+            {
+                if (_caller == null)
+                {
+                    _caller = Host.Container.Resolve<IRemoteServiceCaller>();
+                }
+                return _caller;
+            }
+        }
+
+        public static async Task<bool> Exist(string path, string httpMethod)
+        {
+            return await Caller.ExistAsync(path, httpMethod, null);
+        }
+        public static async Task<bool> Exist(string path, string httpMethod, IDictionary<string, object> paras)
+        {
+            return await Caller.ExistAsync(path, httpMethod, paras);
+        }
+
+
         public static async Task<JimuRemoteCallResultData> Invoke(string path, IDictionary<string, object> paras, string httpMethod)
         {
-            var remoteServiceInvoker = Host.Container.Resolve<IRemoteServiceCaller>();
-            var result = await remoteServiceInvoker.InvokeAsync(path, paras, httpMethod);
+            var result = await Caller.InvokeAsync(path, paras, httpMethod);
             if (!string.IsNullOrEmpty(result.ExceptionMessage))
             {
                 throw new JimuHttpStatusCodeException(400, $"{result.ToErrorString()}", path);

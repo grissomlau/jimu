@@ -1,16 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Authors>grissomlau@qq.com</Authors>
-    <Version>1.5.0</Version>
+    <Version>1.6.3</Version>
     <RepositoryUrl>https://github.com/grissomlau/Jimu</RepositoryUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="sqlSugarCore" Version="5.0.2.2" />
+    <PackageReference Include="sqlSugarCore" Version="5.0.9.1" />
   </ItemGroup>
 
   <ItemGroup>

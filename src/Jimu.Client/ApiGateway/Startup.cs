@@ -28,7 +28,7 @@ namespace Jimu.Client.ApiGateway
             {
                 o.EnableEndpointRouting = false;
                 o.ModelBinderProviders.Insert(0, new JimuQueryStringModelBinderProvider());
-                o.ModelBinderProviders.Insert(1, new JimuModelBinderProvider());
+                //o.ModelBinderProviders.Insert(1, new JimuModelBinderProvider());
                 o.RespectBrowserAcceptHeader = true;
             }).AddNewtonsoftJson(options =>
             {

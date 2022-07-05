@@ -1,4 +1,4 @@
-﻿{
+{
   "JimuNLogOptions": {
     "UseInService": true,
     "EnableConsoleLog": true,
@@ -40,6 +40,10 @@
   },
   "ServiceOptions": {
     "Path": "", //服务dll所在路径，默认当前目录
-    "LoadFilePattern": "IService.Auth.dll,Service.Auth.dll", //需要加载的服务dll，支持统配符:*.dll,*.txt
+    "LoadFilePattern": "IService.Auth.dll,Service.Auth.dll" //需要加载的服务dll，支持统配符:*.dll,*.txt
+  },
+  "DbConOptions": {
+    "ConnectionString": "server=127.0.0.1;database=jimu_sample2;user=root;pwd=root;Allow User Variables=True;",
+    "DbProviderName": "mysql"
   }
 }

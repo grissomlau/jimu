@@ -1,10 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace Jimu.Common
 {
@@ -46,13 +48,35 @@ namespace Jimu.Common
         /// <returns></returns>
         public static IConfigurationRoot GetConfig(string settingJson)
         {
-            var provider = new JsonEnvParamParserFileProvider(settingJson);
+         //   var provider = new JsonEnvParamParserFileProvider(settingJson);
             var builder = new ConfigurationBuilder()
                 .SetBasePath(AppContext.BaseDirectory)
-                .AddJsonFile(provider, settingJson, true, false)
+                //.AddJsonFile(provider, settingJson, true, false)
+                .AddJsonFile(settingJson,true,false)
                 .AddEnvironmentVariables();
-                
-            return builder.Build();
+
+            IConfigurationRoot config =  builder.Build();
+            var evnConfig = new ConfigurationBuilder().AddEnvironmentVariables().Build();
+            foreach (KeyValuePair<string, string> kv in config.AsEnumerable())
+            {
+                if(!string.IsNullOrEmpty(kv.Value) && kv.Value.StartsWith("${"))
+                {
+                    var reg = new Regex("([$]{[\\w\\d-_.]+})");
+                    var value = kv.Value;
+                    var envVars = reg.Matches(value);
+                    foreach (Match match in envVars)
+                    {
+                        var envVarName = match.Value.TrimStart(new char[] { '$', '{' }).TrimEnd('}');
+                        var envVarValue = evnConfig[envVarName];
+                        if (!string.IsNullOrEmpty(envVarValue))
+                        {
+                             value = value.Replace(match.Value, envVarValue.Replace(@"\", @"\\"));
+                        }
+                    }
+                    config.GetSection(kv.Key).Value = value;
+                }
+            }
+            return config;
         }
         public static string GetLocalIPAddress()
         {
@@ -80,7 +104,9 @@ namespace Jimu.Common
             {
                 throw new FileNotFoundException($"{jimuAppSettings} not found!");
             }
-            return GetConfig(jimuAppSettings);
+            IConfigurationRoot config = GetConfig(jimuAppSettings);
+            // net6.0 
+            return config;
         }
 
         public static string ReadJimuEvn()

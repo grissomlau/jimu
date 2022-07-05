@@ -45,5 +45,7 @@ namespace Jimu.Client.RemoteCaller
         /// <param name="middleware"></param>
         /// <returns></returns>
         IRemoteServiceCaller Use(Func<ClientRequestDel, ClientRequestDel> middleware);
+
+        Task<bool> ExistAsync(string serviceIdOrPath, string httpMethod, IDictionary<string, object> paras);
     }
 }

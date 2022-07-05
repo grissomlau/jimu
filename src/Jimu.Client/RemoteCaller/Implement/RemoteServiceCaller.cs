@@ -228,6 +228,22 @@ namespace Jimu.Client.RemoteCaller.Implement
             this._middlewares.Push(middleware);
             return this;
         }
-
+        public async Task<bool> ExistAsync(string serviceIdOrPath, string httpMethod, IDictionary<string, object> paras)
+        {
+            if (paras == null)
+            {
+                paras = new ConcurrentDictionary<string, object>();
+            }
+            JimuServiceRoute service = null;
+            if (!string.IsNullOrEmpty(httpMethod))
+            {
+                service = await GetServiceByPathAsync(serviceIdOrPath, paras, httpMethod);
+            }
+            if (service == null)
+            {
+                service = await GetServiceByIdAsync(serviceIdOrPath);
+            }
+            return service != null;
+        }
     }
 }

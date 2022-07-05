@@ -1,4 +1,4 @@
-﻿{
+{
   "JimuLog4netOptions": {
     "UseInService": true,
     "Configuration":  "log4net.config"
